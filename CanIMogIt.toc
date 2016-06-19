@@ -1,0 +1,5 @@
+## Interface: 70300
+## Title: Can I Mog It?
+## Version: a01PTR
+## Notes: Adds a line to item tooltips to tell you if you have learned a transmog appearance.
+code.lua
