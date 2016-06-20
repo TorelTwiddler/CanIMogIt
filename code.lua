@@ -2,6 +2,12 @@
 
 CanIMogIt = {}
 
+local DEBUG = false
+
+if DEBUG then
+	print("CanIMogIt is in Debug mode.")
+end
+
 ---- Transmog Categories
 -- 1 Head
 -- 2 Shoulder
@@ -64,6 +70,12 @@ local categoryMap = {
 }
 
 
+local CAN_I_MOG_IT = "|cff00a3cc" .. "CanIMogIt:"
+local KNOWN = "|cff0072b2" .. "You have collected this appearance"
+local UNKNOWN = "|cffd55e00" .. "You haven't collected this appearance"
+local UNKNOWABLE_BY_CHARACTER = "|cfff0e442" .. "This character cannot learn this item"
+local NOT_TRANSMOGABLE = "|cff666666" .. "This item cannot be learned"
+
 
 local function AnIndexOf(t,val)
 	-- return the first integer index holding the value 
@@ -74,16 +86,48 @@ local function AnIndexOf(t,val)
 end
 
 
-local CAN_I_MOG_IT = "CanIMogIt:"
-local KNOWN = "You have collected this appearance"
-local UNKNOWN = "You haven't collected this appearance"
-local UNKNOWABLE_BY_CHARACTER = "This character cannot learn this item"
-local NOT_TRANSMOGABLE = "This item cannot be learned"
+local function addDoubleLine(tooltip, left_text, right_text)
+	tooltip:AddDoubleLine(left_text, right_text)
+	tooltip:Show()
+end
+
+
+local function addLine(tooltip, text)
+	tooltip:AddLine(text)
+	tooltip:Show()
+end
+
+
+local function printDebug(tooltip, itemID)
+	-- Add debug statements to the tooltip, to make it easier to understand
+	-- what may be going wrong.
+	addDoubleLine(tooltip, "itemID:", tostring(itemID))
+	local categoryID = CanIMogIt:GetCategoryID(itemID)
+	addDoubleLine(tooltip, "categoryID:", tostring(categoryID))
+	addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemID)))
+
+	if categoryID then
+		addDoubleLine(tooltip, "IsValidInCategory:", tostring(CanIMogIt:IsValidInCategory(categoryID, itemID)))
+		addDoubleLine(tooltip, "C_TransmogCollection.IsCategoryValidForItem:", tostring(C_TransmogCollection.IsCategoryValidForItem(categoryID, itemID)))
+		addDoubleLine(tooltip, "PlayerCanLearnTransmog:", tostring(CanIMogIt:PlayerCanLearnTransmog(itemID)))
+	end
+
+	
+	addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(CanIMogIt:PlayerKnowsTransmog(itemID)))
+	addDoubleLine(tooltip, "C_TransmogCollection.PlayerHasTransmog: ", tostring(C_TransmogCollection.PlayerHasTransmog(itemID)))
+end
 
 
 function CanIMogIt:PlayerKnowsTransmog(itemID)
 	-- Returns whether this item is already known by the player.
 	return C_TransmogCollection.PlayerHasTransmog(itemID)
+end
+
+
+function CanIMogIt:PlayerCanLearnTransmog(itemID)
+	-- Returns whether the player can learn the item or not.
+	local categoryID = CanIMogIt:GetCategoryID(itemID)
+	return CanIMogIt:IsValidInCategory(categoryID, itemID)
 end
 
 
@@ -111,58 +155,48 @@ function CanIMogIt:IsValidInCategory(categoryID, itemID)
 end
 
 
-local function addLine(tooltip, text_to_add, itemID)
-    local found = false
-
-    -- Check if we already added to this tooltip. Happens on the talent frame
-    for i = 1,15 do
-        local frame = _G[tooltip:GetName() .. "TextLeft" .. i]
-        local text
-        if frame then text = frame:GetText() end
-        if text and text == CAN_I_MOG_IT then found = true break end
-    end
-
-    if not found then
-        tooltip:AddDoubleLine("|c00a3ccff" .. CAN_I_MOG_IT .. itemID, "|c00a3ccff" .. text_to_add)
-        tooltip:Show()
-    end
+function CanIMogIt:IsTransmogable(itemID)
+	-- Returns whether the item is transmoggable or not.
+	local categoryID = CanIMogIt:GetCategoryID(itemID)
+	return not not categoryID
 end
 
 
-function CanIMogIt:attachItemTooltip()
+local function attachItemTooltip(self)
+	CanIMogIt.tooltip = self
     local itemName = select(1, self:GetItem())
 	local itemID = select(1, GetItemInfoInstant(itemName))
 	if type(itemID)=="number" then
-	
+		if DEBUG then
+			printDebug(CanIMogIt.tooltip, itemID)
+		end
 		local text = ""
-		if CanIMogIt:PlayerKnowsTransmog(itemID) then
-			-- Set text to KNOWN
-			text = KNOWN
-		else
-			-- Get the categoryID
-			local categoryID = CanIMogIt:GetCategoryID(itemID)
-			if categoryID then
-				if CanIMogIt:IsValidInCategory(categoryID, itemID) then
+		if CanIMogIt:IsTransmogable(itemID) then
+			if CanIMogIt:PlayerKnowsTransmog(itemID) then
+				-- Set text to KNOWN
+				text = KNOWN
+			else
+				if CanIMogIt:PlayerCanLearnTransmog(itemID) then
 					-- Set text to UNKNOWN
 					text = UNKNOWN
 				else
 					-- Set text to UNKNOWABLE_BY_CHARACTER
 					text = UNKNOWABLE_BY_CHARACTER
 				end
-			else
-				--Set text to NOT_TRANSMOGABLE
-				text = NOT_TRANSMOGABLE
 			end
+		else
+			--Set text to NOT_TRANSMOGABLE
+			text = NOT_TRANSMOGABLE
 		end
 		if text then
-			addLine(self, text, itemID)
+			addDoubleLine(self, CAN_I_MOG_IT, text)
 		end
 	end
 end
 
-GameTooltip:HookScript("OnTooltipSetItem", CanIMogIt.attachItemTooltip)
-ItemRefTooltip:HookScript("OnTooltipSetItem", CanIMogIt.attachItemTooltip)
-ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt.attachItemTooltip)
-ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt.attachItemTooltip)
-ShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt.attachItemTooltip)
-ShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt.attachItemTooltip)
+GameTooltip:HookScript("OnTooltipSetItem", attachItemTooltip)
+ItemRefTooltip:HookScript("OnTooltipSetItem", attachItemTooltip)
+ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", attachItemTooltip)
+ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", attachItemTooltip)
+ShoppingTooltip1:HookScript("OnTooltipSetItem", attachItemTooltip)
+ShoppingTooltip2:HookScript("OnTooltipSetItem", attachItemTooltip)
