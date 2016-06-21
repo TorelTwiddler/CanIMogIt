@@ -102,7 +102,8 @@ local function printDebug(tooltip, itemID)
 	-- Add debug statements to the tooltip, to make it easier to understand
 	-- what may be going wrong.
 	addDoubleLine(tooltip, "Item ID:", tostring(itemID))
-	_, _, _, _, _, itemClass, itemSubClass, _, equipSlot = GetItemInfo(itemID)
+	local _, _, quality, _, _, itemClass, itemSubClass, _, equipSlot = GetItemInfo(itemID)
+	addDoubleLine(tooltip, "Item Quality:", tostring(quality))
 	addDoubleLine(tooltip, "Item Class:", tostring(itemClass))
 	addDoubleLine(tooltip, "Item SubClass:", tostring(itemSubClass))
 	addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
@@ -152,6 +153,12 @@ function CanIMogIt:GetCategoryID(itemID)
 end
 
 
+function CanIMogIt:GetQuality(itemID)
+	-- Returns the quality of the item.
+	return select(3, GetItemInfo(itemID))
+end
+
+
 function CanIMogIt:IsValidInCategory(categoryID, itemID)
 	-- Returns whether the item is a transmoggable item for this
 	-- category.
@@ -161,6 +168,10 @@ end
 
 function CanIMogIt:IsTransmogable(itemID)
 	-- Returns whether the item is transmoggable or not.
+	local quality = CanIMogIt:GetQuality(itemID)
+	if quality <= 1 then
+		return false
+	end
 	local categoryID = CanIMogIt:GetCategoryID(itemID)
 	return not not categoryID
 end
