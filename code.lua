@@ -41,7 +41,7 @@ end
 local categoryMap = {
 	"INVTYPE_HEAD", --"Head",
 	"INVTYPE_SHOULDER", --"Shoulder",
-	"INVTYPE_BACK", --"Back",
+	"INVTYPE_CLOAK", --"Back",
 	"INVTYPE_CHEST", --"Chest",
 	"INVTYPE_SHIRT", --"Shirt",
 	"INVTYPE_TABARD", --"Tabard",
@@ -56,7 +56,7 @@ local categoryMap = {
 	"One-Handed Maces",
 	"Daggers",
 	"Fist Weapons",
-	"Shields",
+	"INVTYPE_SHIELD", --"Shields",
 	"Held In Off-hand",
 	"Two-Handed Axes",
 	"Two-Handed Swords",
