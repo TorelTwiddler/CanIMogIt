@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 70000
 ## Title: Can I Mog It?
 ## Version: 7.0.3.02-PTR
 ## Notes: Adds a line to item tooltips to tell you if you have learned a transmog appearance.
