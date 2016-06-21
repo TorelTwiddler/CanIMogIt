@@ -101,7 +101,11 @@ end
 local function printDebug(tooltip, itemID)
 	-- Add debug statements to the tooltip, to make it easier to understand
 	-- what may be going wrong.
-	addDoubleLine(tooltip, "itemID:", tostring(itemID))
+	addDoubleLine(tooltip, "Item ID:", tostring(itemID))
+	_, _, _, _, _, itemClass, itemSubClass, _, equipSlot = GetItemInfo(itemID)
+	addDoubleLine(tooltip, "Item Class:", tostring(itemClass))
+	addDoubleLine(tooltip, "Item SubClass:", tostring(itemSubClass))
+	addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
 	local categoryID = CanIMogIt:GetCategoryID(itemID)
 	addDoubleLine(tooltip, "categoryID:", tostring(categoryID))
 	addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemID)))
