@@ -57,7 +57,7 @@ local categoryMap = {
 	"Daggers",
 	"Fist Weapons",
 	"INVTYPE_SHIELD", --"Shields",
-	"Held In Off-hand",
+	"INVTYPE_HOLDABLE", --"Held In Off-hand",
 	"Two-Handed Axes",
 	"Two-Handed Swords",
 	"Two-Handed Maces",
