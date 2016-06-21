@@ -43,7 +43,7 @@ local categoryMap = {
 	"INVTYPE_SHOULDER", --"Shoulder",
 	"INVTYPE_CLOAK", --"Back",
 	"INVTYPE_CHEST", --"Chest",
-	"INVTYPE_SHIRT", --"Shirt",
+	"INVTYPE_BODY", --"Shirt",
 	"INVTYPE_TABARD", --"Tabard",
 	"INVTYPE_WRIST", --"Wrist",
 	"INVTYPE_HAND", --"Hands",
