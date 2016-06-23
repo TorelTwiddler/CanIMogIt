@@ -50,7 +50,7 @@ local categoryMap = {
 	"INVTYPE_WAIST", --"Waist",
 	"INVTYPE_LEGS", --"Legs",
 	"INVTYPE_FEET", --"Feet",
-	"Wand",
+	"Wands",
 	"One-Handed Axes",
 	"One-Handed Swords",
 	"One-Handed Maces",
