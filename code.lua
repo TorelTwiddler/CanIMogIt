@@ -39,34 +39,35 @@ end
 -- 28 Warglaives
 
 local categoryMap = {
-	"INVTYPE_HEAD", --"Head",
-	"INVTYPE_SHOULDER", --"Shoulder",
-	"INVTYPE_CLOAK", --"Back",
-	"INVTYPE_CHEST", --"Chest",
-	"INVTYPE_BODY", --"Shirt",
-	"INVTYPE_TABARD", --"Tabard",
-	"INVTYPE_WRIST", --"Wrist",
-	"INVTYPE_HAND", --"Hands",
-	"INVTYPE_WAIST", --"Waist",
-	"INVTYPE_LEGS", --"Legs",
-	"INVTYPE_FEET", --"Feet",
-	"Wands",
-	"One-Handed Axes",
-	"One-Handed Swords",
-	"One-Handed Maces",
-	"Daggers",
-	"Fist Weapons",
-	"INVTYPE_SHIELD", --"Shields",
-	"INVTYPE_HOLDABLE", --"Held In Off-hand",
-	"Two-Handed Axes",
-	"Two-Handed Swords",
-	"Two-Handed Maces",
-	"Staves",
-	"Polearms",
-	"Bows",
-	"Guns",
-	"Crossbows",
-	"Warglaives",
+	["INVTYPE_HEAD"]=1, --"Head",
+	["INVTYPE_SHOULDER"]=2, --"Shoulder",
+	["INVTYPE_CLOAK"]=3, --"Back",
+	["INVTYPE_CHEST"]=4, --"Chest",
+	["INVTYPE_ROBE"]=4, --"Chest",
+	["INVTYPE_BODY"]=5, --"Shirt",
+	["INVTYPE_TABARD"]=6, --"Tabard",
+	["INVTYPE_WRIST"]=7, --"Wrist",
+	["INVTYPE_HAND"]=8, --"Hands",
+	["INVTYPE_WAIST"]=9, --"Waist",
+	["INVTYPE_LEGS"]=10, --"Legs",
+	["INVTYPE_FEET"]=11, --"Feet",
+	["Wands"]=12,
+	["One-Handed Axes"]=13,
+	["One-Handed Swords"]=14,
+	["One-Handed Maces"]=15,
+	["Daggers"]=16,
+	["Fist Weapons"]=17,
+	["INVTYPE_SHIELD"]=18, --"Shields",
+	["INVTYPE_HOLDABLE"]=19, --"Held In Off-hand",
+	["Two-Handed Axes"]=20,
+	["Two-Handed Swords"]=21,
+	["Two-Handed Maces"]=22,
+	["Staves"]=23,
+	["Polearms"]=24,
+	["Bows"]=25,
+	["Guns"]=26,
+	["Crossbows"]=27,
+	["Warglaives"]=28,
 }
 
 
@@ -75,15 +76,6 @@ local KNOWN = "|cff0072b2" .. "You have collected this appearance"
 local UNKNOWN = "|cffd55e00" .. "You haven't collected this appearance"
 local UNKNOWABLE_BY_CHARACTER = "|cfff0e442" .. "This character cannot learn this item"
 local NOT_TRANSMOGABLE = "|cff666666" .. "This item cannot be learned"
-
-
-local function AnIndexOf(t,val)
-	-- return the first integer index holding the value 
-	-- http://stackoverflow.com/questions/2095669/getting-table-entry-index
-    for k,v in ipairs(t) do 
-        if v == val then return k end
-    end
-end
 
 
 local function addDoubleLine(tooltip, left_text, right_text)
@@ -149,7 +141,7 @@ function CanIMogIt:GetCategoryID(itemID)
 		-- Something that isn't equipable
 		return nil
 	end
-	return AnIndexOf(categoryMap, categoryName)
+	return categoryMap[categoryName]
 end
 
 
