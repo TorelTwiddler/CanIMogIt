@@ -169,10 +169,9 @@ function CanIMogIt:IsTransmogable(itemID)
 end
 
 
-local function attachItemTooltip(self)
-	CanIMogIt.tooltip = self
-    local itemName = select(1, self:GetItem())
-	local itemID = select(1, GetItemInfoInstant(itemName))
+local function addToTooltip(tooltip, itemID)
+	-- Does the calculations for determining what text to
+	-- display on the tooltip.
 	if type(itemID)=="number" then
 		if DEBUG then
 			printDebug(CanIMogIt.tooltip, itemID)
@@ -196,10 +195,22 @@ local function attachItemTooltip(self)
 			text = NOT_TRANSMOGABLE
 		end
 		if text then
-			addDoubleLine(self, CAN_I_MOG_IT, text)
+			addDoubleLine(tooltip, CAN_I_MOG_IT, text)
 		end
 	end
 end
+
+
+local function attachItemTooltip(self)
+	-- Hook for normal tooltips.
+	CanIMogIt.tooltip = self
+	local link = select(2, self:GetItem())
+	if link then
+    	local itemID = tonumber(link:match("item:(%d+)"))
+		addToTooltip(CanIMogIt.tooltip, itemID)
+	end
+end
+
 
 GameTooltip:HookScript("OnTooltipSetItem", attachItemTooltip)
 ItemRefTooltip:HookScript("OnTooltipSetItem", attachItemTooltip)
@@ -207,3 +218,18 @@ ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", attachItemTooltip)
 ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", attachItemTooltip)
 ShoppingTooltip1:HookScript("OnTooltipSetItem", attachItemTooltip)
 ShoppingTooltip2:HookScript("OnTooltipSetItem", attachItemTooltip)
+
+
+local function onSetHyperlink(self, link)
+	-- Hook for Hyperlinked tooltips.
+	CanIMogIt.tooltip = self
+	local type, id = string.match(link, "^(%a+):(%d+)")
+	if not type or not id then return end
+	if type == "item" then
+		addToTooltip(CanIMogIt.tooltip, id)
+	end
+end
+
+
+hooksecurefunc(ItemRefTooltip, "SetHyperlink", onSetHyperlink)
+hooksecurefunc(GameTooltip, "SetHyperlink", onSetHyperlink)
