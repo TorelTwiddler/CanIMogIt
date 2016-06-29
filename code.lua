@@ -2,11 +2,17 @@
 
 CanIMogIt = {}
 
+local dressUpModel = CreateFrame('DressUpModel')
+
 local DEBUG = false
 
 if DEBUG then
 	print("CanIMogIt is in Debug mode.")
 end
+
+-----------------------------
+-- Maps                    --
+-----------------------------
 
 ---- Transmog Categories
 -- 1 Head
@@ -71,12 +77,44 @@ local categoryMap = {
 }
 
 
-local CAN_I_MOG_IT = "|cff00a3cc" .. "CanIMogIt:"
-local KNOWN = "|cff0072b2" .. "You have collected this appearance"
-local UNKNOWN = "|cffd55e00" .. "You haven't collected this appearance"
-local UNKNOWABLE_BY_CHARACTER = "|cfff0e442" .. "This character cannot learn this item"
-local NOT_TRANSMOGABLE = "|cff666666" .. "This item cannot be learned"
+local inventorySlotsMap = {
+    ['INVTYPE_HEAD'] = 1,
+    ['INVTYPE_NECK'] = 2,
+    ['INVTYPE_SHOULDER'] = 3,
+    ['INVTYPE_BODY'] = 4,
+    ['INVTYPE_CHEST'] = 5,
+    ['INVTYPE_ROBE'] = 5,
+    ['INVTYPE_WAIST'] = 6,
+    ['INVTYPE_LEGS'] = 7,
+    ['INVTYPE_FEET'] = 8,
+    ['INVTYPE_WRIST'] = 9,
+    ['INVTYPE_HAND'] = 10,
+    ['INVTYPE_CLOAK'] = 15,
+    ['INVTYPE_WEAPON'] = 16,
+    ['INVTYPE_SHIELD'] = 17,
+    ['INVTYPE_2HWEAPON'] = 16,
+    ['INVTYPE_WEAPONMAINHAND'] = 16,
+    ['INVTYPE_RANGED'] = 16,
+    ['INVTYPE_RANGEDRIGHT'] = 16,
+    ['INVTYPE_WEAPONOFFHAND'] = 17,
+    ['INVTYPE_HOLDABLE'] = 17,
+}
 
+
+-----------------------------
+-- Tooltip text constants  --
+-----------------------------
+local CAN_I_MOG_IT = 			"|cff00a3cc" .. "CanIMogIt:"
+local KNOWN = 					"|cff0072b2" .. "You have collected this appearance"
+local KNOWN_FROM_ANOTHER_ITEM = "|cff0072b2" .. "You have collected this appearance from another item"
+local UNKNOWN = 				"|cffd55e00" .. "You haven't collected this appearance"
+local UNKNOWABLE_BY_CHARACTER = "|cfff0e442" .. "This character cannot learn this item"
+local NOT_TRANSMOGABLE = 		"|cff666666" .. "This item cannot be learned"
+
+
+-----------------------------
+-- Adding to tooltip       --
+-----------------------------
 
 local function addDoubleLine(tooltip, left_text, right_text)
 	tooltip:AddDoubleLine(left_text, right_text)
@@ -88,6 +126,11 @@ local function addLine(tooltip, text)
 	tooltip:AddLine(text)
 	tooltip:Show()
 end
+
+
+-----------------------------
+-- Debug functions         --
+-----------------------------
 
 
 local function printDebug(tooltip, itemID)
@@ -108,15 +151,65 @@ local function printDebug(tooltip, itemID)
 		addDoubleLine(tooltip, "C_TransmogCollection.IsCategoryValidForItem:", tostring(C_TransmogCollection.IsCategoryValidForItem(categoryID, itemID)))
 		addDoubleLine(tooltip, "PlayerCanLearnTransmog:", tostring(CanIMogIt:PlayerCanLearnTransmog(itemID)))
 	end
-
 	
-	addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(CanIMogIt:PlayerKnowsTransmog(itemID)))
+	addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemID)))
 	addDoubleLine(tooltip, "C_TransmogCollection.PlayerHasTransmog: ", tostring(C_TransmogCollection.PlayerHasTransmog(itemID)))
+
+	local appearanceID = CanIMogIt:GetAppearanceID(itemID)
+	addDoubleLine(tooltip, "GetAppearanceID:", tostring(appearanceID))
+	if appearanceID then
+		addDoubleLine(tooltip, "PlayerHasAppearance:", tostring(CanIMogIt:PlayerHasAppearance(appearanceID)))
+	end
+end
+
+
+-----------------------------
+-- CanIMogIt Core methods  --
+-----------------------------
+
+ 
+function CanIMogIt:GetAppearanceID(itemID)
+	-- Gets the appearanceID of the given itemID.
+    local itemID, _, _, slotName = GetItemInfoInstant(itemID)
+    local slot = inventorySlotsMap[slotName]
+    if not slot then return end
+    dressUpModel:SetUnit('player')
+    dressUpModel:Undress()
+    dressUpModel:TryOn('item:' .. itemID, slot)
+    local source = dressUpModel:GetSlotTransmogSources(slot)
+    if source then
+        local appearance = C_TransmogCollection.GetAppearanceInfoBySource(source)
+        return appearance and appearance.appearanceID
+    end
+end
+
+
+function CanIMogIt:PlayerHasAppearance(appearanceID)
+	-- Returns whether the player has the given appearanceID.
+    local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
+    if sources then
+        for i, source in pairs(sources) do
+            if source.isCollected then
+                return true
+            end
+        end
+    end
+    return false
 end
 
 
 function CanIMogIt:PlayerKnowsTransmog(itemID)
-	-- Returns whether this item is already known by the player.
+	-- Returns whether this item's appearance is already known by the player.
+	local appearanceID = CanIMogIt:GetAppearanceID(itemID)
+	if appearanceID then
+		return CanIMogIt:PlayerHasAppearance(appearanceID)
+	end
+	return false
+end
+
+
+function CanIMogIt:PlayerKnowsTransmogFromItem(itemID)
+	-- Returns whether the transmog is known from this item specifically.
 	return C_TransmogCollection.PlayerHasTransmog(itemID)
 end
 
@@ -169,6 +262,11 @@ function CanIMogIt:IsTransmogable(itemID)
 end
 
 
+-----------------------------
+-- Tooltip hooks           --
+-----------------------------
+
+
 local function addToTooltip(tooltip, itemID)
 	-- Does the calculations for determining what text to
 	-- display on the tooltip.
@@ -178,9 +276,12 @@ local function addToTooltip(tooltip, itemID)
 		end
 		local text = ""
 		if CanIMogIt:IsTransmogable(itemID) then
-			if CanIMogIt:PlayerKnowsTransmog(itemID) then
+			if CanIMogIt:PlayerKnowsTransmogFromItem(itemID) then
 				-- Set text to KNOWN
 				text = KNOWN
+			elseif CanIMogIt:PlayerKnowsTransmog(itemID) then
+				-- Set text to KNOWN_FROM_ANOTHER_ITEM
+				text = KNOWN_FROM_ANOTHER_ITEM
 			else
 				if CanIMogIt:PlayerCanLearnTransmog(itemID) then
 					-- Set text to UNKNOWN
