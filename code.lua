@@ -133,9 +133,10 @@ end
 -----------------------------
 
 
-local function printDebug(tooltip, itemID)
+local function printDebug(tooltip, itemLink)
 	-- Add debug statements to the tooltip, to make it easier to understand
 	-- what may be going wrong.
+	local itemID = CanIMogIt:GetItemID(itemLink)
 	addDoubleLine(tooltip, "Item ID:", tostring(itemID))
 	local _, _, quality, _, _, itemClass, itemSubClass, _, equipSlot = GetItemInfo(itemID)
 	addDoubleLine(tooltip, "Item Quality:", tostring(quality))
@@ -144,18 +145,18 @@ local function printDebug(tooltip, itemID)
 	addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
 	local categoryID = CanIMogIt:GetCategoryID(itemID)
 	addDoubleLine(tooltip, "categoryID:", tostring(categoryID))
-	addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemID)))
+	addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemLink)))
 
 	if categoryID then
 		addDoubleLine(tooltip, "IsValidInCategory:", tostring(CanIMogIt:IsValidInCategory(categoryID, itemID)))
 		addDoubleLine(tooltip, "C_TransmogCollection.IsCategoryValidForItem:", tostring(C_TransmogCollection.IsCategoryValidForItem(categoryID, itemID)))
-		addDoubleLine(tooltip, "PlayerCanLearnTransmog:", tostring(CanIMogIt:PlayerCanLearnTransmog(itemID)))
+		addDoubleLine(tooltip, "PlayerCanLearnTransmog:", tostring(CanIMogIt:PlayerCanLearnTransmog(itemLink)))
 	end
 	
-	addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemID)))
+	addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)))
 	addDoubleLine(tooltip, "C_TransmogCollection.PlayerHasTransmog: ", tostring(C_TransmogCollection.PlayerHasTransmog(itemID)))
 
-	local appearanceID = CanIMogIt:GetAppearanceID(itemID)
+	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
 	addDoubleLine(tooltip, "GetAppearanceID:", tostring(appearanceID))
 	if appearanceID then
 		addDoubleLine(tooltip, "PlayerHasAppearance:", tostring(CanIMogIt:PlayerHasAppearance(appearanceID)))
@@ -168,18 +169,18 @@ end
 -----------------------------
 
  
-function CanIMogIt:GetAppearanceID(itemID)
+function CanIMogIt:GetAppearanceID(itemLink)
 	-- Gets the appearanceID of the given itemID.
-    local itemID, _, _, slotName = GetItemInfoInstant(itemID)
+    local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
     local slot = inventorySlotsMap[slotName]
-    if not slot then return end
+    if not slot or not IsDressableItem(itemLink) then return end
     dressUpModel:SetUnit('player')
     dressUpModel:Undress()
-    dressUpModel:TryOn('item:' .. itemID, slot)
+    dressUpModel:TryOn(itemLink, slot)
     local source = dressUpModel:GetSlotTransmogSources(slot)
     if source then
-        local appearance = C_TransmogCollection.GetAppearanceInfoBySource(source)
-        return appearance and appearance.appearanceID
+        local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(source))
+        return appearanceID
     end
 end
 
@@ -198,9 +199,9 @@ function CanIMogIt:PlayerHasAppearance(appearanceID)
 end
 
 
-function CanIMogIt:PlayerKnowsTransmog(itemID)
+function CanIMogIt:PlayerKnowsTransmog(itemLink)
 	-- Returns whether this item's appearance is already known by the player.
-	local appearanceID = CanIMogIt:GetAppearanceID(itemID)
+	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
 	if appearanceID then
 		return CanIMogIt:PlayerHasAppearance(appearanceID)
 	end
@@ -208,14 +209,16 @@ function CanIMogIt:PlayerKnowsTransmog(itemID)
 end
 
 
-function CanIMogIt:PlayerKnowsTransmogFromItem(itemID)
+function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
 	-- Returns whether the transmog is known from this item specifically.
+	local itemID = CanIMogIt:GetItemID(itemLink)
 	return C_TransmogCollection.PlayerHasTransmog(itemID)
 end
 
 
-function CanIMogIt:PlayerCanLearnTransmog(itemID)
+function CanIMogIt:PlayerCanLearnTransmog(itemLink)
 	-- Returns whether the player can learn the item or not.
+	local itemID = CanIMogIt:GetItemID(itemLink)
 	local categoryID = CanIMogIt:GetCategoryID(itemID)
 	return CanIMogIt:IsValidInCategory(categoryID, itemID)
 end
@@ -251,53 +254,64 @@ function CanIMogIt:IsValidInCategory(categoryID, itemID)
 end
 
 
-function CanIMogIt:IsTransmogable(itemID)
+function CanIMogIt:IsTransmogable(itemLink)
 	-- Returns whether the item is transmoggable or not.
-	local quality = CanIMogIt:GetQuality(itemID)
+	local quality = CanIMogIt:GetQuality(itemLink)
 	if quality <= 1 then
 		return false
 	end
+	local itemID = CanIMogIt:GetItemID(itemLink)
 	local categoryID = CanIMogIt:GetCategoryID(itemID)
 	return not not categoryID
 end
 
+
+function CanIMogIt:GetItemID(itemLink)
+	return tonumber(itemLink:match("item:(%d+)"))
+end
+
+
+function CanIMogIt:GetItemLink(itemID)
+	return select(2, GetItemInfo(itemID))
+end
 
 -----------------------------
 -- Tooltip hooks           --
 -----------------------------
 
 
-local function addToTooltip(tooltip, itemID)
+local function addToTooltip(tooltip, itemLink)
 	-- Does the calculations for determining what text to
 	-- display on the tooltip.
-	if type(itemID)=="number" then
-		if DEBUG then
-			printDebug(CanIMogIt.tooltip, itemID)
-		end
-		local text = ""
-		if CanIMogIt:IsTransmogable(itemID) then
-			if CanIMogIt:PlayerKnowsTransmogFromItem(itemID) then
-				-- Set text to KNOWN
-				text = KNOWN
-			elseif CanIMogIt:PlayerKnowsTransmog(itemID) then
-				-- Set text to KNOWN_FROM_ANOTHER_ITEM
-				text = KNOWN_FROM_ANOTHER_ITEM
-			else
-				if CanIMogIt:PlayerCanLearnTransmog(itemID) then
-					-- Set text to UNKNOWN
-					text = UNKNOWN
-				else
-					-- Set text to UNKNOWABLE_BY_CHARACTER
-					text = UNKNOWABLE_BY_CHARACTER
-				end
-			end
+	local itemID = CanIMogIt:GetItemID(itemLink)
+	local itemInfo = GetItemInfo(itemLink)
+	if not itemInfo then return end
+	if DEBUG then
+		printDebug(CanIMogIt.tooltip, itemLink)
+	end
+	local text = ""
+	if CanIMogIt:IsTransmogable(itemLink) then
+		if CanIMogIt:PlayerKnowsTransmogFromItem(itemLink) then
+			-- Set text to KNOWN
+			text = KNOWN
+		elseif CanIMogIt:PlayerKnowsTransmog(itemLink) then
+			-- Set text to KNOWN_FROM_ANOTHER_ITEM
+			text = KNOWN_FROM_ANOTHER_ITEM
 		else
-			--Set text to NOT_TRANSMOGABLE
-			text = NOT_TRANSMOGABLE
+			if CanIMogIt:PlayerCanLearnTransmog(itemLink) then
+				-- Set text to UNKNOWN
+				text = UNKNOWN
+			else
+				-- Set text to UNKNOWABLE_BY_CHARACTER
+				text = UNKNOWABLE_BY_CHARACTER
+			end
 		end
-		if text then
-			addDoubleLine(tooltip, CAN_I_MOG_IT, text)
-		end
+	else
+		--Set text to NOT_TRANSMOGABLE
+		text = NOT_TRANSMOGABLE
+	end
+	if text then
+		addDoubleLine(tooltip, CAN_I_MOG_IT, text)
 	end
 end
 
@@ -307,8 +321,7 @@ local function attachItemTooltip(self)
 	CanIMogIt.tooltip = self
 	local link = select(2, self:GetItem())
 	if link then
-    	local itemID = tonumber(link:match("item:(%d+)"))
-		addToTooltip(CanIMogIt.tooltip, itemID)
+		addToTooltip(CanIMogIt.tooltip, link)
 	end
 end
 
@@ -327,10 +340,9 @@ local function onSetHyperlink(self, link)
 	local type, id = string.match(link, "^(%a+):(%d+)")
 	if not type or not id then return end
 	if type == "item" then
-		addToTooltip(CanIMogIt.tooltip, id)
+		addToTooltip(CanIMogIt.tooltip, link)
 	end
 end
 
 
-hooksecurefunc(ItemRefTooltip, "SetHyperlink", onSetHyperlink)
 hooksecurefunc(GameTooltip, "SetHyperlink", onSetHyperlink)
