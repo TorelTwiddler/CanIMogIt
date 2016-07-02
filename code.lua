@@ -4,7 +4,7 @@ CanIMogIt = {}
 
 local dressUpModel = CreateFrame('DressUpModel')
 
-local DEBUG = false
+local DEBUG = true
 
 if DEBUG then
 	print("CanIMogIt is in Debug mode.")
@@ -150,14 +150,18 @@ local function printDebug(tooltip, itemLink)
 	if categoryID then
 		addDoubleLine(tooltip, "IsValidInCategory:", tostring(CanIMogIt:IsValidInCategory(categoryID, itemID)))
 		addDoubleLine(tooltip, "C_TransmogCollection.IsCategoryValidForItem:", tostring(C_TransmogCollection.IsCategoryValidForItem(categoryID, itemID)))
-		addDoubleLine(tooltip, "PlayerCanLearnTransmog:", tostring(CanIMogIt:PlayerCanLearnTransmog(itemLink)))
 	end
 	
 	addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)))
 	addDoubleLine(tooltip, "C_TransmogCollection.PlayerHasTransmog: ", tostring(C_TransmogCollection.PlayerHasTransmog(itemID)))
 
+	local source = CanIMogIt:GetSource(itemLink)
+	addDoubleLine(tooltip, "GetSource:", tostring(source))
 	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
 	addDoubleLine(tooltip, "GetAppearanceID:", tostring(appearanceID))
+	addDoubleLine(tooltip, "PlayerCanLearnTransmog:", tostring(CanIMogIt:PlayerCanLearnTransmog(itemLink)))
+
+
 	if appearanceID then
 		addDoubleLine(tooltip, "PlayerHasAppearance:", tostring(CanIMogIt:PlayerHasAppearance(appearanceID)))
 	end
@@ -168,19 +172,24 @@ end
 -- CanIMogIt Core methods  --
 -----------------------------
 
- 
-function CanIMogIt:GetAppearanceID(itemLink)
-	-- Gets the appearanceID of the given itemID.
+
+function CanIMogIt:GetSource(itemLink)
+	-- Get the source from the item link.
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
     local slot = inventorySlotsMap[slotName]
     if not slot or not IsDressableItem(itemLink) then return end
     dressUpModel:SetUnit('player')
     dressUpModel:Undress()
     dressUpModel:TryOn(itemLink, slot)
-    local source = dressUpModel:GetSlotTransmogSources(slot)
-    if source then
-        local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(source))
-        return appearanceID
+    return dressUpModel:GetSlotTransmogSources(slot)
+end
+
+ 
+function CanIMogIt:GetAppearanceID(itemLink)
+	-- Gets the appearanceID of the given itemID.
+	local source = CanIMogIt:GetSource(itemLink)
+    if source and source ~= 0 then
+        return select(2, C_TransmogCollection.GetAppearanceSourceInfo(source))
     end
 end
 
@@ -218,9 +227,19 @@ end
 
 function CanIMogIt:PlayerCanLearnTransmog(itemLink)
 	-- Returns whether the player can learn the item or not.
-	local itemID = CanIMogIt:GetItemID(itemLink)
-	local categoryID = CanIMogIt:GetCategoryID(itemID)
-	return CanIMogIt:IsValidInCategory(categoryID, itemID)
+	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
+	if not appearanceID then
+		return false
+	end
+    local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
+    if sources then
+        for i, source in pairs(sources) do
+            if C_TransmogCollection.PlayerCanCollectSource(source.sourceID) then
+                return true
+            end
+        end
+    end
+	return false
 end
 
 
@@ -260,9 +279,11 @@ function CanIMogIt:IsTransmogable(itemLink)
 	if quality <= 1 then
 		return false
 	end
-	local itemID = CanIMogIt:GetItemID(itemLink)
-	local categoryID = CanIMogIt:GetCategoryID(itemID)
-	return not not categoryID
+	-- local itemID = CanIMogIt:GetItemID(itemLink)
+	-- local categoryID = CanIMogIt:GetCategoryID(itemID)
+	-- return not not categoryID
+	local source = CanIMogIt:GetSource(itemLink)
+	return source ~= 0 and not not source
 end
 
 
