@@ -104,12 +104,12 @@ local inventorySlotsMap = {
 -----------------------------
 -- Tooltip text constants  --
 -----------------------------
-local CAN_I_MOG_IT = 			"|cff00a3cc" .. "CanIMogIt:"
-local KNOWN = 					"|cff0072b2" .. "You have collected this appearance"
-local KNOWN_FROM_ANOTHER_ITEM = "|cff0072b2" .. "You have collected this appearance from another item"
-local UNKNOWN = 				"|cffd55e00" .. "You haven't collected this appearance"
-local UNKNOWABLE_BY_CHARACTER = "|cfff0e442" .. "This character cannot learn this item"
-local NOT_TRANSMOGABLE = 		"|cff666666" .. "This item cannot be learned"
+local CAN_I_MOG_IT = 			"|cff00a3cc" .. " "
+local KNOWN = 					"|cff15abff" .. "Learned."
+local KNOWN_FROM_ANOTHER_ITEM = "|cff15abff" .. "Learned from another item."
+local UNKNOWN = 				"|cffff9333" .. "Not learned."
+local UNKNOWABLE_BY_CHARACTER = "|cfff0e442" .. "This character cannot learn this item."
+local NOT_TRANSMOGABLE = 		"|cff888888" .. "Cannot be learned."
 
 
 -----------------------------
