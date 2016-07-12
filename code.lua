@@ -129,6 +129,16 @@ end
 
 
 -----------------------------
+-- CanIMogIt variables        --
+-----------------------------
+
+
+CanIMogIt.tooltip = nil;
+CanIMogIt.cachedItemLink = nil;
+CanIMogIt.cachedTooltipText = nil;
+
+
+-----------------------------
 -- CanIMogIt Core methods  --
 -----------------------------
 
@@ -273,11 +283,25 @@ local function addToTooltip(tooltip, itemLink)
 	-- Does the calculations for determining what text to
 	-- display on the tooltip.
 	local itemInfo = GetItemInfo(itemLink)
-	if not itemInfo then return end
+	if not itemInfo then 
+		CanIMogIt.cachedItemLink = nil
+		CanIMogIt.cachedTooltipText = nil
+		return 
+	end
 	if DEBUG then
 		printDebug(CanIMogIt.tooltip, itemLink)
 	end
-	local text = CanIMogIt:GetTooltipText(itemLink)
+	
+	local text;
+	-- Checking against the cached item first.
+	if itemLink == CanIMogIt.cachedItemLink then
+		text = CanIMogIt.cachedTooltipText
+	else
+		text = CanIMogIt:GetTooltipText(itemLink)
+		-- Save the cached item and text, so it's faster next time.
+		CanIMogIt.cachedItemLink = itemLink
+		CanIMogIt.cachedTooltipText = text
+	end
 	if text then
 		addDoubleLine(tooltip, CanIMogIt.CAN_I_MOG_IT, text)
 	end
