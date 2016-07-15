@@ -6,3 +6,5 @@
 ## X-Category: Transmogrify
 ## X-Website: http://mods.curse.com/addons/wow/can-i-mog-it
 code.lua
+options.lua
+##SavedVariables: CanIMogItOptions

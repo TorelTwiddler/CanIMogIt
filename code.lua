@@ -4,11 +4,6 @@ CanIMogIt = {}
 
 local dressUpModel = CreateFrame('DressUpModel')
 
-local DEBUG = false
-
-if DEBUG then
-	print("CanIMogIt is in Debug mode.")
-end
 
 -----------------------------
 -- Maps                    --
@@ -143,6 +138,13 @@ CanIMogIt.cachedTooltipText = nil;
 -----------------------------
 
 
+function CanIMogIt:IsEquippable(itemLink)
+	-- Returns whether the item is equippable or not (exluding bags)
+	local slotName = select(9, GetItemInfo(itemLink))
+	return slotName ~= "" and slotName ~= "INVTYPE_BAG"
+end
+
+
 function CanIMogIt:GetSource(itemLink)
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
     local slot = inventorySlotsMap[slotName]
@@ -251,6 +253,12 @@ function CanIMogIt:GetTooltipText(itemLink)
 	-- Gets the text to display on the tooltip
 	local text = ""
 
+	if CanIMogItOptions["showEquippableOnly"] and 
+			not CanIMogIt:IsEquippable(itemLink) then
+		-- Don't bother if it's not equipable.
+		return
+	end
+
 	if CanIMogIt:IsTransmogable(itemLink) then
 		if CanIMogIt:PlayerKnowsTransmogFromItem(itemLink) then
 			-- Set text to KNOWN
@@ -288,7 +296,7 @@ local function addToTooltip(tooltip, itemLink)
 		CanIMogIt.cachedTooltipText = nil
 		return 
 	end
-	if DEBUG then
+	if CanIMogItOptions["debug"] then
 		printDebug(CanIMogIt.tooltip, itemLink)
 	end
 	
