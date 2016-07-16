@@ -80,7 +80,12 @@ CanIMogIt.NOT_TRANSMOGABLE = 		"|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANS
 
 
 local exceptionItems = {
-    ['INVTYPE_HEAD'] = {},
+    ['INVTYPE_HEAD'] = {
+		[87213] = CanIMogIt.NOT_TRANSMOGABLE, -- Mist-Piercing Goggles
+		[52485] = CanIMogIt.NOT_TRANSMOGABLE, -- Jeweler's Ruby Monocle
+		[52486] = CanIMogIt.NOT_TRANSMOGABLE, -- Jeweler's Sapphire Monocle
+		-- [52487] = CanIMogIt.NOT_TRANSMOGABLE, -- Jeweler's Ruby Monocle -- NOTE: This item works.
+	},
     ['INVTYPE_SHOULDER'] = {
 		[119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
 	},
@@ -124,7 +129,9 @@ local exceptionItems = {
 		-- Brewfest Steins end --
 	},
     ['INVTYPE_SHIELD'] = {},
-    ['INVTYPE_2HWEAPON'] = {},
+    ['INVTYPE_2HWEAPON'] = {
+		[41755] = CanIMogIt.NOT_TRANSMOGABLE, -- The Fire Extinguisher
+	},
     ['INVTYPE_WEAPONMAINHAND'] = {},
     ['INVTYPE_RANGED'] = {},
     ['INVTYPE_RANGEDRIGHT'] = {},
