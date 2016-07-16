@@ -75,6 +75,66 @@ CanIMogIt.NOT_TRANSMOGABLE = 		"|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANS
 
 
 -----------------------------
+-- Exceptions              --
+-----------------------------
+
+
+local exceptionItems = {
+    ['INVTYPE_HEAD'] = {},
+    ['INVTYPE_SHOULDER'] = {
+		[119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
+	},
+    ['INVTYPE_BODY'] = {},
+    ['INVTYPE_CHEST'] = {},
+    ['INVTYPE_ROBE'] = {},
+    ['INVTYPE_WAIST'] = {},
+    ['INVTYPE_LEGS'] = {},
+    ['INVTYPE_FEET'] = {},
+    ['INVTYPE_WRIST'] = {},
+    ['INVTYPE_HAND'] = {},
+    ['INVTYPE_CLOAK'] = {},
+    ['INVTYPE_WEAPON'] = {
+		[89566] = CanIMogIt.NOT_TRANSMOGABLE, -- Novice's Handwraps
+		[89570] = CanIMogIt.NOT_TRANSMOGABLE, -- Initiate's Handwraps
+		[89571] = CanIMogIt.NOT_TRANSMOGABLE, -- Grappling Handwraps
+		[89572] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Pilgrimage
+		[89573] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Meditation
+		[89574] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Fallen Blossoms
+		[89575] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Serenity
+		-- Brewfest Steins start --
+		[27941] = CanIMogIt.NOT_TRANSMOGABLE,
+		[33016] = CanIMogIt.NOT_TRANSMOGABLE,
+		[37892] = CanIMogIt.NOT_TRANSMOGABLE,
+		[32912] = CanIMogIt.NOT_TRANSMOGABLE,
+		[33020] = CanIMogIt.NOT_TRANSMOGABLE,
+		[32917] = CanIMogIt.NOT_TRANSMOGABLE,
+		[33017] = CanIMogIt.NOT_TRANSMOGABLE,
+		[33021] = CanIMogIt.NOT_TRANSMOGABLE,
+		[33019] = CanIMogIt.NOT_TRANSMOGABLE,
+		[32918] = CanIMogIt.NOT_TRANSMOGABLE,
+		[37897] = CanIMogIt.NOT_TRANSMOGABLE,
+		[32920] = CanIMogIt.NOT_TRANSMOGABLE,
+		[37895] = CanIMogIt.NOT_TRANSMOGABLE,
+		[32915] = CanIMogIt.NOT_TRANSMOGABLE,
+		[37896] = CanIMogIt.NOT_TRANSMOGABLE,
+		[32919] = CanIMogIt.NOT_TRANSMOGABLE,
+		[37894] = CanIMogIt.NOT_TRANSMOGABLE,
+		[37893] = CanIMogIt.NOT_TRANSMOGABLE,
+		[33018] = CanIMogIt.NOT_TRANSMOGABLE,
+		-- Brewfest Steins end --
+	},
+    ['INVTYPE_SHIELD'] = {},
+    ['INVTYPE_2HWEAPON'] = {},
+    ['INVTYPE_WEAPONMAINHAND'] = {},
+    ['INVTYPE_RANGED'] = {},
+    ['INVTYPE_RANGEDRIGHT'] = {},
+    ['INVTYPE_WEAPONOFFHAND'] = {},
+    ['INVTYPE_HOLDABLE'] = {},
+	['INVTYPE_TABARD'] = {},
+}
+
+
+-----------------------------
 -- Adding to tooltip       --
 -----------------------------
 
@@ -136,6 +196,14 @@ CanIMogIt.cachedTooltipText = nil;
 -----------------------------
 -- CanIMogIt Core methods  --
 -----------------------------
+
+
+function CanIMogIt:GetExceptionText(itemLink)
+	-- Returns the exception text for this item, if it has one.
+	local itemID = CanIMogIt:GetItemID(itemLink)
+	local slotName = select(9, GetItemInfo(itemLink))
+	return exceptionItems[slotName][itemID]
+end
 
 
 function CanIMogIt:IsEquippable(itemLink)
@@ -257,6 +325,11 @@ function CanIMogIt:GetTooltipText(itemLink)
 			not CanIMogIt:IsEquippable(itemLink) then
 		-- Don't bother if it's not equipable.
 		return
+	end
+
+	local exception_text = CanIMogIt:GetExceptionText(itemLink)
+	if exception_text then
+		return exception_text
 	end
 
 	if CanIMogIt:IsTransmogable(itemLink) then
