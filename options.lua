@@ -17,7 +17,7 @@ CanIMogItOptions_Defaults = {
 
 CanIMogItOptions_DisplayData = {
     ["debug"] = {
-        ["displayName"] = "Debug",
+        ["displayName"] = "Debug Tooltip",
         ["description"] = "Enables a detailed display for debug purposes. Use this when sending bug reports.",
     },
     ["showEquippableOnly"] = {
