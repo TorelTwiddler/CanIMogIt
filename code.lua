@@ -63,6 +63,42 @@ local inventorySlotsMap = {
 }
 
 
+local MISC = 0
+local CLOTH = 1
+local LEATHER = 2
+local MAIL = 3
+local PLATE = 4
+local COSMETIC = 5
+
+local classArmorTypeMap = {
+	["DEATHKNIGHT"] = PLATE,
+	["DEMONHUNTER"] = LEATHER,
+	["DRUID"] = LEATHER,
+	["HUNTER"] = MAIL,
+	["MAGE"] = CLOTH,
+	["MONK"] = LEATHER,
+	["PALADIN"] = PLATE,
+	["PRIEST"] = CLOTH,
+	["ROGUE"] = LEATHER,
+	["SHAMAN"] = MAIL,
+	["WARLOCK"] = CLOTH,
+	["WARRIOR"] = PLATE,
+}
+
+
+local armorTypeSlots = {
+	["INVTYPE_HEAD"] = true,
+	["INVTYPE_SHOULDER"] = true,
+	["INVTYPE_CHEST"] = true,
+	["INVTYPE_ROBE"] = true,
+	["INVTYPE_WRIST"] = true,
+	["INVTYPE_HAND"] = true,
+	["INVTYPE_WAIST"] = true,
+	["INVTYPE_LEGS"] = true,
+	["INVTYPE_FEET"] = true,
+}
+
+
 -----------------------------
 -- Tooltip text constants --
 -----------------------------
@@ -183,6 +219,9 @@ local function printDebug(tooltip, itemLink)
 	addDoubleLine(tooltip, "Item SubClass:", tostring(itemSubClass))
 	addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
 	addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemLink)))
+	addDoubleLine(tooltip, "IsItemArmor:", tostring(CanIMogIt:IsItemArmor(itemLink)))
+	addDoubleLine(tooltip, "GetPlayerArmorTypeName:", tostring(CanIMogIt:GetPlayerArmorTypeName()))
+	addDoubleLine(tooltip, "IsArmorAppropriateForPlayer:", tostring(CanIMogIt:IsArmorAppropriateForPlayer(itemLink)))
 
 	local source = CanIMogIt:GetSource(itemLink)
 	if source then
@@ -215,19 +254,42 @@ CanIMogIt.cachedTooltipText = nil;
 -----------------------------
 
 
+function CanIMogIt:GetPlayerArmorTypeName()
+	local playerArmorTypeID = classArmorTypeMap[select(2, UnitClass("player"))]
+	return select(1, GetItemSubClassInfo(4, playerArmorTypeID))
+end
+
+
+function CanIMogIt:IsItemArmor(itemLink)
+	return GetItemClassInfo(4) == select(6, GetItemInfo(itemLink))
+end
+
+
+function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
+	local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
+	if armorTypeSlots[CanIMogIt:GetSlotName(itemLink)] then 
+		return playerArmorTypeID == select(7, GetItemInfo(itemLink))
+	else
+		return true
+	end
+end
+
+
 function CanIMogIt:GetSlotName(itemLink)
 	return select(9, GetItemInfo(itemLink))
 end
 
 
 function CanIMogIt:IsValidAppearanceForPlayer(itemLink)
-	local itemID = CanIMogIt:GetItemID(itemLink)
-	for categoryID = 1,28 do
-		if C_TransmogCollection.IsCategoryValidForItem(categoryID, itemID) then
+	if IsEquippableItem(itemLink) then
+		if CanIMogIt:IsItemArmor(itemLink) then
+			return CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
+		else
 			return true
 		end
+	else
+		return false
 	end
-	return false
 end
 
 
