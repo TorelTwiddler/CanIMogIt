@@ -4,13 +4,14 @@
 
 local _G = _G
 
-CanIMogIt_OptionsVersion = "1.1"
+CanIMogIt_OptionsVersion = "1.2"
 
 CanIMogItOptions_Defaults = {
     ["options"] = {
         ["version"] = CanIMogIt_OptionsVersion,
         ["debug"] = false,
         ["showEquippableOnly"] = true,
+        ["showTransmoggableOnly"] = false,
     },
 }
 
@@ -18,11 +19,15 @@ CanIMogItOptions_Defaults = {
 CanIMogItOptions_DisplayData = {
     ["debug"] = {
         ["displayName"] = "Debug Tooltip",
-        ["description"] = "Enables a detailed display for debug purposes. Use this when sending bug reports.",
+        ["description"] = "Detailed information for debug purposes. Use this when sending bug reports.",
     },
     ["showEquippableOnly"] = {
-        ["displayName"] = "Show On Equippable Items Only",
-        ["description"] = "When selected, only items that can be equipped will display the Can I Mog It? tooltip."
+        ["displayName"] = "Equippable Items Only",
+        ["description"] = "Only show on items that can be equipped."
+    },
+    ["showTransmoggableOnly"] = {
+        ["displayName"] = "Transmoggable Items Only",
+        ["description"] = "Only show on items that can be transmoggrified."
     },
 }
 
@@ -75,10 +80,12 @@ local function createOptionsMenu()
     -- define the checkboxes
     local debug = newCheckbox(CanIMogIt.frame, "debug")
     local showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
+    local showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
 
     -- position the checkboxes
     debug:SetPoint("TOPLEFT", 16, -16)
     showEquippableOnly:SetPoint("TOPLEFT", debug, "BOTTOMLEFT")
+    showTransmoggableOnly:SetPoint("TOPLEFT", showEquippableOnly, "BOTTOMLEFT")
 end
 
 

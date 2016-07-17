@@ -126,6 +126,7 @@ local exceptionItems = {
 		[37894] = CanIMogIt.NOT_TRANSMOGABLE,
 		[37893] = CanIMogIt.NOT_TRANSMOGABLE,
 		[33018] = CanIMogIt.NOT_TRANSMOGABLE,
+		[56836] = CanIMogIt.NOT_TRANSMOGABLE,
 		-- Brewfest Steins end --
 	},
     ['INVTYPE_SHIELD'] = {},
@@ -209,7 +210,10 @@ function CanIMogIt:GetExceptionText(itemLink)
 	-- Returns the exception text for this item, if it has one.
 	local itemID = CanIMogIt:GetItemID(itemLink)
 	local slotName = select(9, GetItemInfo(itemLink))
-	return exceptionItems[slotName][itemID]
+	local slotExceptions = exceptionItems[slotName]
+	if slotExceptions then
+		return slotExceptions[itemID]
+	end
 end
 
 
@@ -389,6 +393,10 @@ local function addToTooltip(tooltip, itemLink)
 		-- Save the cached item and text, so it's faster next time.
 		CanIMogIt.cachedItemLink = itemLink
 		CanIMogIt.cachedTooltipText = text
+	end
+	if CanIMogItOptions["showTransmoggableOnly"] and text == CanIMogIt.NOT_TRANSMOGABLE then
+		-- If we don't want to show the tooltip if it's not transmoggable
+		return
 	end
 	if text then
 		addDoubleLine(tooltip, CanIMogIt.CAN_I_MOG_IT, text)
