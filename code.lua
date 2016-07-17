@@ -214,10 +214,26 @@ CanIMogIt.cachedTooltipText = nil;
 -----------------------------
 
 
+function CanIMogIt:GetSlotName(itemLink)
+	return select(9, GetItemInfo(itemLink))
+end
+
+
+function CanIMogIt:EquippableByPlayer(itemLink)
+	local itemID = CanIMogIt:GetItemID(itemLink)
+	for categoryID = 1,28 do
+		if C_TransmogCollection.IsCategoryValidForItem(categoryID, itemID) then
+			return true
+		end
+	end
+	return false
+end
+
+
 function CanIMogIt:GetExceptionText(itemLink)
 	-- Returns the exception text for this item, if it has one.
 	local itemID = CanIMogIt:GetItemID(itemLink)
-	local slotName = select(9, GetItemInfo(itemLink))
+	local slotName = CanIMogIt:GetSlotName(itemLink)
 	local slotExceptions = exceptionItems[slotName]
 	if slotExceptions then
 		return slotExceptions[itemID]
@@ -227,7 +243,7 @@ end
 
 function CanIMogIt:IsEquippable(itemLink)
 	-- Returns whether the item is equippable or not (exluding bags)
-	local slotName = select(9, GetItemInfo(itemLink))
+	local slotName = CanIMogIt:GetSlotName(itemLink)
 	return slotName ~= "" and slotName ~= "INVTYPE_BAG"
 end
 
@@ -354,14 +370,14 @@ function CanIMogIt:GetTooltipText(itemLink)
 
 	if CanIMogIt:IsTransmogable(itemLink) then
 		if CanIMogIt:PlayerKnowsTransmogFromItem(itemLink) then
-			if CanIMogIt:PlayerCanLearnTransmog(itemLink) then
+			if CanIMogIt:EquippableByPlayer(itemLink) then
 				-- Set text to KNOWN
 				text = CanIMogIt.KNOWN
 			else
 				text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
 			end
 		elseif CanIMogIt:PlayerKnowsTransmog(itemLink) then
-			if CanIMogIt:PlayerCanLearnTransmog(itemLink) then
+			if CanIMogIt:EquippableByPlayer(itemLink) then
 				-- Set text to KNOWN_FROM_ANOTHER_ITEM
 				text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
 			else
