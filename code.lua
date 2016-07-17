@@ -74,7 +74,8 @@ local NOT_TRANSMOGABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSM
 
 CanIMogIt.CAN_I_MOG_IT = 			"|cff00a3cc" .. " "
 CanIMogIt.KNOWN = 					KNOWN_ICON .. "|cff15abff" .. "Learned."
-CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER = KNOWN_ICON .. "|cff15abff" .. "Learned from another character."
+CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER = KNOWN_ICON .. "|cff15abff" .. "Learned for a different class."
+CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL = KNOWN_ICON .. "|cff15abff" .. "Learned but cannot transmog yet."
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = KNOWN_ICON .. "|cff15abff" .. "Learned from another item."
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = KNOWN_ICON .. "|cff15abff" .. "Learned from another item and character."
 CanIMogIt.UNKNOWN = 				UNKNOWN_ICON .. "|cffff9333" .. "Not learned."
@@ -219,16 +220,20 @@ function CanIMogIt:GetSlotName(itemLink)
 end
 
 
-function CanIMogIt:EquippableByPlayer(itemLink)
+function CanIMogIt:IsValidAppearanceForPlayer(itemLink)
 	local itemID = CanIMogIt:GetItemID(itemLink)
-	local minLevel = select(5, GetItemInfo(itemLink))
-	if UnitLevel("player") < minLevel then return false end
 	for categoryID = 1,28 do
 		if C_TransmogCollection.IsCategoryValidForItem(categoryID, itemID) then
 			return true
 		end
 	end
 	return false
+end
+
+
+function CanIMogIt:PlayerIsTooLowLevelForItem(itemLink)
+	local minLevel = select(5, GetItemInfo(itemLink))
+	return UnitLevel("player") < minLevel
 end
 
 
@@ -372,16 +377,22 @@ function CanIMogIt:GetTooltipText(itemLink)
 
 	if CanIMogIt:IsTransmogable(itemLink) then
 		if CanIMogIt:PlayerKnowsTransmogFromItem(itemLink) then
-			if CanIMogIt:EquippableByPlayer(itemLink) then
-				-- Set text to KNOWN
-				text = CanIMogIt.KNOWN
+			if CanIMogIt:IsValidAppearanceForPlayer(itemLink) then
+				if CanIMogIt:PlayerIsTooLowLevelForItem(itemLink) then
+					text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
+				else
+					text = CanIMogIt.KNOWN
+				end
 			else
 				text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
 			end
 		elseif CanIMogIt:PlayerKnowsTransmog(itemLink) then
-			if CanIMogIt:EquippableByPlayer(itemLink) then
-				-- Set text to KNOWN_FROM_ANOTHER_ITEM
-				text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+			if CanIMogIt:IsValidAppearanceForPlayer(itemLink) then
+				if CanIMogIt:PlayerIsTooLowLevelForItem(itemLink) then
+					text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
+				else
+					text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+				end
 			else
 				text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
 			end
