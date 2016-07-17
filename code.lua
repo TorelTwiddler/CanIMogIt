@@ -221,6 +221,8 @@ end
 
 function CanIMogIt:EquippableByPlayer(itemLink)
 	local itemID = CanIMogIt:GetItemID(itemLink)
+	local minLevel = select(5, GetItemInfo(itemLink))
+	if UnitLevel("player") < minLevel then return false end
 	for categoryID = 1,28 do
 		if C_TransmogCollection.IsCategoryValidForItem(categoryID, itemID) then
 			return true
