@@ -64,8 +64,10 @@ local inventorySlotsMap = {
 
 
 -----------------------------
--- Tooltip text constants  --
+-- Tooltip text constants --
 -----------------------------
+
+
 CanIMogIt.CAN_I_MOG_IT = 			"|cff00a3cc" .. " "
 CanIMogIt.KNOWN = 					"|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN:0|t " .. "|cff15abff" .. "Learned."
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN:0|t " .. "|cff15abff" .. "Learned from another item."
