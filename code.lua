@@ -267,7 +267,7 @@ end
 
 function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
 	local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
-	if armorTypeSlots[CanIMogIt:GetSlotName(itemLink)] then 
+	if armorTypeSlots[CanIMogIt:GetSlotName(itemLink)] and select(1, GetItemSubClassInfo(4, 5)) ~= select(7, GetItemInfo(itemLink)) then 
 		return playerArmorTypeID == select(7, GetItemInfo(itemLink))
 	else
 		return true
