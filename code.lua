@@ -67,13 +67,19 @@ local inventorySlotsMap = {
 -- Tooltip text constants --
 -----------------------------
 
+local KNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN:0|t "
+local UNKNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN:0|t "
+local UNKNOWABLE_BY_CHARACTER_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER:0|t "
+local NOT_TRANSMOGABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE:0|t "
 
 CanIMogIt.CAN_I_MOG_IT = 			"|cff00a3cc" .. " "
-CanIMogIt.KNOWN = 					"|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN:0|t " .. "|cff15abff" .. "Learned."
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN:0|t " .. "|cff15abff" .. "Learned from another item."
-CanIMogIt.UNKNOWN = 				"|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN:0|t " .. "|cffff9333" .. "Not learned."
-CanIMogIt.UNKNOWABLE_BY_CHARACTER = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER:0|t " .. "|cfff0e442" .. "This character cannot learn this item."
-CanIMogIt.NOT_TRANSMOGABLE = 		"|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE:0|t " .. "|cff888888" .. "Cannot be learned."
+CanIMogIt.KNOWN = 					KNOWN_ICON .. "|cff15abff" .. "Learned."
+CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER = KNOWN_ICON .. "|cff15abff" .. "Learned from another character."
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = KNOWN_ICON .. "|cff15abff" .. "Learned from another item."
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = KNOWN_ICON .. "|cff15abff" .. "Learned from another item and character."
+CanIMogIt.UNKNOWN = 				UNKNOWN_ICON .. "|cffff9333" .. "Not learned."
+CanIMogIt.UNKNOWABLE_BY_CHARACTER = UNKNOWABLE_BY_CHARACTER_ICON .. "|cfff0e442" .. "This character cannot learn this item."
+CanIMogIt.NOT_TRANSMOGABLE = 		NOT_TRANSMOGABLE_ICON .. "|cff888888" .. "Cannot be learned."
 
 
 -----------------------------
@@ -345,13 +351,22 @@ function CanIMogIt:GetTooltipText(itemLink)
 		return exception_text
 	end
 
+
 	if CanIMogIt:IsTransmogable(itemLink) then
 		if CanIMogIt:PlayerKnowsTransmogFromItem(itemLink) then
-			-- Set text to KNOWN
-			text = CanIMogIt.KNOWN
+			if CanIMogIt:PlayerCanLearnTransmog(itemLink) then
+				-- Set text to KNOWN
+				text = CanIMogIt.KNOWN
+			else
+				text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
+			end
 		elseif CanIMogIt:PlayerKnowsTransmog(itemLink) then
-			-- Set text to KNOWN_FROM_ANOTHER_ITEM
-			text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+			if CanIMogIt:PlayerCanLearnTransmog(itemLink) then
+				-- Set text to KNOWN_FROM_ANOTHER_ITEM
+				text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+			else
+				text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+			end
 		else
 			if CanIMogIt:PlayerCanLearnTransmog(itemLink) then
 				-- Set text to UNKNOWN
