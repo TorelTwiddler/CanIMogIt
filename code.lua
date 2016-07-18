@@ -218,24 +218,25 @@ local function printDebug(tooltip, itemLink)
 	addDoubleLine(tooltip, "Item Class:", tostring(itemClass))
 	addDoubleLine(tooltip, "Item SubClass:", tostring(itemSubClass))
 	addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
-	addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemLink)))
-	addDoubleLine(tooltip, "IsItemArmor:", tostring(CanIMogIt:IsItemArmor(itemLink)))
-	addDoubleLine(tooltip, "GetPlayerArmorTypeName:", tostring(CanIMogIt:GetPlayerArmorTypeName()))
-	addDoubleLine(tooltip, "IsArmorAppropriateForPlayer:", tostring(CanIMogIt:IsArmorAppropriateForPlayer(itemLink)))
 
 	local source = CanIMogIt:GetSource(itemLink)
 	if source then
 		addDoubleLine(tooltip, "Item source:", tostring(source))
 	end
 
-	addDoubleLine(tooltip, "PlayerCanLearnTransmog:", tostring(CanIMogIt:PlayerCanLearnTransmog(itemLink)))
-	addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)))
-
 	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
 	addDoubleLine(tooltip, "GetAppearanceID:", tostring(appearanceID))
 	if appearanceID then
 		addDoubleLine(tooltip, "PlayerHasAppearance:", tostring(CanIMogIt:PlayerHasAppearance(appearanceID)))
 	end
+
+	addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemLink)))
+	addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)))
+	addDoubleLine(tooltip, "IsValidAppearanceForPlayer:", tostring(CanIMogIt:IsValidAppearanceForPlayer(itemLink)))
+	addDoubleLine(tooltip, "PlayerIsTooLowLevelForItem:", tostring(CanIMogIt:PlayerIsTooLowLevelForItem(itemLink)))
+	addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(CanIMogIt:PlayerKnowsTransmog(itemLink)))
+	addDoubleLine(tooltip, "PlayerCanLearnTransmog:", tostring(CanIMogIt:PlayerCanLearnTransmog(itemLink)))
+
 end
 
 
