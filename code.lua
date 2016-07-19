@@ -103,20 +103,28 @@ local armorTypeSlots = {
 -- Tooltip text constants --
 -----------------------------
 
+
 local KNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN:0|t "
+local KNOWN_BUT_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_circle:0|t "
 local UNKNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN:0|t "
 local UNKNOWABLE_BY_CHARACTER_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER:0|t "
 local NOT_TRANSMOGABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE:0|t "
+local QUESTIONABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\QUESTIONABLE:0|t "
+
+local BLUE =   "|cff15abff"
+local ORANGE = "|cffff9333"
+local YELLOW = "|cfff0e442"
+local GRAY =   "|cff888888"
 
 CanIMogIt.CAN_I_MOG_IT = 			"|cff00a3cc" .. " "
-CanIMogIt.KNOWN = 					KNOWN_ICON .. "|cff15abff" .. "Learned."
-CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER = KNOWN_ICON .. "|cff15abff" .. "Learned for a different class."
-CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL = KNOWN_ICON .. "|cff15abff" .. "Learned but cannot transmog yet."
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = KNOWN_ICON .. "|cff15abff" .. "Learned from another item."
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = KNOWN_ICON .. "|cff15abff" .. "Learned from another item and character."
-CanIMogIt.UNKNOWN = 				UNKNOWN_ICON .. "|cffff9333" .. "Not learned."
-CanIMogIt.UNKNOWABLE_BY_CHARACTER = UNKNOWABLE_BY_CHARACTER_ICON .. "|cfff0e442" .. "This character cannot learn this item."
-CanIMogIt.NOT_TRANSMOGABLE = 		NOT_TRANSMOGABLE_ICON .. "|cff888888" .. "Cannot be learned."
+CanIMogIt.KNOWN = 					KNOWN_ICON .. BLUE .. "Learned."
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = KNOWN_ICON .. BLUE .. "Learned from another item."
+CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER = KNOWN_BUT_ICON .. BLUE .. "Learned for a different class."
+CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL = KNOWN_BUT_ICON .. BLUE .. "Learned but cannot transmog yet."
+CanIMogIt.UNKNOWN = 				UNKNOWN_ICON .. ORANGE .. "Not learned."
+CanIMogIt.UNKNOWABLE_BY_CHARACTER = UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. "This character cannot learn this item."
+CanIMogIt.NOT_TRANSMOGABLE = 		NOT_TRANSMOGABLE_ICON .. GRAY .. "Cannot be learned."
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = QUESTIONABLE_ICON .. YELLOW .. "Cannot determine status on other characters."
 
 
 -----------------------------
