@@ -99,6 +99,13 @@ local armorTypeSlots = {
 }
 
 
+local miscArmorExceptions = {
+	["INVTYPE_HOLDABLE"] = true,
+	["INVTYPE_BODY"] = true,
+	["INVTYPE_TABARD"] = true,
+}
+
+
 -----------------------------
 -- Tooltip text constants --
 -----------------------------
@@ -381,7 +388,7 @@ function CanIMogIt:IsTransmogable(itemLink)
 	end
 
 	local is_misc_subclass = CanIMogIt:IsArmorSubClass(MISC, itemLink)
-	if is_misc_subclass then
+	if is_misc_subclass and not miscArmorExceptions[CanIMogIt:GetSlotName(itemLink)] then
 		return false
 	end
 	
