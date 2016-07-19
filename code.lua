@@ -133,12 +133,7 @@ CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = QUESTIONABLE_ICON .. YELLOW ..
 
 
 local exceptionItems = {
-    ['INVTYPE_HEAD'] = {
-		[87213] = CanIMogIt.NOT_TRANSMOGABLE, -- Mist-Piercing Goggles
-		[52485] = CanIMogIt.NOT_TRANSMOGABLE, -- Jeweler's Ruby Monocle
-		[52486] = CanIMogIt.NOT_TRANSMOGABLE, -- Jeweler's Sapphire Monocle
-		-- [52487] = CanIMogIt.NOT_TRANSMOGABLE, -- Jeweler's Ruby Monocle -- NOTE: This item works.
-	},
+    ['INVTYPE_HEAD'] = {},
     ['INVTYPE_SHOULDER'] = {
 		[119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
 	},
@@ -159,33 +154,9 @@ local exceptionItems = {
 		[89573] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Meditation
 		[89574] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Fallen Blossoms
 		[89575] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Serenity
-		-- Brewfest Steins start --
-		[27941] = CanIMogIt.NOT_TRANSMOGABLE,
-		[33016] = CanIMogIt.NOT_TRANSMOGABLE,
-		[37892] = CanIMogIt.NOT_TRANSMOGABLE,
-		[32912] = CanIMogIt.NOT_TRANSMOGABLE,
-		[33020] = CanIMogIt.NOT_TRANSMOGABLE,
-		[32917] = CanIMogIt.NOT_TRANSMOGABLE,
-		[33017] = CanIMogIt.NOT_TRANSMOGABLE,
-		[33021] = CanIMogIt.NOT_TRANSMOGABLE,
-		[33019] = CanIMogIt.NOT_TRANSMOGABLE,
-		[32918] = CanIMogIt.NOT_TRANSMOGABLE,
-		[37897] = CanIMogIt.NOT_TRANSMOGABLE,
-		[32920] = CanIMogIt.NOT_TRANSMOGABLE,
-		[37895] = CanIMogIt.NOT_TRANSMOGABLE,
-		[32915] = CanIMogIt.NOT_TRANSMOGABLE,
-		[37896] = CanIMogIt.NOT_TRANSMOGABLE,
-		[32919] = CanIMogIt.NOT_TRANSMOGABLE,
-		[37894] = CanIMogIt.NOT_TRANSMOGABLE,
-		[37893] = CanIMogIt.NOT_TRANSMOGABLE,
-		[33018] = CanIMogIt.NOT_TRANSMOGABLE,
-		[56836] = CanIMogIt.NOT_TRANSMOGABLE,
-		-- Brewfest Steins end --
 	},
     ['INVTYPE_SHIELD'] = {},
-    ['INVTYPE_2HWEAPON'] = {
-		[41755] = CanIMogIt.NOT_TRANSMOGABLE, -- The Fire Extinguisher
-	},
+    ['INVTYPE_2HWEAPON'] = {},
     ['INVTYPE_WEAPONMAINHAND'] = {},
     ['INVTYPE_RANGED'] = {},
     ['INVTYPE_RANGEDRIGHT'] = {},
@@ -274,9 +245,14 @@ function CanIMogIt:IsItemArmor(itemLink)
 end
 
 
+function CanIMogIt:IsArmorSubClass(subClass, itemLink)
+	return select(1, GetItemSubClassInfo(4, subClass)) == select(7, GetItemInfo(itemLink))
+end
+
+
 function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
 	local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
-	if armorTypeSlots[CanIMogIt:GetSlotName(itemLink)] and select(1, GetItemSubClassInfo(4, 5)) ~= select(7, GetItemInfo(itemLink)) then 
+	if armorTypeSlots[CanIMogIt:GetSlotName(itemLink)] and not CanIMogIt:IsArmorSubClass(COSMETIC, itemLink) then 
 		return playerArmorTypeID == select(7, GetItemInfo(itemLink))
 	else
 		return true
@@ -401,6 +377,11 @@ function CanIMogIt:IsTransmogable(itemLink)
 	-- White items are not transmoggable.
 	local quality = CanIMogIt:GetQuality(itemLink)
 	if quality <= 1 then
+		return false
+	end
+
+	local is_misc_subclass = CanIMogIt:IsArmorSubClass(MISC, itemLink)
+	if is_misc_subclass then
 		return false
 	end
 	
