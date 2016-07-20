@@ -40,25 +40,25 @@ local dressUpModel = CreateFrame('DressUpModel')
 -- 28 Warglaives
 
 local inventorySlotsMap = {
-    ['INVTYPE_HEAD'] = 1,
-    ['INVTYPE_SHOULDER'] = 3,
-    ['INVTYPE_BODY'] = 4,
-    ['INVTYPE_CHEST'] = 5,
-    ['INVTYPE_ROBE'] = 5,
-    ['INVTYPE_WAIST'] = 6,
-    ['INVTYPE_LEGS'] = 7,
-    ['INVTYPE_FEET'] = 8,
-    ['INVTYPE_WRIST'] = 9,
-    ['INVTYPE_HAND'] = 10,
-    ['INVTYPE_CLOAK'] = 15,
-    ['INVTYPE_WEAPON'] = 16,
-    ['INVTYPE_SHIELD'] = 17,
-    ['INVTYPE_2HWEAPON'] = 16,
-    ['INVTYPE_WEAPONMAINHAND'] = 16,
-    ['INVTYPE_RANGED'] = 16,
-    ['INVTYPE_RANGEDRIGHT'] = 16,
-    ['INVTYPE_WEAPONOFFHAND'] = 17,
-    ['INVTYPE_HOLDABLE'] = 17,
+    ['INVTYPE_HEAD'] = {1},
+    ['INVTYPE_SHOULDER'] = {3},
+    ['INVTYPE_BODY'] = {4},
+    ['INVTYPE_CHEST'] = {5},
+    ['INVTYPE_ROBE'] = {5},
+    ['INVTYPE_WAIST'] = {6},
+    ['INVTYPE_LEGS'] = {7},
+    ['INVTYPE_FEET'] = {8},
+    ['INVTYPE_WRIST'] = {9},
+    ['INVTYPE_HAND'] = {10},
+    ['INVTYPE_CLOAK'] = {15},
+    ['INVTYPE_WEAPON'] = {16, 17},
+    ['INVTYPE_SHIELD'] = {17},
+    ['INVTYPE_2HWEAPON'] = {16, 17},
+    ['INVTYPE_WEAPONMAINHAND'] = {16},
+    ['INVTYPE_RANGED'] = {16},
+    ['INVTYPE_RANGEDRIGHT'] = {16},
+    ['INVTYPE_WEAPONOFFHAND'] = {17},
+    ['INVTYPE_HOLDABLE'] = {17},
 	['INVTYPE_TABARD'] = false,
 }
 
@@ -206,8 +206,10 @@ local function printDebug(tooltip, itemLink)
 	addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
 
 	local source = CanIMogIt:GetSource(itemLink)
-	if source then
+	if source ~= nil then
 		addDoubleLine(tooltip, "Item source:", tostring(source))
+	else
+		addDoubleLine(tooltip, "Item source:", 'nil')
 	end
 
 	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
@@ -311,12 +313,16 @@ end
 
 function CanIMogIt:GetSource(itemLink)
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
-    local slot = inventorySlotsMap[slotName]
-    if not slot or not IsDressableItem(itemLink) then return end
+    local slots = inventorySlotsMap[slotName]
+
+    if not slots or not IsDressableItem(itemLink) then return end
     dressUpModel:SetUnit('player')
     dressUpModel:Undress()
-    dressUpModel:TryOn(itemLink, slot)
-    return dressUpModel:GetSlotTransmogSources(slot)
+	for i, slot in pairs(slots) do
+    	dressUpModel:TryOn(itemLink, slot)
+		local source = dressUpModel:GetSlotTransmogSources(slot)
+		if source ~= 0 then return source end
+	end
 end
 
  
@@ -364,7 +370,7 @@ end
 function CanIMogIt:PlayerCanLearnTransmog(itemLink)
 	-- Returns whether the player can learn the item or not.
 	local source = CanIMogIt:GetSource(itemLink)
-	if not source then return false end
+	if source == nil then return false end
 	if select(2, C_TransmogCollection.PlayerCanCollectSource(source)) then
 		return true
 	end
