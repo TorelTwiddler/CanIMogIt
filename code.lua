@@ -134,6 +134,14 @@ CanIMogIt.NOT_TRANSMOGABLE = 		NOT_TRANSMOGABLE_ICON .. GRAY .. "Cannot be learn
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = QUESTIONABLE_ICON .. YELLOW .. "Cannot determine status on other characters."
 
 
+local knownTexts = {
+	[CanIMogIt.KNOWN] = true,
+	[CanIMogIt.KNOWN_FROM_ANOTHER_ITEM] = true,
+	[CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = true,
+	[CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = true,
+}
+
+
 -----------------------------
 -- Exceptions              --
 -----------------------------
@@ -507,6 +515,10 @@ local function addToTooltip(tooltip, itemLink)
 	end
 	if CanIMogItOptions["showTransmoggableOnly"] and text == CanIMogIt.NOT_TRANSMOGABLE then
 		-- If we don't want to show the tooltip if it's not transmoggable
+		return
+	end
+	if CanIMogItOptions["showUnknownOnly"] and knownTexts[text] then
+		-- We don't want to show the tooltip if it's already known.
 		return
 	end
 	if text then

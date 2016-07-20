@@ -4,7 +4,7 @@
 
 local _G = _G
 
-CanIMogIt_OptionsVersion = "1.2"
+CanIMogIt_OptionsVersion = "1.3"
 
 CanIMogItOptions_Defaults = {
     ["options"] = {
@@ -12,6 +12,7 @@ CanIMogItOptions_Defaults = {
         ["debug"] = false,
         ["showEquippableOnly"] = true,
         ["showTransmoggableOnly"] = false,
+        ["showUnknownOnly"] = false,
     },
 }
 
@@ -28,6 +29,10 @@ CanIMogItOptions_DisplayData = {
     ["showTransmoggableOnly"] = {
         ["displayName"] = "Transmoggable Items Only",
         ["description"] = "Only show on items that can be transmoggrified."
+    },
+    ["showUnknownOnly"] = {
+        ["displayName"] = "Unknown Items Only",
+        ["description"] = "Only show on items that you haven't learned."
     },
 }
 
@@ -81,11 +86,13 @@ local function createOptionsMenu()
     local debug = newCheckbox(CanIMogIt.frame, "debug")
     local showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
     local showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
+    local showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
 
     -- position the checkboxes
     debug:SetPoint("TOPLEFT", 16, -16)
     showEquippableOnly:SetPoint("TOPLEFT", debug, "BOTTOMLEFT")
     showTransmoggableOnly:SetPoint("TOPLEFT", showEquippableOnly, "BOTTOMLEFT")
+    showUnknownOnly:SetPoint("TOPLEFT", showTransmoggableOnly, "BOTTOMLEFT")
 end
 
 
