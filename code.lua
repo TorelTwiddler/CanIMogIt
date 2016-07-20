@@ -129,7 +129,7 @@ CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = KNOWN_ICON .. BLUE .. "Learned from another 
 CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER = KNOWN_BUT_ICON .. BLUE .. "Learned for a different class."
 CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL = KNOWN_BUT_ICON .. BLUE .. "Learned but cannot transmog yet."
 CanIMogIt.UNKNOWN = 				UNKNOWN_ICON .. ORANGE .. "Not learned."
-CanIMogIt.UNKNOWABLE_BY_CHARACTER = UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. "This character cannot learn this item."
+CanIMogIt.UNKNOWABLE_BY_CHARACTER = UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. "Another class can learn this item."
 CanIMogIt.NOT_TRANSMOGABLE = 		NOT_TRANSMOGABLE_ICON .. GRAY .. "Cannot be learned."
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = QUESTIONABLE_ICON .. YELLOW .. "Cannot determine status on other characters."
 
