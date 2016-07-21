@@ -220,6 +220,14 @@ local function printDebug(tooltip, itemLink)
 		addDoubleLine(tooltip, "Item source:", 'nil')
 	end
 
+	local playerClass = select(2, UnitClass("player"))
+	local playerLevel = UnitLevel("player")
+	local playerSpec = GetSpecialization()
+	local playerSpecName = playerSpec and select(2, GetSpecializationInfo(playerSpec)) or "None"
+	addDoubleLine(tooltip, "Player Class:", playerClass)
+	addDoubleLine(tooltip, "Player Spec:", playerSpecName)
+	addDoubleLine(tooltip, "Player Level:", playerLevel)
+
 	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
 	addDoubleLine(tooltip, "GetAppearanceID:", tostring(appearanceID))
 	if appearanceID then
