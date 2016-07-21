@@ -39,27 +39,51 @@ local dressUpModel = CreateFrame('DressUpModel')
 -- 27 Crossbows
 -- 28 Warglaives
 
+
+local HEAD = "INVTYPE_HEAD"
+local SHOULDER = "INVTYPE_SHOULDER"
+local BODY = "INVTYPE_BODY"
+local CHEST = "INVTYPE_CHEST"
+local ROBE = "INVTYPE_ROBE"
+local WAIST = "INVTYPE_WAIST"
+local LEGS = "INVTYPE_LEGS"
+local FEET = "INVTYPE_FEET"
+local WRIST = "INVTYPE_WRIST"
+local HAND = "INVTYPE_HAND"
+local CLOAK = "INVTYPE_CLOAK"
+local WEAPON = "INVTYPE_WEAPON"
+local SHIELD = "INVTYPE_SHIELD"
+local WEAPON_2HAND = "INVTYPE_2HWEAPON"
+local WEAPON_MAIN_HAND = "INVTYPE_WEAPONMAINHAND"
+local RANGED = "INVTYPE_RANGED"
+local RANGED_RIGHT = "INVTYPE_RANGEDRIGHT"
+local WEAPON_OFF_HAND = "INVTYPE_WEAPONOFFHAND"
+local HOLDABLE = "INVTYPE_HOLDABLE"
+local TABARD = "INVTYPE_TABARD"
+local BAG = "INVTYPE_BAG"
+
+
 local inventorySlotsMap = {
-    ['INVTYPE_HEAD'] = {1},
-    ['INVTYPE_SHOULDER'] = {3},
-    ['INVTYPE_BODY'] = {4},
-    ['INVTYPE_CHEST'] = {5},
-    ['INVTYPE_ROBE'] = {5},
-    ['INVTYPE_WAIST'] = {6},
-    ['INVTYPE_LEGS'] = {7},
-    ['INVTYPE_FEET'] = {8},
-    ['INVTYPE_WRIST'] = {9},
-    ['INVTYPE_HAND'] = {10},
-    ['INVTYPE_CLOAK'] = {15},
-    ['INVTYPE_WEAPON'] = {16, 17},
-    ['INVTYPE_SHIELD'] = {17},
-    ['INVTYPE_2HWEAPON'] = {16, 17},
-    ['INVTYPE_WEAPONMAINHAND'] = {16},
-    ['INVTYPE_RANGED'] = {16},
-    ['INVTYPE_RANGEDRIGHT'] = {16},
-    ['INVTYPE_WEAPONOFFHAND'] = {17},
-    ['INVTYPE_HOLDABLE'] = {17},
-	['INVTYPE_TABARD'] = false,
+    [HEAD] = {1},
+    [SHOULDER] = {3},
+    [BODY] = {4},
+    [CHEST] = {5},
+    [ROBE] = {5},
+    [WAIST] = {6},
+    [LEGS] = {7},
+    [FEET] = {8},
+    [WRIST] = {9},
+    [HAND] = {10},
+    [CLOAK] = {15},
+    [WEAPON] = {16, 17},
+    [SHIELD] = {17},
+    [WEAPON_2HAND] = {16, 17},
+    [WEAPON_MAIN_HAND] = {16},
+    [RANGED] = {16},
+    [RANGED_RIGHT] = {16},
+    [WEAPON_OFF_HAND] = {17},
+    [HOLDABLE] = {17},
+	[TABARD] = false,
 }
 
 
@@ -87,22 +111,22 @@ local classArmorTypeMap = {
 
 
 local armorTypeSlots = {
-	["INVTYPE_HEAD"] = true,
-	["INVTYPE_SHOULDER"] = true,
-	["INVTYPE_CHEST"] = true,
-	["INVTYPE_ROBE"] = true,
-	["INVTYPE_WRIST"] = true,
-	["INVTYPE_HAND"] = true,
-	["INVTYPE_WAIST"] = true,
-	["INVTYPE_LEGS"] = true,
-	["INVTYPE_FEET"] = true,
+	[HEAD] = true,
+	[SHOULDER] = true,
+	[CHEST] = true,
+	[ROBE] = true,
+	[WRIST] = true,
+	[HAND] = true,
+	[WAIST] = true,
+	[LEGS] = true,
+	[FEET] = true,
 }
 
 
 local miscArmorExceptions = {
-	["INVTYPE_HOLDABLE"] = true,
-	["INVTYPE_BODY"] = true,
-	["INVTYPE_TABARD"] = true,
+	[HOLDABLE] = true,
+	[BODY] = true,
+	[TABARD] = true,
 }
 
 
@@ -148,20 +172,20 @@ local knownTexts = {
 
 
 local exceptionItems = {
-    ['INVTYPE_HEAD'] = {},
-    ['INVTYPE_SHOULDER'] = {
+    [HEAD] = {},
+    [SHOULDER] = {
 		[119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
 	},
-    ['INVTYPE_BODY'] = {},
-    ['INVTYPE_CHEST'] = {},
-    ['INVTYPE_ROBE'] = {},
-    ['INVTYPE_WAIST'] = {},
-    ['INVTYPE_LEGS'] = {},
-    ['INVTYPE_FEET'] = {},
-    ['INVTYPE_WRIST'] = {},
-    ['INVTYPE_HAND'] = {},
-    ['INVTYPE_CLOAK'] = {},
-    ['INVTYPE_WEAPON'] = {
+    [BODY] = {},
+    [CHEST] = {},
+    [ROBE] = {},
+    [WAIST] = {},
+    [LEGS] = {},
+    [FEET] = {},
+    [WRIST] = {},
+    [HAND] = {},
+    [CLOAK] = {},
+    [WEAPON] = {
 		[89566] = CanIMogIt.NOT_TRANSMOGABLE, -- Novice's Handwraps
 		[89570] = CanIMogIt.NOT_TRANSMOGABLE, -- Initiate's Handwraps
 		[89571] = CanIMogIt.NOT_TRANSMOGABLE, -- Grappling Handwraps
@@ -170,14 +194,14 @@ local exceptionItems = {
 		[89574] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Fallen Blossoms
 		[89575] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Serenity
 	},
-    ['INVTYPE_SHIELD'] = {},
-    ['INVTYPE_2HWEAPON'] = {},
-    ['INVTYPE_WEAPONMAINHAND'] = {},
-    ['INVTYPE_RANGED'] = {},
-    ['INVTYPE_RANGEDRIGHT'] = {},
-    ['INVTYPE_WEAPONOFFHAND'] = {},
-    ['INVTYPE_HOLDABLE'] = {},
-	['INVTYPE_TABARD'] = {},
+    [SHIELD] = {},
+    [WEAPON_2HAND] = {},
+    [WEAPON_MAIN_HAND] = {},
+    [RANGED] = {},
+    [RANGED_RIGHT] = {},
+    [WEAPON_OFF_HAND] = {},
+    [HOLDABLE] = {},
+	[TABARD] = {},
 }
 
 
@@ -323,7 +347,7 @@ end
 function CanIMogIt:IsEquippable(itemLink)
 	-- Returns whether the item is equippable or not (exluding bags)
 	local slotName = CanIMogIt:GetSlotName(itemLink)
-	return slotName ~= "" and slotName ~= "INVTYPE_BAG"
+	return slotName ~= "" and slotName ~= BAG
 end
 
 
@@ -385,6 +409,7 @@ end
 
 function CanIMogIt:PlayerCanLearnTransmog(itemLink)
 	-- Returns whether the player can learn the item or not.
+	if CanIMogIt:GetSlotName(itemLink) == TABARD then return true end
 	local source = CanIMogIt:GetSource(itemLink)
 	if source == nil then return false end
 	if select(2, C_TransmogCollection.PlayerCanCollectSource(source)) then
