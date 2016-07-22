@@ -455,6 +455,12 @@ function CanIMogIt:IsTransmogable(itemLink)
 end
 
 
+function CanIMogIt:TextIsKnown(text)
+	-- Returns whether the text is considered to be a KNOWN value or not.
+	return knownTexts[text] or false
+end
+
+
 function CanIMogIt:GetItemID(itemLink)
 	return tonumber(itemLink:match("item:(%d+)"))
 end
@@ -550,7 +556,7 @@ local function addToTooltip(tooltip, itemLink)
 		-- If we don't want to show the tooltip if it's not transmoggable
 		return
 	end
-	if CanIMogItOptions["showUnknownOnly"] and knownTexts[text] then
+	if CanIMogItOptions["showUnknownOnly"] and CanIMogIt:TextIsKnown(text) then
 		-- We don't want to show the tooltip if it's already known.
 		return
 	end
