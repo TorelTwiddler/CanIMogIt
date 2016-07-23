@@ -5,6 +5,7 @@
 ## Notes: Adds tooltips to items showing if you have learned a transmog appearance.
 ## X-Category: Transmogrify
 ## X-Website: http://mods.curse.com/addons/wow/can-i-mog-it
-## SavedVariables: CanIMogItOptions
+## SavedVariables: CanIMogItOptions, CanIMogItDatabase
 code.lua
 options.lua
+database.lua

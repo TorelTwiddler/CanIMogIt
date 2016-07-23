@@ -2,7 +2,7 @@
 
 CanIMogIt = {}
 
-local dressUpModel = CreateFrame('DressUpModel')
+CanIMogIt.DressUpModel = CreateFrame('DressUpModel')
 
 
 -----------------------------
@@ -152,10 +152,10 @@ CanIMogIt.KNOWN = 					KNOWN_ICON .. BLUE .. "Learned."
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = KNOWN_ICON .. BLUE .. "Learned from another item."
 CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER = KNOWN_BUT_ICON .. BLUE .. "Learned for a different class."
 CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL = KNOWN_BUT_ICON .. BLUE .. "Learned but cannot transmog yet."
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = KNOWN_BUT_ICON .. BLUE .. "Learned for a different class and item."
 CanIMogIt.UNKNOWN = 				UNKNOWN_ICON .. ORANGE .. "Not learned."
 CanIMogIt.UNKNOWABLE_BY_CHARACTER = UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. "Another class can learn this item."
 CanIMogIt.NOT_TRANSMOGABLE = 		NOT_TRANSMOGABLE_ICON .. GRAY .. "Cannot be learned."
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = QUESTIONABLE_ICON .. YELLOW .. "Cannot determine status on other characters."
 
 
 local knownTexts = {
@@ -254,16 +254,21 @@ local function printDebug(tooltip, itemLink)
 
 	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
 	addDoubleLine(tooltip, "GetAppearanceID:", tostring(appearanceID))
-	if appearanceID then
-		addDoubleLine(tooltip, "PlayerHasAppearance:", tostring(CanIMogIt:PlayerHasAppearance(appearanceID)))
-	end
+
+	addLine(tooltip, '--------')
 
 	addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemLink)))
 	addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)))
-	addDoubleLine(tooltip, "IsValidAppearanceForPlayer:", tostring(CanIMogIt:IsValidAppearanceForPlayer(itemLink)))
-	addDoubleLine(tooltip, "PlayerIsTooLowLevelForItem:", tostring(CanIMogIt:PlayerIsTooLowLevelForItem(itemLink)))
 	addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(CanIMogIt:PlayerKnowsTransmog(itemLink)))
-	addDoubleLine(tooltip, "PlayerCanLearnTransmog:", tostring(CanIMogIt:PlayerCanLearnTransmog(itemLink)))
+	addDoubleLine(tooltip, "CharacterCanLearnTransmog:", tostring(CanIMogIt:CharacterCanLearnTransmog(itemLink)))
+	addDoubleLine(tooltip, "IsValidAppearanceForCharacter:", tostring(CanIMogIt:IsValidAppearanceForCharacter(itemLink)))
+	addDoubleLine(tooltip, "CharacterIsTooLowLevelForItem:", tostring(CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)))
+
+	addLine(tooltip, '--------')
+
+	addDoubleLine(tooltip, "Database GetItem:", tostring(CanIMogIt.Database:GetItem(itemLink)))
+	addDoubleLine(tooltip, "Database GetAppearanceTable:", tostring(CanIMogIt.Database:GetAppearanceTable(itemLink)))
+	
 
 end
 
@@ -283,6 +288,22 @@ CanIMogIt.cachedTooltipText = nil;
 -----------------------------
 
 
+function CanIMogIt:GetAppearances()
+	-- Gets a table of all the appearances known to a character.
+	C_TransmogCollection.ClearSearch()
+	appearances = {}
+	for categoryID=1,28 do
+		categoryAppearances = C_TransmogCollection.GetCategoryAppearances(categoryID)
+		for i, categoryAppearance in pairs(categoryAppearances) do
+			if categoryAppearance.isCollected then
+				appearances[categoryAppearance.visualID] = categoryAppearance
+			end
+		end
+	end
+	return appearances
+end
+
+
 function CanIMogIt:GetPlayerArmorTypeName()
 	local playerArmorTypeID = classArmorTypeMap[select(2, UnitClass("player"))]
 	return select(1, GetItemSubClassInfo(4, playerArmorTypeID))
@@ -296,6 +317,11 @@ end
 
 function CanIMogIt:IsArmorSubClass(subClass, itemLink)
 	return select(1, GetItemSubClassInfo(4, subClass)) == select(7, GetItemInfo(itemLink))
+end
+
+
+function CanIMogIt:IsArmorSubClassIdentical(itemLinkA, itemLinkB)
+	return select(7, GetItemInfo(itemLinkA)) == select(7, GetItemInfo(itemLinkB))
 end
 
 
@@ -314,8 +340,19 @@ function CanIMogIt:GetSlotName(itemLink)
 end
 
 
-function CanIMogIt:IsValidAppearanceForPlayer(itemLink)
-	if IsEquippableItem(itemLink) then
+function CanIMogIt:CharacterCanEquipItem(itemLink)
+	local itemID = CanIMogIt:GetItemID(itemLink)
+	for i=1,28 do
+		if C_TransmogCollection.IsCategoryValidForItem(i, itemID) then
+			return true
+		end
+	end
+	return false
+end
+
+
+function CanIMogIt:IsValidAppearanceForCharacter(itemLink)
+	if CanIMogIt:CharacterCanEquipItem(itemLink) then
 		if CanIMogIt:IsItemArmor(itemLink) then
 			return CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
 		else
@@ -327,7 +364,7 @@ function CanIMogIt:IsValidAppearanceForPlayer(itemLink)
 end
 
 
-function CanIMogIt:PlayerIsTooLowLevelForItem(itemLink)
+function CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)
 	local minLevel = select(5, GetItemInfo(itemLink))
 	return UnitLevel("player") < minLevel
 end
@@ -356,16 +393,16 @@ function CanIMogIt:GetSource(itemLink)
     local slots = inventorySlotsMap[slotName]
 
     if not slots or not IsDressableItem(itemLink) then return end
-    dressUpModel:SetUnit('player')
-    dressUpModel:Undress()
+    CanIMogIt.DressUpModel:SetUnit('player')
+    CanIMogIt.DressUpModel:Undress()
 	for i, slot in pairs(slots) do
-    	dressUpModel:TryOn(itemLink, slot)
-		local source = dressUpModel:GetSlotTransmogSources(slot)
+    	CanIMogIt.DressUpModel:TryOn(itemLink, slot)
+		local source = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
 		if source ~= 0 then return source end
 	end
 end
 
- 
+
 function CanIMogIt:GetAppearanceID(itemLink)
 	-- Gets the appearanceID of the given itemID.
 	local source = CanIMogIt:GetSource(itemLink)
@@ -376,25 +413,20 @@ function CanIMogIt:GetAppearanceID(itemLink)
 end
 
 
-function CanIMogIt:PlayerHasAppearance(appearanceID)
-	-- Returns whether the player has the given appearanceID.
-    local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
-    if sources then
-        for i, source in pairs(sources) do
-            if source.isCollected then
-                return true
-            end
-        end
-    end
-    return false
-end
-
-
 function CanIMogIt:PlayerKnowsTransmog(itemLink)
 	-- Returns whether this item's appearance is already known by the player.
-	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
-	if appearanceID then
-		return CanIMogIt:PlayerHasAppearance(appearanceID)
+	appearanceTable = self.Database:GetAppearanceTable(itemLink)
+	if not appearanceTable then return false end
+	if CanIMogIt:IsItemArmor(itemLink) then
+		for knownItemLink, bool in pairs(appearanceTable) do
+			-- if itemLink armor type is the same as one of the knownItemLink armor types
+			if CanIMogIt:IsArmorSubClassIdentical(itemLink, knownItemLink) then
+				return true
+			end
+		end
+	else
+		-- Is not armor, don't worry about same appearance for different types
+		return true
 	end
 	return false
 end
@@ -403,11 +435,13 @@ end
 function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
 	-- Returns whether the transmog is known from this item specifically.
 	local itemID = CanIMogIt:GetItemID(itemLink)
-	return C_TransmogCollection.PlayerHasTransmog(itemID)
+	local hasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID)
+	CanIMogIt.Database:UpdateItem(itemLink, hasTransmog)
+	return hasTransmog
 end
 
 
-function CanIMogIt:PlayerCanLearnTransmog(itemLink)
+function CanIMogIt:CharacterCanLearnTransmog(itemLink)
 	-- Returns whether the player can learn the item or not.
 	if CanIMogIt:GetSlotName(itemLink) == TABARD then return true end
 	local source = CanIMogIt:GetSource(itemLink)
@@ -489,8 +523,8 @@ function CanIMogIt:GetTooltipText(itemLink)
 
 	if CanIMogIt:IsTransmogable(itemLink) then
 		if CanIMogIt:PlayerKnowsTransmogFromItem(itemLink) then
-			if CanIMogIt:IsValidAppearanceForPlayer(itemLink) then
-				if CanIMogIt:PlayerIsTooLowLevelForItem(itemLink) then
+			if CanIMogIt:IsValidAppearanceForCharacter(itemLink) then
+				if CanIMogIt:CharacterIsTooLowLevelForItem(itemLink) then
 					text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
 				else
 					text = CanIMogIt.KNOWN
@@ -499,8 +533,8 @@ function CanIMogIt:GetTooltipText(itemLink)
 				text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
 			end
 		elseif CanIMogIt:PlayerKnowsTransmog(itemLink) then
-			if CanIMogIt:IsValidAppearanceForPlayer(itemLink) then
-				if CanIMogIt:PlayerIsTooLowLevelForItem(itemLink) then
+			if CanIMogIt:IsValidAppearanceForCharacter(itemLink) then
+				if CanIMogIt:CharacterIsTooLowLevelForItem(itemLink) then
 					text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
 				else
 					text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
@@ -509,7 +543,7 @@ function CanIMogIt:GetTooltipText(itemLink)
 				text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
 			end
 		else
-			if CanIMogIt:PlayerCanLearnTransmog(itemLink) then
+			if CanIMogIt:CharacterCanLearnTransmog(itemLink) then
 				-- Set text to UNKNOWN
 				text = CanIMogIt.UNKNOWN
 			else
@@ -532,6 +566,11 @@ end
 local function addToTooltip(tooltip, itemLink)
 	-- Does the calculations for determining what text to
 	-- display on the tooltip.
+	
+	-- TODO: caching doesn't work when the compare tooltip is visible.
+	-- if CanIMogIt.cachedItemLink ~= itemLink then
+	-- 	print("itemLink changed! " .. itemLink)
+	-- end
 	local itemInfo = GetItemInfo(itemLink)
 	if not itemInfo then 
 		CanIMogIt.cachedItemLink = nil

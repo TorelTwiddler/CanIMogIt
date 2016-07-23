@@ -40,13 +40,34 @@ CanIMogItOptions_DisplayData = {
 CanIMogIt.frame = CreateFrame("Frame", "CanIMogItOptionsFrame", UIParent);
 CanIMogIt.frame.name = "Can I Mog It?";
 InterfaceOptions_AddCategory(CanIMogIt.frame);
-CanIMogIt.frame:RegisterEvent("ADDON_LOADED")
 
-CanIMogIt.frame:SetScript("OnEvent", function(self, event, addonName)
+
+local EVENTS = {
+    "ADDON_LOADED",
+    "TRANSMOG_COLLECTION_UPDATED",
+    "PLAYER_LOGIN",
+    "GET_ITEM_INFO_RECEIVED",
+}
+
+for i, event in pairs(EVENTS) do
+    CanIMogIt.frame:RegisterEvent(event);
+end
+
+
+CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
+    -- Add functions you want to catch events here
+    self:AddonLoaded(event, ...)
+    self:PlayerLogin(event, ...)
+    self:TransmogCollectionUpdated(event, ...)
+    self:GetItemInfoReceived(event, ...)
+end)
+
+
+function CanIMogIt.frame:AddonLoaded(event, addonName)
     if event == "ADDON_LOADED" and addonName == "CanIMogIt" then
         CanIMogIt.frame.Loaded()
     end
-end)
+end
 
 
 local function checkboxOnClick(self)
@@ -101,6 +122,9 @@ function CanIMogIt.frame.Loaded()
     if (not CanIMogItOptions) then
         CanIMogItOptions = CanIMogItOptions_Defaults.options
         print("CanIMogItOptions not found, loading defaults!")
+    end
+    if (not CanIMogItDatabase) then
+        CanIMogItDatabase = {}
     end
     -- Set missing options from the defaults if the version is out of date.
     if (CanIMogItOptions["version"] < CanIMogIt_OptionsVersion) then
