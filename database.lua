@@ -15,8 +15,7 @@
 local Database = {}
 CanIMogIt.Database = Database
 
-CanIMogIt.sourceIDQueue = {}
-local sourceIDQueueLength = 0
+local CanIMogIt.sourceIDQueue = {}
 local getItemInfoReceivedCount = 0
 
 
@@ -120,7 +119,6 @@ function Database:AddItemBySourceID(sourceID, appearanceID)
         -- Call GetItemInfo here so that we can capture the event when it's done cooking.
         GetItemInfo(itemLink)
         CanIMogIt.sourceIDQueue[sourceID] = appearanceID
-        sourceIDQueueLength = sourceIDQueueLength + 1
         return
     end
     self:AddItem(itemLink, appearanceID)
@@ -171,12 +169,21 @@ function CanIMogIt.frame:TransmogCollectionUpdated(event, ...)
 end
 
 
+local function tablelength(T)
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+end
+
+
 function CanIMogIt.frame:GetItemInfoReceived(event, ...)
     if event ~= "GET_ITEM_INFO_RECEIVED" then return end
     if next(CanIMogIt.sourceIDQueue) == nil then return end
     -- Update the database with any items that were still cooking.
     getItemInfoReceivedCount = getItemInfoReceivedCount + 1
-    if sourceIDQueueLength <= getItemInfoReceivedCount then
+    if getItemInfoReceivedCount >= 300 or tablelength(CanIMogIt.sourceIDQueue) <= 300 then
+		getItemInfoReceivedCount = 0
+		CanIMogItRunCounter = CanIMogItRunCounter + 1
         done = {}
         for sourceID, appearanceID in pairs(CanIMogIt.sourceIDQueue) do
             local itemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
