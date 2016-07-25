@@ -415,6 +415,8 @@ end
 
 function CanIMogIt:PlayerKnowsTransmog(itemLink)
 	-- Returns whether this item's appearance is already known by the player.
+	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
+	if appearanceID then self.Database:AddAppearanceSources(appearanceID) end
 	appearanceTable = self.Database:GetAppearanceTable(itemLink)
 	if not appearanceTable then return false end
 	if CanIMogIt:IsItemArmor(itemLink) then

@@ -128,10 +128,19 @@ end
 function Database:AddAppearanceSources(appearanceID)
     -- Adds the sources (the items) of the appearance to the database.
     local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
+    if not sources then return end
     for i, source in pairs(sources) do
         if source.isCollected then
             self:AddItemBySourceID(source.sourceID, appearanceID)
         end
+    end
+end
+
+
+function Database:UpdateFromKnownSources(knownSources, appearanceID)
+    -- Updates the items given from knownSources.
+    for sourceID, source in pairs(knownSources) do
+        self:AddItemBySourceID(sourceID, appearanceID)
     end
 end
 
