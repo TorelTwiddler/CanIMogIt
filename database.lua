@@ -15,7 +15,7 @@
 local Database = {}
 CanIMogIt.Database = Database
 
-local CanIMogIt.sourceIDQueue = {}
+CanIMogIt.sourceIDQueue = {}
 local getItemInfoReceivedCount = 0
 
 
@@ -183,7 +183,6 @@ function CanIMogIt.frame:GetItemInfoReceived(event, ...)
     getItemInfoReceivedCount = getItemInfoReceivedCount + 1
     if getItemInfoReceivedCount >= 300 or tablelength(CanIMogIt.sourceIDQueue) <= 300 then
 		getItemInfoReceivedCount = 0
-		CanIMogItRunCounter = CanIMogItRunCounter + 1
         done = {}
         for sourceID, appearanceID in pairs(CanIMogIt.sourceIDQueue) do
             local itemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
