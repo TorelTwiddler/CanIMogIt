@@ -163,6 +163,7 @@ local knownTexts = {
 	[CanIMogIt.KNOWN_FROM_ANOTHER_ITEM] = true,
 	[CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = true,
 	[CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = true,
+	[CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = true,
 }
 
 
