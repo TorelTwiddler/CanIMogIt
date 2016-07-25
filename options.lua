@@ -4,6 +4,18 @@
 
 local _G = _G
 
+local CREATE_DATABASE_TEXT = [[|cff15abffCan I Mog It? |cffff9333Important Message:
+|cfff0e442Please log into all of your characters for about 30 seconds to compile complete transmog appearance data.]]
+
+StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
+  text = CREATE_DATABASE_TEXT,
+  button1 = "Okay, I'll go log onto all of my toons!",
+  timeout = 0,
+  whileDead = true,
+  hideOnEscape = true,
+  preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+}
+
 CanIMogIt_OptionsVersion = "1.3"
 
 CanIMogItOptions_Defaults = {
@@ -125,6 +137,7 @@ function CanIMogIt.frame.Loaded()
     end
     if (not CanIMogItDatabase) then
         CanIMogItDatabase = {}
+        StaticPopup_Show("CANIMOGIT_NEW_DATABASE")
     end
     -- Set missing options from the defaults if the version is out of date.
     if (CanIMogItOptions["version"] < CanIMogIt_OptionsVersion) then
