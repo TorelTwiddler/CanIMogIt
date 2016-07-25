@@ -288,6 +288,14 @@ CanIMogIt.cachedTooltipText = nil;
 -----------------------------
 
 
+function CanIMogIt:GetItemInfo(itemLink)
+	-- Calls GetItemInfo, but raises an error if it fails.
+	local result = {GetItemInfo(itemLink)}
+	if not result[1] then error("Waiting on GetItemInfo") end
+	return unpack(result)
+end
+
+
 function CanIMogIt:GetAppearances()
 	-- Gets a table of all the appearances known to a character.
 	C_TransmogCollection.ClearSearch()
@@ -311,24 +319,24 @@ end
 
 
 function CanIMogIt:IsItemArmor(itemLink)
-	return GetItemClassInfo(4) == select(6, GetItemInfo(itemLink))
+	return GetItemClassInfo(4) == select(6, CanIMogIt:GetItemInfo(itemLink))
 end
 
 
 function CanIMogIt:IsArmorSubClass(subClass, itemLink)
-	return select(1, GetItemSubClassInfo(4, subClass)) == select(7, GetItemInfo(itemLink))
+	return select(1, GetItemSubClassInfo(4, subClass)) == select(7, CanIMogIt:GetItemInfo(itemLink))
 end
 
 
 function CanIMogIt:IsArmorSubClassIdentical(itemLinkA, itemLinkB)
-	return select(7, GetItemInfo(itemLinkA)) == select(7, GetItemInfo(itemLinkB))
+	return select(7, CanIMogIt:GetItemInfo(itemLinkA)) == select(7, CanIMogIt:GetItemInfo(itemLinkB))
 end
 
 
 function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
 	local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
 	if armorTypeSlots[CanIMogIt:GetSlotName(itemLink)] and not CanIMogIt:IsArmorSubClass(COSMETIC, itemLink) then 
-		return playerArmorTypeID == select(7, GetItemInfo(itemLink))
+		return playerArmorTypeID == select(7, CanIMogIt:GetItemInfo(itemLink))
 	else
 		return true
 	end
@@ -336,7 +344,7 @@ end
 
 
 function CanIMogIt:GetSlotName(itemLink)
-	return select(9, GetItemInfo(itemLink))
+	return select(9, CanIMogIt:GetItemInfo(itemLink))
 end
 
 
@@ -365,7 +373,7 @@ end
 
 
 function CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)
-	local minLevel = select(5, GetItemInfo(itemLink))
+	local minLevel = select(5, CanIMogIt:GetItemInfo(itemLink))
 	return UnitLevel("player") < minLevel
 end
 
@@ -457,7 +465,7 @@ end
 
 function CanIMogIt:GetQuality(itemID)
 	-- Returns the quality of the item.
-	return select(3, GetItemInfo(itemID))
+	return select(3, CanIMogIt:GetItemInfo(itemID))
 end
 
 
@@ -503,7 +511,7 @@ end
 
 
 function CanIMogIt:GetItemLink(itemID)
-	return select(2, GetItemInfo(itemID))
+	return select(2, CanIMogIt:GetItemInfo(itemID))
 end
 
 
@@ -573,14 +581,17 @@ local function addToTooltip(tooltip, itemLink)
 	-- if CanIMogIt.cachedItemLink ~= itemLink then
 	-- 	print("itemLink changed! " .. itemLink)
 	-- end
-	local itemInfo = GetItemInfo(itemLink)
+	local itemInfo = CanIMogIt:GetItemInfo(itemLink)
 	if not itemInfo then 
 		CanIMogIt.cachedItemLink = nil
 		CanIMogIt.cachedTooltipText = nil
 		return 
 	end
+	
+	local ok;
 	if CanIMogItOptions["debug"] then
-		printDebug(CanIMogIt.tooltip, itemLink)
+		ok = pcall(printDebug, CanIMogIt.tooltip, itemLink)
+		if not ok then return end
 	end
 	
 	local text;
@@ -588,7 +599,8 @@ local function addToTooltip(tooltip, itemLink)
 	if itemLink == CanIMogIt.cachedItemLink then
 		text = CanIMogIt.cachedTooltipText
 	else
-		text = CanIMogIt:GetTooltipText(itemLink)
+		ok, text = pcall(CanIMogIt.GetTooltipText, CanIMogIt, itemLink)
+		if not ok then return end
 		-- Save the cached item and text, so it's faster next time.
 		CanIMogIt.cachedItemLink = itemLink
 		CanIMogIt.cachedTooltipText = text

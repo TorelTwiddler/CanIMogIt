@@ -19,6 +19,13 @@ CanIMogIt.sourceIDQueue = {}
 local getItemInfoReceivedCount = 0
 
 
+local function tablelength(T)
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+end
+
+
 function Database:AddItem(itemLink, appearanceID)
     --[[ 
         Adds the given itemLink to the database. Returns whether it was added or not.
@@ -162,31 +169,7 @@ function Database:UpdateItem(itemLink, hasTransmogFromItem)
 end
 
 
-function CanIMogIt.frame:PlayerLogin(event, ...)
-    if event == "PLAYER_LOGIN" then
-        -- add all known appearanceID's to the database
-        Database:UpdateAppearances()
-    end
-end
-
-
-function CanIMogIt.frame:TransmogCollectionUpdated(event, ...)
-    if event == "TRANSMOG_COLLECTION_UPDATED" then
-        -- add the equipment slot that was changed to the database
-        Database:UpdateAppearances()
-    end
-end
-
-
-local function tablelength(T)
-    local count = 0
-    for _ in pairs(T) do count = count + 1 end
-    return count
-end
-
-
-function CanIMogIt.frame:GetItemInfoReceived(event, ...)
-    if event ~= "GET_ITEM_INFO_RECEIVED" then return end
+function Database:GetItemInfoReceived()
     if next(CanIMogIt.sourceIDQueue) == nil then return end
     -- Update the database with any items that were still cooking.
     getItemInfoReceivedCount = getItemInfoReceivedCount + 1
@@ -205,4 +188,26 @@ function CanIMogIt.frame:GetItemInfoReceived(event, ...)
             CanIMogIt.sourceIDQueue[sourceID] = nil
         end
     end
+end
+
+
+function CanIMogIt.frame:PlayerLogin(event, ...)
+    if event == "PLAYER_LOGIN" then
+        -- add all known appearanceID's to the database
+        Database:UpdateAppearances()
+    end
+end
+
+
+function CanIMogIt.frame:TransmogCollectionUpdated(event, ...)
+    if event == "TRANSMOG_COLLECTION_UPDATED" then
+        -- add the equipment slot that was changed to the database
+        Database:UpdateAppearances()
+    end
+end
+
+
+function CanIMogIt.frame:GetItemInfoReceived(event, ...)
+    if event ~= "GET_ITEM_INFO_RECEIVED" then return end
+    Database:GetItemInfoReceived()
 end
