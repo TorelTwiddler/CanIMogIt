@@ -301,7 +301,7 @@ end
 function CanIMogIt:GetAppearances()
 	-- Gets a table of all the appearances known to a character.
 	C_TransmogCollection.ClearSearch()
-	appearances = {}
+	local appearances = {}
 	for categoryID=1,28 do
 		categoryAppearances = C_TransmogCollection.GetCategoryAppearances(categoryID)
 		for i, categoryAppearance in pairs(categoryAppearances) do

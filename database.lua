@@ -108,7 +108,7 @@ function Database:UpdateAppearances()
         Updates the database with the current appearances,
         adding or removing as needed.
     ]]
-    appearances = CanIMogIt:GetAppearances()
+    local appearances = CanIMogIt:GetAppearances()
     for appearanceID, appearance in pairs(appearances) do
         if appearance.isCollected then
             self:AddAppearance(appearanceID)
@@ -175,7 +175,7 @@ function Database:GetItemInfoReceived()
     getItemInfoReceivedCount = getItemInfoReceivedCount + 1
     if getItemInfoReceivedCount >= 300 or tablelength(CanIMogIt.sourceIDQueue) <= 300 then
 		getItemInfoReceivedCount = 0
-        done = {}
+        local done = {}
         for sourceID, appearanceID in pairs(CanIMogIt.sourceIDQueue) do
             local itemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
             if not string.find(itemLink, '|h%[%]|h') then
