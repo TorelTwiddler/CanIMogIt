@@ -263,6 +263,7 @@ local function printDebug(tooltip, itemLink)
 	addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)))
 	addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(CanIMogIt:PlayerKnowsTransmog(itemLink)))
 	addDoubleLine(tooltip, "CharacterCanLearnTransmog:", tostring(CanIMogIt:CharacterCanLearnTransmog(itemLink)))
+	addDoubleLine(tooltip, "CharacterCanEquipItem:", tostring(CanIMogIt:CharacterCanEquipItem(itemLink)))
 	addDoubleLine(tooltip, "IsValidAppearanceForCharacter:", tostring(CanIMogIt:IsValidAppearanceForCharacter(itemLink)))
 	addDoubleLine(tooltip, "CharacterIsTooLowLevelForItem:", tostring(CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)))
 
@@ -369,11 +370,16 @@ function CanIMogIt:IsArmorSubClassIdentical(itemLinkA, itemLinkB)
 end
 
 
+function CanIMogIt:IsArmorCosmetic(itemLink)
+	return CanIMogIt:IsArmorSubClass(COSMETIC, itemLink)
+end
+
+
 function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
 	local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
 	local slotName = CanIMogIt:GetItemSlotName(itemLink)
 	if not slotName then return end
-	if armorTypeSlots[slotName] and not CanIMogIt:IsArmorSubClass(COSMETIC, itemLink) then 
+	if armorTypeSlots[slotName] and not CanIMogIt:IsArmorCosmetic(itemLink) then 
 		return playerArmorTypeID == CanIMogIt:GetItemSubClassName(itemLink)
 	else
 		return true
@@ -382,6 +388,9 @@ end
 
 
 function CanIMogIt:CharacterCanEquipItem(itemLink)
+	if CanIMogIt:IsItemArmor(itemLink) and CanIMogIt:IsArmorCosmetic(itemLink) then
+		return true
+	end
 	local itemID = CanIMogIt:GetItemID(itemLink)
 	for i=1,28 do
 		if C_TransmogCollection.IsCategoryValidForItem(i, itemID) then
