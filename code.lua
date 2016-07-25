@@ -582,7 +582,7 @@ local function addToTooltip(tooltip, itemLink)
 	-- if CanIMogIt.cachedItemLink ~= itemLink then
 	-- 	print("itemLink changed! " .. itemLink)
 	-- end
-	local itemInfo = CanIMogIt:GetItemInfo(itemLink)
+	local itemInfo = GetItemInfo(itemLink)
 	if not itemInfo then 
 		CanIMogIt.cachedItemLink = nil
 		CanIMogIt.cachedTooltipText = nil
