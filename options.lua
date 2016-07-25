@@ -56,9 +56,9 @@ InterfaceOptions_AddCategory(CanIMogIt.frame);
 
 local EVENTS = {
     "ADDON_LOADED",
-    "TRANSMOG_COLLECTION_UPDATED",
-    "PLAYER_LOGIN",
-    "GET_ITEM_INFO_RECEIVED",
+    -- "TRANSMOG_COLLECTION_UPDATED",
+    -- "PLAYER_LOGIN",
+    -- "GET_ITEM_INFO_RECEIVED",
 }
 
 for i, event in pairs(EVENTS) do
@@ -135,10 +135,11 @@ function CanIMogIt.frame.Loaded()
         CanIMogItOptions = CanIMogItOptions_Defaults.options
         print("CanIMogItOptions not found, loading defaults!")
     end
-    if (not CanIMogItDatabase) then
-        CanIMogItDatabase = {}
-        StaticPopup_Show("CANIMOGIT_NEW_DATABASE")
-    end
+    -- if (not CanIMogItDatabase) then
+    --     CanIMogItDatabase = {}
+    --     StaticPopup_Show("CANIMOGIT_NEW_DATABASE")
+    -- end
+    CanIMogItDatabase = nil
     -- Set missing options from the defaults if the version is out of date.
     if (CanIMogItOptions["version"] < CanIMogIt_OptionsVersion) then
         CanIMogItOptions_temp = CanIMogItOptions_Defaults.options;

@@ -267,8 +267,8 @@ local function printDebug(tooltip, itemLink)
 
 	addLine(tooltip, '--------')
 
-	addDoubleLine(tooltip, "Database GetItem:", tostring(CanIMogIt.Database:GetItem(itemLink)))
-	addDoubleLine(tooltip, "Database GetAppearanceTable:", tostring(CanIMogIt.Database:GetAppearanceTable(itemLink)))
+	-- addDoubleLine(tooltip, "Database GetItem:", tostring(CanIMogIt.Database:GetItem(itemLink)))
+	-- addDoubleLine(tooltip, "Database GetAppearanceTable:", tostring(CanIMogIt.Database:GetAppearanceTable(itemLink)))
 	
 
 end
@@ -425,21 +425,32 @@ end
 function CanIMogIt:PlayerKnowsTransmog(itemLink)
 	-- Returns whether this item's appearance is already known by the player.
 	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
-	if appearanceID then self.Database:AddAppearanceSources(appearanceID) end
-	appearanceTable = self.Database:GetAppearanceTable(itemLink)
-	if not appearanceTable then return false end
-	if CanIMogIt:IsItemArmor(itemLink) then
-		for knownItemLink, bool in pairs(appearanceTable) do
-			-- if itemLink armor type is the same as one of the knownItemLink armor types
-			if CanIMogIt:IsArmorSubClassIdentical(itemLink, knownItemLink) then
-				return true
-			end
-		end
-	else
-		-- Is not armor, don't worry about same appearance for different types
-		return true
-	end
-	return false
+	-- if appearanceID then self.Database:AddAppearanceSources(appearanceID) end
+	-- appearanceTable = self.Database:GetAppearanceTable(itemLink)
+	-- if not appearanceTable then return false end
+	-- if CanIMogIt:IsItemArmor(itemLink) then
+	-- 	for knownItemLink, bool in pairs(appearanceTable) do
+	-- 		-- if itemLink armor type is the same as one of the knownItemLink armor types
+	-- 		if CanIMogIt:IsArmorSubClassIdentical(itemLink, knownItemLink) then
+	-- 			return true
+	-- 		end
+	-- 	end
+	-- else
+	-- 	-- Is not armor, don't worry about same appearance for different types
+	-- 	return true
+	-- end
+	-- return false
+
+	if not appearanceID then return false end
+	local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
+    if sources then
+        for i, source in pairs(sources) do
+            if source.isCollected then
+                return true
+            end
+        end
+    end
+    return false
 end
 
 
@@ -447,7 +458,7 @@ function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
 	-- Returns whether the transmog is known from this item specifically.
 	local itemID = CanIMogIt:GetItemID(itemLink)
 	local hasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID)
-	CanIMogIt.Database:UpdateItem(itemLink, hasTransmog)
+	-- CanIMogIt.Database:UpdateItem(itemLink, hasTransmog)
 	return hasTransmog
 end
 
@@ -591,8 +602,9 @@ local function addToTooltip(tooltip, itemLink)
 	
 	local ok;
 	if CanIMogItOptions["debug"] then
-		ok = pcall(printDebug, CanIMogIt.tooltip, itemLink)
-		if not ok then return end
+		-- ok = pcall(printDebug, CanIMogIt.tooltip, itemLink)
+		-- if not ok then return end
+		printDebug(CanIMogIt.tooltip, itemLink)
 	end
 	
 	local text;
@@ -600,8 +612,9 @@ local function addToTooltip(tooltip, itemLink)
 	if itemLink == CanIMogIt.cachedItemLink then
 		text = CanIMogIt.cachedTooltipText
 	else
-		ok, text = pcall(CanIMogIt.GetTooltipText, CanIMogIt, itemLink)
-		if not ok then return end
+		-- ok, text = pcall(CanIMogIt.GetTooltipText, CanIMogIt, itemLink)
+		-- if not ok then return end
+		text = CanIMogIt.GetTooltipText(CanIMogIt, itemLink)
 		-- Save the cached item and text, so it's faster next time.
 		CanIMogIt.cachedItemLink = itemLink
 		CanIMogIt.cachedTooltipText = text
