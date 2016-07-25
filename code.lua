@@ -290,14 +290,6 @@ CanIMogIt.cachedTooltipText = nil;
 -----------------------------
 
 
-function CanIMogIt:GetItemInfo(itemLink)
-	-- Calls GetItemInfo, but raises an error if it fails.
-	local result = {GetItemInfo(itemLink)}
-	if not result[1] then error("Waiting on GetItemInfo") end
-	return unpack(result)
-end
-
-
 function CanIMogIt:GetAppearances()
 	-- Gets a table of all the appearances known to a character.
 	C_TransmogCollection.ClearSearch()
@@ -320,33 +312,72 @@ function CanIMogIt:GetPlayerArmorTypeName()
 end
 
 
+function CanIMogIt:GetItemID(itemLink)
+	return tonumber(itemLink:match("item:(%d+)"))
+end
+
+
+function CanIMogIt:GetItemLink(itemID)
+	return select(2, CanIMogIt:GetItemInfo(itemID))
+end
+
+
+function CanIMogIt:GetItemQuality(itemID)
+	return select(3, GetItemInfo(itemID))
+end
+
+
+function CanIMogIt:GetItemMinLevel(itemLink)
+	return select(5, GetItemInfo(itemLink))
+end
+
+
+function CanIMogIt:GetItemClassName(itemLink)
+	return select(6, GetItemInfo(itemLink))
+end
+
+
+function CanIMogIt:GetItemSubClassName(itemLink)
+	return select(7, GetItemInfo(itemLink))
+end
+
+
+function CanIMogIt:GetItemSlotName(itemLink)
+	return select(9, GetItemInfo(itemLink))
+end
+
+
 function CanIMogIt:IsItemArmor(itemLink)
-	return GetItemClassInfo(4) == select(6, CanIMogIt:GetItemInfo(itemLink))
+	local itemClass = CanIMogIt:GetItemClassName(itemLink)
+	if not itemClass then return end
+	return GetItemClassInfo(4) == itemClass
 end
 
 
 function CanIMogIt:IsArmorSubClass(subClass, itemLink)
-	return select(1, GetItemSubClassInfo(4, subClass)) == select(7, CanIMogIt:GetItemInfo(itemLink))
+	local itemSubClass = CanIMogIt:GetItemSubClassName(itemLink)
+	if not itemSubClass then return end
+	return select(1, GetItemSubClassInfo(4, subClass)) == itemSubClass
 end
 
 
 function CanIMogIt:IsArmorSubClassIdentical(itemLinkA, itemLinkB)
-	return select(7, CanIMogIt:GetItemInfo(itemLinkA)) == select(7, CanIMogIt:GetItemInfo(itemLinkB))
+	local subClassA = CanIMogIt:GetItemSubClassName(itemLinkA)
+	local subClassB = CanIMogIt:GetItemSubClassName(itemLinkB)
+	if not subClassA or not subClassB then return end
+	return subClassA == subClassB
 end
 
 
 function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
 	local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
-	if armorTypeSlots[CanIMogIt:GetSlotName(itemLink)] and not CanIMogIt:IsArmorSubClass(COSMETIC, itemLink) then 
-		return playerArmorTypeID == select(7, CanIMogIt:GetItemInfo(itemLink))
+	local slotName = CanIMogIt:GetItemSlotName(itemLink)
+	if not slotName then return end
+	if armorTypeSlots[slotName] and not CanIMogIt:IsArmorSubClass(COSMETIC, itemLink) then 
+		return playerArmorTypeID == CanIMogIt:GetItemSubClassName(itemLink)
 	else
 		return true
 	end
-end
-
-
-function CanIMogIt:GetSlotName(itemLink)
-	return select(9, CanIMogIt:GetItemInfo(itemLink))
 end
 
 
@@ -375,7 +406,8 @@ end
 
 
 function CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)
-	local minLevel = select(5, CanIMogIt:GetItemInfo(itemLink))
+	local minLevel = CanIMogIt:GetItemMinLevel(itemLink)
+	if not minLevel then return end
 	return UnitLevel("player") < minLevel
 end
 
@@ -383,7 +415,8 @@ end
 function CanIMogIt:GetExceptionText(itemLink)
 	-- Returns the exception text for this item, if it has one.
 	local itemID = CanIMogIt:GetItemID(itemLink)
-	local slotName = CanIMogIt:GetSlotName(itemLink)
+	local slotName = CanIMogIt:GetItemSlotName(itemLink)
+	if not slotName then return end
 	local slotExceptions = exceptionItems[slotName]
 	if slotExceptions then
 		return slotExceptions[itemID]
@@ -393,7 +426,8 @@ end
 
 function CanIMogIt:IsEquippable(itemLink)
 	-- Returns whether the item is equippable or not (exluding bags)
-	local slotName = CanIMogIt:GetSlotName(itemLink)
+	local slotName = CanIMogIt:GetItemSlotName(itemLink)
+	if not slotName then return end
 	return slotName ~= "" and slotName ~= BAG
 end
 
@@ -466,7 +500,8 @@ end
 
 function CanIMogIt:CharacterCanLearnTransmog(itemLink)
 	-- Returns whether the player can learn the item or not.
-	if CanIMogIt:GetSlotName(itemLink) == TABARD then return true end
+	local slotName = CanIMogIt:GetItemSlotName(itemLink)
+	if slotName == TABARD then return true end
 	local source = CanIMogIt:GetSource(itemLink)
 	if source == nil then return false end
 	if select(2, C_TransmogCollection.PlayerCanCollectSource(source)) then
@@ -476,23 +511,18 @@ function CanIMogIt:CharacterCanLearnTransmog(itemLink)
 end
 
 
-function CanIMogIt:GetQuality(itemID)
-	-- Returns the quality of the item.
-	return select(3, CanIMogIt:GetItemInfo(itemID))
-end
-
-
 function CanIMogIt:IsTransmogable(itemLink)
 	-- Returns whether the item is transmoggable or not.
 
 	-- White items are not transmoggable.
-	local quality = CanIMogIt:GetQuality(itemLink)
+	local quality = CanIMogIt:GetItemQuality(itemLink)
+	if not quality then return end
 	if quality <= 1 then
 		return false
 	end
 
 	local is_misc_subclass = CanIMogIt:IsArmorSubClass(MISC, itemLink)
-	if is_misc_subclass and not miscArmorExceptions[CanIMogIt:GetSlotName(itemLink)] then
+	if is_misc_subclass and not miscArmorExceptions[CanIMogIt:GetItemSlotName(itemLink)] then
 		return false
 	end
 	
@@ -515,16 +545,6 @@ end
 function CanIMogIt:TextIsKnown(text)
 	-- Returns whether the text is considered to be a KNOWN value or not.
 	return knownTexts[text] or false
-end
-
-
-function CanIMogIt:GetItemID(itemLink)
-	return tonumber(itemLink:match("item:(%d+)"))
-end
-
-
-function CanIMogIt:GetItemLink(itemID)
-	return select(2, CanIMogIt:GetItemInfo(itemID))
 end
 
 
