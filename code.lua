@@ -350,14 +350,14 @@ end
 
 function CanIMogIt:IsItemArmor(itemLink)
 	local itemClass = CanIMogIt:GetItemClassName(itemLink)
-	if not itemClass then return end
+	if itemClass == nil then return end
 	return GetItemClassInfo(4) == itemClass
 end
 
 
 function CanIMogIt:IsArmorSubClass(subClass, itemLink)
 	local itemSubClass = CanIMogIt:GetItemSubClassName(itemLink)
-	if not itemSubClass then return end
+	if itemSubClass == nil then return end
 	return select(1, GetItemSubClassInfo(4, subClass)) == itemSubClass
 end
 
@@ -365,7 +365,7 @@ end
 function CanIMogIt:IsArmorSubClassIdentical(itemLinkA, itemLinkB)
 	local subClassA = CanIMogIt:GetItemSubClassName(itemLinkA)
 	local subClassB = CanIMogIt:GetItemSubClassName(itemLinkB)
-	if not subClassA or not subClassB then return end
+	if subClassA == nil or subClassB == nil then return end
 	return subClassA == subClassB
 end
 
@@ -378,8 +378,10 @@ end
 function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
 	local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
 	local slotName = CanIMogIt:GetItemSlotName(itemLink)
-	if not slotName then return end
-	if armorTypeSlots[slotName] and not CanIMogIt:IsArmorCosmetic(itemLink) then 
+	if slotName == nil then return end
+	local isArmorCosmetic = CanIMogIt:IsArmorCosmetic(itemLink)
+	if isArmorCosmetic == nil then return end
+	if armorTypeSlots[slotName] and isArmorCosmetic == false then 
 		return playerArmorTypeID == CanIMogIt:GetItemSubClassName(itemLink)
 	else
 		return true
@@ -416,7 +418,7 @@ end
 
 function CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)
 	local minLevel = CanIMogIt:GetItemMinLevel(itemLink)
-	if not minLevel then return end
+	if minLevel == nil then return end
 	return UnitLevel("player") < minLevel
 end
 
@@ -425,7 +427,7 @@ function CanIMogIt:GetExceptionText(itemLink)
 	-- Returns the exception text for this item, if it has one.
 	local itemID = CanIMogIt:GetItemID(itemLink)
 	local slotName = CanIMogIt:GetItemSlotName(itemLink)
-	if not slotName then return end
+	if slotName == nil then return end
 	local slotExceptions = exceptionItems[slotName]
 	if slotExceptions then
 		return slotExceptions[itemID]
@@ -436,7 +438,7 @@ end
 function CanIMogIt:IsEquippable(itemLink)
 	-- Returns whether the item is equippable or not (exluding bags)
 	local slotName = CanIMogIt:GetItemSlotName(itemLink)
-	if not slotName then return end
+	if slotName == nil then return end
 	return slotName ~= "" and slotName ~= BAG
 end
 
@@ -445,7 +447,7 @@ function CanIMogIt:GetSource(itemLink)
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
     local slots = inventorySlotsMap[slotName]
 
-    if not slots or not IsDressableItem(itemLink) then return end
+    if slots == nil or slots == false or IsDressableItem(itemLink) == false then return end
     CanIMogIt.DressUpModel:SetUnit('player')
     CanIMogIt.DressUpModel:Undress()
 	for i, slot in pairs(slots) do
@@ -471,7 +473,7 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
 	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
 	-- if appearanceID then self.Database:AddAppearanceSources(appearanceID) end
 	-- appearanceTable = self.Database:GetAppearanceTable(itemLink)
-	-- if not appearanceTable then return false end
+	-- if appearanceTable == nil then return false end
 	-- if CanIMogIt:IsItemArmor(itemLink) then
 	-- 	for knownItemLink, bool in pairs(appearanceTable) do
 	-- 		-- if itemLink armor type is the same as one of the knownItemLink armor types
@@ -485,7 +487,7 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
 	-- end
 	-- return false
 
-	if not appearanceID then return false end
+	if appearanceID == nil then return false end
 	local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
     if sources then
         for i, source in pairs(sources) do
@@ -525,13 +527,13 @@ function CanIMogIt:IsTransmogable(itemLink)
 
 	-- White items are not transmoggable.
 	local quality = CanIMogIt:GetItemQuality(itemLink)
-	if not quality then return end
+	if quality == nil then return end
 	if quality <= 1 then
 		return false
 	end
 
 	local is_misc_subclass = CanIMogIt:IsArmorSubClass(MISC, itemLink)
-	if is_misc_subclass and not miscArmorExceptions[CanIMogIt:GetItemSlotName(itemLink)] then
+	if is_misc_subclass and miscArmorExceptions[CanIMogIt:GetItemSlotName(itemLink)] == nil then
 		return false
 	end
 	
@@ -624,7 +626,7 @@ local function addToTooltip(tooltip, itemLink)
 	-- 	print("itemLink changed! " .. itemLink)
 	-- end
 	local itemInfo = GetItemInfo(itemLink)
-	if not itemInfo then 
+	if itemInfo == nil then 
 		CanIMogIt.cachedItemLink = nil
 		CanIMogIt.cachedTooltipText = nil
 		return 
