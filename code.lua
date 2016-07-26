@@ -239,9 +239,9 @@ local function printDebug(tooltip, itemLink)
 	addDoubleLine(tooltip, "Item SubClass:", tostring(itemSubClass))
 	addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
 
-	local source = CanIMogIt:GetSource(itemLink)
-	if source ~= nil then
-		addDoubleLine(tooltip, "Item source:", tostring(source))
+	local sourceID = CanIMogIt:GetSource(itemLink)
+	if sourceID ~= nil then
+		addDoubleLine(tooltip, "Item source:", tostring(sourceID))
 	else
 		addDoubleLine(tooltip, "Item source:", 'nil')
 	end
@@ -256,6 +256,10 @@ local function printDebug(tooltip, itemLink)
 
 	local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
 	addDoubleLine(tooltip, "GetAppearanceID:", tostring(appearanceID))
+	addDoubleLine(tooltip, "PlayerHasTransmog:", tostring(C_TransmogCollection.PlayerHasTransmog(itemID)))
+	if sourceID then
+		addDoubleLine(tooltip, "PlayerHasTransmogItemModifiedAppearance:", tostring(C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)))
+	end
 
 	addLine(tooltip, '--------')
 
@@ -452,17 +456,17 @@ function CanIMogIt:GetSource(itemLink)
     CanIMogIt.DressUpModel:Undress()
 	for i, slot in pairs(slots) do
     	CanIMogIt.DressUpModel:TryOn(itemLink, slot)
-		local source = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
-		if source ~= 0 then return source end
+		local sourceID = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
+		if sourceID ~= 0 then return sourceID end
 	end
 end
 
 
 function CanIMogIt:GetAppearanceID(itemLink)
 	-- Gets the appearanceID of the given itemID.
-	local source = CanIMogIt:GetSource(itemLink)
-    if source then
-        local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(source))
+	local sourceID = CanIMogIt:GetSource(itemLink)
+    if sourceID then
+        local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
         return appearanceID
     end
 end
@@ -502,9 +506,27 @@ end
 
 function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
 	-- Returns whether the transmog is known from this item specifically.
-	local itemID = CanIMogIt:GetItemID(itemLink)
-	local hasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID)
+	-- local itemID = CanIMogIt:GetItemID(itemLink)
+	-- local hasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID)
+	-- if hasTransmog == false then
+	-- 	for i=1,12 do
+	-- 		hasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID, i)
+	-- 		if hasTransmog then
+	-- 			return true
+	-- 		end
+	-- 	end
+	-- end
 	-- CanIMogIt.Database:UpdateItem(itemLink, hasTransmog)
+
+	local hasTransmog;
+	local slotName = CanIMogIt:GetItemSlotName(itemLink)
+	if slotName == TABARD then
+		local itemID = CanIMogIt:GetItemID(itemLink)
+		return C_TransmogCollection.PlayerHasTransmog(itemID)
+	end
+	local sourceID = CanIMogIt:GetSource(itemLink)
+	if sourceID == nil then return false end
+	hasTransmog = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
 	return hasTransmog
 end
 
@@ -513,9 +535,9 @@ function CanIMogIt:CharacterCanLearnTransmog(itemLink)
 	-- Returns whether the player can learn the item or not.
 	local slotName = CanIMogIt:GetItemSlotName(itemLink)
 	if slotName == TABARD then return true end
-	local source = CanIMogIt:GetSource(itemLink)
-	if source == nil then return false end
-	if select(2, C_TransmogCollection.PlayerCanCollectSource(source)) then
+	local sourceID = CanIMogIt:GetSource(itemLink)
+	if sourceID == nil then return false end
+	if select(2, C_TransmogCollection.PlayerCanCollectSource(sourceID)) then
 		return true
 	end
 	return false

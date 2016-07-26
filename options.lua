@@ -69,9 +69,9 @@ end
 CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
     -- Add functions you want to catch events here
     self:AddonLoaded(event, ...)
-    self:PlayerLogin(event, ...)
-    self:TransmogCollectionUpdated(event, ...)
-    self:GetItemInfoReceived(event, ...)
+    -- self:PlayerLogin(event, ...)
+    -- self:TransmogCollectionUpdated(event, ...)
+    -- self:GetItemInfoReceived(event, ...)
 end)
 
 
