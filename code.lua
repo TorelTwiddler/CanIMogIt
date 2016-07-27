@@ -152,6 +152,7 @@ CanIMogIt.KNOWN = 					KNOWN_ICON .. BLUE .. "Learned."
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = KNOWN_ICON .. BLUE .. "Learned from another item."
 CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER = KNOWN_BUT_ICON .. BLUE .. "Learned for a different class."
 CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL = KNOWN_BUT_ICON .. BLUE .. "Learned but cannot transmog yet."
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL = KNOWN_BUT_ICON .. BLUE .. "Learned from another item but cannot transmog yet."
 -- CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = KNOWN_BUT_ICON .. BLUE .. "Learned for a different class and item."
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = QUESTIONABLE_ICON .. YELLOW .. "Cannot determine status on other characters."
 CanIMogIt.UNKNOWN = 				UNKNOWN_ICON .. ORANGE .. "Not learned."
@@ -611,7 +612,7 @@ function CanIMogIt:GetTooltipText(itemLink)
 		elseif CanIMogIt:PlayerKnowsTransmog(itemLink) then
 			if CanIMogIt:IsValidAppearanceForCharacter(itemLink) then
 				if CanIMogIt:CharacterIsTooLowLevelForItem(itemLink) then
-					text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
+					text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
 				else
 					text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
 				end
