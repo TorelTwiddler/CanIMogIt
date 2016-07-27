@@ -176,7 +176,9 @@ local knownTexts = {
 
 local exceptionItems = {
     [HEAD] = {},
-    [SHOULDER] = {},
+    [SHOULDER] = {
+		[119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
+	},
     [BODY] = {},
     [CHEST] = {},
     [ROBE] = {},
