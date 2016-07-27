@@ -176,9 +176,7 @@ local knownTexts = {
 
 local exceptionItems = {
     [HEAD] = {},
-    [SHOULDER] = {
-		[119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
-	},
+    [SHOULDER] = {},
     [BODY] = {},
     [CHEST] = {},
     [ROBE] = {},
@@ -188,15 +186,7 @@ local exceptionItems = {
     [WRIST] = {},
     [HAND] = {},
     [CLOAK] = {},
-    [WEAPON] = {
-		[89566] = CanIMogIt.NOT_TRANSMOGABLE, -- Novice's Handwraps
-		[89570] = CanIMogIt.NOT_TRANSMOGABLE, -- Initiate's Handwraps
-		[89571] = CanIMogIt.NOT_TRANSMOGABLE, -- Grappling Handwraps
-		[89572] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Pilgrimage
-		[89573] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Meditation
-		[89574] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Fallen Blossoms
-		[89575] = CanIMogIt.NOT_TRANSMOGABLE, -- Handwraps of Serenity
-	},
+    [WEAPON] = {},
     [SHIELD] = {},
     [WEAPON_2HAND] = {},
     [WEAPON_MAIN_HAND] = {},
