@@ -1,5 +1,7 @@
 -- This file is loaded from "CanIMogIt.toc"
 
+local _, L = ...;
+
 CanIMogIt = {}
 
 CanIMogIt.DressUpModel = CreateFrame('DressUpModel')
@@ -147,18 +149,34 @@ local ORANGE = "|cffff9333"
 local YELLOW = "|cfff0e442"
 local GRAY =   "|cff888888"
 
-CanIMogIt.CAN_I_MOG_IT = 			"|cff00a3cc" .. " "
-CanIMogIt.KNOWN = 					KNOWN_ICON .. BLUE .. "Learned."
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = KNOWN_ICON .. BLUE .. "Learned from another item."
-CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER = KNOWN_BUT_ICON .. BLUE .. "Learned for a different class."
-CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL = KNOWN_BUT_ICON .. BLUE .. "Learned but cannot transmog yet."
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL = KNOWN_BUT_ICON .. BLUE .. "Learned from another item but cannot transmog yet."
--- CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = KNOWN_BUT_ICON .. BLUE .. "Learned for a different class and item."
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = QUESTIONABLE_ICON .. YELLOW .. "Cannot determine status on other characters."
-CanIMogIt.UNKNOWN = 				UNKNOWN_ICON .. ORANGE .. "Not learned."
-CanIMogIt.UNKNOWABLE_BY_CHARACTER = UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. "Another class can learn this item."
-CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND = UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. "Cannot be learned by this character."
-CanIMogIt.NOT_TRANSMOGABLE = 		NOT_TRANSMOGABLE_ICON .. GRAY .. "Cannot be learned."
+
+local KNOWN = 										L["Learned."]
+local KNOWN_FROM_ANOTHER_ITEM = 					L["Learned from another item."]
+local KNOWN_BY_ANOTHER_CHARACTER = 					L["Learned for a different class."]
+local KNOWN_BUT_TOO_LOW_LEVEL = 					L["Learned but cannot transmog yet."]
+local KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL = 	L["Learned from another item but cannot transmog yet."]
+local KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       L["Learned for a different class and item."]
+local UNKNOWN = 									L["Not learned."]
+local UNKNOWABLE_BY_CHARACTER = 					L["Another class can learn this item."]
+local UNKNOWABLE_BY_CHARACTER_SOULBOUND = 			L["Cannot be learned by this character."]
+local CAN_BE_LEARNED_BY = 							L["Can be learned by:"] -- list of classes
+local NOT_TRANSMOGABLE = 							L["Cannot be learned."]
+local CANNOT_DETERMINE = 							L["Cannot determine status on other characters."]
+
+
+
+CanIMogIt.CAN_I_MOG_IT = 								"|cff00a3cc" .. " "
+CanIMogIt.KNOWN = 										KNOWN_ICON .. BLUE .. KNOWN
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM = 					KNOWN_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM
+CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER = 					KNOWN_BUT_ICON .. BLUE .. KNOWN_BY_ANOTHER_CHARACTER
+CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL = 					KNOWN_BUT_ICON .. BLUE .. KNOWN_BUT_TOO_LOW_LEVEL
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL = 	KNOWN_BUT_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
+-- CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = 	KNOWN_BUT_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = 		QUESTIONABLE_ICON .. YELLOW .. CANNOT_DETERMINE
+CanIMogIt.UNKNOWN = 									UNKNOWN_ICON .. ORANGE .. UNKNOWN
+CanIMogIt.UNKNOWABLE_BY_CHARACTER = 					UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. UNKNOWABLE_BY_CHARACTER
+CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND = 			UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. UNKNOWABLE_BY_CHARACTER_SOULBOUND
+CanIMogIt.NOT_TRANSMOGABLE = 							NOT_TRANSMOGABLE_ICON .. GRAY .. NOT_TRANSMOGABLE
 
 
 local knownTexts = {

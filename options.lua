@@ -3,9 +3,9 @@
 -- Thanks to Stanzilla and Semlar and their addon AdvancedInterfaceOptions, which I used as reference.
 
 local _G = _G
+local _, L = ...;
 
-local CREATE_DATABASE_TEXT = [[|cff15abffCan I Mog It? |cffff9333Important Message:
-|cfff0e442Please log into all of your characters for about 30 seconds to compile complete transmog appearance data.]]
+local CREATE_DATABASE_TEXT = L["Can I Mog It? Important Message: Please log into all of your characters to compile complete transmog appearance data."]
 
 StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
   text = CREATE_DATABASE_TEXT,
@@ -31,20 +31,20 @@ CanIMogItOptions_Defaults = {
 
 CanIMogItOptions_DisplayData = {
     ["debug"] = {
-        ["displayName"] = "Debug Tooltip",
-        ["description"] = "Detailed information for debug purposes. Use this when sending bug reports.",
+        ["displayName"] = L["Debug Tooltip"],
+        ["description"] = L["Detailed information for debug purposes. Use this when sending bug reports."],
     },
     ["showEquippableOnly"] = {
-        ["displayName"] = "Equippable Items Only",
-        ["description"] = "Only show on items that can be equipped."
+        ["displayName"] = L["Equippable Items Only"],
+        ["description"] = L["Only show on items that can be equipped."]
     },
     ["showTransmoggableOnly"] = {
-        ["displayName"] = "Transmoggable Items Only",
-        ["description"] = "Only show on items that can be transmoggrified."
+        ["displayName"] = L["Transmoggable Items Only"],
+        ["description"] = L["Only show on items that can be transmoggrified."]
     },
     ["showUnknownOnly"] = {
-        ["displayName"] = "Unknown Items Only",
-        ["description"] = "Only show on items that you haven't learned."
+        ["displayName"] = L["Unknown Items Only"],
+        ["description"] = L["Only show on items that you haven't learned."]
     },
 }
 
@@ -133,7 +133,7 @@ function CanIMogIt.frame.Loaded()
     -- Set the Options from defaults.
     if (not CanIMogItOptions) then
         CanIMogItOptions = CanIMogItOptions_Defaults.options
-        print("CanIMogItOptions not found, loading defaults!")
+        print(L["CanIMogItOptions not found, loading defaults!"])
     end
     -- if (not CanIMogItDatabase) then
     --     CanIMogItDatabase = {}

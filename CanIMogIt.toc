@@ -6,6 +6,10 @@
 ## X-Category: Transmogrify
 ## X-Website: http://mods.curse.com/addons/wow/can-i-mog-it
 ## SavedVariables: CanIMogItOptions, CanIMogItDatabase
+localization.core.lua
+localization.deDE.lua
+localization.zhCN.lua
+localization.zhTW.lua
 code.lua
 options.lua
 database.lua
