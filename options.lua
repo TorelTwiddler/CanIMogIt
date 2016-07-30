@@ -83,9 +83,9 @@ end
 
 
 local function checkboxOnClick(self)
-	local checked = self:GetChecked()
-	PlaySound(checked and "igMainMenuOptionCheckBoxOn" or "igMainMenuOptionCheckBoxOff")
-	self:SetValue(checked)
+    local checked = self:GetChecked()
+    PlaySound(checked and "igMainMenuOptionCheckBoxOn" or "igMainMenuOptionCheckBoxOff")
+    self:SetValue(checked)
 end
 
 

@@ -175,7 +175,7 @@ function Database:GetItemInfoReceived()
     -- Update the database with any items that were still cooking.
     getItemInfoReceivedCount = getItemInfoReceivedCount + 1
     if getItemInfoReceivedCount >= 300 or tablelength(CanIMogIt.sourceIDQueue) <= 300 then
-		getItemInfoReceivedCount = 0
+        getItemInfoReceivedCount = 0
         local done = {}
         for sourceID, appearanceID in pairs(CanIMogIt.sourceIDQueue) do
             local itemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
