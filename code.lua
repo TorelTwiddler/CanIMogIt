@@ -139,11 +139,16 @@ local KNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN:0|t "
 local KNOWN_BUT_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_circle:0|t "
 local UNKNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN:0|t "
 local UNKNOWABLE_BY_CHARACTER_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER:0|t "
+local UNKNOWABLE_BY_CHARACTER_SOULBOUND_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER_SOULBOUND:0|t "
 local NOT_TRANSMOGABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE:0|t "
 local QUESTIONABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\QUESTIONABLE:0|t "
 
+
 local BLUE =   "|cff15abff"
-local ORANGE = "|cffff9333"
+local BLUE_GREEN = "|cff009e73"
+local PINK = "|cffcc79a7"
+local ORANGE = "|cffe69f00"
+local RED_ORANGE = "|cffff9333"
 local YELLOW = "|cfff0e442"
 local GRAY =   "|cff888888"
 
@@ -162,7 +167,6 @@ local NOT_TRANSMOGABLE =                            L["Cannot be learned."]
 local CANNOT_DETERMINE =                            L["Cannot determine status on other characters."]
 
 
-
 CanIMogIt.CAN_I_MOG_IT =                                "|cff00a3cc" .. " "
 CanIMogIt.KNOWN =                                       KNOWN_ICON .. BLUE .. KNOWN
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM =                     KNOWN_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM
@@ -171,10 +175,38 @@ CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL =                     KNOWN_BUT_ICON .. BLUE .
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL =   KNOWN_BUT_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
 -- CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =    KNOWN_BUT_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       QUESTIONABLE_ICON .. YELLOW .. CANNOT_DETERMINE
-CanIMogIt.UNKNOWN =                                     UNKNOWN_ICON .. ORANGE .. UNKNOWN
+CanIMogIt.UNKNOWN =                                     UNKNOWN_ICON .. RED_ORANGE .. UNKNOWN
 CanIMogIt.UNKNOWABLE_BY_CHARACTER =                     UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. UNKNOWABLE_BY_CHARACTER
-CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND =           UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. UNKNOWABLE_BY_CHARACTER_SOULBOUND
+CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND =           UNKNOWABLE_BY_CHARACTER_SOULBOUND_ICON .. BLUE_GREEN .. UNKNOWABLE_BY_CHARACTER_SOULBOUND
 CanIMogIt.NOT_TRANSMOGABLE =                            NOT_TRANSMOGABLE_ICON .. GRAY .. NOT_TRANSMOGABLE
+
+
+local tooltipTexts = {
+    [KNOWN] = CanIMogIt.KNOWN,
+    [KNOWN_FROM_ANOTHER_ITEM] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM,
+    [KNOWN_BY_ANOTHER_CHARACTER] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER,
+    [KNOWN_BUT_TOO_LOW_LEVEL] = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL,
+    [KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL,
+    [KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER,
+    [UNKNOWN] = CanIMogIt.UNKNOWN,
+    [UNKNOWABLE_BY_CHARACTER] = CanIMogIt.UNKNOWABLE_BY_CHARACTER,
+    [UNKNOWABLE_BY_CHARACTER_SOULBOUND] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND,
+    [CAN_BE_LEARNED_BY] = CanIMogIt.CAN_BE_LEARNED_BY,
+    [NOT_TRANSMOGABLE] = CanIMogIt.NOT_TRANSMOGABLE,
+    [CANNOT_DETERMINE] = CanIMogIt.CANNOT_DETERMINE,
+}
+
+
+local LEFT_TEXT_THRESHOLD = 200
+
+
+-- Texts that we want to display on the left instead of right because of length.
+local leftTexts = {}
+for text, full_text in pairs(tooltipTexts) do
+    if string.len(text) > LEFT_TEXT_THRESHOLD then
+        leftTexts[full_text] = true
+    end
+end
 
 
 local knownTexts = {
@@ -232,7 +264,7 @@ end
 
 
 local function addLine(tooltip, text)
-    tooltip:AddLine(text)
+    tooltip:AddLine(text, nil, nil, nil, true)
     tooltip:Show()
 end
 
@@ -707,7 +739,11 @@ local function addToTooltip(tooltip, itemLink)
         return
     end
     if text then
-        addDoubleLine(tooltip, CanIMogIt.CAN_I_MOG_IT, text)
+        if leftTexts[text] then
+            addLine(tooltip, text)
+        else
+            addDoubleLine(tooltip, " ", text)
+        end
     end
 end
 
