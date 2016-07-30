@@ -20,3 +20,4 @@ localization.zhTW.lua
 code.lua
 options.lua
 database.lua
+tooltipScanner.lua

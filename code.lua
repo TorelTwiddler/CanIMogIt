@@ -196,6 +196,7 @@ local exceptionItems = {
     [HEAD] = {},
     [SHOULDER] = {
         [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
+        [119588] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons
     },
     [BODY] = {},
     [CHEST] = {},
@@ -204,7 +205,9 @@ local exceptionItems = {
     [LEGS] = {},
     [FEET] = {},
     [WRIST] = {},
-    [HAND] = {},
+    [HAND] = {
+        [119585] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards
+    },
     [CLOAK] = {},
     [WEAPON] = {},
     [SHIELD] = {},
@@ -278,6 +281,10 @@ local function printDebug(tooltip, itemLink)
     addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)))
     addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(CanIMogIt:PlayerKnowsTransmog(itemLink)))
     addDoubleLine(tooltip, "CharacterCanLearnTransmog:", tostring(CanIMogIt:CharacterCanLearnTransmog(itemLink)))
+
+    addLine(tooltip, '--------')
+
+    addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink)))
     addDoubleLine(tooltip, "CharacterCanEquipItem:", tostring(CanIMogIt:CharacterCanEquipItem(itemLink)))
     addDoubleLine(tooltip, "IsValidAppearanceForCharacter:", tostring(CanIMogIt:IsValidAppearanceForCharacter(itemLink)))
     addDoubleLine(tooltip, "CharacterIsTooLowLevelForItem:", tostring(CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)))
@@ -286,7 +293,6 @@ local function printDebug(tooltip, itemLink)
 
     -- addDoubleLine(tooltip, "Database GetItem:", tostring(CanIMogIt.Database:GetItem(itemLink)))
     -- addDoubleLine(tooltip, "Database GetAppearanceTable:", tostring(CanIMogIt.Database:GetAppearanceTable(itemLink)))
-    
 
 end
 
@@ -435,6 +441,11 @@ function CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)
     local minLevel = CanIMogIt:GetItemMinLevel(itemLink)
     if minLevel == nil then return end
     return UnitLevel("player") < minLevel
+end
+
+
+function CanIMogIt:IsItemSoulbound(itemLink)
+	return CanIMogItTooltipScanner:IsItemSoulbound(itemLink)
 end
 
 
@@ -634,8 +645,11 @@ function CanIMogIt:GetTooltipText(itemLink)
                 -- Set text to UNKNOWN
                 text = CanIMogIt.UNKNOWN
             else
-                -- Set text to UNKNOWABLE_BY_CHARACTER
-                text = CanIMogIt.UNKNOWABLE_BY_CHARACTER
+                if CanIMogIt:IsItemSoulbound(itemLink) then
+                    text = CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND
+                else
+                    text = CanIMogIt.UNKNOWABLE_BY_CHARACTER
+                end
             end
         end
     else
