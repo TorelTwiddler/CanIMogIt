@@ -1,8 +1,6 @@
 -- This file is loaded from "CanIMogIt.toc"
 
-local _, L = ...;
-
-CanIMogIt = {}
+local L = CanIMogIt.L
 
 CanIMogIt.DressUpModel = CreateFrame('DressUpModel')
 

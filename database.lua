@@ -11,7 +11,7 @@
         The Transmog collection is updated.
 ]]
 
-local _, L = ...;
+local L = CanIMogIt.L
 
 local Database = {}
 CanIMogIt.Database = Database

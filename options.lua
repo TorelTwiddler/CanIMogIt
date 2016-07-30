@@ -3,7 +3,7 @@
 -- Thanks to Stanzilla and Semlar and their addon AdvancedInterfaceOptions, which I used as reference.
 
 local _G = _G
-local _, L = ...;
+local L = CanIMogIt.L
 
 local CREATE_DATABASE_TEXT = L["Can I Mog It? Important Message: Please log into all of your characters to compile complete transmog appearance data."]
 
