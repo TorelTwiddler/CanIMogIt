@@ -20,6 +20,7 @@ CanIMogIt.L = CanIMogIt.L or setmetatable({}, {
 
 
 function CanIMogIt:RegisterLocale(locale, tbl)
+    if not tbl then return end
     if locale == "enUS" or locale == GetLocale() then
         for k,v in pairs(tbl) do
             if v == true then

@@ -1,4 +1,4 @@
-local translations = @localization(locale="ruRU", format="lua_table")@
+local translations = --@localization(locale="ruRU", format="lua_table")@
 
 
 CanIMogIt:RegisterLocale("ruRU", translations)
