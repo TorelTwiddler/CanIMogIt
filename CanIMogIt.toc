@@ -17,7 +17,8 @@ localization.koKR.lua
 localization.ruRU.lua
 localization.zhCN.lua
 localization.zhTW.lua
-code.lua
 options.lua
+code.lua
 database.lua
 tooltipScanner.lua
+itemOverlay.lua

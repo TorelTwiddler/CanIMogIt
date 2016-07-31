@@ -56,7 +56,7 @@ InterfaceOptions_AddCategory(CanIMogIt.frame);
 
 local EVENTS = {
     "ADDON_LOADED",
-    -- "TRANSMOG_COLLECTION_UPDATED",
+    "TRANSMOG_COLLECTION_UPDATED",
     -- "PLAYER_LOGIN",
     -- "GET_ITEM_INFO_RECEIVED",
 }
@@ -70,7 +70,7 @@ CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
     -- Add functions you want to catch events here
     self:AddonLoaded(event, ...)
     -- self:PlayerLogin(event, ...)
-    -- self:TransmogCollectionUpdated(event, ...)
+    self:TransmogCollectionUpdated(event, ...)
     -- self:GetItemInfoReceived(event, ...)
 end)
 

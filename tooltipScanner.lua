@@ -9,10 +9,11 @@ local _G = _G
 local L = CanIMogIt.L
 
 -- Tooltip setup
-CanIMogItTooltipScanner = {}
-
-
-local GameTooltip = GameTooltip
+CanIMogItTooltipScanner = CreateFrame( "GameTooltip", "CanIMogItTooltipScanner");
+CanIMogItTooltipScanner:SetOwner( WorldFrame, "ANCHOR_NONE" );
+CanIMogItTooltipScanner:AddFontStrings(
+    CanIMogItTooltipScanner:CreateFontString( "$parentTextLeft1", nil, "GameTooltipText" ),
+    CanIMogItTooltipScanner:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" ) );
 
 
 local function IsTextRed(text)
@@ -33,13 +34,18 @@ local function IsItemSoulbound(text)
 end
 
 
-function CanIMogItTooltipScanner:ScanTooltip(func)
-    local tooltip = GameTooltip
-    local tooltipName = tooltip:GetName()
-    for i = 1, tooltip:NumLines() do
+function CanIMogItTooltipScanner:ScanTooltip(func, itemLink, bag, slot)
+    if bag and slot then
+        self:SetBagItem(bag, slot)
+    else
+        self:SetHyperlink(itemLink)
+    end
+    local tooltipName = self:GetName()
+    for i = 1, self:NumLines() do
         result = func(_G[tooltipName..'TextLeft'..i]) or func(_G[tooltipName..'TextRight'..i])
         if result then break end
     end
+    self:ClearLines()
     return result
 end
 
@@ -49,6 +55,10 @@ function CanIMogItTooltipScanner:IsItemUsable(itemLink)
 end
 
 
-function CanIMogItTooltipScanner:IsItemSoulbound(itemLink)
-    return self:ScanTooltip(IsItemSoulbound)
+function CanIMogItTooltipScanner:IsItemSoulbound(bag, slot)
+    if bag and slot then
+        return self:ScanTooltip(IsItemSoulbound, nil, bag, slot)
+    else
+        return false
+    end
 end

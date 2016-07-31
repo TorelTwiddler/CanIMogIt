@@ -181,7 +181,7 @@ CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND =           UNKNOWABLE_BY_CHARACTER_
 CanIMogIt.NOT_TRANSMOGABLE =                            NOT_TRANSMOGABLE_ICON .. GRAY .. NOT_TRANSMOGABLE
 
 
-local tooltipTexts = {
+CanIMogIt.tooltipTexts = {
     [KNOWN] = CanIMogIt.KNOWN,
     [KNOWN_FROM_ANOTHER_ITEM] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM,
     [KNOWN_BY_ANOTHER_CHARACTER] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER,
@@ -197,12 +197,29 @@ local tooltipTexts = {
 }
 
 
+CanIMogIt.tooltipIcons = {
+    [CanIMogIt.KNOWN] = KNOWN_ICON,
+    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM] = KNOWN_ICON,
+    [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = KNOWN_BUT_ICON,
+    [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = KNOWN_BUT_ICON,
+    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL] = KNOWN_BUT_ICON,
+    -- [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = KNOWN_BUT_ICON,
+    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = QUESTIONABLE_ICON,
+    [CanIMogIt.UNKNOWN] = UNKNOWN_ICON,
+    [CanIMogIt.UNKNOWABLE_BY_CHARACTER] = UNKNOWABLE_BY_CHARACTER_ICON,
+    [CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND] = UNKNOWABLE_BY_CHARACTER_SOULBOUND_ICON,
+    -- [CanIMogIt.CAN_BE_LEARNED_BY] = UNKNOWABLE_BY_CHARACTER_ICON,
+    [CanIMogIt.NOT_TRANSMOGABLE] = NOT_TRANSMOGABLE_ICON,
+    -- [CanIMogIt.CANNOT_DETERMINE] = QUESTIONABLE_ICON,
+}
+
+
 local LEFT_TEXT_THRESHOLD = 200
 
 
 -- Texts that we want to display on the left instead of right because of length.
 local leftTexts = {}
-for text, full_text in pairs(tooltipTexts) do
+for text, full_text in pairs(CanIMogIt.tooltipTexts) do
     if string.len(text) > LEFT_TEXT_THRESHOLD then
         leftTexts[full_text] = true
     end
@@ -335,8 +352,15 @@ end
 
 
 CanIMogIt.tooltip = nil;
-CanIMogIt.cachedItemLink = nil;
-CanIMogIt.cachedTooltipText = nil;
+CanIMogIt.cache = {}
+
+
+
+function CanIMogIt.frame:TransmogCollectionUpdated(event, ...)
+    if event == "TRANSMOG_COLLECTION_UPDATED" then
+        CanIMogIt.cache = {}
+    end
+end
 
 
 -----------------------------
@@ -476,8 +500,9 @@ function CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)
 end
 
 
-function CanIMogIt:IsItemSoulbound(itemLink)
-	return CanIMogItTooltipScanner:IsItemSoulbound(itemLink)
+function CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
+    if not bag and slot then return false end
+	return CanIMogItTooltipScanner:IsItemSoulbound(bag, slot)
 end
 
 
@@ -635,8 +660,17 @@ function CanIMogIt:TextIsKnown(text)
 end
 
 
-function CanIMogIt:GetTooltipText(itemLink)
-    -- Gets the text to display on the tooltip
+function CanIMogIt:GetTooltipText(itemLink, bag, slot)
+    --[[
+        Gets the text to display on the tooltip from the itemLink.
+
+        If bag and slot are given, this will use the itemLink from 
+        bag and slot instead.
+    ]]
+    if bag and slot then
+        itemLink = GetContainerItemLink(bag, slot)
+    end
+    if not itemLink then return end
     local text = ""
 
     if CanIMogItOptions["showEquippableOnly"] and 
@@ -645,11 +679,15 @@ function CanIMogIt:GetTooltipText(itemLink)
         return
     end
 
+    -- Return cached items
+    if CanIMogIt.cache[itemLink] then
+        return CanIMogIt.cache[itemLink]
+    end
+
     local exception_text = CanIMogIt:GetExceptionText(itemLink)
     if exception_text then
         return exception_text
     end
-
 
     if CanIMogIt:IsTransmogable(itemLink) then
         if CanIMogIt:PlayerKnowsTransmogFromItem(itemLink) then
@@ -677,7 +715,7 @@ function CanIMogIt:GetTooltipText(itemLink)
                 -- Set text to UNKNOWN
                 text = CanIMogIt.UNKNOWN
             else
-                if CanIMogIt:IsItemSoulbound(itemLink) then
+                if CanIMogIt:IsItemSoulbound(itemLink, bag, slot) then
                     text = CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND
                 else
                     text = CanIMogIt.UNKNOWABLE_BY_CHARACTER
@@ -688,6 +726,10 @@ function CanIMogIt:GetTooltipText(itemLink)
         --Set text to NOT_TRANSMOGABLE
         text = CanIMogIt.NOT_TRANSMOGABLE
     end
+
+    -- Update cached items
+    CanIMogIt.cache[itemLink] = text
+
     return text
 end
 
@@ -699,15 +741,8 @@ end
 local function addToTooltip(tooltip, itemLink)
     -- Does the calculations for determining what text to
     -- display on the tooltip.
-    
-    -- TODO: caching doesn't work when the compare tooltip is visible.
-    -- if CanIMogIt.cachedItemLink ~= itemLink then
-    --     print("itemLink changed! " .. itemLink)
-    -- end
     local itemInfo = GetItemInfo(itemLink)
-    if itemInfo == nil then 
-        CanIMogIt.cachedItemLink = nil
-        CanIMogIt.cachedTooltipText = nil
+    if itemInfo == nil then
         return 
     end
     
@@ -719,17 +754,10 @@ local function addToTooltip(tooltip, itemLink)
     end
     
     local text;
-    -- Checking against the cached item first.
-    if itemLink == CanIMogIt.cachedItemLink then
-        text = CanIMogIt.cachedTooltipText
-    else
-        -- ok, text = pcall(CanIMogIt.GetTooltipText, CanIMogIt, itemLink)
-        -- if not ok then return end
-        text = CanIMogIt.GetTooltipText(CanIMogIt, itemLink)
-        -- Save the cached item and text, so it's faster next time.
-        CanIMogIt.cachedItemLink = itemLink
-        CanIMogIt.cachedTooltipText = text
-    end
+
+    -- ok, text = pcall(CanIMogIt.GetTooltipText, CanIMogIt, itemLink)
+    -- if not ok then return end
+    text = CanIMogIt.GetTooltipText(CanIMogIt, itemLink)
     if CanIMogItOptions["showTransmoggableOnly"] and text == CanIMogIt.NOT_TRANSMOGABLE then
         -- If we don't want to show the tooltip if it's not transmoggable
         return
