@@ -294,21 +294,8 @@ end
 local function printDebug(tooltip, itemLink)
     -- Add debug statements to the tooltip, to make it easier to understand
     -- what may be going wrong.
-    local itemID = CanIMogIt:GetItemID(itemLink)
-    addDoubleLine(tooltip, "Item ID:", tostring(itemID))
-    local _, _, quality, _, _, itemClass, itemSubClass, _, equipSlot = GetItemInfo(itemID)
-    addDoubleLine(tooltip, "Item Quality:", tostring(quality))
-    addDoubleLine(tooltip, "Item Class:", tostring(itemClass))
-    addDoubleLine(tooltip, "Item SubClass:", tostring(itemSubClass))
-    addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
 
-    local sourceID = CanIMogIt:GetSource(itemLink)
-    if sourceID ~= nil then
-        addDoubleLine(tooltip, "Item source:", tostring(sourceID))
-    else
-        addDoubleLine(tooltip, "Item source:", 'nil')
-    end
-
+    addDoubleLine(tooltip, "Addon Version:", GetAddOnMetadata("CanIMogIt", "Version"))
     local playerClass = select(2, UnitClass("player"))
     local playerLevel = UnitLevel("player")
     local playerSpec = GetSpecialization()
@@ -317,14 +304,31 @@ local function printDebug(tooltip, itemLink)
     addDoubleLine(tooltip, "Player Spec:", playerSpecName)
     addDoubleLine(tooltip, "Player Level:", playerLevel)
 
+    addLine(tooltip, '--------')
+
+    local itemID = CanIMogIt:GetItemID(itemLink)
+    addDoubleLine(tooltip, "Item ID:", tostring(itemID))
+    local _, _, quality, _, _, itemClass, itemSubClass, _, equipSlot = GetItemInfo(itemID)
+    addDoubleLine(tooltip, "Item quality:", tostring(quality))
+    addDoubleLine(tooltip, "Item class:", tostring(itemClass))
+    addDoubleLine(tooltip, "Item subClass:", tostring(itemSubClass))
+    addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
+
+    local sourceID = CanIMogIt:GetSource(itemLink)
+    if sourceID ~= nil then
+        addDoubleLine(tooltip, "Item sourceID:", tostring(sourceID))
+    else
+        addDoubleLine(tooltip, "Item sourceID:", 'nil')
+    end
     local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
-    addDoubleLine(tooltip, "GetAppearanceID:", tostring(appearanceID))
+    addDoubleLine(tooltip, "Item appearanceID:", tostring(appearanceID))
+
+    addLine(tooltip, '--------')
+
     addDoubleLine(tooltip, "PlayerHasTransmog:", tostring(C_TransmogCollection.PlayerHasTransmog(itemID)))
     if sourceID then
         addDoubleLine(tooltip, "PlayerHasTransmogItemModifiedAppearance:", tostring(C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)))
     end
-
-    addLine(tooltip, '--------')
 
     addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemLink)))
     addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)))
