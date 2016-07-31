@@ -664,6 +664,34 @@ function CanIMogIt:TextIsKnown(text)
 end
 
 
+function CanIMogIt:PreLogicOptionsContinue(itemLink)
+    -- Apply the options. Returns false if it should stop the logic.
+    if CanIMogItOptions["showEquippableOnly"] and 
+            not CanIMogIt:IsEquippable(itemLink) then
+        -- Don't bother if it's not equipable.
+        return false
+    end
+
+    return true
+end
+
+
+function CanIMogIt:PostLogicOptionsText(text)
+    -- Apply the options to the text. Returns the relevant text.
+    
+    if CanIMogItOptions["showUnknownOnly"] and CanIMogIt:TextIsKnown(text) then
+        -- We don't want to show the tooltip if it's already known.
+        return
+    end
+
+    if CanIMogItOptions["showTransmoggableOnly"] and text == CanIMogIt.NOT_TRANSMOGABLE then
+        -- If we don't want to show the tooltip if it's not transmoggable
+        return
+    end
+    return text
+end
+
+
 function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     --[[
         Gets the text to display on the tooltip from the itemLink.
@@ -677,11 +705,7 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     if not itemLink then return end
     local text = ""
 
-    if CanIMogItOptions["showEquippableOnly"] and 
-            not CanIMogIt:IsEquippable(itemLink) then
-        -- Don't bother if it's not equipable.
-        return
-    end
+    if not CanIMogIt:PreLogicOptionsContinue(itemLink) then return end
 
     -- Return cached items
     if CanIMogIt.cache[itemLink] then
@@ -731,6 +755,8 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
         text = CanIMogIt.NOT_TRANSMOGABLE
     end
 
+    text = CanIMogIt:PostLogicOptionsText(text)
+
     -- Update cached items
     CanIMogIt.cache[itemLink] = text
 
@@ -762,14 +788,6 @@ local function addToTooltip(tooltip, itemLink)
     -- ok, text = pcall(CanIMogIt.GetTooltipText, CanIMogIt, itemLink)
     -- if not ok then return end
     text = CanIMogIt.GetTooltipText(CanIMogIt, itemLink)
-    if CanIMogItOptions["showTransmoggableOnly"] and text == CanIMogIt.NOT_TRANSMOGABLE then
-        -- If we don't want to show the tooltip if it's not transmoggable
-        return
-    end
-    if CanIMogItOptions["showUnknownOnly"] and CanIMogIt:TextIsKnown(text) then
-        -- We don't want to show the tooltip if it's already known.
-        return
-    end
     if text then
         if leftTexts[text] then
             addLine(tooltip, text)

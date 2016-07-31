@@ -16,7 +16,7 @@ StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
   preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
 }
 
-CanIMogIt_OptionsVersion = "1.3"
+CanIMogIt_OptionsVersion = "1.4"
 
 CanIMogItOptions_Defaults = {
     ["options"] = {
@@ -25,6 +25,7 @@ CanIMogItOptions_Defaults = {
         ["showEquippableOnly"] = true,
         ["showTransmoggableOnly"] = false,
         ["showUnknownOnly"] = false,
+        ["showItemIconOverlay"] = true,
     },
 }
 
@@ -45,6 +46,10 @@ CanIMogItOptions_DisplayData = {
     ["showUnknownOnly"] = {
         ["displayName"] = L["Unknown Items Only"],
         ["description"] = L["Only show on items that you haven't learned."]
+    },
+    ["showItemIconOverlay"] = {
+        ["displayName"] = L["Show Bag Icons"],
+        ["description"] = L["Shows the icon directly on the item in your bag."]
     },
 }
 
@@ -86,6 +91,8 @@ local function checkboxOnClick(self)
     local checked = self:GetChecked()
     PlaySound(checked and "igMainMenuOptionCheckBoxOn" or "igMainMenuOptionCheckBoxOff")
     self:SetValue(checked)
+    -- Reset the cache when an option changes.
+    CanIMogIt.cache = {}
 end
 
 
@@ -120,12 +127,14 @@ local function createOptionsMenu()
     local showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
     local showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
     local showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
+    local showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
 
     -- position the checkboxes
     debug:SetPoint("TOPLEFT", 16, -16)
     showEquippableOnly:SetPoint("TOPLEFT", debug, "BOTTOMLEFT")
     showTransmoggableOnly:SetPoint("TOPLEFT", showEquippableOnly, "BOTTOMLEFT")
     showUnknownOnly:SetPoint("TOPLEFT", showTransmoggableOnly, "BOTTOMLEFT")
+    showItemIconOverlay:SetPoint("TOPLEFT", showUnknownOnly, "BOTTOMLEFT")
 end
 
 
