@@ -16,7 +16,7 @@ StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
   preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
 }
 
-CanIMogIt_OptionsVersion = "1.4"
+CanIMogIt_OptionsVersion = "1.5"
 
 CanIMogItOptions_Defaults = {
     ["options"] = {
@@ -26,6 +26,7 @@ CanIMogItOptions_Defaults = {
         ["showTransmoggableOnly"] = false,
         ["showUnknownOnly"] = false,
         ["showItemIconOverlay"] = true,
+        ["showVerboseText"] = false,
     },
 }
 
@@ -50,6 +51,10 @@ CanIMogItOptions_DisplayData = {
     ["showItemIconOverlay"] = {
         ["displayName"] = L["Show Bag Icons"],
         ["description"] = L["Shows the icon directly on the item in your bag."]
+    },
+    ["showVerboseText"] = {
+        ["displayName"] = L["Verbose Text"],
+        ["description"] = L["Shows a more verbose text for some of the tooltips."]
     },
 }
 
@@ -128,6 +133,7 @@ local function createOptionsMenu()
     local showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
     local showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
     local showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
+    local showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
 
     -- position the checkboxes
     debug:SetPoint("TOPLEFT", 16, -16)
@@ -135,6 +141,7 @@ local function createOptionsMenu()
     showTransmoggableOnly:SetPoint("TOPLEFT", showEquippableOnly, "BOTTOMLEFT")
     showUnknownOnly:SetPoint("TOPLEFT", showTransmoggableOnly, "BOTTOMLEFT")
     showItemIconOverlay:SetPoint("TOPLEFT", showUnknownOnly, "BOTTOMLEFT")
+    showVerboseText:SetPoint("TOPLEFT", showItemIconOverlay, "BOTTOMLEFT")
 end
 
 

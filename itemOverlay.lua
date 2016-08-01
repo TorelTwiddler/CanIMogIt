@@ -5,7 +5,7 @@ local function ContainerFrame_OnUpdate(self, elapsed)
     local text = CanIMogIt:GetTooltipText(nil, bag, slot)
     if not CanIMogItOptions["showItemIconOverlay"] then self.CanIMogItIcon:SetText(); return end
     if not text then self.CanIMogItIcon:SetText(); return end
-    local icon = CanIMogIt.tooltipIcons[text]
+    local icon = CanIMogIt:GetValueInTableFromText(CanIMogIt.tooltipIcons, text)
     self.CanIMogItIcon:SetText(icon)
 end
 

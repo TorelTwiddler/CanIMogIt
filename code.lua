@@ -136,14 +136,21 @@ local miscArmorExceptions = {
 
 
 local KNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN:0|t "
+local KNOWN_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_OVERLAY:0|t "
 local KNOWN_BUT_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_circle:0|t "
+local KNOWN_BUT_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_circle_OVERLAY:0|t "
 local UNKNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN:0|t "
+local UNKNOWN_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN_OVERLAY:0|t "
 local UNKNOWABLE_BY_CHARACTER_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER:0|t "
-local UNKNOWABLE_BY_CHARACTER_SOULBOUND_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER_SOULBOUND:0|t "
+local UNKNOWABLE_BY_CHARACTER_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER_OVERLAY:0|t "
+local UNKNOWABLE_SOULBOUND_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_SOULBOUND:0|t "
+local UNKNOWABLE_SOULBOUND_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_SOULBOUND_OVERLAY:0|t "
 local NOT_TRANSMOGABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE:0|t "
+local NOT_TRANSMOGABLE_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE_OVERLAY:0|t "
 local QUESTIONABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\QUESTIONABLE:0|t "
+local QUESTIONABLE_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\QUESTIONABLE_OVERLAY:0|t "
 
-
+-- Colorblind colors
 local BLUE =   "|cff15abff"
 local BLUE_GREEN = "|cff009e73"
 local PINK = "|cffcc79a7"
@@ -151,6 +158,9 @@ local ORANGE = "|cffe69f00"
 local RED_ORANGE = "|cffff9333"
 local YELLOW = "|cfff0e442"
 local GRAY =   "|cff888888"
+
+-- Built-in colors
+local BLIZZARD_RED = "|cffff1919"
 
 
 local KNOWN =                                       L["Learned."]
@@ -160,14 +170,13 @@ local KNOWN_BUT_TOO_LOW_LEVEL =                     L["Learned but cannot transm
 local KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL =   L["Learned from another item but cannot transmog yet."]
 local KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       L["Learned for a different class and item."]
 local UNKNOWN =                                     L["Not learned."]
-local UNKNOWABLE_BY_CHARACTER =                     L["Another class can learn this item."]
-local UNKNOWABLE_BY_CHARACTER_SOULBOUND =           L["Cannot be learned by this character."]
+local UNKNOWABLE_BY_CHARACTER =                     L["Cannot learn: "] -- subClass
+local UNKNOWABLE_SOULBOUND =                        L["Cannot learn: Soulbound "] -- subClass
 local CAN_BE_LEARNED_BY =                           L["Can be learned by:"] -- list of classes
 local NOT_TRANSMOGABLE =                            L["Cannot be learned."]
 local CANNOT_DETERMINE =                            L["Cannot determine status on other characters."]
 
 
-CanIMogIt.CAN_I_MOG_IT =                                "|cff00a3cc" .. " "
 CanIMogIt.KNOWN =                                       KNOWN_ICON .. BLUE .. KNOWN
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM =                     KNOWN_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM
 CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER =                  KNOWN_BUT_ICON .. BLUE .. KNOWN_BY_ANOTHER_CHARACTER
@@ -177,7 +186,7 @@ CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL =   KNOWN_BUT_ICON .. BLUE .
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       QUESTIONABLE_ICON .. YELLOW .. CANNOT_DETERMINE
 CanIMogIt.UNKNOWN =                                     UNKNOWN_ICON .. RED_ORANGE .. UNKNOWN
 CanIMogIt.UNKNOWABLE_BY_CHARACTER =                     UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. UNKNOWABLE_BY_CHARACTER
-CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND =           UNKNOWABLE_BY_CHARACTER_SOULBOUND_ICON .. BLUE_GREEN .. UNKNOWABLE_BY_CHARACTER_SOULBOUND
+CanIMogIt.UNKNOWABLE_SOULBOUND =                        UNKNOWABLE_SOULBOUND_ICON .. BLUE_GREEN .. UNKNOWABLE_SOULBOUND
 CanIMogIt.NOT_TRANSMOGABLE =                            NOT_TRANSMOGABLE_ICON .. GRAY .. NOT_TRANSMOGABLE
 
 
@@ -190,7 +199,7 @@ CanIMogIt.tooltipTexts = {
     [KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER,
     [UNKNOWN] = CanIMogIt.UNKNOWN,
     [UNKNOWABLE_BY_CHARACTER] = CanIMogIt.UNKNOWABLE_BY_CHARACTER,
-    [UNKNOWABLE_BY_CHARACTER_SOULBOUND] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND,
+    [UNKNOWABLE_SOULBOUND] = CanIMogIt.UNKNOWABLE_SOULBOUND,
     [CAN_BE_LEARNED_BY] = CanIMogIt.CAN_BE_LEARNED_BY,
     [NOT_TRANSMOGABLE] = CanIMogIt.NOT_TRANSMOGABLE,
     [CANNOT_DETERMINE] = CanIMogIt.CANNOT_DETERMINE,
@@ -198,26 +207,35 @@ CanIMogIt.tooltipTexts = {
 
 
 CanIMogIt.tooltipIcons = {
-    [CanIMogIt.KNOWN] = KNOWN_ICON,
-    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM] = KNOWN_ICON,
-    [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = KNOWN_BUT_ICON,
-    [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = KNOWN_BUT_ICON,
-    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL] = KNOWN_BUT_ICON,
-    -- [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = KNOWN_BUT_ICON,
-    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = QUESTIONABLE_ICON,
-    [CanIMogIt.UNKNOWN] = UNKNOWN_ICON,
-    [CanIMogIt.UNKNOWABLE_BY_CHARACTER] = UNKNOWABLE_BY_CHARACTER_ICON,
-    [CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND] = UNKNOWABLE_BY_CHARACTER_SOULBOUND_ICON,
-    -- [CanIMogIt.CAN_BE_LEARNED_BY] = UNKNOWABLE_BY_CHARACTER_ICON,
-    [CanIMogIt.NOT_TRANSMOGABLE] = NOT_TRANSMOGABLE_ICON,
-    -- [CanIMogIt.CANNOT_DETERMINE] = QUESTIONABLE_ICON,
+    [CanIMogIt.KNOWN] = KNOWN_ICON_OVERLAY,
+    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM] = KNOWN_ICON_OVERLAY,
+    [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = KNOWN_BUT_ICON_OVERLAY,
+    [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = KNOWN_BUT_ICON_OVERLAY,
+    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL] = KNOWN_BUT_ICON_OVERLAY,
+    -- [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = KNOWN_BUT_ICON_OVERLAY,
+    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = QUESTIONABLE_ICON_OVERLAY,
+    [CanIMogIt.UNKNOWN] = UNKNOWN_ICON_OVERLAY,
+    [CanIMogIt.UNKNOWABLE_BY_CHARACTER] = UNKNOWABLE_BY_CHARACTER_ICON_OVERLAY,
+    [CanIMogIt.UNKNOWABLE_SOULBOUND] = UNKNOWABLE_SOULBOUND_ICON_OVERLAY,
+    -- [CanIMogIt.CAN_BE_LEARNED_BY] = UNKNOWABLE_BY_CHARACTER_ICON_OVERLAY,
+    [CanIMogIt.NOT_TRANSMOGABLE] = NOT_TRANSMOGABLE_ICON_OVERLAY,
+    -- [CanIMogIt.CANNOT_DETERMINE] = QUESTIONABLE_ICON_OVERLAY,
 }
 
 
-local LEFT_TEXT_THRESHOLD = 200
+local simpleTextMap = {
+    [CanIMogIt.KNOWN] = CanIMogIt.KNOWN,
+    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM] = CanIMogIt.KNOWN,
+    [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = CanIMogIt.KNOWN,
+    [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = CanIMogIt.KNOWN,
+    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL] = CanIMogIt.KNOWN,
+    -- [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.KNOWN,
+}
 
 
 -- Texts that we want to display on the left instead of right because of length.
+local LEFT_TEXT_THRESHOLD = 200
+
 local leftTexts = {}
 for text, full_text in pairs(CanIMogIt.tooltipTexts) do
     if string.len(text) > LEFT_TEXT_THRESHOLD then
@@ -370,6 +388,14 @@ end
 -----------------------------
 -- CanIMogIt Core methods  --
 -----------------------------
+
+
+function CanIMogIt:GetValueInTableFromText(tbl, text)
+    -- Returns the value from tbl when the key contains text.
+    for key, value in pairs(tbl) do
+        if text:find(key) then return value end
+    end
+end
 
 
 function CanIMogIt:GetAppearances()
@@ -684,10 +710,15 @@ function CanIMogIt:PostLogicOptionsText(text)
         return
     end
 
-    if CanIMogItOptions["showTransmoggableOnly"] and text == CanIMogIt.NOT_TRANSMOGABLE then
+    if CanIMogItOptions["showTransmoggableOnly"] and text:find(CanIMogIt.NOT_TRANSMOGABLE) then
         -- If we don't want to show the tooltip if it's not transmoggable
         return
     end
+
+    if not CanIMogItOptions["showVerboseText"] then
+        text = simpleTextMap[text] or text
+    end
+
     return text
 end
 
@@ -744,9 +775,11 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
                 text = CanIMogIt.UNKNOWN
             else
                 if CanIMogIt:IsItemSoulbound(itemLink, bag, slot) then
-                    text = CanIMogIt.UNKNOWABLE_BY_CHARACTER_SOULBOUND
+                    text = CanIMogIt.UNKNOWABLE_SOULBOUND
+                            .. BLIZZARD_RED .. CanIMogIt:GetItemSubClassName(itemLink)
                 else
                     text = CanIMogIt.UNKNOWABLE_BY_CHARACTER
+                            .. BLIZZARD_RED .. CanIMogIt:GetItemSubClassName(itemLink)
                 end
             end
         end
@@ -798,7 +831,7 @@ local function addToTooltip(tooltip, itemLink)
 end
 
 
-local function attachItemTooltip(self)
+function CanIMogIt_AttachItemTooltip(self)
     -- Hook for normal tooltips.
     CanIMogIt.tooltip = self
     local link = select(2, self:GetItem())
@@ -808,15 +841,15 @@ local function attachItemTooltip(self)
 end
 
 
-GameTooltip:HookScript("OnTooltipSetItem", attachItemTooltip)
-ItemRefTooltip:HookScript("OnTooltipSetItem", attachItemTooltip)
-ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", attachItemTooltip)
-ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", attachItemTooltip)
-ShoppingTooltip1:HookScript("OnTooltipSetItem", attachItemTooltip)
-ShoppingTooltip2:HookScript("OnTooltipSetItem", attachItemTooltip)
+GameTooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+ItemRefTooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+ShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+ShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
 
 
-local function onSetHyperlink(self, link)
+function CanIMogIt_OnSetHyperlink(self, link)
     -- Hook for Hyperlinked tooltips.
     CanIMogIt.tooltip = self
     local type, id = string.match(link, "^(%a+):(%d+)")
@@ -827,4 +860,4 @@ local function onSetHyperlink(self, link)
 end
 
 
-hooksecurefunc(GameTooltip, "SetHyperlink", onSetHyperlink)
+hooksecurefunc(GameTooltip, "SetHyperlink", CanIMogIt_OnSetHyperlink)
