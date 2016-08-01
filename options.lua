@@ -85,6 +85,21 @@ CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
 end)
 
 
+--[[
+    Hack to reset the cache slightly after the game loads, since
+    there doesn't seem to be a good event to handle it directly.
+]]
+local timer = 0
+local function onUpdate(self,elapsed)
+    timer = timer + elapsed
+    if timer >= 2 then
+        CanIMogIt.cache = {}
+        CanIMogIt.frame:SetScript("OnUpdate", nil)
+    end
+end
+CanIMogIt.frame:SetScript("OnUpdate", onUpdate)
+
+
 function CanIMogIt.frame:AddonLoaded(event, addonName)
     if event == "ADDON_LOADED" and addonName == "CanIMogIt" then
         CanIMogIt.frame.Loaded()
