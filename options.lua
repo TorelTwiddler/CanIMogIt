@@ -90,11 +90,13 @@ end)
     there doesn't seem to be a good event to handle it directly.
 ]]
 local timer = 0
-local function onUpdate(self,elapsed)
+local function onUpdate(self, elapsed)
     timer = timer + elapsed
-    if timer >= 2 then
-        CanIMogIt.cache = {}
+    -- Unregister if appearances are ready, or 30 seconds have passed.
+    if CanIMogIt.appearancesReady or timer >= 30 then
         CanIMogIt.frame:SetScript("OnUpdate", nil)
+    else
+        CanIMogIt.cache = {}
     end
 end
 CanIMogIt.frame:SetScript("OnUpdate", onUpdate)

@@ -375,6 +375,7 @@ end
 
 CanIMogIt.tooltip = nil;
 CanIMogIt.cache = {}
+CanIMogIt.appearancesReady = false;
 
 
 
@@ -799,6 +800,11 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     end
 
     text = CanIMogIt:PostLogicOptionsText(text)
+
+    -- Inform everything that the appearance data is ready.
+    if knownTexts[text] then
+        CanIMogIt.appearancesReady = true
+    end
 
     -- Update cached items
     CanIMogIt.cache[itemLink] = text
