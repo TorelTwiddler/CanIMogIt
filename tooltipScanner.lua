@@ -16,11 +16,13 @@ CanIMogItTooltipScanner:AddFontStrings(
     CanIMogItTooltipScanner:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" ) );
 
 
-local function IsTextRed(text)
+local function GetRedText(text)
     if text and text:GetText() then
         local r,g,b = text:GetTextColor()
         -- Color values from RED_FONT_COLOR (see FrameXML/FontStyles.xml)
-        return math.floor(r*256) == 255 and math.floor(g*256) == 32 and math.floor(b*256) == 32
+        if math.floor(r*256) == 255 and math.floor(g*256) == 32 and math.floor(b*256) == 32 then
+            return text:GetText()
+        end
     end
 end
 
@@ -34,12 +36,14 @@ local function IsItemSoulbound(text)
 end
 
 
-function CanIMogItTooltipScanner:ScanTooltip(func, itemLink, bag, slot)
+function CanIMogItTooltipScanner:ScanTooltipBreak(func, itemLink, bag, slot)
+    -- Scans the tooltip, breaking when an item is found.
     if bag and slot then
         self:SetBagItem(bag, slot)
     else
         self:SetHyperlink(itemLink)
     end
+    local result;
     local tooltipName = self:GetName()
     for i = 1, self:NumLines() do
         result = func(_G[tooltipName..'TextLeft'..i]) or func(_G[tooltipName..'TextRight'..i])
@@ -50,14 +54,42 @@ function CanIMogItTooltipScanner:ScanTooltip(func, itemLink, bag, slot)
 end
 
 
-function CanIMogItTooltipScanner:IsItemUsable(itemLink)
-    return not self:ScanTooltip(IsTextRed)
+function CanIMogItTooltipScanner:ScanTooltip(func, itemLink, bag, slot)
+    -- Scans the tooltip, returning a table of all of the results.
+    if bag and slot then
+        self:SetBagItem(bag, slot)
+    else
+        self:SetHyperlink(itemLink)
+    end
+    local tooltipName = self:GetName()
+    local results = {}
+    for i = 1, self:NumLines() do
+        results[tooltipName..'TextLeft'..i] = func(_G[tooltipName..'TextLeft'..i])
+        results[tooltipName..'TextRight'..i] = func(_G[tooltipName..'TextRight'..i])
+    end
+    self:ClearLines()
+    return results
+end
+
+
+
+function CanIMogItTooltipScanner:GetRedText(itemLink)
+    -- Returns all of the red text as space seperated string.
+    local results = self:ScanTooltip(GetRedText, itemLink)
+    local red_texts = {}
+    for key, value in pairs(results) do
+        if value then
+            table.insert(red_texts, value)
+        end
+    end
+    return table.concat(red_texts, " ")
 end
 
 
 function CanIMogItTooltipScanner:IsItemSoulbound(bag, slot)
+    -- Returns whether the item is soulbound or not.
     if bag and slot then
-        return self:ScanTooltip(IsItemSoulbound, nil, bag, slot)
+        return self:ScanTooltipBreak(IsItemSoulbound, nil, bag, slot)
     else
         return false
     end

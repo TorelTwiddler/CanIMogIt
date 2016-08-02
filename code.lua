@@ -653,6 +653,15 @@ function CanIMogIt:CharacterCanLearnTransmog(itemLink)
 end
 
 
+function CanIMogIt:GetReason(itemLink)
+    local reason = CanIMogItTooltipScanner:GetRedText(itemLink)
+    if reason == "" then
+        reason = CanIMogIt:GetItemSubClassName(itemLink)
+    end
+    return reason
+end
+
+
 function CanIMogIt:IsTransmogable(itemLink)
     -- Returns whether the item is transmoggable or not.
 
@@ -776,10 +785,10 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
             else
                 if CanIMogIt:IsItemSoulbound(itemLink, bag, slot) then
                     text = CanIMogIt.UNKNOWABLE_SOULBOUND
-                            .. BLIZZARD_RED .. CanIMogIt:GetItemSubClassName(itemLink)
+                            .. BLIZZARD_RED .. CanIMogIt:GetReason(itemLink)
                 else
                     text = CanIMogIt.UNKNOWABLE_BY_CHARACTER
-                            .. BLIZZARD_RED .. CanIMogIt:GetItemSubClassName(itemLink)
+                            .. BLIZZARD_RED .. CanIMogIt:GetReason(itemLink)
                 end
             end
         end
