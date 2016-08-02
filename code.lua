@@ -820,7 +820,7 @@ local function addToTooltip(tooltip, itemLink)
     end
 
     local bag, slot;
-    if tooltip:GetOwner() and tooltip:GetOwner():GetParent() then
+    if tooltip:GetOwner() and tooltip:GetOwner():GetName():find("ContainerFrame") then
         -- Get the bag and slot, if it's in the inventory.
         bag, slot = tooltip:GetOwner():GetParent():GetID(), tooltip:GetOwner():GetID()
     end
