@@ -54,7 +54,7 @@ CanIMogItOptions_DisplayData = {
     },
     ["showVerboseText"] = {
         ["displayName"] = L["Verbose Text"],
-        ["description"] = L["Shows a more verbose text for some of the tooltips."]
+        ["description"] = L["Shows a more detailed text for some of the tooltips."]
     },
 }
 
