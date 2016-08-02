@@ -309,7 +309,7 @@ end
 -----------------------------
 
 
-local function printDebug(tooltip, itemLink)
+local function printDebug(tooltip, itemLink, bag, slot)
     -- Add debug statements to the tooltip, to make it easier to understand
     -- what may be going wrong.
 
@@ -332,7 +332,7 @@ local function printDebug(tooltip, itemLink)
     addDoubleLine(tooltip, "Item subClass:", tostring(itemSubClass))
     addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
 
-    local sourceID = CanIMogIt:GetSource(itemLink)
+    local sourceID = CanIMogIt:GetSourceID(itemLink)
     if sourceID ~= nil then
         addDoubleLine(tooltip, "Item sourceID:", tostring(sourceID))
     else
@@ -355,7 +355,7 @@ local function printDebug(tooltip, itemLink)
 
     addLine(tooltip, '--------')
 
-    addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink)))
+    addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink, bag, slot)))
     addDoubleLine(tooltip, "CharacterCanEquipItem:", tostring(CanIMogIt:CharacterCanEquipItem(itemLink)))
     addDoubleLine(tooltip, "IsValidAppearanceForCharacter:", tostring(CanIMogIt:IsValidAppearanceForCharacter(itemLink)))
     addDoubleLine(tooltip, "CharacterIsTooLowLevelForItem:", tostring(CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)))
@@ -556,7 +556,8 @@ function CanIMogIt:IsEquippable(itemLink)
 end
 
 
-function CanIMogIt:GetSource(itemLink)
+function CanIMogIt:GetSourceID(itemLink)
+    -- Gets the sourceID for the item.
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
     local slots = inventorySlotsMap[slotName]
 
@@ -572,8 +573,8 @@ end
 
 
 function CanIMogIt:GetAppearanceID(itemLink)
-    -- Gets the appearanceID of the given itemID.
-    local sourceID = CanIMogIt:GetSource(itemLink)
+    -- Gets the appearanceID of the given item.
+    local sourceID = CanIMogIt:GetSourceID(itemLink)
     if sourceID then
         local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
         return appearanceID
@@ -633,7 +634,7 @@ function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
         local itemID = CanIMogIt:GetItemID(itemLink)
         return C_TransmogCollection.PlayerHasTransmog(itemID)
     end
-    local sourceID = CanIMogIt:GetSource(itemLink)
+    local sourceID = CanIMogIt:GetSourceID(itemLink)
     if sourceID == nil then return false end
     hasTransmog = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
     return hasTransmog
@@ -644,7 +645,7 @@ function CanIMogIt:CharacterCanLearnTransmog(itemLink)
     -- Returns whether the player can learn the item or not.
     local slotName = CanIMogIt:GetItemSlotName(itemLink)
     if slotName == TABARD then return true end
-    local sourceID = CanIMogIt:GetSource(itemLink)
+    local sourceID = CanIMogIt:GetSourceID(itemLink)
     if sourceID == nil then return false end
     if select(2, C_TransmogCollection.PlayerCanCollectSource(sourceID)) then
         return true
@@ -817,19 +818,24 @@ local function addToTooltip(tooltip, itemLink)
     if itemInfo == nil then
         return 
     end
-    
-    local ok;
+
+    local bag, slot;
+    if tooltip:GetOwner() and tooltip:GetOwner():GetParent() then
+        -- Get the bag and slot, if it's in the inventory.
+        bag, slot = tooltip:GetOwner():GetParent():GetID(), tooltip:GetOwner():GetID()
+    end
+
+    -- local ok;
     if CanIMogItOptions["debug"] then
         -- ok = pcall(printDebug, CanIMogIt.tooltip, itemLink)
         -- if not ok then return end
-        printDebug(CanIMogIt.tooltip, itemLink)
+        printDebug(CanIMogIt.tooltip, itemLink, bag, slot)
     end
-    
-    local text;
 
+    local text;
     -- ok, text = pcall(CanIMogIt.GetTooltipText, CanIMogIt, itemLink)
     -- if not ok then return end
-    text = CanIMogIt.GetTooltipText(CanIMogIt, itemLink)
+    text = CanIMogIt.GetTooltipText(CanIMogIt, itemLink, bag, slot)
     if text then
         if leftTexts[text] then
             addLine(tooltip, text)
