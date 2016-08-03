@@ -832,11 +832,13 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     text = CanIMogIt:PostLogicOptionsText(text)
 
     if not CanIMogIt.appearancesReady then
-        -- Need to make sure that some known item has been found
-        -- and that it wasn't a tabard, so we can guarantee that
-        -- we will be getting valid data back from Blizzard.
+        --[[ Need to make sure that some known item has been found
+        and that it wasn't a tabard, and had a valid sourceID,
+        so we can guarantee that we will be getting valid data
+        back from Blizzard. ]]
         local slotName = CanIMogIt:GetItemSlotName(itemLink)
-        if knownTexts[text] and slotName ~= TABARD then
+        local sourceID = CanIMogIt:GetSourceID(itemLink)
+        if knownTexts[text] and slotName ~= TABARD and sourceID ~= nil then
             -- Inform everything that the appearance data is ready.
             CanIMogIt.appearancesReady = true
         end
