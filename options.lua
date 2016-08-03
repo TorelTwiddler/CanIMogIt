@@ -79,27 +79,9 @@ end
 CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
     -- Add functions you want to catch events here
     self:AddonLoaded(event, ...)
-    -- self:PlayerLogin(event, ...)
     self:TransmogCollectionUpdated(event, ...)
     -- self:GetItemInfoReceived(event, ...)
 end)
-
-
---[[
-    Hack to reset the cache slightly after the game loads, since
-    there doesn't seem to be a good event to handle it directly.
-]]
-local timer = 0
-local function onUpdate(self, elapsed)
-    timer = timer + elapsed
-    -- Unregister if appearances are ready, or 30 seconds have passed.
-    if CanIMogIt.appearancesReady or timer >= 30 then
-        CanIMogIt.frame:SetScript("OnUpdate", nil)
-    else
-        CanIMogIt.cache = {}
-    end
-end
-CanIMogIt.frame:SetScript("OnUpdate", onUpdate)
 
 
 function CanIMogIt.frame:AddonLoaded(event, addonName)

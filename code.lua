@@ -378,7 +378,6 @@ CanIMogIt.cache = {}
 CanIMogIt.appearancesReady = false;
 
 
-
 function CanIMogIt.frame:TransmogCollectionUpdated(event, ...)
     if event == "TRANSMOG_COLLECTION_UPDATED" then
         CanIMogIt.cache = {}
@@ -452,7 +451,7 @@ end
 
 
 function CanIMogIt:GetItemSlotName(itemLink)
-    return select(9, GetItemInfo(itemLink))
+    return select(4, GetItemInfoInstant(itemLink))
 end
 
 
@@ -568,7 +567,9 @@ function CanIMogIt:GetSourceID(itemLink)
     for i, slot in pairs(slots) do
         CanIMogIt.DressUpModel:TryOn(itemLink, slot)
         local sourceID = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
-        if sourceID ~= 0 then return sourceID end
+        if sourceID ~= 0 then
+            return sourceID
+        end
     end
 end
 
@@ -576,7 +577,7 @@ end
 function CanIMogIt:GetAppearanceID(itemLink)
     -- Gets the appearanceID of the given item.
     local sourceID = CanIMogIt:GetSourceID(itemLink)
-    if sourceID then
+    if sourceID ~= nil then
         local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
         return appearanceID
     end
@@ -636,7 +637,7 @@ function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
         return C_TransmogCollection.PlayerHasTransmog(itemID)
     end
     local sourceID = CanIMogIt:GetSourceID(itemLink)
-    if sourceID == nil then return false end
+    if sourceID == nil then return end
     hasTransmog = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
     return hasTransmog
 end
@@ -647,7 +648,7 @@ function CanIMogIt:CharacterCanLearnTransmog(itemLink)
     local slotName = CanIMogIt:GetItemSlotName(itemLink)
     if slotName == TABARD then return true end
     local sourceID = CanIMogIt:GetSourceID(itemLink)
-    if sourceID == nil then return false end
+    if sourceID == nil then return end
     if select(2, C_TransmogCollection.PlayerCanCollectSource(sourceID)) then
         return true
     end
@@ -747,6 +748,10 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     if not itemLink then return end
     local text = ""
 
+    -- Must have GetItemInfo available for item.
+    local itemInfo = GetItemInfo(itemLink)
+    if itemInfo == nil then return end
+
     if not CanIMogIt:PreLogicOptionsContinue(itemLink) then return end
 
     -- Return cached items
@@ -759,10 +764,29 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
         return exception_text
     end
 
-    if CanIMogIt:IsTransmogable(itemLink) then
-        if CanIMogIt:PlayerKnowsTransmogFromItem(itemLink) then
-            if CanIMogIt:IsValidAppearanceForCharacter(itemLink) then
-                if CanIMogIt:CharacterIsTooLowLevelForItem(itemLink) then
+    local isTransmogable = CanIMogIt:IsTransmogable(itemLink)
+    -- if isTransmogable == nil then return end
+
+    local playerKnowsTransmogFromItem, isValidAppearanceForCharacter, characterIsTooLowLevel,
+        playerKnowsTransmog, characterCanLearnTransmog, isItemSoulbound;
+
+    if isTransmogable then
+
+        playerKnowsTransmogFromItem = CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
+        if playerKnowsTransmogFromItem == nil then return end
+
+        isValidAppearanceForCharacter = CanIMogIt:IsValidAppearanceForCharacter(itemLink)
+        if isValidAppearanceForCharacter == nil then return end
+
+        characterIsTooLowLevel = CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)
+        if characterIsTooLowLevel == nil then return end
+
+        playerKnowsTransmog = CanIMogIt:PlayerKnowsTransmog(itemLink)
+        if playerKnowsTransmog == nil then return end
+
+        if playerKnowsTransmogFromItem then
+            if isValidAppearanceForCharacter then
+                if characterIsTooLowLevel then
                     text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                 else
                     text = CanIMogIt.KNOWN
@@ -770,9 +794,9 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
             else
                 text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
             end
-        elseif CanIMogIt:PlayerKnowsTransmog(itemLink) then
-            if CanIMogIt:IsValidAppearanceForCharacter(itemLink) then
-                if CanIMogIt:CharacterIsTooLowLevelForItem(itemLink) then
+        elseif playerKnowsTransmog then
+            if isValidAppearanceForCharacter then
+                if characterIsTooLowLevel then
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                 else
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
@@ -781,11 +805,17 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
                 text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
             end
         else
-            if CanIMogIt:CharacterCanLearnTransmog(itemLink) then
+            characterCanLearnTransmog = CanIMogIt:CharacterCanLearnTransmog(itemLink)
+            if characterCanLearnTransmog == nil then return end
+
+            if characterCanLearnTransmog then
                 -- Set text to UNKNOWN
                 text = CanIMogIt.UNKNOWN
             else
-                if CanIMogIt:IsItemSoulbound(itemLink, bag, slot) then
+                isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
+                if isItemSoulbound == nil then return end
+
+                if isItemSoulbound then
                     text = CanIMogIt.UNKNOWABLE_SOULBOUND
                             .. BLIZZARD_RED .. CanIMogIt:GetReason(itemLink)
                 else
@@ -801,13 +831,21 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
 
     text = CanIMogIt:PostLogicOptionsText(text)
 
-    -- Inform everything that the appearance data is ready.
-    if knownTexts[text] then
-        CanIMogIt.appearancesReady = true
+    if not CanIMogIt.appearancesReady then
+        -- Need to make sure that some known item has been found
+        -- and that it wasn't a tabard, so we can guarantee that
+        -- we will be getting valid data back from Blizzard.
+        local slotName = CanIMogIt:GetItemSlotName(itemLink)
+        if knownTexts[text] and slotName ~= TABARD then
+            -- Inform everything that the appearance data is ready.
+            CanIMogIt.appearancesReady = true
+        end
     end
 
-    -- Update cached items
-    CanIMogIt.cache[itemLink] = text
+    if CanIMogIt.appearancesReady then
+        -- Update cached items
+        CanIMogIt.cache[itemLink] = text
+    end
 
     return text
 end
@@ -822,7 +860,7 @@ local function addToTooltip(tooltip, itemLink)
     -- display on the tooltip.
     local itemInfo = GetItemInfo(itemLink)
     if itemInfo == nil then
-        return 
+        return
     end
 
     local bag, slot;
