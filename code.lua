@@ -343,15 +343,15 @@ local function printDebug(tooltip, itemLink, bag, slot)
 
     addLine(tooltip, '--------')
 
-    addDoubleLine(tooltip, "PlayerHasTransmog:", tostring(C_TransmogCollection.PlayerHasTransmog(itemID)))
+    addDoubleLine(tooltip, "PlayerHasTransmog:", tostring(C_TransmogCollection.PlayerHasTransmog(itemID) or "nil"))
     if sourceID then
-        addDoubleLine(tooltip, "PlayerHasTransmogItemModifiedAppearance:", tostring(C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)))
+        addDoubleLine(tooltip, "PlayerHasTransmogItemModifiedAppearance:", tostring(C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID) or "nil"))
     end
 
     addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemLink)))
-    addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)))
-    addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(CanIMogIt:PlayerKnowsTransmog(itemLink)))
-    addDoubleLine(tooltip, "CharacterCanLearnTransmog:", tostring(CanIMogIt:CharacterCanLearnTransmog(itemLink)))
+    addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink) or "nil"))
+    addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(CanIMogIt:PlayerKnowsTransmog(itemLink) or "nil"))
+    addDoubleLine(tooltip, "CharacterCanLearnTransmog:", tostring(CanIMogIt:CharacterCanLearnTransmog(itemLink) or "nil"))
 
     addLine(tooltip, '--------')
 
@@ -839,8 +839,11 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
         local slotName = CanIMogIt:GetItemSlotName(itemLink)
         local sourceID = CanIMogIt:GetSourceID(itemLink)
         if knownTexts[text] and slotName ~= TABARD and sourceID ~= nil then
-            -- Inform everything that the appearance data is ready.
-            CanIMogIt.appearancesReady = true
+            local tempLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+            if CanIMogIt:GetItemID(tempLink) == CanIMogIt:GetItemID(itemLink) then
+                -- Inform everything that the appearance data is ready.
+                CanIMogIt.appearancesReady = true
+            end
         end
     end
 
