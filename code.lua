@@ -845,8 +845,9 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
 
     -- Verify that blizzard is giving back real data.
     local sourceID = CanIMogIt:GetSourceID(itemLink)
-    if sourceID ~= nil then 
+    if sourceID ~= nil then
         local tempLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+        if not itemLink or not tempLink then return end
         if CanIMogIt:GetItemID(tempLink) ~= CanIMogIt:GetItemID(itemLink) then
             -- Bad data! Throw it away!
             return
