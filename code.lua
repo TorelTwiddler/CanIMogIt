@@ -343,15 +343,30 @@ local function printDebug(tooltip, itemLink, bag, slot)
 
     addLine(tooltip, '--------')
 
-    addDoubleLine(tooltip, "PlayerHasTransmog:", tostring(C_TransmogCollection.PlayerHasTransmog(itemID) or "nil"))
+    local playerHasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID)
+    if playerHasTransmog ~= nil then
+        addDoubleLine(tooltip, "PlayerHasTransmog:", tostring(playerHasTransmog))
+    end
     if sourceID then
-        addDoubleLine(tooltip, "PlayerHasTransmogItemModifiedAppearance:", tostring(C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID) or "nil"))
+        local playerHasTransmogItem = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
+        if playerHasTransmogItem ~= nil then
+            addDoubleLine(tooltip, "PlayerHasTransmogItemModifiedAppearance:", tostring(playerHasTransmogItem))
+        end
     end
 
     addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemLink)))
-    addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(CanIMogIt:PlayerKnowsTransmogFromItem(itemLink) or "nil"))
-    addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(CanIMogIt:PlayerKnowsTransmog(itemLink) or "nil"))
-    addDoubleLine(tooltip, "CharacterCanLearnTransmog:", tostring(CanIMogIt:CharacterCanLearnTransmog(itemLink) or "nil"))
+    local playerKnowsTransmogFromItem = CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
+    if playerKnowsTransmogFromItem ~= nil then
+        addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(playerKnowsTransmogFromItem))
+    end
+    local playerKnowsTrasmog = CanIMogIt:PlayerKnowsTransmog(itemLink)
+    if playerKnowsTrasmog ~= nil then
+        addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(playerKnowsTrasmog))
+    end
+    local characterCanLearnTransmog = CanIMogIt:CharacterCanLearnTransmog(itemLink)
+    if characterCanLearnTransmog ~= nil then
+        addDoubleLine(tooltip, "CharacterCanLearnTransmog:", tostring(characterCanLearnTransmog))
+    end
 
     addLine(tooltip, '--------')
 
@@ -577,8 +592,7 @@ function CanIMogIt:GetAppearanceID(itemLink)
     -- Gets the appearanceID of the given item.
     local sourceID = CanIMogIt:GetSourceID(itemLink)
     if sourceID ~= nil then
-        local _, appearanceID, _, _, _, tempLink = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
-        if itemLink ~= tempLink then return end
+        local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
         return appearanceID
     end
 end
