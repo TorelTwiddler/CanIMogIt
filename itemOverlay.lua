@@ -1,12 +1,19 @@
 
 local function ContainerFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the current bag and slot.
-    if not CanIMogItOptions["showItemIconOverlay"] then self.CanIMogItIcon:SetText(); return end
+    if not CanIMogItOptions["showItemIconOverlay"] then
+        if self.CanIMogItIcon:GetText() then
+            self.CanIMogItIcon:SetText()
+        end
+        return
+    end
     local bag, slot = self:GetParent():GetID(), self:GetID()
     local text = CanIMogIt:GetTooltipText(nil, bag, slot)
     if not text then self.CanIMogItIcon:SetText(); return end
     local icon = CanIMogIt:GetValueInTableFromText(CanIMogIt.tooltipIcons, text)
-    self.CanIMogItIcon:SetText(icon)
+    if icon ~= self.CanIMogItIcon:GetText() then
+        self.CanIMogItIcon:SetText(icon)
+    end
 end
 
 -- Create the FontString and set the OnUpdate script for each bag item.
