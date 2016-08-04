@@ -375,7 +375,6 @@ end
 
 CanIMogIt.tooltip = nil;
 CanIMogIt.cache = {}
-CanIMogIt.appearancesReady = false;
 
 
 function CanIMogIt.frame:TransmogCollectionUpdated(event, ...)
@@ -578,7 +577,8 @@ function CanIMogIt:GetAppearanceID(itemLink)
     -- Gets the appearanceID of the given item.
     local sourceID = CanIMogIt:GetSourceID(itemLink)
     if sourceID ~= nil then
-        local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+        local _, appearanceID, _, _, _, tempLink = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
+        if itemLink ~= tempLink then return end
         return appearanceID
     end
 end
@@ -829,28 +829,20 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
         text = CanIMogIt.NOT_TRANSMOGABLE
     end
 
-    text = CanIMogIt:PostLogicOptionsText(text)
-
-    if not CanIMogIt.appearancesReady then
-        --[[ Need to make sure that some known item has been found
-        and that it wasn't a tabard, and had a valid sourceID,
-        so we can guarantee that we will be getting valid data
-        back from Blizzard. ]]
-        local slotName = CanIMogIt:GetItemSlotName(itemLink)
-        local sourceID = CanIMogIt:GetSourceID(itemLink)
-        if knownTexts[text] and slotName ~= TABARD and sourceID ~= nil then
-            local tempLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
-            if CanIMogIt:GetItemID(tempLink) == CanIMogIt:GetItemID(itemLink) then
-                -- Inform everything that the appearance data is ready.
-                CanIMogIt.appearancesReady = true
-            end
+    -- Verify that blizzard is giving back real data.
+    local sourceID = CanIMogIt:GetSourceID(itemLink)
+    if sourceID ~= nil then 
+        local tempLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+        if CanIMogIt:GetItemID(tempLink) ~= CanIMogIt:GetItemID(itemLink) then
+            -- Bad data! Throw it away!
+            return
         end
     end
 
-    if CanIMogIt.appearancesReady then
-        -- Update cached items
-        CanIMogIt.cache[itemLink] = text
-    end
+    -- Update cached items
+    CanIMogIt.cache[itemLink] = text
+
+    text = CanIMogIt:PostLogicOptionsText(text)
 
     return text
 end
