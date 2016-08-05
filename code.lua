@@ -260,7 +260,9 @@ local knownTexts = {
 
 
 local exceptionItems = {
-    [HEAD] = {},
+    [HEAD] = {
+        [134110] = CanIMogIt.KNOWN, -- Hidden Helm
+    },
     [SHOULDER] = {
         [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
         [119588] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons
