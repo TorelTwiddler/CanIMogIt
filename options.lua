@@ -85,8 +85,9 @@ end)
 
 
 --[[
-    Hack to reset the cache slightly after the game loads, since
-    there doesn't seem to be a good event to handle it directly.
+    Resets the cache every RESET_TIME seconds. This prevents invalid
+    data from being stuck in the cache. It appears to not be a
+    significant enough slowdown even with the bags open.
 ]]
 
 local RESET_TIME = 5
