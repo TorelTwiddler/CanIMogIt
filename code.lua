@@ -264,6 +264,7 @@ local exceptionItems = {
     [SHOULDER] = {
         [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
         [119588] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons
+        [134112] = CanIMogIt.KNOWN, -- Hidden Shoulders
     },
     [BODY] = {},
     [CHEST] = {},
