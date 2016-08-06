@@ -254,6 +254,12 @@ local knownTexts = {
 }
 
 
+local unknownTexts = {
+    [CanIMogIt.UNKNOWN] = true,
+    [CanIMogIt.UNKNOWABLE_BY_CHARACTER] = true,
+}
+
+
 -----------------------------
 -- Exceptions              --
 -----------------------------
@@ -719,6 +725,12 @@ function CanIMogIt:TextIsKnown(text)
 end
 
 
+function CanIMogIt:TextIsUnknown(text)
+    -- Returns whether the text is considered to be an UNKNOWN value or not.
+    return CanIMogIt:GetValueInTableFromText(unknownTexts, text) or false
+end
+
+
 function CanIMogIt:PreLogicOptionsContinue(itemLink)
     -- Apply the options. Returns false if it should stop the logic.
     if CanIMogItOptions["showEquippableOnly"] and 
@@ -734,7 +746,7 @@ end
 function CanIMogIt:PostLogicOptionsText(text)
     -- Apply the options to the text. Returns the relevant text.
     
-    if CanIMogItOptions["showUnknownOnly"] and CanIMogIt:TextIsKnown(text) then
+    if CanIMogItOptions["showUnknownOnly"] and not CanIMogIt:TextIsUnknown(text) then
         -- We don't want to show the tooltip if it's already known.
         return
     end
@@ -846,10 +858,10 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
         text = CanIMogIt.NOT_TRANSMOGABLE
     end
 
+    text = CanIMogIt:PostLogicOptionsText(text)
+
     -- Update cached items
     CanIMogIt.cache[itemLink] = text
-
-    text = CanIMogIt:PostLogicOptionsText(text)
 
     return text
 end
