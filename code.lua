@@ -178,9 +178,9 @@ local CANNOT_DETERMINE =                            L["Cannot determine status o
 
 
 CanIMogIt.KNOWN =                                       KNOWN_ICON .. BLUE .. KNOWN
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM =                     KNOWN_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM
-CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER =                  KNOWN_BUT_ICON .. BLUE .. KNOWN_BY_ANOTHER_CHARACTER
-CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL =                     KNOWN_BUT_ICON .. BLUE .. KNOWN_BUT_TOO_LOW_LEVEL
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM =                     KNOWN_BUT_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM
+CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER =                  KNOWN_ICON .. BLUE .. KNOWN_BY_ANOTHER_CHARACTER
+CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL =                     KNOWN_ICON .. BLUE .. KNOWN_BUT_TOO_LOW_LEVEL
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL =   KNOWN_BUT_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
 -- CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =    KNOWN_BUT_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       QUESTIONABLE_ICON .. YELLOW .. CANNOT_DETERMINE
@@ -208,9 +208,9 @@ CanIMogIt.tooltipTexts = {
 
 CanIMogIt.tooltipIcons = {
     [CanIMogIt.KNOWN] = KNOWN_ICON_OVERLAY,
-    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM] = KNOWN_ICON_OVERLAY,
-    [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = KNOWN_BUT_ICON_OVERLAY,
-    [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = KNOWN_BUT_ICON_OVERLAY,
+    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM] = KNOWN_BUT_ICON_OVERLAY,
+    [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = KNOWN_ICON_OVERLAY,
+    [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = KNOWN_ICON_OVERLAY,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL] = KNOWN_BUT_ICON_OVERLAY,
     -- [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = KNOWN_BUT_ICON_OVERLAY,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = QUESTIONABLE_ICON_OVERLAY,
@@ -224,11 +224,9 @@ CanIMogIt.tooltipIcons = {
 
 
 local simpleTextMap = {
-    [CanIMogIt.KNOWN] = CanIMogIt.KNOWN,
-    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM] = CanIMogIt.KNOWN,
     [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = CanIMogIt.KNOWN,
     [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = CanIMogIt.KNOWN,
-    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL] = CanIMogIt.KNOWN,
+    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM,
     -- [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.KNOWN,
 }
 
@@ -784,8 +782,12 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     if not CanIMogIt:PreLogicOptionsContinue(itemLink) then return end
 
     -- Return cached items
-    if CanIMogIt.cache[itemLink] then
-        return CanIMogIt.cache[itemLink]
+    cachedText = CanIMogIt.cache[itemLink]
+    if cachedText ~= nil then
+        if cachedText == false then
+            return nil
+        end
+        return cachedText
     end
 
     local exception_text = CanIMogIt:GetExceptionText(itemLink)
@@ -861,7 +863,11 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     text = CanIMogIt:PostLogicOptionsText(text)
 
     -- Update cached items
-    CanIMogIt.cache[itemLink] = text
+    if text == nil then
+        CanIMogIt.cache[itemLink] = false
+    else
+        CanIMogIt.cache[itemLink] = text
+    end
 
     return text
 end
