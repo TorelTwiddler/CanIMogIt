@@ -40,6 +40,29 @@ local function LootFrame_OnUpdate(self, elapsed)
 end
 
 
+local function MailFrame_OnUpdate(self, elapsed)
+    -- Sets the icon overlay for the mail attachement frame.
+    if not CheckOptionEnabled(self) then return end
+    local frameID = self:GetID()
+
+    local messageIndex;
+    -- 7 is the number of visible inbox buttons at a time.
+    for i=1,7 do
+        local mailFrame = _G["MailItem"..i.."Button"]
+        if mailFrame:GetChecked() then
+            messageIndex = mailFrame.index
+        end
+    end
+    if not messageIndex then
+        SetIcon(self, nil)
+        return
+    end
+
+    local itemLink = GetInboxItemLink(messageIndex, frameID)
+    SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
+end
+
+
 local function AddToFrame(frame, func)
     -- Create the FontString and set OnUpdate
     if frame then
@@ -68,4 +91,10 @@ end
 for i=1,NUM_GROUP_LOOT_FRAMES do
     local frame = _G["GroupLootFrame"..i].IconFrame
     AddToFrame(frame, LootFrame_OnUpdate)
+end
+
+-- Add hook for the Mail inbox frames.
+for i=1,ATTACHMENTS_MAX_SEND do
+    local frame = _G["OpenMailAttachmentButton"..i]
+    AddToFrame(frame, MailFrame_OnUpdate)
 end
