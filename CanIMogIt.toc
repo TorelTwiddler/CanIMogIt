@@ -17,6 +17,7 @@ localization.koKR.lua
 localization.ruRU.lua
 localization.zhCN.lua
 localization.zhTW.lua
+constants.lua
 options.lua
 code.lua
 database.lua

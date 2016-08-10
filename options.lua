@@ -27,6 +27,18 @@ CanIMogItOptions_Defaults = {
         ["showUnknownOnly"] = false,
         ["showItemIconOverlay"] = true,
         ["showVerboseText"] = false,
+		["showKNOWN"] = true,
+		["showKNOWN_FROM_ANOTHER_ITEM"] = true,
+		["showKNOWN_BY_ANOTHER_CHARACTER"] = false,
+		["showKNOWN_BUT_TOO_LOW_LEVEL"] = false,
+		["showKNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL"] = false,
+		["showKNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER"] = true,
+		["showUNKNOWABLE_SOULBOUND"] = true,
+		["showUNKNOWABLE_BY_CHARACTER"] = true,
+		--["showCAN_BE_LEARNED_BY"] = true,
+		["showUNKNOWN"] = true,
+		["showNOT_TRANSMOGABLE"] = true,
+		-- ["showCANNOT_DETERMINE"] = true,
     },
 }
 
@@ -56,6 +68,55 @@ CanIMogItOptions_DisplayData = {
         ["displayName"] = L["Verbose Text"],
         ["description"] = L["Shows a more detailed text for some of the tooltips."]
     },
+	["showKNOWN"] = {
+        ["displayName"] = L[CanIMogIt.KNOWN],
+        ["description"] = L["Displays when you have collected the appearance."]
+    },
+	["showKNOWN_FROM_ANOTHER_ITEM"] = {
+        ["displayName"] = L[CanIMogIt.KNOWN_FROM_ANOTHER_ITEM],
+        ["description"] = L["Displays when you have collected the appearance from a different item."]
+    },
+	["showKNOWN_BY_ANOTHER_CHARACTER"] = {
+        ["displayName"] = L[CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER],
+        ["description"] = L["Displays when you have collected the appearance, but cannot use the transmog on this character."]
+    },
+	["showKNOWN_BUT_TOO_LOW_LEVEL"] = {
+        ["displayName"] = L[CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL],
+        ["description"] = L["Displays when you have collected the appearance, but are too low level to use it for transmog."]
+    },
+	["showKNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL"] = {
+        ["displayName"] = L[CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL],
+        ["description"] = L["Displays when you have collected the appearance from a different item, and are too low level to use it for transmog."]
+    },
+	["showKNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER"] = {
+        -- Displays CANNOT_DETERMINE text because of a Blizzard API issue: Ticket 1
+        ["displayName"] = L[CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER],
+        ["description"] = L["Displays when you have collected the appearance on your current character, but the item you are looking at cannot be collected because it is the wrong armor/weapon type for the character."]
+    },
+	["showUNKNOWABLE_SOULBOUND"] = {
+        ["displayName"] = L[CanIMogIt.UNKNOWABLE_SOULBOUND .. BLIZZARD_RED .. "[Reason]"],
+        ["description"] = L["Displays when an item is soulbound but the appearance cannot be collected on your current character."]
+    },
+	["showUNKNOWABLE_BY_CHARACTER"] = {
+        ["displayName"] = L[CanIMogIt.UNKNOWABLE_BY_CHARACTER .. BLIZZARD_RED .. "[Reason]"],
+        ["description"] = L["Displays when you cannot collect an appearance from an item on your current character."]
+    },
+	--["showCAN_BE_LEARNED_BY"] = {
+        --["displayName"] = L[CanIMogIt.CAN_BE_LEARNED_BY],
+        --["description"] = L["Displays when you have collected the appearance."]
+    --},
+	["showUNKNOWN"] = {
+        ["displayName"] = L[CanIMogIt.UNKNOWN],
+        ["description"] = L["Displays when you have not collected the appearance."]
+    },
+	["showNOT_TRANSMOGABLE"] = {
+        ["displayName"] = L[CanIMogIt.NOT_TRANSMOGABLE],
+        ["description"] = L["Displays when an item can never be learned for transmog."]
+    },
+	-- ["showCANNOT_DETERMINE"] = {
+    --     ["displayName"] = L[CanIMogIt.CANNOT_DETERMINE],
+    --     ["description"] = L["Displays when you have collected the appearance."]
+    -- },
 }
 
 
@@ -153,6 +214,19 @@ local function createOptionsMenu()
     local showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
     local showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
     local showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
+	-- Tooltip texts
+	local showKNOWN = newCheckbox(CanIMogIt.frame, "showKNOWN")
+	local showKNOWN_FROM_ANOTHER_ITEM = newCheckbox(CanIMogIt.frame, "showKNOWN_FROM_ANOTHER_ITEM")
+	local showKNOWN_BY_ANOTHER_CHARACTER = newCheckbox(CanIMogIt.frame, "showKNOWN_BY_ANOTHER_CHARACTER")
+	local showKNOWN_BUT_TOO_LOW_LEVEL = newCheckbox(CanIMogIt.frame, "showKNOWN_BUT_TOO_LOW_LEVEL")
+	local showKNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL = newCheckbox(CanIMogIt.frame, "showKNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL")
+	local showKNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER = newCheckbox(CanIMogIt.frame, "showKNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER")
+	local showUNKNOWABLE_SOULBOUND = newCheckbox(CanIMogIt.frame, "showUNKNOWABLE_SOULBOUND")
+	local showUNKNOWABLE_BY_CHARACTER = newCheckbox(CanIMogIt.frame, "showUNKNOWABLE_BY_CHARACTER")
+	--local showCAN_BE_LEARNED_BY = newCheckbox(CanIMogIt.frame, "showCAN_BE_LEARNED_BY")
+	local showUNKNOWN = newCheckbox(CanIMogIt.frame, "showUNKNOWN")
+	local showNOT_TRANSMOGABLE = newCheckbox(CanIMogIt.frame, "showNOT_TRANSMOGABLE")
+	-- local showCANNOT_DETERMINE = newCheckbox(CanIMogIt.frame, "showCANNOT_DETERMINE")
 
     -- position the checkboxes
     debug:SetPoint("TOPLEFT", 16, -16)
@@ -161,6 +235,19 @@ local function createOptionsMenu()
     showUnknownOnly:SetPoint("TOPLEFT", showTransmoggableOnly, "BOTTOMLEFT")
     showItemIconOverlay:SetPoint("TOPLEFT", showUnknownOnly, "BOTTOMLEFT")
     showVerboseText:SetPoint("TOPLEFT", showItemIconOverlay, "BOTTOMLEFT")
+	-- Tooltip texts
+	showKNOWN:SetPoint("TOPLEFT", showVerboseText, "BOTTOMLEFT")
+	showKNOWN_FROM_ANOTHER_ITEM:SetPoint("TOPLEFT", showKNOWN, "BOTTOMLEFT")
+	showKNOWN_BY_ANOTHER_CHARACTER:SetPoint("TOPLEFT", showKNOWN_FROM_ANOTHER_ITEM, "BOTTOMLEFT")
+	showKNOWN_BUT_TOO_LOW_LEVEL:SetPoint("TOPLEFT", showKNOWN_BY_ANOTHER_CHARACTER, "BOTTOMLEFT")
+	showKNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL:SetPoint("TOPLEFT", showKNOWN_BUT_TOO_LOW_LEVEL, "BOTTOMLEFT")
+	showKNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER:SetPoint("TOPLEFT", showKNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL, "BOTTOMLEFT")
+	showUNKNOWABLE_SOULBOUND:SetPoint("TOPLEFT", showKNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER, "BOTTOMLEFT")
+	showUNKNOWABLE_BY_CHARACTER:SetPoint("TOPLEFT", showUNKNOWABLE_SOULBOUND, "BOTTOMLEFT")
+	--showCAN_BE_LEARNED_BY:SetPoint("TOPLEFT", showUNKNOWABLE_BY_CHARACTER, "BOTTOMLEFT")
+	showUNKNOWN:SetPoint("TOPLEFT", showUNKNOWABLE_BY_CHARACTER, "BOTTOMLEFT")
+	showNOT_TRANSMOGABLE:SetPoint("TOPLEFT", showUNKNOWN, "BOTTOMLEFT")
+	-- showCANNOT_DETERMINE:SetPoint("TOPLEFT", showNOT_TRANSMOGABLE, "BOTTOMLEFT")
 end
 
 
