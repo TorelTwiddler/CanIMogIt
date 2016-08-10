@@ -69,6 +69,7 @@ local EVENTS = {
     "TRANSMOG_COLLECTION_UPDATED",
     -- "PLAYER_LOGIN",
     -- "GET_ITEM_INFO_RECEIVED",
+    "AUCTION_HOUSE_SHOW",
 }
 
 for i, event in pairs(EVENTS) do
@@ -80,6 +81,7 @@ CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
     -- Add functions you want to catch events here
     self:AddonLoaded(event, ...)
     self:TransmogCollectionUpdated(event, ...)
+    self:OnAuctionHouseShow(event, ...)
     -- self:GetItemInfoReceived(event, ...)
 end)
 

@@ -48,6 +48,16 @@ local function MerchantFrame_OnUpdate(self, elapsed)
 end
 
 
+local function AuctionFrame_OnUpdate(self, elapsed)
+    -- Sets the icon overlay for the auction frame.
+    if not CheckOptionEnabled(self) then return end
+    local browseButtonID = self:GetParent():GetID()
+    local index = BrowseScrollFrame.offset + browseButtonID
+    local itemLink = GetAuctionItemLink("list", index)
+    SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
+end
+
+
 local function MailFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the mail attachement frame.
     if not CheckOptionEnabled(self) then return end
@@ -112,4 +122,15 @@ end
 for i=1,12 do
     local frame = _G["MerchantItem"..i.."ItemButton"]
     AddToFrame(frame, MerchantFrame_OnUpdate)
+end
+
+
+function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
+    -- The button frames don't exist until the auction house is open.
+    if event ~= "AUCTION_HOUSE_SHOW" then return end
+    -- Add hook for the Auction House frames.
+    for i=1,8 do
+        local frame = _G["BrowseButton"..i.."Item"]
+        AddToFrame(frame, AuctionFrame_OnUpdate)
+    end
 end
