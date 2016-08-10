@@ -40,6 +40,14 @@ local function LootFrame_OnUpdate(self, elapsed)
 end
 
 
+local function MerchantFrame_OnUpdate(self, elapsed)
+    -- Sets the icon overlay for the merchant frame.
+    if not CheckOptionEnabled(self) then return end
+    local itemLink = self.link
+    SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
+end
+
+
 local function MailFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the mail attachement frame.
     if not CheckOptionEnabled(self) then return end
@@ -97,4 +105,11 @@ end
 for i=1,ATTACHMENTS_MAX_SEND do
     local frame = _G["OpenMailAttachmentButton"..i]
     AddToFrame(frame, MailFrame_OnUpdate)
+end
+
+-- Add hook for the Merchant frames.
+-- 12 is the number of merchant items visible at once.
+for i=1,12 do
+    local frame = _G["MerchantItem"..i.."ItemButton"]
+    AddToFrame(frame, MerchantFrame_OnUpdate)
 end
