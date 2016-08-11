@@ -22,6 +22,24 @@ local function SetIcon(frame, text)
 end
 
 
+local function AddToFrame(frame, func)
+    -- Create the FontString and set OnUpdate
+    if not event then event = "OnUpdate" end
+    if frame then
+        frame.CanIMogItIcon = frame:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
+        frame.CanIMogItIcon:SetPoint("TOPLEFT", 2, -2)
+        if func then
+            frame:HookScript(event, func)
+        end
+    end
+end
+
+
+----------------------------
+-- OnUpdate functions     --
+----------------------------
+
+
 local function ContainerFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the current bag and slot.
     if not CheckOptionEnabled(self) then return end
@@ -45,6 +63,14 @@ local function MerchantFrame_OnUpdate(self, elapsed)
     if not CheckOptionEnabled(self) then return end
     local itemLink = self.link
     SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
+end
+
+
+local function JournalFrame_SetLootButton(itemFrame)
+    -- Sets the icon overlay for the merchant frame.
+    if not CheckOptionEnabled(itemFrame) then return end
+    local itemLink = itemFrame.link
+    SetIcon(itemFrame, CanIMogIt:GetTooltipText(itemLink))
 end
 
 
@@ -81,14 +107,9 @@ local function MailFrame_OnUpdate(self, elapsed)
 end
 
 
-local function AddToFrame(frame, func)
-    -- Create the FontString and set OnUpdate
-    if frame then
-        frame.CanIMogItIcon = frame:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
-        frame.CanIMogItIcon:SetPoint("TOPLEFT", 2, -2)
-        frame:SetScript("OnUpdate", func)
-    end
-end
+----------------------------
+-- Begin adding to frames --
+----------------------------
 
 
 -- Add hook for each bag item.
@@ -133,4 +154,14 @@ function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
         local frame = _G["BrowseButton"..i.."Item"]
         AddToFrame(frame, AuctionFrame_OnUpdate)
     end
+end
+
+function CanIMogIt.frame:OnEncounterJournalLoaded(event, addonName, ...)
+    if event ~= "ADDON_LOADED" then return end
+    if addonName ~= "Blizzard_EncounterJournal" then return end
+    for i=1,10 do
+        local frame = _G["EncounterJournalEncounterFrameInfoLootScrollFrameButton"..i]
+        AddToFrame(frame)
+    end
+    hooksecurefunc("EncounterJournal_SetLootButton", JournalFrame_SetLootButton)
 end

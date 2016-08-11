@@ -80,6 +80,7 @@ end
 CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
     -- Add functions you want to catch events here
     self:AddonLoaded(event, ...)
+    self:OnEncounterJournalLoaded(event, ...)
     self:TransmogCollectionUpdated(event, ...)
     self:OnAuctionHouseShow(event, ...)
     -- self:GetItemInfoReceived(event, ...)
