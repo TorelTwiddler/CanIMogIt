@@ -24,12 +24,11 @@ end
 
 local function AddToFrame(frame, func)
     -- Create the FontString and set OnUpdate
-    if not event then event = "OnUpdate" end
     if frame then
         frame.CanIMogItIcon = frame:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
         frame.CanIMogItIcon:SetPoint("TOPLEFT", 2, -2)
         if func then
-            frame:HookScript(event, func)
+            frame:HookScript("OnUpdate", func)
         end
     end
 end
@@ -107,6 +106,16 @@ local function MailFrame_OnUpdate(self, elapsed)
 end
 
 
+local function GuildBankFrame_OnUpdate(self, elapsed)
+    -- Sets the icon overlay for the guild bank item frame.
+    if not CheckOptionEnabled(self) then return end
+    local tab = GetCurrentGuildBankTab()
+    local slot = self:GetID()
+    local itemLink = GetGuildBankItemLink(tab, slot)
+    SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
+end
+
+
 ----------------------------
 -- Begin adding to frames --
 ----------------------------
@@ -164,4 +173,19 @@ function CanIMogIt.frame:OnEncounterJournalLoaded(event, addonName, ...)
         AddToFrame(frame)
     end
     hooksecurefunc("EncounterJournal_SetLootButton", JournalFrame_SetLootButton)
+end
+
+
+local guildBankLoaded = false
+
+function CanIMogIt.frame:OnGuildBankOpened(event, ...)
+    if event ~= "GUILDBANKFRAME_OPENED" then return end
+    if guildBankLoaded == true then return end
+    guildBankLoaded = true
+    for column=1,7 do
+        for button=1,14 do
+            local frame = _G["GuildBankColumn"..column.."Button"..button]
+            AddToFrame(frame, GuildBankFrame_OnUpdate)
+        end
+    end
 end
