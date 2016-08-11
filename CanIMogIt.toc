@@ -14,6 +14,7 @@ localization.esMX.lua
 localization.frFR.lua
 localization.itIT.lua
 localization.koKR.lua
+localization.ptBR.lua
 localization.ruRU.lua
 localization.zhCN.lua
 localization.zhTW.lua
