@@ -116,6 +116,17 @@ local function GuildBankFrame_OnUpdate(self, elapsed)
 end
 
 
+local function VoidStorageFrame_OnUpdate(self, elapsed)
+    -- Sets the icon overlay for the guild bank item frame.
+    if not CheckOptionEnabled(self) then return end
+    local page = _G["VoidStorageFrame"].page
+    local buttonSlot = self.slot
+    local voidSlot = buttonSlot + (80 * (page - 1))
+    local itemLink = GetVoidItemHyperlinkString(voidSlot)
+    SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
+end
+
+
 ----------------------------
 -- Begin adding to frames --
 ----------------------------
@@ -187,5 +198,18 @@ function CanIMogIt.frame:OnGuildBankOpened(event, ...)
             local frame = _G["GuildBankColumn"..column.."Button"..button]
             AddToFrame(frame, GuildBankFrame_OnUpdate)
         end
+    end
+end
+
+
+local voidStorageLoaded = false
+
+function CanIMogIt.frame:OnVoidStorageOpened(event, ...)
+    if event ~= "VOID_STORAGE_OPEN" then return end
+    if voidStorageLoaded == true then return end
+    voidStorageLoaded = true
+    for i=1,80 do
+        local frame = _G["VoidStorageStorageButton"..i]
+        AddToFrame(frame, VoidStorageFrame_OnUpdate)
     end
 end

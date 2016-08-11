@@ -71,6 +71,7 @@ local EVENTS = {
     -- "GET_ITEM_INFO_RECEIVED",
     "AUCTION_HOUSE_SHOW",
     "GUILDBANKFRAME_OPENED",
+    "VOID_STORAGE_OPEN",
 }
 
 for i, event in pairs(EVENTS) do
@@ -85,6 +86,7 @@ CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
     self:TransmogCollectionUpdated(event, ...)
     self:OnAuctionHouseShow(event, ...)
     self:OnGuildBankOpened(event, ...)
+    self:OnVoidStorageOpened(event, ...)
     -- self:GetItemInfoReceived(event, ...)
 end)
 
