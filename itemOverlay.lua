@@ -3,8 +3,8 @@
 local function CheckOptionEnabled(frame)
     -- Checks if the option is enabled. If it's not, then clear the text.
     if not CanIMogItOptions["showItemIconOverlay"] then
-        if self.CanIMogItIcon:GetText() then
-            self.CanIMogItIcon:SetText()
+        if frame.CanIMogItIcon:GetText() then
+            frame.CanIMogItIcon:SetText()
         end
         return false
     end
