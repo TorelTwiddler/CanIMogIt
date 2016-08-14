@@ -12,10 +12,10 @@ local function CheckOptionEnabled(frame)
 end
 
 
-local function SetIcon(frame, text)
+local function SetIcon(frame, text, unmodifiedText)
     -- Sets the icon based on the text for the CanIMogItIcon on the given frame.
     if not text then frame.CanIMogItIcon:SetText(); return end
-    local icon = CanIMogIt:GetValueInTableFromText(CanIMogIt.tooltipIcons, text)
+    local icon = CanIMogIt.tooltipIcons[unmodifiedText]
     if icon ~= frame.CanIMogItIcon:GetText() then
         frame.CanIMogItIcon:SetText(icon)
     end
@@ -43,8 +43,7 @@ local function ContainerFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the current bag and slot.
     if not CheckOptionEnabled(self) then return end
     local bag, slot = self:GetParent():GetID(), self:GetID()
-    local text = CanIMogIt:GetTooltipText(nil, bag, slot)
-    SetIcon(self, text)
+    SetIcon(self, CanIMogIt:GetTooltipText(nil, bag, slot))
 end
 
 
