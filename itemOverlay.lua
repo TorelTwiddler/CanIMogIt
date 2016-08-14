@@ -165,15 +165,15 @@ for i=1,12 do
 end
 
 
-function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
-    -- The button frames don't exist until the auction house is open.
-    if event ~= "AUCTION_HOUSE_SHOW" then return end
-    -- Add hook for the Auction House frames.
-    for i=1,8 do
-        local frame = _G["BrowseButton"..i.."Item"]
-        AddToFrame(frame, AuctionFrame_OnUpdate)
-    end
-end
+-- function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
+--     -- The button frames don't exist until the auction house is open.
+--     if event ~= "AUCTION_HOUSE_SHOW" then return end
+--     -- Add hook for the Auction House frames.
+--     for i=1,8 do
+--         local frame = _G["BrowseButton"..i.."Item"]
+--         AddToFrame(frame, AuctionFrame_OnUpdate)
+--     end
+-- end
 
 function CanIMogIt.frame:OnEncounterJournalLoaded(event, addonName, ...)
     if event ~= "ADDON_LOADED" then return end

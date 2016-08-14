@@ -84,10 +84,9 @@ CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
     self:AddonLoaded(event, ...)
     self:OnEncounterJournalLoaded(event, ...)
     self:TransmogCollectionUpdated(event, ...)
-    self:OnAuctionHouseShow(event, ...)
+    -- self:OnAuctionHouseShow(event, ...)
     self:OnGuildBankOpened(event, ...)
     self:OnVoidStorageOpened(event, ...)
-    -- self:GetItemInfoReceived(event, ...)
 end)
 
 
