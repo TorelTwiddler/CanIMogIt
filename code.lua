@@ -482,7 +482,7 @@ function CanIMogIt:IsArmorSubClass(subClass, itemLink)
 end
 
 
-function CanIMogIt:IsArmorSubClassIdentical(itemLinkA, itemLinkB)
+function CanIMogIt:IsItemSubClassIdentical(itemLinkA, itemLinkB)
     local subClassA = CanIMogIt:GetItemSubClassName(itemLinkA)
     local subClassB = CanIMogIt:GetItemSubClassName(itemLinkB)
     if subClassA == nil or subClassB == nil then return end
@@ -606,7 +606,7 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
     -- if CanIMogIt:IsItemArmor(itemLink) then
     --     for knownItemLink, bool in pairs(appearanceTable) do
     --         -- if itemLink armor type is the same as one of the knownItemLink armor types
-    --         if CanIMogIt:IsArmorSubClassIdentical(itemLink, knownItemLink) then
+    --         if CanIMogIt:IsItemSubClassIdentical(itemLink, knownItemLink) then
     --             return true
     --         end
     --     end
@@ -620,7 +620,8 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
     local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
     if sources then
         for i, source in pairs(sources) do
-            if source.isCollected then
+            local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(source.sourceID))
+            if CanIMogIt:IsItemSubClassIdentical(itemLink, sourceItemLink) and source.isCollected then
                 return true
             end
         end
