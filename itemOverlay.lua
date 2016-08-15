@@ -152,10 +152,10 @@ for i=1,NUM_GROUP_LOOT_FRAMES do
 end
 
 -- Add hook for the Mail inbox frames.
-for i=1,ATTACHMENTS_MAX_SEND do
-    local frame = _G["OpenMailAttachmentButton"..i]
-    AddToFrame(frame, MailFrame_OnUpdate)
-end
+-- for i=1,ATTACHMENTS_MAX_SEND do
+--     local frame = _G["OpenMailAttachmentButton"..i]
+--     AddToFrame(frame, MailFrame_OnUpdate)
+-- end
 
 -- Add hook for the Merchant frames.
 -- 12 is the number of merchant items visible at once.
