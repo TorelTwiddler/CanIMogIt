@@ -866,7 +866,7 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
         unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
     end
 
-    text = CanIMogIt:PostLogicOptionsText(text)
+    text = CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
 
     -- Update cached items
     if text == nil then
