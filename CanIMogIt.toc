@@ -17,18 +17,18 @@
 ## X-Website: http://mods.curse.com/addons/wow/can-i-mog-it
 ## SavedVariables: CanIMogItOptions, CanIMogItDatabase
 embeds.xml
-CanIMogItCore.lua
-localization.enUS.lua
-localization.deDE.lua
-localization.esES.lua
-localization.esMX.lua
-localization.frFR.lua
-localization.itIT.lua
-localization.koKR.lua
-localization.ptBR.lua
-localization.ruRU.lua
-localization.zhCN.lua
-localization.zhTW.lua
+core.lua
+Locale\enUS.lua
+Locale\deDE.lua
+Locale\esES.lua
+Locale\esMX.lua
+Locale\frFR.lua
+Locale\itIT.lua
+Locale\koKR.lua
+Locale\ptBR.lua
+Locale\ruRU.lua
+Locale\zhCN.lua
+Locale\zhTW.lua
 constants.lua
 options.lua
 code.lua
