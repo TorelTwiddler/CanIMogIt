@@ -324,14 +324,6 @@ end
 -----------------------------
 
 
-function CanIMogIt:GetValueInTableFromText(tbl, text)
-    -- Returns the value from tbl when the key contains text.
-    for key, value in pairs(tbl) do
-        if text:find(key) then return value end
-    end
-end
-
-
 function CanIMogIt:GetAppearances()
     -- Gets a table of all the appearances known to a character.
     C_TransmogCollection.ClearSearch()
@@ -403,7 +395,7 @@ function CanIMogIt:IsArmorSubClass(subClass, itemLink)
 end
 
 
-function CanIMogIt:IsArmorSubClassIdentical(itemLinkA, itemLinkB)
+function CanIMogIt:IsItemSubClassIdentical(itemLinkA, itemLinkB)
     local subClassA = CanIMogIt:GetItemSubClassName(itemLinkA)
     local subClassB = CanIMogIt:GetItemSubClassName(itemLinkB)
     if subClassA == nil or subClassB == nil then return end
@@ -527,7 +519,7 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
     -- if CanIMogIt:IsItemArmor(itemLink) then
     --     for knownItemLink, bool in pairs(appearanceTable) do
     --         -- if itemLink armor type is the same as one of the knownItemLink armor types
-    --         if CanIMogIt:IsArmorSubClassIdentical(itemLink, knownItemLink) then
+    --         if CanIMogIt:IsItemSubClassIdentical(itemLink, knownItemLink) then
     --             return true
     --         end
     --     end
@@ -541,7 +533,8 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
     local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
     if sources then
         for i, source in pairs(sources) do
-            if source.isCollected then
+            local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(source.sourceID))
+            if CanIMogIt:IsItemSubClassIdentical(itemLink, sourceItemLink) and source.isCollected then
                 return true
             end
         end
@@ -636,9 +629,9 @@ function CanIMogIt:TextIsKnown(text)
 end
 
 
-function CanIMogIt:TextIsUnknown(text)
+function CanIMogIt:TextIsUnknown(unmodifiedText)
     -- Returns whether the text is considered to be an UNKNOWN value or not.
-    return CanIMogIt:GetValueInTableFromText(unknownTexts, text) or false
+    return unknownTexts[unmodifiedText] or false
 end
 
 
@@ -654,15 +647,15 @@ function CanIMogIt:PreLogicOptionsContinue(itemLink)
 end
 
 
-function CanIMogIt:PostLogicOptionsText(text)
+function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
     -- Apply the options to the text. Returns the relevant text.
     
-    if CanIMogItOptions["showUnknownOnly"] and not CanIMogIt:TextIsUnknown(text) then
+    if CanIMogItOptions["showUnknownOnly"] and not CanIMogIt:TextIsUnknown(unmodifiedText) then
         -- We don't want to show the tooltip if it's already known.
         return
     end
 
-    if CanIMogItOptions["showTransmoggableOnly"] and text:find(CanIMogIt.NOT_TRANSMOGABLE) then
+    if CanIMogItOptions["showTransmoggableOnly"] and unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE then
         -- If we don't want to show the tooltip if it's not transmoggable
         return
     end
@@ -671,7 +664,7 @@ function CanIMogIt:PostLogicOptionsText(text)
         text = simpleTextMap[text] or text
     end
 
-    return text
+    return text, unmodifiedText
 end
 
 
@@ -681,12 +674,17 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
 
         If bag and slot are given, this will use the itemLink from 
         bag and slot instead.
+
+        Returns two things:
+            the text to display.
+            the unmodifiedText that can be used for lookup values.
     ]]
     if bag and slot then
         itemLink = GetContainerItemLink(bag, slot)
     end
     if not itemLink then return end
     local text = ""
+    local unmodifiedText = ""
 
     -- Must have GetItemInfo available for item.
     local itemInfo = GetItemInfo(itemLink)
@@ -695,12 +693,12 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     if not CanIMogIt:PreLogicOptionsContinue(itemLink) then return end
 
     -- Return cached items
-    cachedText = CanIMogIt.cache[itemLink]
-    if cachedText ~= nil then
+    if CanIMogIt.cache[itemLink] then
+        cachedText, cachedUnmodifiedText = unpack(CanIMogIt.cache[itemLink])
         if cachedText == false then
             return nil
         end
-        return cachedText
+        return cachedText, cachedUnmodifiedText
     end
 
     local exception_text = CanIMogIt:GetExceptionText(itemLink)
@@ -732,29 +730,35 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
             if isValidAppearanceForCharacter then
                 if characterIsTooLowLevel then
                     text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
+                    unmodifiedText = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                 else
                     text = CanIMogIt.KNOWN
+                    unmodifiedText = CanIMogIt.KNOWN
                 end
             else
                 text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
+                unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
             end
         elseif playerKnowsTransmog then
             if isValidAppearanceForCharacter then
                 if characterIsTooLowLevel then
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                 else
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
                 end
             else
                 text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+                unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
             end
         else
             characterCanLearnTransmog = CanIMogIt:CharacterCanLearnTransmog(itemLink)
             if characterCanLearnTransmog == nil then return end
 
             if characterCanLearnTransmog then
-                -- Set text to UNKNOWN
                 text = CanIMogIt.UNKNOWN
+                unmodifiedText = CanIMogIt.UNKNOWN
             else
                 isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
                 if isItemSoulbound == nil then return end
@@ -762,27 +766,29 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
                 if isItemSoulbound then
                     text = CanIMogIt.UNKNOWABLE_SOULBOUND
                             .. BLIZZARD_RED .. CanIMogIt:GetReason(itemLink)
+                    unmodifiedText = CanIMogIt.UNKNOWABLE_SOULBOUND
                 else
                     text = CanIMogIt.UNKNOWABLE_BY_CHARACTER
                             .. BLIZZARD_RED .. CanIMogIt:GetReason(itemLink)
+                    unmodifiedText = CanIMogIt.UNKNOWABLE_BY_CHARACTER
                 end
             end
         end
     else
-        --Set text to NOT_TRANSMOGABLE
         text = CanIMogIt.NOT_TRANSMOGABLE
+        unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
     end
 
-    text = CanIMogIt:PostLogicOptionsText(text)
+    text = CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
 
     -- Update cached items
     if text == nil then
-        CanIMogIt.cache[itemLink] = false
+        CanIMogIt.cache[itemLink] = {false, false}
     else
-        CanIMogIt.cache[itemLink] = text
+        CanIMogIt.cache[itemLink] = {text, unmodifiedText}
     end
 
-    return text
+    return text, unmodifiedText
 end
 
 -----------------------------

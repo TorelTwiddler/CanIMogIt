@@ -3,9 +3,20 @@
 ## Author: TorelTwiddler, Ami Yuy
 ## Version: @project-version@
 ## Notes: Adds tooltips to items showing if you have learned a transmog appearance.
+## Notes-deDE: @localization(locale="deDE", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
+## Notes-esES: @localization(locale="esES", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
+## Notes-esMX: @localization(locale="esMX", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
+## Notes-frFR: @localization(locale="frFR", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
+## Notes-itIT: @localization(locale="itIT", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
+## Notes-koKR: @localization(locale="koKR", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
+## Notes-ptBR: @localization(locale="ptBR", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
+## Notes-ruRU: @localization(locale="ruRU", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
+## Notes-zhCN: @localization(locale="zhCN", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
+## Notes-zhTW: @localization(locale="zhTW", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
 ## X-Category: Transmogrify
 ## X-Website: http://mods.curse.com/addons/wow/can-i-mog-it
 ## SavedVariables: CanIMogItOptions, CanIMogItDatabase
+embeds.xml
 CanIMogItCore.lua
 localization.enUS.lua
 localization.deDE.lua
@@ -14,6 +25,7 @@ localization.esMX.lua
 localization.frFR.lua
 localization.itIT.lua
 localization.koKR.lua
+localization.ptBR.lua
 localization.ruRU.lua
 localization.zhCN.lua
 localization.zhTW.lua
