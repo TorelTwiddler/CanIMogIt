@@ -195,12 +195,10 @@ function CanIMogIt.frame.Loaded()
     createOptionsMenu()
 end
 
-CanIMogIt.Console = LibStub("AceConsole-3.0")
-CanIMogIt.Console:Print("CIMI: Hello world!")
-CanIMogIt.Console:RegisterChatCommand("cimi", "OpenOptionsMenu")
-CanIMogIt.Console:RegisterChatCommand("canimogit", "OpenOptionsMenu")
+CanIMogIt:RegisterChatCommand("cimi", "OpenOptionsMenu")
+CanIMogIt:RegisterChatCommand("canimogit", "OpenOptionsMenu")
 
-function CanIMogIt.Console:OpenOptionsMenu()
+function CanIMogIt:OpenOptionsMenu()
     -- Run it twice, because the first one only opens
     -- the main interface window.
     InterfaceOptionsFrame_OpenToCategory(CanIMogIt.frame)
