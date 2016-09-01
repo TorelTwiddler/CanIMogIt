@@ -36,13 +36,21 @@ local function IsItemSoulbound(text)
 end
 
 
-function CanIMogItTooltipScanner:ScanTooltipBreak(func, itemLink, bag, slot)
-    -- Scans the tooltip, breaking when an item is found.
-    if bag and slot then
+function CanIMogItTooltipScanner:CIMI_SetItem(itemLink, bag, slot)
+    -- Sets the item for the tooltip based on the itemLink or bag and slot.
+    if bag and slot and bag == BANK_CONTAINER then
+        self:SetInventoryItem("player", BankButtonIDToInvSlotID(slot, nil))
+    elseif bag and slot then
         self:SetBagItem(bag, slot)
     else
         self:SetHyperlink(itemLink)
     end
+end
+
+
+function CanIMogItTooltipScanner:ScanTooltipBreak(func, itemLink, bag, slot)
+    -- Scans the tooltip, breaking when an item is found.
+    self:CIMI_SetItem(itemLink, bag, slot)
     local result;
     local tooltipName = self:GetName()
     for i = 1, self:NumLines() do
@@ -56,11 +64,7 @@ end
 
 function CanIMogItTooltipScanner:ScanTooltip(func, itemLink, bag, slot)
     -- Scans the tooltip, returning a table of all of the results.
-    if bag and slot then
-        self:SetBagItem(bag, slot)
-    else
-        self:SetHyperlink(itemLink)
-    end
+    self:CIMI_SetItem(itemLink, bag, slot)
     local tooltipName = self:GetName()
     local results = {}
     for i = 1, self:NumLines() do
@@ -70,7 +74,6 @@ function CanIMogItTooltipScanner:ScanTooltip(func, itemLink, bag, slot)
     self:ClearLines()
     return results
 end
-
 
 
 function CanIMogItTooltipScanner:GetRedText(itemLink)
