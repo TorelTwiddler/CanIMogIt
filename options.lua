@@ -67,7 +67,7 @@ InterfaceOptions_AddCategory(CanIMogIt.frame);
 local EVENTS = {
     "ADDON_LOADED",
     "TRANSMOG_COLLECTION_UPDATED",
-    -- "PLAYER_LOGIN",
+    "PLAYER_LOGIN",
     -- "GET_ITEM_INFO_RECEIVED",
     "AUCTION_HOUSE_SHOW",
     "GUILDBANKFRAME_OPENED",
@@ -87,6 +87,7 @@ CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
     -- self:OnAuctionHouseShow(event, ...)
     self:OnGuildBankOpened(event, ...)
     self:OnVoidStorageOpened(event, ...)
+    self:PlayerLogin(event, ...)
 end)
 
 
@@ -176,11 +177,10 @@ function CanIMogIt.frame.Loaded()
         CanIMogItOptions = CanIMogItOptions_Defaults.options
         print(L["CanIMogItOptions not found, loading defaults!"])
     end
-    -- if (not CanIMogItDatabase) then
-    --     CanIMogItDatabase = {}
-    --     StaticPopup_Show("CANIMOGIT_NEW_DATABASE")
-    -- end
-    CanIMogItDatabase = nil
+    if (not CanIMogItDatabase) then
+        CanIMogIt:OnInitialize()
+        StaticPopup_Show("CANIMOGIT_NEW_DATABASE")
+    end
     -- Set missing options from the defaults if the version is out of date.
     if (CanIMogItOptions["version"] < CanIMogIt_OptionsVersion) then
         CanIMogItOptions_temp = CanIMogItOptions_Defaults.options;
