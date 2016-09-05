@@ -286,7 +286,8 @@ local function printDebug(tooltip, itemLink, bag, slot)
     if playerKnowsTransmogFromItem ~= nil then
         addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(playerKnowsTransmogFromItem))
     end
-    local playerKnowsTrasmog = CanIMogIt:PlayerKnowsTransmog(itemLink)
+
+    local playerKnowsTrasmog = CanIMogIt:_PlayerKnowsTransmog(itemLink, appearanceID)
     if playerKnowsTrasmog ~= nil then
         addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(playerKnowsTrasmog))
     end
@@ -350,7 +351,7 @@ function CanIMogIt:GetAppearances()
     C_TransmogCollection.ClearSearch()
     local appearances = {}
     for categoryID=1,28 do
-        categoryAppearances = C_TransmogCollection.GetCategoryAppearances(categoryID)
+        local categoryAppearances = C_TransmogCollection.GetCategoryAppearances(categoryID)
         for i, categoryAppearance in pairs(categoryAppearances) do
             if categoryAppearance.isCollected then
                 local appearanceID = categoryAppearance.visualID
@@ -556,6 +557,7 @@ end
 function CanIMogIt:_PlayerKnowsTransmog(itemLink, appearanceID)
     -- Internal logic for determining if the item is known or not.
     -- Does not use the CIMI database.
+    if itemLink == nil or appearanceID == nil then return end
     local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
     if sources then
         for i, source in pairs(sources) do

@@ -24,6 +24,9 @@ local default = {
 
 
 function CanIMogIt:OnInitialize()
+    if (not CanIMogItDatabase) then
+        StaticPopup_Show("CANIMOGIT_NEW_DATABASE")
+    end
     self.db = LibStub("AceDB-3.0"):New("CanIMogItDatabase", default)
 end
 
@@ -82,6 +85,13 @@ function CanIMogIt:DBHasItem(itemLink)
     local appearanceID, sourceID = self:GetAppearanceID(itemLink)
     if appearanceID == nil or sourceID == nil then return end
     return self:DBHasSource(appearanceID, sourceID)
+end
+
+
+function CanIMogIt:DBReset()
+    CanIMogItDatabase = nil
+    CanIMogIt.db = nil
+    ReloadUI()
 end
 
 

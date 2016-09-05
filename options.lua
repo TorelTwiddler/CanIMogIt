@@ -9,7 +9,7 @@ local CREATE_DATABASE_TEXT = L["Can I Mog It? Important Message: Please log into
 
 StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
   text = CREATE_DATABASE_TEXT,
-  button1 = "Okay, I'll go log onto all of my toons!",
+  button1 = L["Okay, I'll go log onto all of my toons!"],
   timeout = 0,
   whileDead = true,
   hideOnEscape = true,
@@ -177,10 +177,6 @@ function CanIMogIt.frame.Loaded()
         CanIMogItOptions = CanIMogItOptions_Defaults.options
         print(L["CanIMogItOptions not found, loading defaults!"])
     end
-    if (not CanIMogItDatabase) then
-        CanIMogIt:OnInitialize()
-        StaticPopup_Show("CANIMOGIT_NEW_DATABASE")
-    end
     -- Set missing options from the defaults if the version is out of date.
     if (CanIMogItOptions["version"] < CanIMogIt_OptionsVersion) then
         CanIMogItOptions_temp = CanIMogItOptions_Defaults.options;
@@ -195,8 +191,19 @@ function CanIMogIt.frame.Loaded()
     createOptionsMenu()
 end
 
-CanIMogIt:RegisterChatCommand("cimi", "OpenOptionsMenu")
-CanIMogIt:RegisterChatCommand("canimogit", "OpenOptionsMenu")
+CanIMogIt:RegisterChatCommand("cimi", "SlashCommands")
+CanIMogIt:RegisterChatCommand("canimogit", "SlashCommands")
+
+function CanIMogIt:SlashCommands(input)
+    -- Slash command router.
+    if input == "" then
+        self:OpenOptionsMenu()
+    elseif input == 'PleaseDeleteMyDB' then
+        self:DBReset()
+    else
+        self:Print("Unknown command!")
+    end
+end
 
 function CanIMogIt:OpenOptionsMenu()
     -- Run it twice, because the first one only opens
