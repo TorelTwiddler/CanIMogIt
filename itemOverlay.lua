@@ -1,5 +1,25 @@
 
 
+local theTime = GetTime()
+--TODO: Turn resetDelay into a user option
+local resetDelay = .3
+local resetTime = theTime + resetDelay
+
+local calculatedFrames = {}
+
+
+function iconOverlayUpdateDelay(self, elapsed)
+    -- Delays the update of the icon overlay by resetDelay seconds.
+    theTime = GetTime()
+    if theTime > resetTime then
+        calculatedFrames = {}
+        resetTime = theTime + resetDelay
+    end
+end
+CanIMogIt.frame:HookScript("OnUpdate", iconOverlayUpdateDelay)
+
+
+
 local function CheckOptionEnabled(frame)
     -- Checks if the option is enabled. If it's not, then clear the text.
     if not CanIMogItOptions["showItemIconOverlay"] then
@@ -41,6 +61,8 @@ end
 
 local function ContainerFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the current bag and slot.
+    if calculatedFrames[tostring(self)] then return end
+    calculatedFrames[tostring(self)] = true
     if not CheckOptionEnabled(self) then return end
     local bag, slot = self:GetParent():GetID(), self:GetID()
     SetIcon(self, CanIMogIt:GetTooltipText(nil, bag, slot))
@@ -49,6 +71,8 @@ end
 
 local function LootFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the loot frame.
+    if calculatedFrames[tostring(self)] then return end
+    calculatedFrames[tostring(self)] = true
     if not CheckOptionEnabled(self) then return end
     local lootID = self:GetParent().rollID
     local itemLink = GetLootRollItemLink(lootID)
@@ -58,6 +82,8 @@ end
 
 local function MerchantFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the merchant frame.
+    if calculatedFrames[tostring(self)] then return end
+    calculatedFrames[tostring(self)] = true
     if not CheckOptionEnabled(self) then return end
     local itemLink = self.link
     SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
@@ -66,6 +92,8 @@ end
 
 local function JournalFrame_SetLootButton(itemFrame)
     -- Sets the icon overlay for the merchant frame.
+    if calculatedFrames[tostring(self)] then return end
+    calculatedFrames[tostring(self)] = true
     if not CheckOptionEnabled(itemFrame) then return end
     local itemLink = itemFrame.link
     SetIcon(itemFrame, CanIMogIt:GetTooltipText(itemLink))
@@ -74,6 +102,8 @@ end
 
 local function AuctionFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the auction frame.
+    if calculatedFrames[tostring(self)] then return end
+    calculatedFrames[tostring(self)] = true
     if not CheckOptionEnabled(self) then return end
     local browseButtonID = self:GetParent():GetID()
     local index = BrowseScrollFrame.offset + browseButtonID
@@ -84,6 +114,8 @@ end
 
 local function MailFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the mail attachement frame.
+    if calculatedFrames[tostring(self)] then return end
+    calculatedFrames[tostring(self)] = true
     if not CheckOptionEnabled(self) then return end
     local frameID = self:GetID()
 
@@ -107,6 +139,8 @@ end
 
 local function GuildBankFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the guild bank item frame.
+    if calculatedFrames[tostring(self)] then return end
+    calculatedFrames[tostring(self)] = true
     if not CheckOptionEnabled(self) then return end
     local tab = GetCurrentGuildBankTab()
     local slot = self:GetID()
@@ -117,6 +151,8 @@ end
 
 local function VoidStorageFrame_OnUpdate(self, elapsed)
     -- Sets the icon overlay for the guild bank item frame.
+    if calculatedFrames[tostring(self)] then return end
+    calculatedFrames[tostring(self)] = true
     if not CheckOptionEnabled(self) then return end
     local page = _G["VoidStorageFrame"].page
     local buttonSlot = self.slot

@@ -35,3 +35,4 @@ code.lua
 database.lua
 tooltipScanner.lua
 itemOverlay.lua
+addons.lua
