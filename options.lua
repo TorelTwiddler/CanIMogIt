@@ -79,7 +79,7 @@ for i, event in pairs(EVENTS) do
 end
 
 
-CanIMogIt.frame:SetScript("OnEvent", function(self, event, ...)
+CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     -- Add functions you want to catch events here
     self:AddonLoaded(event, ...)
     self:OnEncounterJournalLoaded(event, ...)
