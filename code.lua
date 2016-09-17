@@ -186,10 +186,12 @@ local unknownTexts = {
 local exceptionItems = {
     [HEAD] = {
         [134110] = CanIMogIt.KNOWN, -- Hidden Helm
+        [133320] = CanIMogIt.KNOWN, -- Illidari Blindfold (Alliance)
+        [112450] = CanIMogIt.KNOWN, -- Illidari Blindfold (Horde)
     },
     [SHOULDER] = {
-        [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
-        [119588] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons
+        [119556] = CanIMogIt.KNOWN, -- Trailseeker Spaulders
+        [119588] = CanIMogIt.KNOWN, -- Mistdancer Pauldrons
         [134112] = CanIMogIt.KNOWN, -- Hidden Shoulders
     },
     [BODY] = {},
