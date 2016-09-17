@@ -8,30 +8,30 @@ local L = CanIMogIt.L
 --------------------------------------------
 
 -- Icons
-local KNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN:0|t "
-local KNOWN_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_OVERLAY:0|t "
-local KNOWN_BUT_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_circle:0|t "
-local KNOWN_BUT_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_circle_OVERLAY:0|t "
-local UNKNOWABLE_SOULBOUND_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_SOULBOUND:0|t "
-local UNKNOWABLE_SOULBOUND_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_SOULBOUND_OVERLAY:0|t "
-local UNKNOWABLE_BY_CHARACTER_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER:0|t "
-local UNKNOWABLE_BY_CHARACTER_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER_OVERLAY:0|t "
-local UNKNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN:0|t "
-local UNKNOWN_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN_OVERLAY:0|t "
-local NOT_TRANSMOGABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE:0|t "
-local NOT_TRANSMOGABLE_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE_OVERLAY:0|t "
-local QUESTIONABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\QUESTIONABLE:0|t "
-local QUESTIONABLE_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\QUESTIONABLE_OVERLAY:0|t "
+CanIMogIt.KNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN:0|t "
+CanIMogIt.KNOWN_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_OVERLAY:0|t "
+CanIMogIt.KNOWN_BUT_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_circle:0|t "
+CanIMogIt.KNOWN_BUT_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\KNOWN_circle_OVERLAY:0|t "
+CanIMogIt.UNKNOWABLE_SOULBOUND_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_SOULBOUND:0|t "
+CanIMogIt.UNKNOWABLE_SOULBOUND_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_SOULBOUND_OVERLAY:0|t "
+CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER:0|t "
+CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER_OVERLAY:0|t "
+CanIMogIt.UNKNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN:0|t "
+CanIMogIt.UNKNOWN_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN_OVERLAY:0|t "
+CanIMogIt.NOT_TRANSMOGABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE:0|t "
+CanIMogIt.NOT_TRANSMOGABLE_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE_OVERLAY:0|t "
+CanIMogIt.QUESTIONABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\QUESTIONABLE:0|t "
+CanIMogIt.QUESTIONABLE_ICON_OVERLAY = "|TInterface\\Addons\\CanIMogIt\\Icons\\QUESTIONABLE_OVERLAY:0|t "
 
 
 -- Colorblind colors
-local BLUE =   "|cff15abff"
-local BLUE_GREEN = "|cff009e73"
-local PINK = "|cffcc79a7"
-local ORANGE = "|cffe69f00"
-local RED_ORANGE = "|cffff9333"
-local YELLOW = "|cfff0e442"
-local GRAY =   "|cff888888"
+CanIMogIt.BLUE =   "|cff15abff"
+CanIMogIt.BLUE_GREEN = "|cff009e73"
+CanIMogIt.PINK = "|cffcc79a7"
+CanIMogIt.ORANGE = "|cffe69f00"
+CanIMogIt.RED_ORANGE = "|cffff9333"
+CanIMogIt.YELLOW = "|cfff0e442"
+CanIMogIt.GRAY =   "|cff888888"
 
 
 -- Text
@@ -50,17 +50,17 @@ local CANNOT_DETERMINE =                            L["Cannot determine status o
 
 
 -- Combine icons, color, and text into full tooltip
-CanIMogIt.KNOWN =                                       KNOWN_ICON .. BLUE .. KNOWN
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM =                     KNOWN_BUT_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM
-CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER =                  KNOWN_ICON .. BLUE .. KNOWN_BY_ANOTHER_CHARACTER
-CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL =                     KNOWN_ICON .. BLUE .. KNOWN_BUT_TOO_LOW_LEVEL
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL =   KNOWN_BUT_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
-CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       KNOWN_BUT_ICON .. BLUE .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
--- CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       QUESTIONABLE_ICON .. YELLOW .. CANNOT_DETERMINE
-CanIMogIt.UNKNOWABLE_SOULBOUND =                        UNKNOWABLE_SOULBOUND_ICON .. BLUE_GREEN .. UNKNOWABLE_SOULBOUND
-CanIMogIt.UNKNOWABLE_BY_CHARACTER =                     UNKNOWABLE_BY_CHARACTER_ICON .. YELLOW .. UNKNOWABLE_BY_CHARACTER
-CanIMogIt.UNKNOWN =                                     UNKNOWN_ICON .. RED_ORANGE .. UNKNOWN
-CanIMogIt.NOT_TRANSMOGABLE =                            NOT_TRANSMOGABLE_ICON .. GRAY .. NOT_TRANSMOGABLE
+CanIMogIt.KNOWN =                                       CanIMogIt.KNOWN_ICON .. CanIMogIt.BLUE .. KNOWN
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM =                     CanIMogIt.KNOWN_BUT_ICON .. CanIMogIt.BLUE .. KNOWN_FROM_ANOTHER_ITEM
+CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER =                  CanIMogIt.KNOWN_ICON .. CanIMogIt.BLUE .. KNOWN_BY_ANOTHER_CHARACTER
+CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL =                     CanIMogIt.KNOWN_ICON .. CanIMogIt.BLUE .. KNOWN_BUT_TOO_LOW_LEVEL
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL =   CanIMogIt.KNOWN_BUT_ICON .. CanIMogIt.BLUE .. KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
+CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       CanIMogIt.KNOWN_BUT_ICON .. CanIMogIt.BLUE .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+-- CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       CanIMogIt.QUESTIONABLE_ICON .. CanIMogIt.YELLOW .. CANNOT_DETERMINE
+CanIMogIt.UNKNOWABLE_SOULBOUND =                        CanIMogIt.UNKNOWABLE_SOULBOUND_ICON .. CanIMogIt.BLUE_GREEN .. UNKNOWABLE_SOULBOUND
+CanIMogIt.UNKNOWABLE_BY_CHARACTER =                     CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON .. CanIMogIt.YELLOW .. UNKNOWABLE_BY_CHARACTER
+CanIMogIt.UNKNOWN =                                     CanIMogIt.UNKNOWN_ICON .. CanIMogIt.RED_ORANGE .. UNKNOWN
+CanIMogIt.NOT_TRANSMOGABLE =                            CanIMogIt.NOT_TRANSMOGABLE_ICON .. CanIMogIt.GRAY .. NOT_TRANSMOGABLE
 
 
 -- Used by leftTexts

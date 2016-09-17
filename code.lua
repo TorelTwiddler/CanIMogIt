@@ -345,29 +345,74 @@ end
 -----------------------------
 
 
-function CanIMogIt:GetAppearances()
-    -- Gets a table of all the appearances known to a character.
-    CanIMogIt:Print("Updating appearances database.")
+local throttleTime = 1
+local bufferMax = 10
+local categoryAppearanceIndex = 0
+local categoryIDIndex = 0
+local sourceIndex = 0
+local getAppearancesDone = false;
+
+
+local function _GetAppearances()
+    -- Core logic for getting the appearances.
+    -- LUA does not have a continue statement, and this is before
+    -- 5.2, which adds goto, so we have to stick with tons of nesting
+    -- instead. I hate LUA.
+    if getAppearancesDone then return end
     C_TransmogCollection.ClearSearch()
     local appearances = {}
+    local buffer = 0
     for categoryID=1,28 do
-        local categoryAppearances = C_TransmogCollection.GetCategoryAppearances(categoryID)
-        for i, categoryAppearance in pairs(categoryAppearances) do
-            if categoryAppearance.isCollected then
-                local appearanceID = categoryAppearance.visualID
-                sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
-                for i, source in pairs(sources) do
-                    if source.isCollected then
-                        local sourceID = source.sourceID
-                        local sourceItemLink = select(6,
-                            C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
-                        CanIMogIt:DBAddItem(sourceItemLink, appearanceID, sourceID)
-                    end
-                end
-            end
-        end
+        -- If the categoryIDIndex is higher, then this has already been done.
+        if categoryIDIndex <= categoryID then
+            categoryIDIndex = categoryID
+            local categoryAppearances = C_TransmogCollection.GetCategoryAppearances(categoryID)
+            for i, categoryAppearance in pairs(categoryAppearances) do
+                -- If the categoryAppearanceIndex is higher, then this has already been done.
+                if categoryAppearanceIndex <= i then
+                    categoryAppearanceIndex = i
+                    if categoryAppearance.isCollected then
+                        local appearanceID = categoryAppearance.visualID
+                        sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
+                        for i, source in pairs(sources) do
+                            if source.isCollected then
+                                -- Only allow bufferMax number added at a time.
+                                buffer = buffer + 1
+                                local sourceID = source.sourceID
+                                local sourceItemLink = select(6,
+                                    C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+                                CanIMogIt:DBAddItem(sourceItemLink, appearanceID, sourceID)
+                                if buffer >= bufferMax then
+                                    return
+                                end -- and
+                            end -- this
+                        end -- is
+                    end -- why
+                end -- I
+            end -- truly
+        end -- hate
+    end -- lua
+    getAppearancesDone = true
+    CanIMogIt:Print(CanIMogIt.KNOWN_ICON..CanIMogIt.BLUE.."Done updating appearances database.")
+end
+
+
+local timer = 0
+local function GetAppearancesOnUpdate(self, elapsed)
+    -- OnUpdate function with a reset timer to throttle getting appearances.
+    timer = timer + elapsed
+    if timer >= throttleTime then
+        _GetAppearances()
+        timer = 0
     end
-    CanIMogIt:Print("Done updating.")
+end
+
+
+function CanIMogIt:GetAppearances()
+    -- Gets a table of all the appearances known to
+    -- a character and adds it to the database.
+    CanIMogIt:Print(CanIMogIt.UNKNOWN_ICON..CanIMogIt.RED_ORANGE.."Updating appearances database. This takes around 30 seconds, depending on how many transmogs you know.")
+    CanIMogIt.frame:HookScript("OnUpdate", GetAppearancesOnUpdate)
 end
 
 
