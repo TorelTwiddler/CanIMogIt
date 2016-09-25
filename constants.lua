@@ -4,6 +4,14 @@ local L = CanIMogIt.L
 
 
 --------------------------------------------
+-- Setting constants                      --
+--------------------------------------------
+
+CanIMogIt.throttleTime = 0.25
+CanIMogIt.bufferMax = 25
+
+
+--------------------------------------------
 -- Tooltip icon, color and text constants --
 --------------------------------------------
 

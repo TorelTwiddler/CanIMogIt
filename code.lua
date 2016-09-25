@@ -347,12 +347,40 @@ end
 -----------------------------
 
 
-local throttleTime = 1
-local bufferMax = 10
 local categoryAppearanceIndex = 0
 local categoryIDIndex = 0
 local sourceIndex = 0
 local getAppearancesDone = false;
+local sourceCount = 0
+local appearanceCount = 0
+local buffer = 0
+
+
+local function AddSource(source)
+    -- Only allow bufferMax number added at a time.
+    buffer = buffer + 1
+    sourceCount = sourceCount + 1
+    local sourceID = source.sourceID
+    local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+    CanIMogIt:DBAddItem(sourceItemLink, appearanceID, sourceID)
+    
+end
+
+
+local function AddAppearance(categoryAppearance)
+    appearanceCount = appearanceCount + 1
+    local appearanceID = categoryAppearance.visualID
+    sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
+    for i, source in pairs(sources) do
+        if i >= sourceIndex then
+            sourceIndex = i
+            if source.isCollected then
+                AddSource(source)
+                if buffer >= bufferMax then return end
+            end
+        end
+    end
+end
 
 
 local function _GetAppearances()
@@ -363,39 +391,29 @@ local function _GetAppearances()
     if getAppearancesDone then return end
     C_TransmogCollection.ClearSearch()
     local appearances = {}
-    local buffer = 0
+    buffer = 0
     for categoryID=1,28 do
         -- If the categoryIDIndex is higher, then this has already been done.
-        if categoryIDIndex <= categoryID then
+        if categoryID >= categoryIDIndex then
             categoryIDIndex = categoryID
             local categoryAppearances = C_TransmogCollection.GetCategoryAppearances(categoryID)
             for i, categoryAppearance in pairs(categoryAppearances) do
-                -- If the categoryAppearanceIndex is higher, then this has already been done.
-                if categoryAppearanceIndex <= i then
+                -- If i is less than categoryAppearanceIndex, then it's already been done.
+                if i >= categoryAppearanceIndex then
                     categoryAppearanceIndex = i
                     if categoryAppearance.isCollected then
-                        local appearanceID = categoryAppearance.visualID
-                        sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
-                        for i, source in pairs(sources) do
-                            if source.isCollected then
-                                -- Only allow bufferMax number added at a time.
-                                buffer = buffer + 1
-                                local sourceID = source.sourceID
-                                local sourceItemLink = select(6,
-                                    C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
-                                CanIMogIt:DBAddItem(sourceItemLink, appearanceID, sourceID)
-                                if buffer >= bufferMax then
-                                    return
-                                end -- and
-                            end -- this
-                        end -- is
-                    end -- why
-                end -- I
-            end -- truly
-        end -- hate
-    end -- lua
+                        AddAppearance(categoryAppearance)
+                        if buffer >= CanIMogIt.bufferMax then return end
+                    end
+                    sourceIndex = 0
+                end
+            end
+            categoryAppearanceIndex = 0
+        end
+    end
     getAppearancesDone = true
-    CanIMogIt:Print(CanIMogIt.KNOWN_ICON..CanIMogIt.BLUE.."Done updating appearances database.")
+    CanIMogIt.cache = {}
+    CanIMogIt:Print(CanIMogIt.KNOWN_ICON..CanIMogIt.BLUE.."Appearances database updated: ".. appearanceCount)
 end
 
 
@@ -403,7 +421,7 @@ local timer = 0
 local function GetAppearancesOnUpdate(self, elapsed)
     -- OnUpdate function with a reset timer to throttle getting appearances.
     timer = timer + elapsed
-    if timer >= throttleTime then
+    if timer >= CanIMogIt.throttleTime then
         _GetAppearances()
         timer = 0
     end
@@ -413,7 +431,7 @@ end
 function CanIMogIt:GetAppearances()
     -- Gets a table of all the appearances known to
     -- a character and adds it to the database.
-    CanIMogIt:Print(CanIMogIt.UNKNOWN_ICON..CanIMogIt.RED_ORANGE.."Updating appearances database. This takes around 30 seconds, depending on how many transmogs you know.")
+    CanIMogIt:Print("Updating appearances database.")
     CanIMogIt.frame:HookScript("OnUpdate", GetAppearancesOnUpdate)
 end
 

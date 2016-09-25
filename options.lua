@@ -91,25 +91,6 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
 end)
 
 
---[[
-    Resets the cache every RESET_TIME seconds. This prevents invalid
-    data from being stuck in the cache. It appears to not be a
-    significant enough slowdown even with the bags open.
-]]
-
-local RESET_TIME = 5
-
-local timer = 0
-local function onUpdate(self, elapsed)
-    timer = timer + elapsed
-    if timer >= RESET_TIME then
-        CanIMogIt.cache = {}
-        timer = 0
-    end
-end
-CanIMogIt.frame:HookScript("OnUpdate", onUpdate)
-
-
 function CanIMogIt.frame:AddonLoaded(event, addonName)
     if event == "ADDON_LOADED" and addonName == "CanIMogIt" then
         CanIMogIt.frame.Loaded()
