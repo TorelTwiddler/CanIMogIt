@@ -376,7 +376,7 @@ local function AddAppearance(categoryAppearance)
             sourceIndex = i
             if source.isCollected then
                 AddSource(source)
-                if buffer >= bufferMax then return end
+                if buffer >= CanIMogIt.bufferMax then return end
             end
         end
     end
