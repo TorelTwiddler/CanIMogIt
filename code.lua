@@ -665,6 +665,11 @@ end
 
 function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
     -- Returns whether the transmog is known from this item specifically.
+    local slotName = CanIMogIt:GetItemSlotName(itemLink)
+    if slotName == TABARD then
+        local itemID = CanIMogIt:GetItemID(itemLink)
+        return C_TransmogCollection.PlayerHasTransmog(itemID)
+    end
     local appearanceID, sourceID = CanIMogIt:GetAppearanceID(itemLink)
     if sourceID == nil then return end
     
@@ -674,11 +679,6 @@ function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
     end
 
     local hasTransmog;
-    local slotName = CanIMogIt:GetItemSlotName(itemLink)
-    if slotName == TABARD then
-        local itemID = CanIMogIt:GetItemID(itemLink)
-        return C_TransmogCollection.PlayerHasTransmog(itemID)
-    end
     hasTransmog = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
 
     -- Update Database
