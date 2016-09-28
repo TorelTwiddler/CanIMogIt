@@ -347,8 +347,7 @@ end
 -----------------------------
 
 
-local categoryAppearanceIndex = 0
-local categoryIDIndex = 0
+local appearanceIndex = 0
 local sourceIndex = 0
 local getAppearancesDone = false;
 local sourceCount = 0
@@ -356,26 +355,54 @@ local appearanceCount = 0
 local buffer = 0
 
 
+local appearancesTable = {}
+local appearancesTableGotten = false
+local doneAppearances = {}
+
+
+local function getKey(appearanceID, sourceID)
+    -- creates a hash key for the doneAppearances table.
+    return tostring(appearanceID)..":"..tostring(sourceID)
+end
+
+
+local function GetAppearancesTable()
+    -- Sort the C_TransmogCollection.GetCategoryAppearances tables into something
+    -- more usable.
+    if appearancesTableGotten then return end
+    for categoryID=1,28 do
+        local categoryAppearances = C_TransmogCollection.GetCategoryAppearances(categoryID)
+        for i, categoryAppearance in pairs(categoryAppearances) do
+            if categoryAppearance.isCollected then
+                appearanceCount = appearanceCount + 1
+                appearancesTable[categoryAppearance.visualID] = true
+            end
+        end
+    end
+    appearancesTableGotten = true
+end
+
+
 local function AddSource(source)
-    -- Only allow bufferMax number added at a time.
+    -- Adds the source to the database, and increments the buffer.
     buffer = buffer + 1
     sourceCount = sourceCount + 1
     local sourceID = source.sourceID
     local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
     CanIMogIt:DBAddItem(sourceItemLink, appearanceID, sourceID)
-    
 end
 
 
-local function AddAppearance(categoryAppearance)
-    appearanceCount = appearanceCount + 1
-    local appearanceID = categoryAppearance.visualID
+local function AddAppearance(appearanceID)
+    -- Adds all of the sources for this appearanceID to the database.
+    -- returns early if the buffer is reached.
     sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
     for i, source in pairs(sources) do
-        if i >= sourceIndex then
-            sourceIndex = i
+        local key = getKey(appearanceID, source.sourceID)
+        if not doneAppearances[key] then
             if source.isCollected then
                 AddSource(source)
+                doneAppearances[key] = true
                 if buffer >= CanIMogIt.bufferMax then return end
             end
         end
@@ -385,35 +412,20 @@ end
 
 local function _GetAppearances()
     -- Core logic for getting the appearances.
-    -- LUA does not have a continue statement, and this is before
-    -- 5.2, which adds goto, so we have to stick with tons of nesting
-    -- instead. I hate LUA.
     if getAppearancesDone then return end
     C_TransmogCollection.ClearSearch()
-    local appearances = {}
+    GetAppearancesTable()
     buffer = 0
-    for categoryID=1,28 do
-        -- If the categoryIDIndex is higher, then this has already been done.
-        if categoryID >= categoryIDIndex then
-            categoryIDIndex = categoryID
-            local categoryAppearances = C_TransmogCollection.GetCategoryAppearances(categoryID)
-            for i, categoryAppearance in pairs(categoryAppearances) do
-                -- If i is less than categoryAppearanceIndex, then it's already been done.
-                if i >= categoryAppearanceIndex then
-                    categoryAppearanceIndex = i
-                    if categoryAppearance.isCollected then
-                        AddAppearance(categoryAppearance)
-                        if buffer >= CanIMogIt.bufferMax then return end
-                    end
-                    sourceIndex = 0
-                end
-            end
-            categoryAppearanceIndex = 0
-        end
+
+    for appearanceID, collected in pairs(appearancesTable) do
+        AddAppearance(appearanceID)
+        if buffer >= CanIMogIt.bufferMax then return end
     end
     getAppearancesDone = true
+    doneAppearances = {} -- cleanup
+    appearancesTable = {} -- cleanup
     CanIMogIt.cache = {}
-    CanIMogIt:Print(CanIMogIt.KNOWN_ICON..CanIMogIt.BLUE.."Appearances database updated: ".. appearanceCount)
+    CanIMogIt:Print(CanIMogIt.KNOWN_ICON..CanIMogIt.BLUE.."Appearances updated: ".. appearanceCount)
 end
 
 

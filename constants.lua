@@ -7,8 +7,18 @@ local L = CanIMogIt.L
 -- Setting constants                      --
 --------------------------------------------
 
+
+-- 0:02
 CanIMogIt.throttleTime = 0.25
-CanIMogIt.bufferMax = 25
+CanIMogIt.bufferMax = 200
+
+-- 0:15
+-- CanIMogIt.throttleTime = 0.25
+-- CanIMogIt.bufferMax = 25
+
+-- 2:23
+-- CanIMogIt.throttleTime = 0.5
+-- CanIMogIt.bufferMax = 5
 
 
 --------------------------------------------
