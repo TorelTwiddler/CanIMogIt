@@ -9,8 +9,12 @@ local L = CanIMogIt.L
 
 
 -- 0:02
-CanIMogIt.throttleTime = 0.25
-CanIMogIt.bufferMax = 200
+-- CanIMogIt.throttleTime = 0.25
+-- CanIMogIt.bufferMax = 200
+
+-- 0:28
+CanIMogIt.throttleTime = 0.1
+CanIMogIt.bufferMax = 5
 
 -- 0:15
 -- CanIMogIt.throttleTime = 0.25

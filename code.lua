@@ -360,12 +360,6 @@ local appearancesTableGotten = false
 local doneAppearances = {}
 
 
-local function getKey(appearanceID, sourceID)
-    -- creates a hash key for the doneAppearances table.
-    return tostring(appearanceID)..":"..tostring(sourceID)
-end
-
-
 local function GetAppearancesTable()
     -- Sort the C_TransmogCollection.GetCategoryAppearances tables into something
     -- more usable.
@@ -398,13 +392,8 @@ local function AddAppearance(appearanceID)
     -- returns early if the buffer is reached.
     sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
     for i, source in pairs(sources) do
-        local key = getKey(appearanceID, source.sourceID)
-        if not doneAppearances[key] then
-            if source.isCollected then
-                AddSource(source)
-                doneAppearances[key] = true
-                if buffer >= CanIMogIt.bufferMax then return end
-            end
+        if source.isCollected then
+            AddSource(source)
         end
     end
 end
@@ -417,12 +406,14 @@ local function _GetAppearances()
     GetAppearancesTable()
     buffer = 0
 
-    for appearanceID, collected in pairs(appearancesTable) do
+    local appearanceID, collected = next(appearancesTable, nil)
+    while appearanceID do
         AddAppearance(appearanceID)
+        appearancesTable[appearanceID] = nil
+        appearanceID, collected = next(appearancesTable, nil)
         if buffer >= CanIMogIt.bufferMax then return end
     end
     getAppearancesDone = true
-    doneAppearances = {} -- cleanup
     appearancesTable = {} -- cleanup
     CanIMogIt.cache = {}
     CanIMogIt:Print(CanIMogIt.KNOWN_ICON..CanIMogIt.BLUE.."Appearances updated: ".. appearanceCount)
