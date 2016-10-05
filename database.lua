@@ -194,7 +194,7 @@ end
 -- end
 
 
-function CanIMogIt.frame:PlayerLogin(event, ...)
+function CanIMogIt.frame:GetAppearancesEvent(event, ...)
     if event == "PLAYER_LOGIN" then
         -- add all known appearanceID's to the database
         CanIMogIt:GetAppearances()

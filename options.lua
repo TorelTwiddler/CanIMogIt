@@ -72,6 +72,14 @@ local EVENTS = {
     "AUCTION_HOUSE_SHOW",
     "GUILDBANKFRAME_OPENED",
     "VOID_STORAGE_OPEN",
+    "UNIT_INVENTORY_CHANGED",
+    "PLAYER_SPECIALIZATION_CHANGED",
+    "BAG_UPDATE",
+    "BAG_NEW_ITEMS_UPDATED",
+    "QUEST_ACCEPTED",
+    "BAG_SLOT_FLAGS_UPDATED",
+    "BANK_BAG_SLOT_FLAGS_UPDATED",
+    "UNIT_AURA",
 }
 
 for i, event in pairs(EVENTS) do
@@ -82,12 +90,14 @@ end
 CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     -- Add functions you want to catch events here
     self:AddonLoaded(event, ...)
-    self:OnEncounterJournalLoaded(event, ...)
+    self:HookItemOverlay(event, ...)
+    -- self:OnEncounterJournalLoaded(event, ...)
     self:TransmogCollectionUpdated(event, ...)
     -- self:OnAuctionHouseShow(event, ...)
-    self:OnGuildBankOpened(event, ...)
-    self:OnVoidStorageOpened(event, ...)
-    self:PlayerLogin(event, ...)
+    -- self:OnGuildBankOpened(event, ...)
+    -- self:OnVoidStorageOpened(event, ...)
+    -- self:GetAppearancesEvent(event, ...)
+    self:ItemOverlayEvents(event, ...)
 end)
 
 

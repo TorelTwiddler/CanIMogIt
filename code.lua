@@ -775,12 +775,12 @@ function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
     
     if CanIMogItOptions["showUnknownOnly"] and not CanIMogIt:TextIsUnknown(unmodifiedText) then
         -- We don't want to show the tooltip if it's already known.
-        return
+        return "", ""
     end
 
     if CanIMogItOptions["showTransmoggableOnly"] and unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE then
         -- If we don't want to show the tooltip if it's not transmoggable
-        return
+        return "", ""
     end
 
     if not CanIMogItOptions["showVerboseText"] then
@@ -789,6 +789,9 @@ function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
 
     return text, unmodifiedText
 end
+
+
+local foundAnItemFromBags = false
 
 
 function CanIMogIt:GetTooltipText(itemLink, bag, slot)
@@ -804,8 +807,19 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     ]]
     if bag and slot then
         itemLink = GetContainerItemLink(bag, slot)
+        if not itemLink then
+            if foundAnItemFromBags then
+                return "", ""
+            else
+                -- If we haven't found any items in the bags yet, then
+                -- it's likely that the inventory hasn't been loaded yet.
+                return nil
+            end
+        else
+            foundAnItemFromBags = true
+        end
     end
-    if not itemLink then return end
+    if not itemLink then return "", "" end
     local text = ""
     local unmodifiedText = ""
 
@@ -813,14 +827,11 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     local itemInfo = GetItemInfo(itemLink)
     if itemInfo == nil then return end
 
-    if not CanIMogIt:PreLogicOptionsContinue(itemLink) then return end
+    if not CanIMogIt:PreLogicOptionsContinue(itemLink) then return "", "" end
 
     -- Return cached items
     if CanIMogIt.cache[itemLink] then
         cachedText, cachedUnmodifiedText = unpack(CanIMogIt.cache[itemLink])
-        if cachedText == false then
-            return nil
-        end
         return cachedText, cachedUnmodifiedText
     end
 
@@ -905,9 +916,7 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     text = CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
 
     -- Update cached items
-    if text == nil then
-        CanIMogIt.cache[itemLink] = {false, false}
-    else
+    if text ~= nil then
         CanIMogIt.cache[itemLink] = {text, unmodifiedText}
     end
 
