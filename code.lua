@@ -954,7 +954,7 @@ local function addToTooltip(tooltip, itemLink)
     -- ok, text = pcall(CanIMogIt.GetTooltipText, CanIMogIt, itemLink)
     -- if not ok then return end
     text = CanIMogIt.GetTooltipText(CanIMogIt, itemLink, bag, slot)
-    if text then
+    if text and text ~= "" then
         if leftTexts[text] then
             addLine(tooltip, text)
         else

@@ -80,6 +80,8 @@ local EVENTS = {
     "BAG_SLOT_FLAGS_UPDATED",
     "BANK_BAG_SLOT_FLAGS_UPDATED",
     "UNIT_AURA",
+    "PLAYERBANKSLOTS_CHANGED",
+    "BANKFRAME_OPENED",
 }
 
 for i, event in pairs(EVENTS) do
@@ -114,6 +116,8 @@ local function checkboxOnClick(self)
     self:SetValue(checked)
     -- Reset the cache when an option changes.
     CanIMogIt.cache = {}
+    -- Fake a BAG_UPDATE event to updating the icons.
+    CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
 end
 
 

@@ -21,7 +21,7 @@ local resetDelay = .3
 
 
 local function CheckOptionEnabled(frame)
-    -- Checks if the option is enabled. If it's not, then clear the text.
+    -- Checks if the item overlay option is enabled.
     if not CanIMogItOptions["showItemIconOverlay"] then
         return false
     end
@@ -53,12 +53,9 @@ local function AddToFrame(frame, func)
     -- Create the FontString and set OnUpdate
     if frame then
         frame.CanIMogItIcon = frame:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
-        frame.CanIMogItIcon:SetPoint("TOPRIGHT", -2, -2)
+        frame.CanIMogItIcon:SetPoint("TOPRIGHT", 6, -2)
         frame.timeSinceCIMIIconCheck = 0
-        func(frame)
-        -- if func then
-        --     frame:HookScript("OnUpdate", func)
-        -- end
+        frame:HookScript("OnUpdate", func)
     end
 end
 
@@ -67,16 +64,17 @@ end
 -- OnUpdate functions     --
 ----------------------------
 
-
 function ContainerFrameItemButton_CIMIUpdateIcon(self)
     self.timeSinceCIMIIconCheck = 0
-
     if not CheckOptionEnabled(self) then
         self.CanIMogItIcon:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
     end
     local bag, slot = self:GetParent():GetID(), self:GetID()
+    -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
+    -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
+    if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
     SetIcon(self, ContainerFrameItemButton_CIMIOnUpdate, CanIMogIt:GetTooltipText(nil, bag, slot))
 end
 
@@ -195,15 +193,15 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     for i=1,NUM_CONTAINER_FRAMES do
         for j=1,MAX_CONTAINER_ITEMS do
             local frame = _G["ContainerFrame"..i.."Item"..j]
-            AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
+            AddToFrame(frame, ContainerFrameItemButton_CIMIOnUpdate)
         end
     end
 
-    -- -- Add hook for the main bank frame.
-    -- for i=1,NUM_BANKGENERIC_SLOTS do
-    --     local frame = _G["BankFrameItem"..i]
-    --     AddToFrame(frame, ContainerFrameItemButton_CIMIOnUpdate)
-    -- end
+    -- Add hook for the main bank frame.
+    for i=1,NUM_BANKGENERIC_SLOTS do
+        local frame = _G["BankFrameItem"..i]
+        AddToFrame(frame, ContainerFrameItemButton_CIMIOnUpdate)
+    end
 
     -- -- Add hook for the loot frames.
     -- for i=1,NUM_GROUP_LOOT_FRAMES do
@@ -287,15 +285,22 @@ local events = {
     ["QUEST_ACCEPTED"] = true,
     ["BAG_SLOT_FLAGS_UPDATED"] = true,
     ["BANK_BAG_SLOT_FLAGS_UPDATED"] = true,
+    ["PLAYERBANKSLOTS_CHANGED"] = true,
+    ["BANKFRAME_OPENED"] = true,
 }
 
 function CanIMogIt.frame:ItemOverlayEvents(event, ...)
-    if events[event] then
-        for i=1,NUM_CONTAINER_FRAMES do
-            for j=1,MAX_CONTAINER_ITEMS do
-                local frame = _G["ContainerFrame"..i.."Item"..j]
-                ContainerFrameItemButton_CIMIUpdateIcon(frame)
-            end
+    if not events[event] then return end
+    -- bags
+    for i=1,NUM_CONTAINER_FRAMES do
+        for j=1,MAX_CONTAINER_ITEMS do
+            local frame = _G["ContainerFrame"..i.."Item"..j]
+            ContainerFrameItemButton_CIMIUpdateIcon(frame)
         end
+    end
+    -- main bank frame
+    for i=1,NUM_BANKGENERIC_SLOTS do
+        local frame = _G["BankFrameItem"..i]
+        ContainerFrameItemButton_CIMIUpdateIcon(frame)
     end
 end
