@@ -82,6 +82,7 @@ local EVENTS = {
     "UNIT_AURA",
     "PLAYERBANKSLOTS_CHANGED",
     "BANKFRAME_OPENED",
+    "START_LOOT_ROLL",
 }
 
 for i, event in pairs(EVENTS) do

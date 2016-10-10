@@ -29,12 +29,12 @@ local function CheckOptionEnabled(frame)
 end
 
 
-local function SetIcon(frame, func, text, unmodifiedText)
+local function SetIcon(frame, updateIconFunc, text, unmodifiedText)
     -- Sets the icon based on the text for the CanIMogItIcon on the given frame.
     if text == nil then
         -- nil means not all data was available to get the text. Try again later.
         frame.CanIMogItIcon:SetShown(false)
-        frame:SetScript("OnUpdate", func);
+        frame:SetScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc));
     elseif text == "" then
         -- An empty string means that the text shouldn't be displayed.
         frame.CanIMogItIcon:SetShown(false)
@@ -49,13 +49,13 @@ local function SetIcon(frame, func, text, unmodifiedText)
 end
 
 
-local function AddToFrame(frame, func)
+local function AddToFrame(frame, updateIconFunc)
     -- Create the FontString and set OnUpdate
     if frame then
         frame.CanIMogItIcon = frame:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
         frame.CanIMogItIcon:SetPoint("TOPRIGHT", 6, -2)
         frame.timeSinceCIMIIconCheck = 0
-        frame:HookScript("OnUpdate", func)
+        frame:HookScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc))
     end
 end
 
@@ -63,6 +63,18 @@ end
 ----------------------------
 -- OnUpdate functions     --
 ----------------------------
+
+function CIMIOnUpdateFuncMaker(func)
+    function CIMIOnUpdate(self, elapsed)
+        -- Attempts to update the icon again after the delay has elapsed.
+        self.timeSinceCIMIIconCheck = self.timeSinceCIMIIconCheck + elapsed
+        if self.timeSinceCIMIIconCheck >= resetDelay then
+            func(self)
+        end
+    end
+    return CIMIOnUpdate
+end
+
 
 function ContainerFrameItemButton_CIMIUpdateIcon(self)
     self.timeSinceCIMIIconCheck = 0
@@ -75,28 +87,23 @@ function ContainerFrameItemButton_CIMIUpdateIcon(self)
     -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
     -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
     if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
-    SetIcon(self, ContainerFrameItemButton_CIMIOnUpdate, CanIMogIt:GetTooltipText(nil, bag, slot))
+    SetIcon(self, ContainerFrameItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
 end
 
 
-function ContainerFrameItemButton_CIMIOnUpdate(self, elapsed)
-    -- Attempts to update the icon again after the delay has elapsed.
-    self.timeSinceCIMIIconCheck = self.timeSinceCIMIIconCheck + elapsed
-    if self.timeSinceCIMIIconCheck >= resetDelay then
-        ContainerFrameItemButton_CIMIUpdateIcon(self)
+function LootFrame_CIMIUpdateIcon(self, elapsed)
+    -- Sets the icon overlay for the loot frame.
+    self.timeSinceCIMIIconCheck = 0
+    local lootID = self:GetParent().rollID
+    if not CheckOptionEnabled(self) or lootID == nil then
+        self.CanIMogItIcon:SetShown(false)
+        self:SetScript("OnUpdate", nil)
+        return
     end
+
+    local itemLink = GetLootRollItemLink(lootID)
+    SetIcon(self, LootFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
 end
-
-
--- local function LootFrame_OnUpdate(self, elapsed)
---     -- Sets the icon overlay for the loot frame.
---     if calculatedFrames[tostring(self)] then return end
---     calculatedFrames[tostring(self)] = true
---     if not CheckOptionEnabled(self) then return end
---     local lootID = self:GetParent().rollID
---     local itemLink = GetLootRollItemLink(lootID)
---     SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
--- end
 
 
 -- local function MerchantFrame_OnUpdate(self, elapsed)
@@ -193,21 +200,21 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     for i=1,NUM_CONTAINER_FRAMES do
         for j=1,MAX_CONTAINER_ITEMS do
             local frame = _G["ContainerFrame"..i.."Item"..j]
-            AddToFrame(frame, ContainerFrameItemButton_CIMIOnUpdate)
+            AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
         end
     end
 
     -- Add hook for the main bank frame.
     for i=1,NUM_BANKGENERIC_SLOTS do
         local frame = _G["BankFrameItem"..i]
-        AddToFrame(frame, ContainerFrameItemButton_CIMIOnUpdate)
+        AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
     end
 
-    -- -- Add hook for the loot frames.
-    -- for i=1,NUM_GROUP_LOOT_FRAMES do
-    --     local frame = _G["GroupLootFrame"..i].IconFrame
-    --     AddToFrame(frame, LootFrame_OnUpdate)
-    -- end
+    -- Add hook for the loot frames.
+    for i=1,NUM_GROUP_LOOT_FRAMES do
+        local frame = _G["GroupLootFrame"..i].IconFrame
+        AddToFrame(frame, LootFrame_CIMIUpdateIcon)
+    end
 
     -- -- Add hook for the Mail inbox frames.
     -- for i=1,ATTACHMENTS_MAX_SEND do
@@ -287,6 +294,7 @@ local events = {
     ["BANK_BAG_SLOT_FLAGS_UPDATED"] = true,
     ["PLAYERBANKSLOTS_CHANGED"] = true,
     ["BANKFRAME_OPENED"] = true,
+    ["START_LOOT_ROLL"] = true,
 }
 
 function CanIMogIt.frame:ItemOverlayEvents(event, ...)
@@ -302,5 +310,11 @@ function CanIMogIt.frame:ItemOverlayEvents(event, ...)
     for i=1,NUM_BANKGENERIC_SLOTS do
         local frame = _G["BankFrameItem"..i]
         ContainerFrameItemButton_CIMIUpdateIcon(frame)
+    end
+
+    -- loot frames
+    for i=1,NUM_GROUP_LOOT_FRAMES do
+        local frame = _G["GroupLootFrame"..i].IconFrame
+        LootFrame_CIMIUpdateIcon(frame)
     end
 end
