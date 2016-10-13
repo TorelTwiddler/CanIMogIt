@@ -99,7 +99,7 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     -- self:OnAuctionHouseShow(event, ...)
     -- self:OnGuildBankOpened(event, ...)
     -- self:OnVoidStorageOpened(event, ...)
-    -- self:GetAppearancesEvent(event, ...)
+    self:GetAppearancesEvent(event, ...)
     self:ItemOverlayEvents(event, ...)
 end)
 
