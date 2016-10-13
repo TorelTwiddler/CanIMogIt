@@ -42,18 +42,20 @@ local function SetIcon(frame, updateIconFunc, text, unmodifiedText)
     else
         -- Show an icon!
         frame.CanIMogItIcon:SetShown(true)
-        local icon = CanIMogIt.tooltipIcons[unmodifiedText] or text
-        frame.CanIMogItIcon:SetText(icon)
+        local icon = CanIMogIt.tooltipIcons[unmodifiedText]
+        frame.CanIMogItIcon:SetTexture(icon, false)
         frame:SetScript("OnUpdate", nil);
     end
 end
 
 
 local function AddToFrame(frame, updateIconFunc)
-    -- Create the FontString and set OnUpdate
+    -- Create the Texture and set OnUpdate
     if frame then
-        frame.CanIMogItIcon = frame:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
-        frame.CanIMogItIcon:SetPoint("TOPRIGHT", 6, -2)
+        frame.CanIMogItIcon = frame:CreateTexture("TestFrame", "OVERLAY")
+        frame.CanIMogItIcon:SetWidth(13)
+        frame.CanIMogItIcon:SetHeight(13)
+        frame.CanIMogItIcon:SetPoint("TOPRIGHT", -2, -2)
         frame.timeSinceCIMIIconCheck = 0
         frame:HookScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc))
     end
