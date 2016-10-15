@@ -30,32 +30,38 @@ end
 
 
 local function SetIcon(frame, updateIconFunc, text, unmodifiedText)
-    -- Sets the icon based on the text for the CanIMogItIcon on the given frame.
+    -- Sets the icon based on the text for the CanIMogItOverlay on the given frame.
     if text == nil then
         -- nil means not all data was available to get the text. Try again later.
-        frame.CanIMogItIcon:SetShown(false)
-        frame:SetScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc));
+        frame.CIMIIconTexture:SetShown(false)
+        frame:HookScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc));
     elseif text == "" then
         -- An empty string means that the text shouldn't be displayed.
-        frame.CanIMogItIcon:SetShown(false)
+        frame.CIMIIconTexture:SetShown(false)
         frame:SetScript("OnUpdate", nil);
     else
         -- Show an icon!
-        frame.CanIMogItIcon:SetShown(true)
+        frame.CIMIIconTexture:SetShown(true)
         local icon = CanIMogIt.tooltipIcons[unmodifiedText]
-        frame.CanIMogItIcon:SetTexture(icon, false)
+        frame.CIMIIconTexture:SetTexture(icon, false)
         frame:SetScript("OnUpdate", nil);
     end
 end
 
 
-local function AddToFrame(frame, updateIconFunc)
+local function AddToFrame(parentFrame, updateIconFunc)
     -- Create the Texture and set OnUpdate
-    if frame then
-        frame.CanIMogItIcon = frame:CreateTexture("TestFrame", "OVERLAY")
-        frame.CanIMogItIcon:SetWidth(13)
-        frame.CanIMogItIcon:SetHeight(13)
-        frame.CanIMogItIcon:SetPoint("TOPRIGHT", -2, -2)
+    if parentFrame and not parentFrame.CanIMogItOverlay then
+        frame = CreateFrame("Frame", "CIMIOverlayFrame_"..tostring(parentFrame:GetName()), parentFrame)
+        parentFrame.CanIMogItOverlay = frame
+        -- Get the frame to match the shape/size of its parent
+        frame:SetAllPoints()
+
+        -- Create the texture frame.
+        frame.CIMIIconTexture = frame:CreateTexture("TestFrame", "OVERLAY")
+        frame.CIMIIconTexture:SetWidth(13)
+        frame.CIMIIconTexture:SetHeight(13)
+        frame.CIMIIconTexture:SetPoint("TOPRIGHT", -2, -2)
         frame.timeSinceCIMIIconCheck = 0
         frame:HookScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc))
     end
@@ -79,26 +85,28 @@ end
 
 
 function ContainerFrameItemButton_CIMIUpdateIcon(self)
+    if not self then return end
     self.timeSinceCIMIIconCheck = 0
     if not CheckOptionEnabled(self) then
-        self.CanIMogItIcon:SetShown(false)
+        self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
     end
-    local bag, slot = self:GetParent():GetID(), self:GetID()
+    local bag, slot = self:GetParent():GetParent():GetID(), self:GetParent():GetID()
     -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
     -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
-    if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
+    if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) or (bag == -1) then return end
     SetIcon(self, ContainerFrameItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
 end
 
 
 function LootFrame_CIMIUpdateIcon(self, elapsed)
+    if not self then return end
     -- Sets the icon overlay for the loot frame.
     self.timeSinceCIMIIconCheck = 0
-    local lootID = self:GetParent().rollID
+    local lootID = self:GetParent():GetParent().rollID
     if not CheckOptionEnabled(self) or lootID == nil then
-        self.CanIMogItIcon:SetShown(false)
+        self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
     end
@@ -305,18 +313,18 @@ function CanIMogIt.frame:ItemOverlayEvents(event, ...)
     for i=1,NUM_CONTAINER_FRAMES do
         for j=1,MAX_CONTAINER_ITEMS do
             local frame = _G["ContainerFrame"..i.."Item"..j]
-            ContainerFrameItemButton_CIMIUpdateIcon(frame)
+            ContainerFrameItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay)
         end
     end
     -- main bank frame
     for i=1,NUM_BANKGENERIC_SLOTS do
         local frame = _G["BankFrameItem"..i]
-        ContainerFrameItemButton_CIMIUpdateIcon(frame)
+        ContainerFrameItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay)
     end
 
     -- loot frames
     for i=1,NUM_GROUP_LOOT_FRAMES do
         local frame = _G["GroupLootFrame"..i].IconFrame
-        LootFrame_CIMIUpdateIcon(frame)
+        LootFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
     end
 end
