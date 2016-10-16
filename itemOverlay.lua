@@ -31,6 +31,7 @@ end
 
 local function SetIcon(frame, updateIconFunc, text, unmodifiedText)
     -- Sets the icon based on the text for the CanIMogItOverlay on the given frame.
+    frame.timeSinceCIMIIconCheck = 0
     if text == nil then
         -- nil means not all data was available to get the text. Try again later.
         frame.CIMIIconTexture:SetShown(false)
