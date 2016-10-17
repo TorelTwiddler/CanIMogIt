@@ -84,6 +84,8 @@ local EVENTS = {
     "BANKFRAME_OPENED",
     "START_LOOT_ROLL",
     "MERCHANT_SHOW",
+    "VOID_STORAGE_CONTENTS_UPDATE",
+    "GUILDBANKBAGSLOTS_CHANGED",
 }
 
 for i, event in pairs(EVENTS) do
@@ -98,8 +100,8 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     -- self:OnEncounterJournalLoaded(event, ...)
     self:TransmogCollectionUpdated(event, ...)
     -- self:OnAuctionHouseShow(event, ...)
-    -- self:OnGuildBankOpened(event, ...)
-    -- self:OnVoidStorageOpened(event, ...)
+    self:OnGuildBankOpened(event, ...)
+    self:OnVoidStorageOpened(event, ...)
     self:GetAppearancesEvent(event, ...)
     self:ItemOverlayEvents(event, ...)
 end)

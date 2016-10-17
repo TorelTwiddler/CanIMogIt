@@ -188,29 +188,37 @@ function MailFrame_CIMIUpdateIcon(self)
 end
 
 
--- local function GuildBankFrame_OnUpdate(self, elapsed)
---     -- Sets the icon overlay for the guild bank item frame.
---     if calculatedFrames[tostring(self)] then return end
---     calculatedFrames[tostring(self)] = true
---     if not CheckOptionEnabled(self) then return end
---     local tab = GetCurrentGuildBankTab()
---     local slot = self:GetID()
---     local itemLink = GetGuildBankItemLink(tab, slot)
---     SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
--- end
+function GuildBankFrame_CIMIUpdateIcon(self)
+    if not self then return end
+    self.timeSinceCIMIIconCheck = 0
+    if not CheckOptionEnabled(self) then
+        self.CIMIIconTexture:SetShown(false)
+        self:SetScript("OnUpdate", nil)
+        return
+    end
+
+    local tab = GetCurrentGuildBankTab()
+    local slot = self:GetParent():GetID()
+    local itemLink = GetGuildBankItemLink(tab, slot)
+    SetIcon(self, GuildBankFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+end
 
 
--- local function VoidStorageFrame_OnUpdate(self, elapsed)
---     -- Sets the icon overlay for the guild bank item frame.
---     if calculatedFrames[tostring(self)] then return end
---     calculatedFrames[tostring(self)] = true
---     if not CheckOptionEnabled(self) then return end
---     local page = _G["VoidStorageFrame"].page
---     local buttonSlot = self.slot
---     local voidSlot = buttonSlot + (80 * (page - 1))
---     local itemLink = GetVoidItemHyperlinkString(voidSlot)
---     SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
--- end
+function VoidStorageFrame_CIMIUpdateIcon(self)
+    if not self then return end
+    self.timeSinceCIMIIconCheck = 0
+    if not CheckOptionEnabled(self) then
+        self.CIMIIconTexture:SetShown(false)
+        self:SetScript("OnUpdate", nil)
+        return
+    end
+
+    local page = _G["VoidStorageFrame"].page
+    local buttonSlot = self:GetParent().slot
+    local voidSlot = buttonSlot + (80 * (page - 1))
+    local itemLink = GetVoidItemHyperlinkString(voidSlot)
+    SetIcon(self, VoidStorageFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+end
 
 
 ------------------------
@@ -230,6 +238,14 @@ function MerchantFrame_CIMIOnClick()
     for i=1,12 do
         local frame = _G["MerchantItem"..i.."ItemButton"]
         MerchantFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
+    end
+end
+
+
+function VoidStorageFrame_CIMIOnClick()
+    for i=1,80 do
+        local frame = _G["VoidStorageStorageButton"..i]
+        VoidStorageFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
     end
 end
 
@@ -309,33 +325,40 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     -- -- end
 
 
-    -- local guildBankLoaded = false
 
-    -- function CanIMogIt.frame:OnGuildBankOpened(event, ...)
-    --     if event ~= "GUILDBANKFRAME_OPENED" then return end
-    --     if guildBankLoaded == true then return end
-    --     guildBankLoaded = true
-    --     for column=1,7 do
-    --         for button=1,14 do
-    --             local frame = _G["GuildBankColumn"..column.."Button"..button]
-    --             AddToFrame(frame, GuildBankFrame_OnUpdate)
-    --         end
-    --     end
-    -- end
+end
 
 
-    -- local voidStorageLoaded = false
+local guildBankLoaded = false
 
-    -- function CanIMogIt.frame:OnVoidStorageOpened(event, ...)
-    --     if event ~= "VOID_STORAGE_OPEN" then return end
-    --     if voidStorageLoaded == true then return end
-    --     voidStorageLoaded = true
-    --     for i=1,80 do
-    --         local frame = _G["VoidStorageStorageButton"..i]
-    --         AddToFrame(frame, VoidStorageFrame_OnUpdate)
-    --     end
-    -- end
+function CanIMogIt.frame:OnGuildBankOpened(event, ...)
+    if event ~= "GUILDBANKFRAME_OPENED" then return end
+    if guildBankLoaded == true then return end
+    guildBankLoaded = true
+    for column=1,7 do
+        for button=1,14 do
+            local frame = _G["GuildBankColumn"..column.."Button"..button]
+            AddToFrame(frame, GuildBankFrame_CIMIUpdateIcon)
+        end
+    end
+end
 
+
+local voidStorageLoaded = false
+
+function CanIMogIt.frame:OnVoidStorageOpened(event, ...)
+    -- Add the overlay to the void storage frame.
+    if event ~= "VOID_STORAGE_OPEN" then return end
+    if voidStorageLoaded == true then return end
+    voidStorageLoaded = true
+    for i=1,80 do
+        local frame = _G["VoidStorageStorageButton"..i]
+        AddToFrame(frame, VoidStorageFrame_CIMIUpdateIcon)
+    end
+
+    local voidStorageFrame = _G["VoidStorageFrame"]
+    voidStorageFrame.Page1:HookScript("OnClick", VoidStorageFrame_CIMIOnClick)
+    voidStorageFrame.Page2:HookScript("OnClick", VoidStorageFrame_CIMIOnClick)
 end
 
 ------------------------
@@ -354,6 +377,9 @@ local events = {
     ["BANKFRAME_OPENED"] = true,
     ["START_LOOT_ROLL"] = true,
     ["MERCHANT_SHOW"] = true,
+    ["VOID_STORAGE_OPEN"] = true,
+    ["VOID_STORAGE_CONTENTS_UPDATE"] = true,
+    ["GUILDBANKBAGSLOTS_CHANGED"] = true,
 }
 
 function CanIMogIt.frame:ItemOverlayEvents(event, ...)
@@ -379,4 +405,19 @@ function CanIMogIt.frame:ItemOverlayEvents(event, ...)
 
     -- merchant frames
     MerchantFrame_CIMIOnClick()
+
+    -- void storage frames
+    if voidStorageLoaded then
+        VoidStorageFrame_CIMIOnClick()
+    end
+
+    -- guild bank frames
+    if guildBankLoaded then
+        for column=1,7 do
+            for button=1,14 do
+                local frame = _G["GuildBankColumn"..column.."Button"..button]
+                GuildBankFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
+            end
+        end
+    end
 end
