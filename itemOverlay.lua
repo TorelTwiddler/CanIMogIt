@@ -20,6 +20,11 @@ local resetDelay = .3
 
 
 
+----------------------------
+-- Core Overlay functions --
+----------------------------
+
+
 local function CheckOptionEnabled(frame)
     -- Checks if the item overlay option is enabled.
     if not CanIMogItOptions["showItemIconOverlay"] then
@@ -69,10 +74,6 @@ local function AddToFrame(parentFrame, updateIconFunc)
 end
 
 
-----------------------------
--- OnUpdate functions     --
-----------------------------
-
 function CIMIOnUpdateFuncMaker(func)
     function CIMIOnUpdate(self, elapsed)
         -- Attempts to update the icon again after the delay has elapsed.
@@ -83,6 +84,11 @@ function CIMIOnUpdateFuncMaker(func)
     end
     return CIMIOnUpdate
 end
+
+
+----------------------------
+-- UpdateIcon functions   --
+----------------------------
 
 
 function ContainerFrameItemButton_CIMIUpdateIcon(self)
@@ -101,7 +107,7 @@ function ContainerFrameItemButton_CIMIUpdateIcon(self)
 end
 
 
-function LootFrame_CIMIUpdateIcon(self, elapsed)
+function LootFrame_CIMIUpdateIcon(self)
     if not self then return end
     -- Sets the icon overlay for the loot frame.
     self.timeSinceCIMIIconCheck = 0
@@ -117,14 +123,18 @@ function LootFrame_CIMIUpdateIcon(self, elapsed)
 end
 
 
--- local function MerchantFrame_OnUpdate(self, elapsed)
---     -- Sets the icon overlay for the merchant frame.
---     if calculatedFrames[tostring(self)] then return end
---     calculatedFrames[tostring(self)] = true
---     if not CheckOptionEnabled(self) then return end
---     local itemLink = self.link
---     SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
--- end
+function MerchantFrame_CIMIUpdateIcon(self)
+    if not self then return end
+    self.timeSinceCIMIIconCheck = 0
+    if not CheckOptionEnabled(self) then
+        self.CIMIIconTexture:SetShown(false)
+        self:SetScript("OnUpdate", nil)
+        return
+    end
+
+    local itemLink = self:GetParent().link
+    SetIcon(self, MerchantFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+end
 
 
 -- local function JournalFrame_SetLootButton(itemFrame)
@@ -149,29 +159,33 @@ end
 -- end
 
 
--- local function MailFrame_OnUpdate(self, elapsed)
---     -- Sets the icon overlay for the mail attachement frame.
---     if calculatedFrames[tostring(self)] then return end
---     calculatedFrames[tostring(self)] = true
---     if not CheckOptionEnabled(self) then return end
---     local frameID = self:GetID()
+function MailFrame_CIMIUpdateIcon(self)
+    if not self then return end
+    self.timeSinceCIMIIconCheck = 0
+    if not CheckOptionEnabled(self) then
+        self.CIMIIconTexture:SetShown(false)
+        self:SetScript("OnUpdate", nil)
+        return
+    end
 
---     local messageIndex;
---     -- 7 is the number of visible inbox buttons at a time.
---     for i=1,7 do
---         local mailFrame = _G["MailItem"..i.."Button"]
---         if mailFrame:IsShown() and mailFrame:GetChecked() then
---             messageIndex = mailFrame.index
---         end
---     end
---     if not messageIndex then
---         SetIcon(self, nil)
---         return
---     end
+    local frameID = self:GetParent():GetID()
 
---     local itemLink = GetInboxItemLink(messageIndex, frameID)
---     SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
--- end
+    local messageIndex;
+    -- 7 is the number of visible inbox buttons at a time.
+    for i=1,7 do
+        local mailFrame = _G["MailItem"..i.."Button"]
+        if mailFrame:IsShown() and mailFrame:GetChecked() then
+            messageIndex = mailFrame.index
+        end
+    end
+    if not messageIndex then
+        SetIcon(self, MailFrame_CIMIUpdateIcon, "")
+        return
+    end
+
+    local itemLink = GetInboxItemLink(messageIndex, frameID)
+    SetIcon(self, MailFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+end
 
 
 -- local function GuildBankFrame_OnUpdate(self, elapsed)
@@ -197,6 +211,27 @@ end
 --     local itemLink = GetVoidItemHyperlinkString(voidSlot)
 --     SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
 -- end
+
+
+------------------------
+-- Function hooks     --
+------------------------
+
+
+function MailFrame_CIMIOnClick()
+    for i=1,ATTACHMENTS_MAX_SEND do
+        local frame = _G["OpenMailAttachmentButton"..i]
+        MailFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
+    end
+end
+
+
+function MerchantFrame_CIMIOnClick()
+    for i=1,12 do
+        local frame = _G["MerchantItem"..i.."ItemButton"]
+        MerchantFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
+    end
+end
 
 
 ----------------------------
@@ -227,18 +262,30 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
         AddToFrame(frame, LootFrame_CIMIUpdateIcon)
     end
 
-    -- -- Add hook for the Mail inbox frames.
-    -- for i=1,ATTACHMENTS_MAX_SEND do
-    --     local frame = _G["OpenMailAttachmentButton"..i]
-    --     AddToFrame(frame, MailFrame_OnUpdate)
-    -- end
+    -- Add hook for the Mail inbox frames.
+    for i=1,ATTACHMENTS_MAX_SEND do
+        local frame = _G["OpenMailAttachmentButton"..i]
+        AddToFrame(frame, MailFrame_CIMIUpdateIcon)
+    end
 
-    -- -- Add hook for the Merchant frames.
-    -- -- 12 is the number of merchant items visible at once.
-    -- for i=1,12 do
-    --     local frame = _G["MerchantItem"..i.."ItemButton"]
-    --     AddToFrame(frame, MerchantFrame_OnUpdate)
-    -- end
+    -- Add hook for clicking on mail (since there is no event).
+    -- 7 is the number of visible inbox buttons at a time.
+    for i=1,7 do
+        local frame = _G["MailItem"..i.."Button"]
+        frame:HookScript("OnClick", MailFrame_CIMIOnClick)
+    end
+
+    -- Add hook for the Merchant frames.
+    -- 12 is the number of merchant items visible at once.
+    for i=1,12 do
+        local frame = _G["MerchantItem"..i.."ItemButton"]
+        AddToFrame(frame, MerchantFrame_CIMIUpdateIcon)
+    end
+
+    -- Add hook for clicking on the next or previous buttons in the
+    -- merchant frames (since there is no event).
+    _G["MerchantNextPageButton"]:HookScript("OnClick", MerchantFrame_CIMIOnClick)
+    _G["MerchantPrevPageButton"]:HookScript("OnClick", MerchantFrame_CIMIOnClick)
 
 
     -- -- function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
@@ -306,6 +353,7 @@ local events = {
     ["PLAYERBANKSLOTS_CHANGED"] = true,
     ["BANKFRAME_OPENED"] = true,
     ["START_LOOT_ROLL"] = true,
+    ["MERCHANT_SHOW"] = true,
 }
 
 function CanIMogIt.frame:ItemOverlayEvents(event, ...)
@@ -328,4 +376,7 @@ function CanIMogIt.frame:ItemOverlayEvents(event, ...)
         local frame = _G["GroupLootFrame"..i].IconFrame
         LootFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
     end
+
+    -- merchant frames
+    MerchantFrame_CIMIOnClick()
 end

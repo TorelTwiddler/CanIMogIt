@@ -83,6 +83,7 @@ local EVENTS = {
     "PLAYERBANKSLOTS_CHANGED",
     "BANKFRAME_OPENED",
     "START_LOOT_ROLL",
+    "MERCHANT_SHOW",
 }
 
 for i, event in pairs(EVENTS) do
