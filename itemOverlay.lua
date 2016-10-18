@@ -36,11 +36,12 @@ end
 
 local function SetIcon(frame, updateIconFunc, text, unmodifiedText)
     -- Sets the icon based on the text for the CanIMogItOverlay on the given frame.
-    frame.timeSinceCIMIIconCheck = 0
+    frame.text = tostring(text)
+    frame.unmodifiedText = tostring(unmodifiedText)
     if text == nil then
         -- nil means not all data was available to get the text. Try again later.
         frame.CIMIIconTexture:SetShown(false)
-        frame:HookScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc));
+        frame:SetScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc));
     elseif text == "" then
         -- An empty string means that the text shouldn't be displayed.
         frame.CIMIIconTexture:SetShown(false)
@@ -52,6 +53,7 @@ local function SetIcon(frame, updateIconFunc, text, unmodifiedText)
         frame.CIMIIconTexture:SetTexture(icon, false)
         frame:SetScript("OnUpdate", nil);
     end
+    frame.shown = frame.CIMIIconTexture:IsShown()
 end
 
 
@@ -64,12 +66,12 @@ local function AddToFrame(parentFrame, updateIconFunc)
         frame:SetAllPoints()
 
         -- Create the texture frame.
-        frame.CIMIIconTexture = frame:CreateTexture("TestFrame", "OVERLAY")
+        frame.CIMIIconTexture = frame:CreateTexture("CIMITextureFrame", "OVERLAY")
         frame.CIMIIconTexture:SetWidth(13)
         frame.CIMIIconTexture:SetHeight(13)
         frame.CIMIIconTexture:SetPoint("TOPRIGHT", -2, -2)
         frame.timeSinceCIMIIconCheck = 0
-        frame:HookScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc))
+        frame:SetScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc))
     end
 end
 
@@ -79,6 +81,7 @@ function CIMIOnUpdateFuncMaker(func)
         -- Attempts to update the icon again after the delay has elapsed.
         self.timeSinceCIMIIconCheck = self.timeSinceCIMIIconCheck + elapsed
         if self.timeSinceCIMIIconCheck >= resetDelay then
+            self.timeSinceCIMIIconCheck = 0
             func(self)
         end
     end
@@ -93,7 +96,6 @@ end
 
 function ContainerFrameItemButton_CIMIUpdateIcon(self)
     if not self then return end
-    self.timeSinceCIMIIconCheck = 0
     if not CheckOptionEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
@@ -102,7 +104,7 @@ function ContainerFrameItemButton_CIMIUpdateIcon(self)
     local bag, slot = self:GetParent():GetParent():GetID(), self:GetParent():GetID()
     -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
     -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
-    if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) or (bag == -1) then return end
+    if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
     SetIcon(self, ContainerFrameItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
 end
 
@@ -110,7 +112,6 @@ end
 function LootFrame_CIMIUpdateIcon(self)
     if not self then return end
     -- Sets the icon overlay for the loot frame.
-    self.timeSinceCIMIIconCheck = 0
     local lootID = self:GetParent():GetParent().rollID
     if not CheckOptionEnabled(self) or lootID == nil then
         self.CIMIIconTexture:SetShown(false)
@@ -125,7 +126,6 @@ end
 
 function MerchantFrame_CIMIUpdateIcon(self)
     if not self then return end
-    self.timeSinceCIMIIconCheck = 0
     if not CheckOptionEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
@@ -133,7 +133,11 @@ function MerchantFrame_CIMIUpdateIcon(self)
     end
 
     local itemLink = self:GetParent().link
-    SetIcon(self, MerchantFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+    if itemLink == nil then
+        SetIcon(self, MerchantFrame_CIMIUpdateIcon, nil)
+    else
+        SetIcon(self, MerchantFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+    end
 end
 
 
@@ -161,7 +165,6 @@ end
 
 function MailFrame_CIMIUpdateIcon(self)
     if not self then return end
-    self.timeSinceCIMIIconCheck = 0
     if not CheckOptionEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
@@ -190,7 +193,6 @@ end
 
 function GuildBankFrame_CIMIUpdateIcon(self)
     if not self then return end
-    self.timeSinceCIMIIconCheck = 0
     if not CheckOptionEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
@@ -206,7 +208,6 @@ end
 
 function VoidStorageFrame_CIMIUpdateIcon(self)
     if not self then return end
-    self.timeSinceCIMIIconCheck = 0
     if not CheckOptionEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
@@ -235,7 +236,7 @@ end
 
 
 function MerchantFrame_CIMIOnClick()
-    for i=1,12 do
+    for i=1,10 do
         local frame = _G["MerchantItem"..i.."ItemButton"]
         MerchantFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
     end
@@ -293,7 +294,7 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
 
     -- Add hook for the Merchant frames.
     -- 12 is the number of merchant items visible at once.
-    for i=1,12 do
+    for i=1,10 do
         local frame = _G["MerchantItem"..i.."ItemButton"]
         AddToFrame(frame, MerchantFrame_CIMIUpdateIcon)
     end

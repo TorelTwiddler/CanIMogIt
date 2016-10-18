@@ -56,7 +56,7 @@ CanIMogIt.YELLOW = "|cfff0e442"
 CanIMogIt.GRAY =   "|cff888888"
 
 
--- Text
+-- Tooltip Text
 local KNOWN =                                       L["Learned."]
 local KNOWN_FROM_ANOTHER_ITEM =                     L["Learned from another item."]
 local KNOWN_BY_ANOTHER_CHARACTER =                  L["Learned for a different class."]
@@ -118,3 +118,9 @@ CanIMogIt.tooltipIcons = {
 	[CanIMogIt.NOT_TRANSMOGABLE] = CanIMogIt.NOT_TRANSMOGABLE_ICON_OVERLAY,
     -- [CanIMogIt.CANNOT_DETERMINE] = CanIMogIt.QUESTIONABLE_ICON_OVERLAY,
 }
+
+
+-- Other text
+
+CanIMogIt.DATABASE_START_UPDATE_TEXT = L["Updating appearances database."]
+CanIMogIt.DATABASE_DONE_UPDATE_TEXT = L["Appearances updated: "] -- followed by a number

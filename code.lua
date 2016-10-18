@@ -360,6 +360,24 @@ local appearancesTableGotten = false
 local doneAppearances = {}
 
 
+function pairsByKeys (t, f)
+    -- returns a sorted iterator for a table.
+    -- https://www.lua.org/pil/19.3.html
+    -- Why is it not a built in function? ¯\_(ツ)_/¯
+    local a = {}
+    for n in pairs(t) do table.insert(a, n) end
+        table.sort(a, f)
+        local i = 0      -- iterator variable
+        local iter = function ()   -- iterator function
+        i = i + 1
+        if a[i] == nil then return nil
+            else return a[i], t[a[i]]
+        end
+    end
+    return iter
+end
+
+
 local function GetAppearancesTable()
     -- Sort the C_TransmogCollection.GetCategoryAppearances tables into something
     -- more usable.
@@ -406,17 +424,16 @@ local function _GetAppearances()
     GetAppearancesTable()
     buffer = 0
 
-    local appearanceID, collected = next(appearancesTable, nil)
-    while appearanceID do
+    for appearanceID, collected in pairsByKeys(appearancesTable) do
         AddAppearance(appearanceID)
         appearancesTable[appearanceID] = nil
-        appearanceID, collected = next(appearancesTable, nil)
         if buffer >= CanIMogIt.bufferMax then return end
     end
     getAppearancesDone = true
     appearancesTable = {} -- cleanup
     CanIMogIt.cache = {}
-    CanIMogIt:Print(CanIMogIt.KNOWN_ICON..CanIMogIt.BLUE.."Appearances updated: ".. appearanceCount)
+    CanIMogIt.frame:SetScript("OnUpdate", nil)
+    CanIMogIt:Print(CanIMogIt.KNOWN_ICON..CanIMogIt.BLUE..CanIMogIt.DATABASE_DONE_UPDATE_TEXT.. appearanceCount)
 end
 
 
@@ -434,8 +451,8 @@ end
 function CanIMogIt:GetAppearances()
     -- Gets a table of all the appearances known to
     -- a character and adds it to the database.
-    CanIMogIt:Print("Updating appearances database.")
-    CanIMogIt.frame:HookScript("OnUpdate", GetAppearancesOnUpdate)
+    CanIMogIt:Print(CanIMogIt.DATABASE_START_UPDATE_TEXT)
+    CanIMogIt.frame:SetScript("OnUpdate", GetAppearancesOnUpdate)
 end
 
 
