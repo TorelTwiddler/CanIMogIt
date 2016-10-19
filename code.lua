@@ -327,7 +327,7 @@ end
 
 
 -----------------------------
--- CanIMogIt variables        --
+-- CanIMogIt variables     --
 -----------------------------
 
 
@@ -335,29 +335,9 @@ CanIMogIt.tooltip = nil;
 CanIMogIt.cache = {}
 
 
-function CanIMogIt.frame:TransmogCollectionUpdated(event, ...)
-    if event == "TRANSMOG_COLLECTION_UPDATED" then
-        CanIMogIt.cache = {}
-    end
-end
-
-
 -----------------------------
--- CanIMogIt Core methods  --
+-- Helper functions        --
 -----------------------------
-
-
-local appearanceIndex = 0
-local sourceIndex = 0
-local getAppearancesDone = false;
-local sourceCount = 0
-local appearanceCount = 0
-local buffer = 0
-
-
-local appearancesTable = {}
-local appearancesTableGotten = false
-local doneAppearances = {}
 
 
 function pairsByKeys (t, f)
@@ -378,6 +358,36 @@ function pairsByKeys (t, f)
 end
 
 
+function copyTable (t)
+    -- shallow-copy a table
+    if type(t) ~= "table" then return t end
+    local target = {}
+    for k, v in pairs(t) do target[k] = v end
+    return target
+end
+
+
+-----------------------------
+-- CanIMogIt Core methods  --
+-----------------------------
+
+-- Variables for managing updating appearances.
+local appearanceIndex = 0
+local sourceIndex = 0
+local getAppearancesDone = false;
+local sourceCount = 0
+local appearanceCount = 0
+local buffer = 0
+local sourcesAdded = 0
+local sourcesRemoved = 0
+
+
+local appearancesTable = {}
+local removeAppearancesTable = nil
+local appearancesTableGotten = false
+local doneAppearances = {}
+
+
 local function GetAppearancesTable()
     -- Sort the C_TransmogCollection.GetCategoryAppearances tables into something
     -- more usable.
@@ -395,13 +405,16 @@ local function GetAppearancesTable()
 end
 
 
-local function AddSource(source)
+local function AddSource(source, appearanceID)
     -- Adds the source to the database, and increments the buffer.
     buffer = buffer + 1
     sourceCount = sourceCount + 1
     local sourceID = source.sourceID
-    local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
-    CanIMogIt:DBAddItem(sourceItemLink, appearanceID, sourceID)
+    local sourceItemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+    local added = CanIMogIt:DBAddItem(sourceItemLink, appearanceID, sourceID)
+    if added then
+        sourcesAdded = sourcesAdded + 1
+    end
 end
 
 
@@ -411,7 +424,7 @@ local function AddAppearance(appearanceID)
     sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
     for i, source in pairs(sources) do
         if source.isCollected then
-            AddSource(source)
+            AddSource(source, appearanceID)
         end
     end
 end
@@ -424,16 +437,31 @@ local function _GetAppearances()
     GetAppearancesTable()
     buffer = 0
 
+    -- Add new appearances learned.
     for appearanceID, collected in pairsByKeys(appearancesTable) do
         AddAppearance(appearanceID)
-        appearancesTable[appearanceID] = nil
         if buffer >= CanIMogIt.bufferMax then return end
+        appearancesTable[appearanceID] = nil
     end
+
+    -- Remove appearances that are no longer learned.
+    for appearanceID, sources in pairsByKeys(removeAppearancesTable) do
+        for sourceID, source in pairs(sources.sources) do
+            if not C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID) then
+                CanIMogIt:DBRemoveItem(appearanceID, sourceID)
+                sourcesRemoved = sourcesRemoved + 1
+            end
+            buffer = buffer + 1
+        end
+        if buffer >= CanIMogIt.bufferMax then return end
+        removeAppearancesTable[appearanceID] = nil
+    end
+
     getAppearancesDone = true
     appearancesTable = {} -- cleanup
-    CanIMogIt.cache = {}
+    CanIMogIt:ResetCache()
     CanIMogIt.frame:SetScript("OnUpdate", nil)
-    CanIMogIt:Print(CanIMogIt.KNOWN_ICON..CanIMogIt.BLUE..CanIMogIt.DATABASE_DONE_UPDATE_TEXT.. appearanceCount)
+    CanIMogIt:Print(CanIMogIt.DATABASE_DONE_UPDATE_TEXT..CanIMogIt.BLUE.."+" .. sourcesAdded .. ", "..CanIMogIt.ORANGE.."-".. sourcesRemoved)
 end
 
 
@@ -452,7 +480,16 @@ function CanIMogIt:GetAppearances()
     -- Gets a table of all the appearances known to
     -- a character and adds it to the database.
     CanIMogIt:Print(CanIMogIt.DATABASE_START_UPDATE_TEXT)
+    removeAppearancesTable = copyTable(CanIMogIt.db.global.appearances)
     CanIMogIt.frame:SetScript("OnUpdate", GetAppearancesOnUpdate)
+end
+
+
+function CanIMogIt:ResetCache()
+    -- Resets the cache, and calls things relying on the cache being reset.
+    CanIMogIt.cache = {}
+    -- Fake a BAG_UPDATE event to updating the icons.
+    CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
 end
 
 
@@ -469,6 +506,11 @@ end
 
 function CanIMogIt:GetItemLink(itemID)
     return select(2, CanIMogIt:GetItemInfo(itemID))
+end
+
+
+function CanIMogIt:GetItemLinkFromSourceID(sourceID)
+    return select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
 end
 
 
@@ -630,11 +672,17 @@ end
 
 
 function CanIMogIt:GetAppearanceID(itemLink)
-    -- Gets the appearanceID of the given item.
+    -- Gets the appearanceID of the given item. Also returns the sourceID, for convenience.
     local sourceID = CanIMogIt:GetSourceID(itemLink)
+    return CanIMogIt:GetAppearanceIDFromSourceID(sourceID), sourceID
+end
+
+
+function CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
+    -- Gets the appearanceID from the sourceID.
     if sourceID ~= nil then
         local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
-        return appearanceID, sourceID
+        return appearanceID
     end
 end
 
@@ -646,7 +694,7 @@ function CanIMogIt:_PlayerKnowsTransmog(itemLink, appearanceID)
     local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
     if sources then
         for i, source in pairs(sources) do
-            local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(source.sourceID))
+            local sourceItemLink = CanIMogIt:GetItemLinkFromSourceID(source.sourceID)
             if CanIMogIt:IsItemSubClassIdentical(itemLink, sourceItemLink) and source.isCollected then
                 return true
             end

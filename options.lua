@@ -86,6 +86,8 @@ local EVENTS = {
     "MERCHANT_SHOW",
     "VOID_STORAGE_CONTENTS_UPDATE",
     "GUILDBANKBAGSLOTS_CHANGED",
+    "TRANSMOG_COLLECTION_SOURCE_ADDED",
+    "TRANSMOG_COLLECTION_SOURCE_REMOVED",
 }
 
 for i, event in pairs(EVENTS) do
@@ -119,9 +121,7 @@ local function checkboxOnClick(self)
     PlaySound(checked and "igMainMenuOptionCheckBoxOn" or "igMainMenuOptionCheckBoxOff")
     self:SetValue(checked)
     -- Reset the cache when an option changes.
-    CanIMogIt.cache = {}
-    -- Fake a BAG_UPDATE event to updating the icons.
-    CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
+    CanIMogIt:ResetCache()
 end
 
 

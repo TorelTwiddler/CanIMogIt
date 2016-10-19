@@ -46,6 +46,11 @@ function CanIMogIt:DBAddAppearance(appearanceID, itemLink)
 end
 
 
+function CanIMogIt:DBRemoveAppearance(appearanceID)
+    self.db.global.appearances[appearanceID] = nil
+end
+
+
 function CanIMogIt:DBHasSource(appearanceID, sourceID)
     if appearanceID == nil or sourceID == nil then return end
     if CanIMogIt:DBHasAppearance(appearanceID) then
@@ -64,6 +69,7 @@ end
 
 
 function CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
+    -- Adds the item to the database. Returns true if it added something, false otherwise.
     if appearanceID == nil or sourceID == nil then
         appearanceID, sourceID = self:GetAppearanceID(itemLink)
     end
@@ -75,8 +81,18 @@ function CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
             ["classRestrictions"] = self:GetItemClassRestrictions(itemLink),
         }
         if self:GetItemSubClassName(itemLink) == nil then
-            print("nil subclass: " .. itemLink)
+            CanIMogIt:Print("nil subclass: " .. itemLink)
         end
+        return true
+    end
+    return false
+end
+
+
+function CanIMogIt:DBRemoveItem(appearanceID, sourceID)
+    self.db.global.appearances[appearanceID].sources[sourceID] = nil
+    if next(self.db.global.appearances[appearanceID].sources) == nil then
+        self:DBRemoveAppearance(appearanceID)
     end
 end
 
@@ -201,13 +217,26 @@ function CanIMogIt.frame:GetAppearancesEvent(event, ...)
     end
 end
 
+local transmogEvents = {
+    ["TRANSMOG_COLLECTION_SOURCE_ADDED"] = true,
+    ["TRANSMOG_COLLECTION_SOURCE_REMOVED"] = true,
+    ["TRANSMOG_COLLECTION_UPDATED"] = true,
+}
 
--- function CanIMogIt.frame:TransmogCollectionUpdated(event, ...)
---     if event == "TRANSMOG_COLLECTION_UPDATED" then
---         -- add the equipment slot that was changed to the database
---         Database:UpdateAppearances()
---     end
--- end
+function CanIMogIt.frame:TransmogCollectionUpdated(event, sourceID, ...)
+    if transmogEvents[event] then
+        -- Get the appearanceID from the sourceID
+        if event == "TRANSMOG_COLLECTION_SOURCE_ADDED" then
+            local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
+            local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+            CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
+        elseif event == "TRANSMOG_COLLECTION_SOURCE_REMOVED" then
+            local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
+            CanIMogIt:DBRemoveItem(appearanceID, sourceID)
+        end
+        CanIMogIt:ResetCache()
+    end
+end
 
 
 -- function CanIMogIt.frame:GetItemInfoReceived(event, ...)

@@ -123,4 +123,4 @@ CanIMogIt.tooltipIcons = {
 -- Other text
 
 CanIMogIt.DATABASE_START_UPDATE_TEXT = L["Updating appearances database."]
-CanIMogIt.DATABASE_DONE_UPDATE_TEXT = L["Appearances updated: "] -- followed by a number
+CanIMogIt.DATABASE_DONE_UPDATE_TEXT = L["Items updated: "] -- followed by a number
