@@ -1,6 +1,9 @@
 # CanIMogIt
 Can I Mog It? adds a line to item tooltips to tell you if you have learned a transmog appearance in World of Warcraft.
 
+[Curse Page](https://mods.curse.com/addons/wow/can-i-mog-it)
+[Curseforge Page](https://wow.curseforge.com/addons/can-i-mog-it/)
+
 # Features
 - Informative tooltips about the learned status of an item's appearance.
 - Bag icon overlays for telling at a glance what to mail or sell.
