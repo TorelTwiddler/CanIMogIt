@@ -83,6 +83,8 @@ function CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
         if self:GetItemSubClassName(itemLink) == nil then
             CanIMogIt:Print("nil subclass: " .. itemLink)
         end
+        -- For testing:
+        -- CanIMogIt:Print("New item found: " .. itemLink)
         return true
     end
     return false
@@ -90,9 +92,14 @@ end
 
 
 function CanIMogIt:DBRemoveItem(appearanceID, sourceID)
-    self.db.global.appearances[appearanceID].sources[sourceID] = nil
-    if next(self.db.global.appearances[appearanceID].sources) == nil then
-        self:DBRemoveAppearance(appearanceID)
+    if self.db.global.appearances[appearanceID].sources[sourceID] ~= nil then
+        self.db.global.appearances[appearanceID].sources[sourceID] = nil
+        if next(self.db.global.appearances[appearanceID].sources) == nil then
+            self:DBRemoveAppearance(appearanceID)
+        end
+        -- For testing:
+        -- local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+        -- CanIMogIt:Print("Item removed: " .. itemLink)
     end
 end
 

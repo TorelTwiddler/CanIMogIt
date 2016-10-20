@@ -4,23 +4,27 @@ local L = CanIMogIt.L
 
 
 --------------------------------------------
--- Setting constants                      --
+-- Database scan speed values             --
 --------------------------------------------
 
 
--- 0:02
+-- Instant - Only the best of connections, or you WILL crash with Error #134
+-- CanIMogIt.throttleTime = 0.25
+-- CanIMogIt.bufferMax = 10000
+
+-- Near Instant - May cause your game to crash with Error #134
 -- CanIMogIt.throttleTime = 0.25
 -- CanIMogIt.bufferMax = 200
 
--- 0:28
+-- Fast - Less likely to cause lag or crash
+-- CanIMogIt.throttleTime = 0.1
+-- CanIMogIt.bufferMax = 50
+
+-- Medium - Most likely safe
 CanIMogIt.throttleTime = 0.1
-CanIMogIt.bufferMax = 5
+CanIMogIt.bufferMax = 25
 
--- 0:15
--- CanIMogIt.throttleTime = 0.25
--- CanIMogIt.bufferMax = 25
-
--- 2:23
+-- Slow - Will take a long time, but be 100% safe. Use if you have a poor connection.
 -- CanIMogIt.throttleTime = 0.5
 -- CanIMogIt.bufferMax = 5
 
