@@ -303,6 +303,7 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     -- merchant frames (since there is no event).
     _G["MerchantNextPageButton"]:HookScript("OnClick", MerchantFrame_CIMIOnClick)
     _G["MerchantPrevPageButton"]:HookScript("OnClick", MerchantFrame_CIMIOnClick)
+    _G["MerchantFrame"]:HookScript("OnMouseWheel", MerchantFrame_CIMIOnClick)
 
 
     -- -- function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
