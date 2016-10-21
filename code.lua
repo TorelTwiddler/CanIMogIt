@@ -464,13 +464,24 @@ local function _GetAppearances()
     CanIMogIt:Print(CanIMogIt.DATABASE_DONE_UPDATE_TEXT..CanIMogIt.BLUE.."+" .. sourcesAdded .. ", "..CanIMogIt.ORANGE.."-".. sourcesRemoved)
 end
 
-
+local bagsOpenedOnce = false
+local bagsClosedOnce = false
 local timer = 0
 local function GetAppearancesOnUpdate(self, elapsed)
     -- OnUpdate function with a reset timer to throttle getting appearances.
     timer = timer + elapsed
     if timer >= CanIMogIt.throttleTime then
         _GetAppearances()
+        -- This is used to prevent a crash from accessing Blizzard endpoints.
+        -- Hopefully it will be unneeded after 7.1.
+        if bagsOpenedOnce and not bagsClosedOnce then
+            CloseAllBags()
+            bagsClosedOnce = true
+        end
+        if not bagsOpenedOnce then
+            OpenAllBags()
+            bagsOpenedOnce = true
+        end
         timer = 0
     end
 end
@@ -1045,6 +1056,7 @@ ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemToolt
 ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
 ShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
 ShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
 
 
 function CanIMogIt_OnSetHyperlink(self, link)
