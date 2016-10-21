@@ -95,7 +95,7 @@ end
 
 
 function ContainerFrameItemButton_CIMIUpdateIcon(self)
-    if not self or not self:GetParent() or not self:GetParent():GetParent() then return end
+    if not self then return end
     if not CheckOptionEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
@@ -230,9 +230,7 @@ end
 function MailFrame_CIMIOnClick()
     for i=1,ATTACHMENTS_MAX_SEND do
         local frame = _G["OpenMailAttachmentButton"..i]
-        if frame then
-            MailFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
-        end
+        MailFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
     end
 end
 
@@ -240,9 +238,7 @@ end
 function MerchantFrame_CIMIOnClick()
     for i=1,10 do
         local frame = _G["MerchantItem"..i.."ItemButton"]
-        if frame then
-            MerchantFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
-        end
+        MerchantFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
     end
 end
 
@@ -250,9 +246,7 @@ end
 function VoidStorageFrame_CIMIOnClick()
     for i=1,80 do
         local frame = _G["VoidStorageStorageButton"..i]
-        if frame then
-            VoidStorageFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
-        end
+        VoidStorageFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
     end
 end
 
@@ -295,13 +289,11 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     -- 7 is the number of visible inbox buttons at a time.
     for i=1,7 do
         local frame = _G["MailItem"..i.."Button"]
-        if frame then
-            frame:HookScript("OnClick", MailFrame_CIMIOnClick)
-        end
+        frame:HookScript("OnClick", MailFrame_CIMIOnClick)
     end
 
     -- Add hook for the Merchant frames.
-    -- 10 is the number of merchant items visible at once.
+    -- 12 is the number of merchant items visible at once.
     for i=1,10 do
         local frame = _G["MerchantItem"..i.."ItemButton"]
         AddToFrame(frame, MerchantFrame_CIMIUpdateIcon)
@@ -309,15 +301,9 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
 
     -- Add hook for clicking on the next or previous buttons in the
     -- merchant frames (since there is no event).
-    if _G["MerchantNextPageButton"] then
-        _G["MerchantNextPageButton"]:HookScript("OnClick", MerchantFrame_CIMIOnClick)
-    end
-    if _G["MerchantPrevPageButton"] then
-        _G["MerchantPrevPageButton"]:HookScript("OnClick", MerchantFrame_CIMIOnClick)
-    end
-    if _G["MerchantFrame"] then
-        _G["MerchantFrame"]:HookScript("OnMouseWheel", MerchantFrame_CIMIOnClick)
-    end
+    _G["MerchantNextPageButton"]:HookScript("OnClick", MerchantFrame_CIMIOnClick)
+    _G["MerchantPrevPageButton"]:HookScript("OnClick", MerchantFrame_CIMIOnClick)
+    _G["MerchantFrame"]:HookScript("OnMouseWheel", MerchantFrame_CIMIOnClick)
 
 
     -- -- function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
@@ -373,11 +359,8 @@ function CanIMogIt.frame:OnVoidStorageOpened(event, ...)
     end
 
     local voidStorageFrame = _G["VoidStorageFrame"]
-    if voidStorageFrame then
-        -- if the frame doesn't exist, then it's likely overwritten by an addon.
-        voidStorageFrame.Page1:HookScript("OnClick", VoidStorageFrame_CIMIOnClick)
-        voidStorageFrame.Page2:HookScript("OnClick", VoidStorageFrame_CIMIOnClick)
-    end
+    voidStorageFrame.Page1:HookScript("OnClick", VoidStorageFrame_CIMIOnClick)
+    voidStorageFrame.Page2:HookScript("OnClick", VoidStorageFrame_CIMIOnClick)
 end
 
 ------------------------
@@ -407,25 +390,19 @@ function CanIMogIt.frame:ItemOverlayEvents(event, ...)
     for i=1,NUM_CONTAINER_FRAMES do
         for j=1,MAX_CONTAINER_ITEMS do
             local frame = _G["ContainerFrame"..i.."Item"..j]
-            if frame then
-                ContainerFrameItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay)
-            end
+            ContainerFrameItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay)
         end
     end
     -- main bank frame
     for i=1,NUM_BANKGENERIC_SLOTS do
         local frame = _G["BankFrameItem"..i]
-        if frame then
-            ContainerFrameItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay)
-        end
+        ContainerFrameItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay)
     end
 
     -- loot frames
     for i=1,NUM_GROUP_LOOT_FRAMES do
         local frame = _G["GroupLootFrame"..i].IconFrame
-        if frame then
-            LootFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
-        end
+        LootFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
     end
 
     -- merchant frames
@@ -441,9 +418,7 @@ function CanIMogIt.frame:ItemOverlayEvents(event, ...)
         for column=1,7 do
             for button=1,14 do
                 local frame = _G["GuildBankColumn"..column.."Button"..button]
-                if frame then
-                    GuildBankFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
-                end
+                GuildBankFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
             end
         end
     end
