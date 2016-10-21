@@ -466,30 +466,21 @@ end
 
 local bagsOpenedOnce = false
 local bagsClosedOnce = false
-local bagsTimer = 0
-local bagsTimerMax = 1
-local countBagsTimer = false
-
 local timer = 0
 local function GetAppearancesOnUpdate(self, elapsed)
     -- OnUpdate function with a reset timer to throttle getting appearances.
     timer = timer + elapsed
-    if countBagsTimer then
-        bagsTimer = bagsTimer + elapsed
-    end
     if timer >= CanIMogIt.throttleTime then
         _GetAppearances()
         -- This is used to prevent a crash from accessing Blizzard endpoints.
         -- Hopefully it will be unneeded after 7.1.
-        if  bagsTimer >= bagsTimerMax and bagsOpenedOnce and not bagsClosedOnce then
+        if bagsOpenedOnce and not bagsClosedOnce then
             CloseAllBags()
             bagsClosedOnce = true
-            countBagsTimer = false
         end
         if not bagsOpenedOnce then
             OpenAllBags()
             bagsOpenedOnce = true
-            countBagsTimer = true
         end
         timer = 0
     end
