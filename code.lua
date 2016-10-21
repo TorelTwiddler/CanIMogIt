@@ -1045,6 +1045,7 @@ ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemToolt
 ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
 ShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
 ShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
 
 
 function CanIMogIt_OnSetHyperlink(self, link)
