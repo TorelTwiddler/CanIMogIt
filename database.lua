@@ -92,6 +92,7 @@ end
 
 
 function CanIMogIt:DBRemoveItem(appearanceID, sourceID)
+    if self.db.global.appearances[appearanceID] == nil then return end
     if self.db.global.appearances[appearanceID].sources[sourceID] ~= nil then
         self.db.global.appearances[appearanceID].sources[sourceID] = nil
         if next(self.db.global.appearances[appearanceID].sources) == nil then
