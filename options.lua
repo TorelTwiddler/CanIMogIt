@@ -99,7 +99,7 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     -- Add functions you want to catch events here
     self:AddonLoaded(event, ...)
     self:HookItemOverlay(event, ...)
-    -- self:OnEncounterJournalLoaded(event, ...)
+    self:OnEncounterJournalLoaded(event, ...)
     self:TransmogCollectionUpdated(event, ...)
     -- self:OnAuctionHouseShow(event, ...)
     self:OnGuildBankOpened(event, ...)

@@ -141,14 +141,31 @@ function MerchantFrame_CIMIUpdateIcon(self)
 end
 
 
--- local function JournalFrame_SetLootButton(itemFrame)
---     -- Sets the icon overlay for the merchant frame.
---     if calculatedFrames[tostring(self)] then return end
---     calculatedFrames[tostring(self)] = true
---     if not CheckOptionEnabled(itemFrame) then return end
---     local itemLink = itemFrame.link
---     SetIcon(itemFrame, CanIMogIt:GetTooltipText(itemLink))
--- end
+function EncounterJournalFrame_CIMIUpdateIcon(self)
+    if not self then return end
+    if not CheckOptionEnabled(self) then
+        self.CIMIIconTexture:SetShown(false)
+        self:SetScript("OnUpdate", nil)
+        return
+    end
+
+    local itemLink = self:GetParent().link
+    SetIcon(self, EncounterJournalFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+end
+
+
+local function EncounterJournalFrame_CIMISetLootButton(self)
+    -- Sets the icon overlay for the Encounter Journal dungeon and raid tabs.
+    local overlay = self.CanIMogItOverlay
+    if not overlay then return end
+    if not CheckOptionEnabled(overlay) then
+        overlay.CIMIIconTexture:SetShown(false)
+        overlay:SetScript("OnUpdate", nil)
+        return
+    end
+    local itemLink = self.link
+    SetIcon(overlay, EncounterJournalFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+end
 
 
 -- local function AuctionFrame_OnUpdate(self, elapsed)
@@ -257,6 +274,14 @@ function VoidStorageFrame_CIMIOnClick()
 end
 
 
+function EncounterJournalFrame_CIMIOnValueChanged()
+    for i=1,10 do
+        local frame = _G["EncounterJournalEncounterFrameInfoLootScrollFrameButton"..i]
+        EncounterJournalFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
+    end
+end
+
+
 ----------------------------
 -- Begin adding to frames --
 ----------------------------
@@ -269,26 +294,34 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     for i=1,NUM_CONTAINER_FRAMES do
         for j=1,MAX_CONTAINER_ITEMS do
             local frame = _G["ContainerFrame"..i.."Item"..j]
-            AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
+            if frame then
+                AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
+            end
         end
     end
 
     -- Add hook for the main bank frame.
     for i=1,NUM_BANKGENERIC_SLOTS do
         local frame = _G["BankFrameItem"..i]
-        AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
+        if frame then
+            AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
+        end
     end
 
     -- Add hook for the loot frames.
     for i=1,NUM_GROUP_LOOT_FRAMES do
         local frame = _G["GroupLootFrame"..i].IconFrame
-        AddToFrame(frame, LootFrame_CIMIUpdateIcon)
+        if frame then
+            AddToFrame(frame, LootFrame_CIMIUpdateIcon)
+        end
     end
 
     -- Add hook for the Mail inbox frames.
     for i=1,ATTACHMENTS_MAX_SEND do
         local frame = _G["OpenMailAttachmentButton"..i]
-        AddToFrame(frame, MailFrame_CIMIUpdateIcon)
+        if frame then
+            AddToFrame(frame, MailFrame_CIMIUpdateIcon)
+        end
     end
 
     -- Add hook for clicking on mail (since there is no event).
@@ -304,7 +337,9 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     -- 10 is the number of merchant items visible at once.
     for i=1,10 do
         local frame = _G["MerchantItem"..i.."ItemButton"]
-        AddToFrame(frame, MerchantFrame_CIMIUpdateIcon)
+        if frame then
+            AddToFrame(frame, MerchantFrame_CIMIUpdateIcon)
+        end
     end
 
     -- Add hook for clicking on the next or previous buttons in the
@@ -330,18 +365,22 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     -- --     end
     -- -- end
 
-    -- -- function CanIMogIt.frame:OnEncounterJournalLoaded(event, addonName, ...)
-    -- --     if event ~= "ADDON_LOADED" then return end
-    -- --     if addonName ~= "Blizzard_EncounterJournal" then return end
-    -- --     for i=1,10 do
-    -- --         local frame = _G["EncounterJournalEncounterFrameInfoLootScrollFrameButton"..i]
-    -- --         AddToFrame(frame)
-    -- --     end
-    -- --     hooksecurefunc("EncounterJournal_SetLootButton", JournalFrame_SetLootButton)
-    -- -- end
+end
 
 
+local encounterJournalLoaded = false
 
+function CanIMogIt.frame:OnEncounterJournalLoaded(event, addonName, ...)
+    if event ~= "ADDON_LOADED" then return end
+    if addonName ~= "Blizzard_EncounterJournal" then return end
+    for i=1,10 do
+        local frame = _G["EncounterJournalEncounterFrameInfoLootScrollFrameButton"..i]
+        if frame then
+            AddToFrame(frame, EncounterJournalFrame_CIMIUpdateIcon)
+        end
+    end
+    hooksecurefunc("EncounterJournal_SetLootButton", EncounterJournalFrame_CIMISetLootButton)
+    _G["EncounterJournalEncounterFrameInfoLootScrollFrameScrollBar"]:HookScript("OnValueChanged", EncounterJournalFrame_CIMIOnValueChanged)
 end
 
 
@@ -354,7 +393,9 @@ function CanIMogIt.frame:OnGuildBankOpened(event, ...)
     for column=1,7 do
         for button=1,14 do
             local frame = _G["GuildBankColumn"..column.."Button"..button]
-            AddToFrame(frame, GuildBankFrame_CIMIUpdateIcon)
+            if frame then
+                AddToFrame(frame, GuildBankFrame_CIMIUpdateIcon)
+            end
         end
     end
 end
@@ -369,7 +410,9 @@ function CanIMogIt.frame:OnVoidStorageOpened(event, ...)
     voidStorageLoaded = true
     for i=1,80 do
         local frame = _G["VoidStorageStorageButton"..i]
-        AddToFrame(frame, VoidStorageFrame_CIMIUpdateIcon)
+        if frame then
+            AddToFrame(frame, VoidStorageFrame_CIMIUpdateIcon)
+        end
     end
 
     local voidStorageFrame = _G["VoidStorageFrame"]
@@ -412,6 +455,7 @@ function CanIMogIt.frame:ItemOverlayEvents(event, ...)
             end
         end
     end
+
     -- main bank frame
     for i=1,NUM_BANKGENERIC_SLOTS do
         local frame = _G["BankFrameItem"..i]
@@ -434,6 +478,10 @@ function CanIMogIt.frame:ItemOverlayEvents(event, ...)
     -- void storage frames
     if voidStorageLoaded then
         VoidStorageFrame_CIMIOnClick()
+    end
+
+    if encounterJournalLoaded then
+        EncounterJournalFrame_CIMIOnValueChanged()
     end
 
     -- guild bank frames
