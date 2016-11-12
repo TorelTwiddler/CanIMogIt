@@ -421,7 +421,7 @@ end
 local function AddAppearance(appearanceID)
     -- Adds all of the sources for this appearanceID to the database.
     -- returns early if the buffer is reached.
-    sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
+    local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
     for i, source in pairs(sources) do
         if source.isCollected then
             AddSource(source, appearanceID)
@@ -896,7 +896,7 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
 
     -- Return cached items
     if CanIMogIt.cache[itemLink] then
-        cachedText, cachedUnmodifiedText = unpack(CanIMogIt.cache[itemLink])
+        local cachedText, cachedUnmodifiedText = unpack(CanIMogIt.cache[itemLink])
         return cachedText, cachedUnmodifiedText
     end
 
