@@ -33,7 +33,7 @@ local function partOf(input, rootString)
     -- Pulls the rootString out of input, leaving the rest of the string.
     -- rootString is a constant with %s, such as "Required %s" or "Hello %s!"
     -- We must assume that no part (before or after) of rootString is in the sub string...
-    before, after = getBeforeAfter(rootString)
+    local before, after = getBeforeAfter(rootString)
     local cleanBefore, count = input:gsub(before, "")
     if before and count == 0 then return false end
     local cleanAfter, count = cleanBefore:gsub(after, "")
