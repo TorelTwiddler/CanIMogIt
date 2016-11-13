@@ -709,13 +709,13 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
     local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
     if appearanceID == nil then return false end
     if CanIMogIt:DBHasAppearance(appearanceID) then
-        -- if CanIMogIt:IsItemArmor(itemLink) then
+        if CanIMogIt:IsItemArmor(itemLink) then
             -- The character knows the appearance, check that it's from the same armor type.
-        for sourceID, knownItem in pairs(CanIMogIt:DBGetSources(appearanceID)) do
-            if CanIMogIt:IsArmorSubClassName(knownItem.subClass, itemLink) then
-                return true
+            for sourceID, knownItem in pairs(CanIMogIt:DBGetSources(appearanceID)) do
+                if CanIMogIt:IsArmorSubClassName(knownItem.subClass, itemLink) then
+                    return true
+                end
             end
-        end
         else
             -- Is not armor, don't worry about same appearance for different types
             return true
