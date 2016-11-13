@@ -60,7 +60,7 @@ end
 local function AddToFrame(parentFrame, updateIconFunc)
     -- Create the Texture and set OnUpdate
     if parentFrame and not parentFrame.CanIMogItOverlay then
-        frame = CreateFrame("Frame", "CIMIOverlayFrame_"..tostring(parentFrame:GetName()), parentFrame)
+        local frame = CreateFrame("Frame", "CIMIOverlayFrame_"..tostring(parentFrame:GetName()), parentFrame)
         parentFrame.CanIMogItOverlay = frame
         -- Get the frame to match the shape/size of its parent
         frame:SetAllPoints()
