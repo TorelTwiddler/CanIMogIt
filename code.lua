@@ -716,10 +716,10 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
                 return true
             end
         end
-        -- else
-        --     -- ???Is not armor, don't worry about same appearance for different types ???
-        --     return true
-        -- end
+        else
+            -- Is not armor, don't worry about same appearance for different types
+            return true
+        end
     end
 
     -- Don't know from the database, try using the API.
