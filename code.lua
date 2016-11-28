@@ -493,6 +493,51 @@ function CanIMogIt:ResetCache()
 end
 
 
+function CanIMogIt:GetSourceTypesText(itemLink)
+    -- Returns string of the all the types of sources which can provide an item with this appearance.
+    local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
+    if appearanceID == nil then return end
+    local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
+    if sources then
+        local output = ""
+        local totalSourceTypes = { 0, 0, 0, 0, 0, 0 }
+        local knownSourceTypes = { 0, 0, 0, 0, 0, 0 }
+        local totalUnknownType = 0
+        local knownUnknownType = 0
+        for _, source in pairs(sources) do
+            if source.sourceType ~= 0 then
+                totalSourceTypes[source.sourceType] = totalSourceTypes[source.sourceType] + 1
+                if source.isCollected then
+                    knownSourceTypes[source.sourceType] = knownSourceTypes[source.sourceType] + 1
+                end
+            elseif source.sourceType == 0 and source.isCollected then
+                totalUnknownType = totalUnknownType + 1
+                knownUnknownType = knownUnknownType + 1
+            end
+        end
+        for sourceType, totalCount in ipairs(totalSourceTypes) do
+            if (totalCount > 0) then
+                local knownCount = knownSourceTypes[sourceType]
+                local knownColor = CanIMogIt.RED_ORANGE
+                if knownCount == totalCount then
+                    knownColor = CanIMogIt.GRAY
+                elseif knownCount > 0 then
+                    knownColor = CanIMogIt.BLUE
+                end
+                output = string.format("%s"..knownColor.."%s ("..knownColor.."%i/%i"..knownColor..")"..CanIMogIt.WHITE..", ",
+                    output, _G["TRANSMOG_SOURCE_"..sourceType], knownCount, totalCount)
+            end
+        end
+        if totalUnknownType > 0 then
+            output = string.format("%s"..CanIMogIt.GRAY.."Unobtainable ("..CanIMogIt.GRAY.."%i/%i"..CanIMogIt.GRAY..")"..CanIMogIt.WHITE..", ",
+                output, knownUnknownType, totalUnknownType)
+        end
+        return string.sub(output, 1, -3)
+    end
+    return
+end
+
+
 function CanIMogIt:GetPlayerArmorTypeName()
     local playerArmorTypeID = classArmorTypeMap[select(2, UnitClass("player"))]
     return select(1, GetItemSubClassInfo(4, playerArmorTypeID))
@@ -1008,16 +1053,11 @@ local function addToTooltip(tooltip, itemLink)
         bag, slot = tooltip:GetOwner():GetParent():GetID(), tooltip:GetOwner():GetID()
     end
 
-    -- local ok;
     if CanIMogItOptions["debug"] then
-        -- ok = pcall(printDebug, CanIMogIt.tooltip, itemLink)
-        -- if not ok then return end
         printDebug(CanIMogIt.tooltip, itemLink, bag, slot)
     end
 
     local text;
-    -- ok, text = pcall(CanIMogIt.GetTooltipText, CanIMogIt, itemLink)
-    -- if not ok then return end
     text = CanIMogIt.GetTooltipText(CanIMogIt, itemLink, bag, slot)
     if text and text ~= "" then
         if leftTexts[text] then
@@ -1025,6 +1065,11 @@ local function addToTooltip(tooltip, itemLink)
         else
             addDoubleLine(tooltip, " ", text)
         end
+    end
+
+    local sourceTypesText = CanIMogIt:GetSourceTypesText(itemLink)
+    if sourceTypesText and sourceTypesText ~= "" then
+        addDoubleLine(tooltip, " ", sourceTypesText)
     end
 end
 

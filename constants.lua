@@ -58,6 +58,7 @@ CanIMogIt.ORANGE = "|cffe69f00"
 CanIMogIt.RED_ORANGE = "|cffff9333"
 CanIMogIt.YELLOW = "|cfff0e442"
 CanIMogIt.GRAY =   "|cff888888"
+CanIMogIt.WHITE =   "|cffffffff"
 
 
 -- Tooltip Text
