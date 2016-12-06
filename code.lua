@@ -488,7 +488,9 @@ local function _GetAppearances()
     appearancesTable = {} -- cleanup
     CanIMogIt:ResetCache()
     CanIMogIt.frame:SetScript("OnUpdate", nil)
-    CanIMogIt:Print(CanIMogIt.DATABASE_DONE_UPDATE_TEXT..CanIMogIt.BLUE.."+" .. sourcesAdded .. ", "..CanIMogIt.ORANGE.."-".. sourcesRemoved)
+    if CanIMogItOptions["printDatabaseScan"] then
+        CanIMogIt:Print(CanIMogIt.DATABASE_DONE_UPDATE_TEXT..CanIMogIt.BLUE.."+" .. sourcesAdded .. ", "..CanIMogIt.ORANGE.."-".. sourcesRemoved)
+    end
 end
 
 
@@ -506,7 +508,9 @@ end
 function CanIMogIt:GetAppearances()
     -- Gets a table of all the appearances known to
     -- a character and adds it to the database.
-    CanIMogIt:Print(CanIMogIt.DATABASE_START_UPDATE_TEXT)
+    if CanIMogItOptions["printDatabaseScan"] then
+        CanIMogIt:Print(CanIMogIt.DATABASE_START_UPDATE_TEXT)
+    end
     removeAppearancesTable = copyTable(CanIMogIt.db.global.appearances)
     CanIMogIt.frame:SetScript("OnUpdate", GetAppearancesOnUpdate)
 end

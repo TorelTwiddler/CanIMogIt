@@ -16,7 +16,7 @@ StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
   preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
 }
 
-CanIMogIt_OptionsVersion = "1.6"
+CanIMogIt_OptionsVersion = "1.7"
 
 CanIMogItOptions_Defaults = {
     ["options"] = {
@@ -28,6 +28,7 @@ CanIMogItOptions_Defaults = {
         ["showItemIconOverlay"] = true,
         ["showVerboseText"] = false,
         ["showSourceLocationTooltip"] = true,
+        ["printDatabaseScan"] = true,
     },
 }
 
@@ -60,6 +61,10 @@ CanIMogItOptions_DisplayData = {
     ["showSourceLocationTooltip"] = {
         ["displayName"] = L["Show Source Location Tooltip"],
         ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop)."]
+    },
+    ["printDatabaseScan"] = {
+        ["displayName"] = L["Database Scanning chat messages"],
+        ["description"] = L["Shows chat messages on login about the database scan."]
     },
 }
 
@@ -164,6 +169,7 @@ local function createOptionsMenu()
     local showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
     local showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
     local showSourceLocationTooltip = newCheckbox(CanIMogIt.frame, "showSourceLocationTooltip")
+    local printDatabaseScan = newCheckbox(CanIMogIt.frame, "printDatabaseScan")
 
     -- position the checkboxes
     debug:SetPoint("TOPLEFT", 16, -16)
@@ -173,6 +179,7 @@ local function createOptionsMenu()
     showItemIconOverlay:SetPoint("TOPLEFT", showUnknownOnly, "BOTTOMLEFT")
     showVerboseText:SetPoint("TOPLEFT", showItemIconOverlay, "BOTTOMLEFT")
     showSourceLocationTooltip:SetPoint("TOPLEFT", showVerboseText, "BOTTOMLEFT")
+    printDatabaseScan:SetPoint("TOPLEFT", showSourceLocationTooltip, "BOTTOMLEFT")
 end
 
 
