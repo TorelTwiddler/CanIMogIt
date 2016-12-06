@@ -520,11 +520,11 @@ function CanIMogIt:ResetCache()
 end
 
 
-function CanIMogIt:CalculateSourceTypesText(itemLink)
+function CanIMogIt:CalculateSourceLocationText(itemLink)
     --[[
         Calculates the sources for this item.
         This function is not cached, so avoid calling often!
-        Use GetSourceTypesText whenever possible!
+        Use GetSourceLocationText whenever possible!
     ]]
     local output = ""
 
@@ -570,7 +570,7 @@ function CanIMogIt:CalculateSourceTypesText(itemLink)
 end
 
 
-function CanIMogIt:GetSourceTypesText(itemLink)
+function CanIMogIt:GetSourceLocationText(itemLink)
     -- Returns string of the all the types of sources which can provide an item with this appearance.
 
     cached_value = CanIMogIt.cache:GetItemSourcesValue(itemLink)
@@ -578,7 +578,7 @@ function CanIMogIt:GetSourceTypesText(itemLink)
         return cached_value
     end
 
-    local output = CanIMogIt:CalculateSourceTypesText(itemLink)
+    local output = CanIMogIt:CalculateSourceLocationText(itemLink)
 
     CanIMogIt.cache:SetItemSourcesValue(itemLink, output)
 
@@ -1129,9 +1129,11 @@ local function addToTooltip(tooltip, itemLink)
         end
     end
 
-    local sourceTypesText = CanIMogIt:GetSourceTypesText(itemLink)
-    if sourceTypesText and sourceTypesText ~= "" then
-        addDoubleLine(tooltip, " ", sourceTypesText)
+    if CanIMogItOptions["showSourceLocationTooltip"] then
+        local sourceTypesText = CanIMogIt:GetSourceLocationText(itemLink)
+        if sourceTypesText and sourceTypesText ~= "" then
+            addDoubleLine(tooltip, " ", sourceTypesText)
+        end
     end
 end
 

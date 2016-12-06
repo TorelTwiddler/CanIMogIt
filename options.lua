@@ -16,7 +16,7 @@ StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
   preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
 }
 
-CanIMogIt_OptionsVersion = "1.5"
+CanIMogIt_OptionsVersion = "1.6"
 
 CanIMogItOptions_Defaults = {
     ["options"] = {
@@ -27,6 +27,7 @@ CanIMogItOptions_Defaults = {
         ["showUnknownOnly"] = false,
         ["showItemIconOverlay"] = true,
         ["showVerboseText"] = false,
+        ["showSourceLocationTooltip"] = true,
     },
 }
 
@@ -55,6 +56,10 @@ CanIMogItOptions_DisplayData = {
     ["showVerboseText"] = {
         ["displayName"] = L["Verbose Text"],
         ["description"] = L["Shows a more detailed text for some of the tooltips."]
+    },
+    ["showSourceLocationTooltip"] = {
+        ["displayName"] = L["Show Source Location Tooltip"],
+        ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop)."]
     },
 }
 
@@ -158,6 +163,7 @@ local function createOptionsMenu()
     local showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
     local showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
     local showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
+    local showSourceLocationTooltip = newCheckbox(CanIMogIt.frame, "showSourceLocationTooltip")
 
     -- position the checkboxes
     debug:SetPoint("TOPLEFT", 16, -16)
@@ -166,6 +172,7 @@ local function createOptionsMenu()
     showUnknownOnly:SetPoint("TOPLEFT", showTransmoggableOnly, "BOTTOMLEFT")
     showItemIconOverlay:SetPoint("TOPLEFT", showUnknownOnly, "BOTTOMLEFT")
     showVerboseText:SetPoint("TOPLEFT", showItemIconOverlay, "BOTTOMLEFT")
+    showSourceLocationTooltip:SetPoint("TOPLEFT", showVerboseText, "BOTTOMLEFT")
 end
 
 
