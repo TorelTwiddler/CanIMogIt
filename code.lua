@@ -130,6 +130,10 @@ local miscArmorExceptions = {
 }
 
 
+-- Get the name for Cosmetic. Uses http://www.wowhead.com/item=130064/deadeye-monocle.
+local COSMETIC_NAME = select(3, GetItemInfoInstant(130064))
+
+
 -- Built-in colors
 -- TODO: move to constants
 local BLIZZARD_RED = "|cffff1919"
@@ -809,7 +813,8 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
         if CanIMogIt:IsItemArmor(itemLink) then
             -- The character knows the appearance, check that it's from the same armor type.
             for sourceID, knownItem in pairs(CanIMogIt:DBGetSources(appearanceID)) do
-                if CanIMogIt:IsArmorSubClassName(knownItem.subClass, itemLink) then
+                if CanIMogIt:IsArmorSubClassName(knownItem.subClass, itemLink) 
+                        or knownItem.subClass == COSMETIC_NAME then
                     return true
                 end
             end
