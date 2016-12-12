@@ -25,7 +25,7 @@ local resetDelay = .3
 ----------------------------
 
 
-local function CheckOptionEnabled(frame)
+function CIMI_CheckOverlayIconEnabled(frame)
     -- Checks if the item overlay option is enabled.
     if not CanIMogItOptions["showItemIconOverlay"] then
         return false
@@ -34,7 +34,7 @@ local function CheckOptionEnabled(frame)
 end
 
 
-local function SetIcon(frame, updateIconFunc, text, unmodifiedText)
+function CIMI_SetIcon(frame, updateIconFunc, text, unmodifiedText)
     -- Sets the icon based on the text for the CanIMogItOverlay on the given frame.
     frame.text = tostring(text)
     frame.unmodifiedText = tostring(unmodifiedText)
@@ -57,7 +57,7 @@ local function SetIcon(frame, updateIconFunc, text, unmodifiedText)
 end
 
 
-local function AddToFrame(parentFrame, updateIconFunc)
+function CIMI_AddToFrame(parentFrame, updateIconFunc)
     -- Create the Texture and set OnUpdate
     if parentFrame and not parentFrame.CanIMogItOverlay then
         local frame = CreateFrame("Frame", "CIMIOverlayFrame_"..tostring(parentFrame:GetName()), parentFrame)
@@ -96,7 +96,7 @@ end
 
 function ContainerFrameItemButton_CIMIUpdateIcon(self)
     if not self or not self:GetParent() or not self:GetParent():GetParent() then return end
-    if not CheckOptionEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -105,7 +105,7 @@ function ContainerFrameItemButton_CIMIUpdateIcon(self)
     -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
     -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
     if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
-    SetIcon(self, ContainerFrameItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
+    CIMI_SetIcon(self, ContainerFrameItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
 end
 
 
@@ -113,20 +113,20 @@ function LootFrame_CIMIUpdateIcon(self)
     if not self then return end
     -- Sets the icon overlay for the loot frame.
     local lootID = self:GetParent():GetParent().rollID
-    if not CheckOptionEnabled(self) or lootID == nil then
+    if not CIMI_CheckOverlayIconEnabled(self) or lootID == nil then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
     end
 
     local itemLink = GetLootRollItemLink(lootID)
-    SetIcon(self, LootFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+    CIMI_SetIcon(self, LootFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
 end
 
 
 function MerchantFrame_CIMIUpdateIcon(self)
     if not self then return end
-    if not CheckOptionEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -134,23 +134,23 @@ function MerchantFrame_CIMIUpdateIcon(self)
 
     local itemLink = self:GetParent().link
     if itemLink == nil then
-        SetIcon(self, MerchantFrame_CIMIUpdateIcon, nil)
+        CIMI_SetIcon(self, MerchantFrame_CIMIUpdateIcon, nil)
     else
-        SetIcon(self, MerchantFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+        CIMI_SetIcon(self, MerchantFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
     end
 end
 
 
 function EncounterJournalFrame_CIMIUpdateIcon(self)
     if not self then return end
-    if not CheckOptionEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
     end
 
     local itemLink = self:GetParent().link
-    SetIcon(self, EncounterJournalFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+    CIMI_SetIcon(self, EncounterJournalFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
 end
 
 
@@ -158,13 +158,13 @@ local function EncounterJournalFrame_CIMISetLootButton(self)
     -- Sets the icon overlay for the Encounter Journal dungeon and raid tabs.
     local overlay = self.CanIMogItOverlay
     if not overlay then return end
-    if not CheckOptionEnabled(overlay) then
+    if not CIMI_CheckOverlayIconEnabled(overlay) then
         overlay.CIMIIconTexture:SetShown(false)
         overlay:SetScript("OnUpdate", nil)
         return
     end
     local itemLink = self.link
-    SetIcon(overlay, EncounterJournalFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+    CIMI_SetIcon(overlay, EncounterJournalFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
 end
 
 
@@ -172,17 +172,17 @@ end
 --     -- Sets the icon overlay for the auction frame.
 --     if calculatedFrames[tostring(self)] then return end
 --     calculatedFrames[tostring(self)] = true
---     if not CheckOptionEnabled(self) then return end
+--     if not CIMI_CheckOverlayIconEnabled(self) then return end
 --     local browseButtonID = self:GetParent():GetID()
 --     local index = BrowseScrollFrame.offset + browseButtonID
 --     local itemLink = GetAuctionItemLink("list", index)
---     SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
+--     CIMI_SetIcon(self, CanIMogIt:GetTooltipText(itemLink))
 -- end
 
 
 function MailFrame_CIMIUpdateIcon(self)
     if not self then return end
-    if not CheckOptionEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -199,18 +199,18 @@ function MailFrame_CIMIUpdateIcon(self)
         end
     end
     if not messageIndex then
-        SetIcon(self, MailFrame_CIMIUpdateIcon, "")
+        CIMI_SetIcon(self, MailFrame_CIMIUpdateIcon, "")
         return
     end
 
     local itemLink = GetInboxItemLink(messageIndex, frameID)
-    SetIcon(self, MailFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+    CIMI_SetIcon(self, MailFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
 end
 
 
 function GuildBankFrame_CIMIUpdateIcon(self)
     if not self then return end
-    if not CheckOptionEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -219,13 +219,13 @@ function GuildBankFrame_CIMIUpdateIcon(self)
     local tab = GetCurrentGuildBankTab()
     local slot = self:GetParent():GetID()
     local itemLink = GetGuildBankItemLink(tab, slot)
-    SetIcon(self, GuildBankFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+    CIMI_SetIcon(self, GuildBankFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
 end
 
 
 function VoidStorageFrame_CIMIUpdateIcon(self)
     if not self then return end
-    if not CheckOptionEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled(self) then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -235,7 +235,7 @@ function VoidStorageFrame_CIMIUpdateIcon(self)
     local buttonSlot = self:GetParent().slot
     local voidSlot = buttonSlot + (80 * (page - 1))
     local itemLink = GetVoidItemHyperlinkString(voidSlot)
-    SetIcon(self, VoidStorageFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+    CIMI_SetIcon(self, VoidStorageFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
 end
 
 
@@ -295,7 +295,7 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
         for j=1,MAX_CONTAINER_ITEMS do
             local frame = _G["ContainerFrame"..i.."Item"..j]
             if frame then
-                AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
+                CIMI_AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
             end
         end
     end
@@ -304,7 +304,7 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     for i=1,NUM_BANKGENERIC_SLOTS do
         local frame = _G["BankFrameItem"..i]
         if frame then
-            AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
+            CIMI_AddToFrame(frame, ContainerFrameItemButton_CIMIUpdateIcon)
         end
     end
 
@@ -312,7 +312,7 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     for i=1,NUM_GROUP_LOOT_FRAMES do
         local frame = _G["GroupLootFrame"..i].IconFrame
         if frame then
-            AddToFrame(frame, LootFrame_CIMIUpdateIcon)
+            CIMI_AddToFrame(frame, LootFrame_CIMIUpdateIcon)
         end
     end
 
@@ -320,7 +320,7 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     for i=1,ATTACHMENTS_MAX_SEND do
         local frame = _G["OpenMailAttachmentButton"..i]
         if frame then
-            AddToFrame(frame, MailFrame_CIMIUpdateIcon)
+            CIMI_AddToFrame(frame, MailFrame_CIMIUpdateIcon)
         end
     end
 
@@ -338,7 +338,7 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     for i=1,10 do
         local frame = _G["MerchantItem"..i.."ItemButton"]
         if frame then
-            AddToFrame(frame, MerchantFrame_CIMIUpdateIcon)
+            CIMI_AddToFrame(frame, MerchantFrame_CIMIUpdateIcon)
         end
     end
 
@@ -361,7 +361,7 @@ function CanIMogIt.frame:HookItemOverlay(event, addonName)
     -- --     -- Add hook for the Auction House frames.
     -- --     for i=1,8 do
     -- --         local frame = _G["BrowseButton"..i.."Item"]
-    -- --         AddToFrame(frame, AuctionFrame_OnUpdate)
+    -- --         CIMI_AddToFrame(frame, AuctionFrame_OnUpdate)
     -- --     end
     -- -- end
 
@@ -376,7 +376,7 @@ function CanIMogIt.frame:OnEncounterJournalLoaded(event, addonName, ...)
     for i=1,10 do
         local frame = _G["EncounterJournalEncounterFrameInfoLootScrollFrameButton"..i]
         if frame then
-            AddToFrame(frame, EncounterJournalFrame_CIMIUpdateIcon)
+            CIMI_AddToFrame(frame, EncounterJournalFrame_CIMIUpdateIcon)
         end
     end
     hooksecurefunc("EncounterJournal_SetLootButton", EncounterJournalFrame_CIMISetLootButton)
@@ -394,7 +394,7 @@ function CanIMogIt.frame:OnGuildBankOpened(event, ...)
         for button=1,14 do
             local frame = _G["GuildBankColumn"..column.."Button"..button]
             if frame then
-                AddToFrame(frame, GuildBankFrame_CIMIUpdateIcon)
+                CIMI_AddToFrame(frame, GuildBankFrame_CIMIUpdateIcon)
             end
         end
     end
@@ -411,7 +411,7 @@ function CanIMogIt.frame:OnVoidStorageOpened(event, ...)
     for i=1,80 do
         local frame = _G["VoidStorageStorageButton"..i]
         if frame then
-            AddToFrame(frame, VoidStorageFrame_CIMIUpdateIcon)
+            CIMI_AddToFrame(frame, VoidStorageFrame_CIMIUpdateIcon)
         end
     end
 
@@ -427,7 +427,7 @@ end
 -- Event functions    --
 ------------------------
 
-local events = {
+CIMIEvents = {
     ["UNIT_INVENTORY_CHANGED"] = true,
     ["PLAYER_SPECIALIZATION_CHANGED"] = true,
     ["BAG_UPDATE"] = true,
@@ -445,7 +445,7 @@ local events = {
 }
 
 function CanIMogIt.frame:ItemOverlayEvents(event, ...)
-    if not events[event] then return end
+    if not CIMIEvents[event] then return end
     -- bags
     for i=1,NUM_CONTAINER_FRAMES do
         for j=1,MAX_CONTAINER_ITEMS do
