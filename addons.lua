@@ -34,11 +34,14 @@ if IsAddOnLoaded("AdiBags") then
         for i=1,160 do
             local frame = _G["AdiBagsItemButton"..i]
             if frame then
+                -- Added a timer here because their function runs too far after the BAG_UPDATE event.
                 C_Timer.After(.5, function() AdiBagsItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
             end
         end
     end
     hooksecurefunc(CanIMogIt.frame, "ItemOverlayEvents", CIMI_AdiBagsEvents)
 
+    -- The bags are considered "updated" well before the world is ready, so adding a delay
+    -- to try to update the bags not long after the person logs in.
     C_Timer.After(10, function() CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE") end)
 end
