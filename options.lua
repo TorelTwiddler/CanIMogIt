@@ -27,7 +27,7 @@ CanIMogItOptions_Defaults = {
         ["showUnknownOnly"] = false,
         ["showItemIconOverlay"] = true,
         ["showVerboseText"] = false,
-        ["showSourceLocationTooltip"] = true,
+        ["showSourceLocationTooltip"] = false,
         ["printDatabaseScan"] = true,
     },
 }
@@ -59,8 +59,8 @@ CanIMogItOptions_DisplayData = {
         ["description"] = L["Shows a more detailed text for some of the tooltips."]
     },
     ["showSourceLocationTooltip"] = {
-        ["displayName"] = L["Show Source Location Tooltip"],
-        ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop)."]
+        ["displayName"] = L["Show Source Location Tooltip"] .. " " .. CanIMogIt.YELLOW .. L["(Experimental)"],
+        ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop)."] .. "\n\n" .. L["Please note that this may not always be correct as Blizzard's information is incomplete."]
     },
     ["printDatabaseScan"] = {
         ["displayName"] = L["Database Scanning chat messages"],
