@@ -1,4 +1,4 @@
---@localization(locale="ruRU", format="lua_additive_table", handle-subnamespaces="subtable", table-name="translations")@
+local translations = --@localization(locale="ruRU", format="lua_table", handle-subnamespaces="subtable")@
 
 
 CanIMogIt:RegisterLocale("ruRU", translations)
