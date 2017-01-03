@@ -1,4 +1,4 @@
-local translations = --@localization(locale="enUS", format="lua_table", handle-subnamespaces="concat")@
+local translations = --@localization(locale="enUS", format="lua_table")@
 
 
 CanIMogIt:RegisterLocale("enUS", translations)

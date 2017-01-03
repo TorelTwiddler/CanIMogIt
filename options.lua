@@ -5,11 +5,11 @@
 local _G = _G
 local L = CanIMogIt.L
 
-local CREATE_DATABASE_TEXT = L["Message/Database/Can I Mog It? Important Message: Please log into all of your characters to compile complete transmog appearance data."]
+local CREATE_DATABASE_TEXT = L["Can I Mog It? Important Message: Please log into all of your characters to compile complete transmog appearance data."]
 
 StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
   text = CREATE_DATABASE_TEXT,
-  button1 = L["Message/Database/Okay, I'll go log onto all of my toons!"],
+  button1 = L["Okay, I'll go log onto all of my toons!"],
   timeout = 0,
   whileDead = true,
   hideOnEscape = true,
@@ -35,36 +35,36 @@ CanIMogItOptions_Defaults = {
 
 CanIMogItOptions_DisplayData = {
     ["debug"] = {
-        ["displayName"] = L["Options/Tooltips/Debug Tooltip"],
-        ["description"] = L["Options/Tooltips/Detailed information for debug purposes. Use this when sending bug reports."],
+        ["displayName"] = L["Debug Tooltip"],
+        ["description"] = L["Detailed information for debug purposes. Use this when sending bug reports."],
     },
     ["showEquippableOnly"] = {
-        ["displayName"] = L["Options/Equippable Items Only"],
-        ["description"] = L["Options/Only show on items that can be equipped."]
+        ["displayName"] = L["Equippable Items Only"],
+        ["description"] = L["Only show on items that can be equipped."]
     },
     ["showTransmoggableOnly"] = {
-        ["displayName"] = L["Options/Transmoggable Items Only"],
-        ["description"] = L["Options/Only show on items that can be transmoggrified."]
+        ["displayName"] = L["Transmoggable Items Only"],
+        ["description"] = L["Only show on items that can be transmoggrified."]
     },
     ["showUnknownOnly"] = {
-        ["displayName"] = L["Options/Unknown Items Only"],
-        ["description"] = L["Options/Only show on items that you haven't learned."]
+        ["displayName"] = L["Unknown Items Only"],
+        ["description"] = L["Only show on items that you haven't learned."]
     },
     ["showItemIconOverlay"] = {
-        ["displayName"] = L["Options/Overlay/Show Bag Icons"],
-        ["description"] = L["Options/Overlay/Shows the icon directly on the item in your bag."]
+        ["displayName"] = L["Show Bag Icons"],
+        ["description"] = L["Shows the icon directly on the item in your bag."]
     },
     ["showVerboseText"] = {
-        ["displayName"] = L["Options/Tooltips/Verbose Text"],
-        ["description"] = L["Options/Tooltips/Shows a more detailed text for some of the tooltips."]
+        ["displayName"] = L["Verbose Text"],
+        ["description"] = L["Shows a more detailed text for some of the tooltips."]
     },
     ["showSourceLocationTooltip"] = {
-        ["displayName"] = L["Options/Tooltips/Show Source Location Tooltip"] .. " " .. CanIMogIt.YELLOW .. L["Options/(Experimental)"],
-        ["description"] = L["Options/Tooltips/Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop)."] .. "\n\n" .. L["Options/Please note that this may not always be correct as Blizzard's information is incomplete."]
+        ["displayName"] = L["Show Source Location Tooltip"] .. " " .. CanIMogIt.YELLOW .. L["(Experimental)"],
+        ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop)."] .. "\n\n" .. L["Please note that this may not always be correct as Blizzard's information is incomplete."]
     },
     ["printDatabaseScan"] = {
-        ["displayName"] = L["Options/Chat/Database Scanning chat messages"],
-        ["description"] = L["Options/Chat/Shows chat messages on login about the database scan."]
+        ["displayName"] = L["Database Scanning chat messages"],
+        ["description"] = L["Shows chat messages on login about the database scan."]
     },
 }
 
@@ -187,7 +187,7 @@ function CanIMogIt.frame.Loaded()
     -- Set the Options from defaults.
     if (not CanIMogItOptions) then
         CanIMogItOptions = CanIMogItOptions_Defaults.options
-        print(L["Messages/Settings/CanIMogItOptions not found, loading defaults!"])
+        print(L["CanIMogItOptions not found, loading defaults!"])
     end
     -- Set missing options from the defaults if the version is out of date.
     if (CanIMogItOptions["version"] < CanIMogIt_OptionsVersion) then
