@@ -287,8 +287,8 @@ end
 ----------------------------
 
 
-function CanIMogIt.frame:HookItemOverlay(event, addonName)
-    if event ~= "PLAYER_LOGIN" and addonName ~= "CanIMogIt" then return end
+function CanIMogIt.frame:HookItemOverlay(event)
+    if event ~= "PLAYER_LOGIN" then return end
 
     -- Add hook for each bag item.
     for i=1,NUM_CONTAINER_FRAMES do

@@ -17,10 +17,16 @@ if IsAddOnLoaded("AdiBags") then
     end
 
     function CIMI_AdiBagsAddFrame(self, event, addonName)
-        if event ~= "PLAYER_LOGIN" and addonName ~= "CanIMogIt" then return end
+        if event ~= "PLAYER_LOGIN" and event ~= "BANKFRAME_OPENED" and not CIMIEvents[event] then return end
         -- Add to frames
-        for i=1,160 do
+        for i=1,300 do
             local frame = _G["AdiBagsItemButton"..i]
+            if frame then
+                CIMI_AddToFrame(frame, AdiBagsItemButton_CIMIUpdateIcon)
+            end
+        end
+        for i=1,28 do
+            local frame = _G["AdiBagsBankItemButton"..i]
             if frame then
                 CIMI_AddToFrame(frame, AdiBagsItemButton_CIMIUpdateIcon)
             end
@@ -31,7 +37,7 @@ if IsAddOnLoaded("AdiBags") then
     function CIMI_AdiBagsEvents(self, event, ...)
         if not CIMIEvents[event] then return end
         -- Update event
-        for i=1,160 do
+        for i=1,300 do
             local frame = _G["AdiBagsItemButton"..i]
             if frame then
                 -- Added a timer here because their function runs too far after the BAG_UPDATE event.
