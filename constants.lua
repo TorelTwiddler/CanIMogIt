@@ -62,18 +62,18 @@ CanIMogIt.WHITE =   "|cffffffff"
 
 
 -- Tooltip Text
-local KNOWN =                                       L["Tooltip Text"]["Learned."]
-local KNOWN_FROM_ANOTHER_ITEM =                     L["Tooltip Text"]["Learned from another item."]
-local KNOWN_BY_ANOTHER_CHARACTER =                  L["Tooltip Text"]["Learned for a different class."]
-local KNOWN_BUT_TOO_LOW_LEVEL =                     L["Tooltip Text"]["Learned but cannot transmog yet."]
-local KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL =   L["Tooltip Text"]["Learned from another item but cannot transmog yet."]
-local KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       L["Tooltip Text"]["Learned for a different class and item."]
-local UNKNOWABLE_SOULBOUND =                        L["Tooltip Text"]["Cannot learn: Soulbound"] .. " " -- subClass
-local UNKNOWABLE_BY_CHARACTER =                     L["Tooltip Text"]["Cannot learn:"] .. " " -- subClass
-local CAN_BE_LEARNED_BY =                           L["Tooltip Text"]["Can be learned by:"] -- list of classes
-local UNKNOWN =                                     L["Tooltip Text"]["Not learned."]
-local NOT_TRANSMOGABLE =                            L["Tooltip Text"]["Cannot be learned."]
-local CANNOT_DETERMINE =                            L["Tooltip Text"]["Cannot determine status on other characters."]
+local KNOWN =                                       L["Tooltip Text/Learned."]
+local KNOWN_FROM_ANOTHER_ITEM =                     L["Tooltip Text/Learned from another item."]
+local KNOWN_BY_ANOTHER_CHARACTER =                  L["Tooltip Text/Learned for a different class."]
+local KNOWN_BUT_TOO_LOW_LEVEL =                     L["Tooltip Text/Learned but cannot transmog yet."]
+local KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL =   L["Tooltip Text/Learned from another item but cannot transmog yet."]
+local KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =       L["Tooltip Text/Learned for a different class and item."]
+local UNKNOWABLE_SOULBOUND =                        L["Tooltip Text/Cannot learn: Soulbound"] .. " " -- subClass
+local UNKNOWABLE_BY_CHARACTER =                     L["Tooltip Text/Cannot learn:"] .. " " -- subClass
+local CAN_BE_LEARNED_BY =                           L["Tooltip Text/Can be learned by:"] -- list of classes
+local UNKNOWN =                                     L["Tooltip Text/Not learned."]
+local NOT_TRANSMOGABLE =                            L["Tooltip Text/Cannot be learned."]
+local CANNOT_DETERMINE =                            L["Tooltip Text/Cannot determine status on other characters."]
 
 
 -- Combine icons, color, and text into full tooltip
@@ -127,5 +127,5 @@ CanIMogIt.tooltipIcons = {
 
 -- Other text
 
-CanIMogIt.DATABASE_START_UPDATE_TEXT = L["Message"]["Database"]["Updating appearances database."]
-CanIMogIt.DATABASE_DONE_UPDATE_TEXT = L["Message"]["Database"]["Items updated: "] -- followed by a number
+CanIMogIt.DATABASE_START_UPDATE_TEXT = L["Message/Database/Updating appearances database."]
+CanIMogIt.DATABASE_DONE_UPDATE_TEXT = L["Message/Database/Items updated: "] -- followed by a number
