@@ -1,6 +1,5 @@
-local translations = {}
---@localization(locale="enUS", format="lua_additive_table", table-name="translations")@
+--@localization(locale="enUS", format="lua_additive_table")@
 
 
-CanIMogIt:RegisterLocale("enUS", translations)
-translations = nil
+CanIMogIt:RegisterLocale("enUS", L)
+L = nil
