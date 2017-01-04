@@ -1,3 +1,4 @@
+L = {}
 --@localization(locale="koKR", format="lua_additive_table")@
 
 
