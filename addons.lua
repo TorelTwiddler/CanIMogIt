@@ -22,13 +22,13 @@ if IsAddOnLoaded("AdiBags") then
         for i=1,300 do
             local frame = _G["AdiBagsItemButton"..i]
             if frame then
-                CIMI_AddToFrame(frame, AdiBagsItemButton_CIMIUpdateIcon)
+                C_Timer.After(.5, function() CIMI_AddToFrame(frame, AdiBagsItemButton_CIMIUpdateIcon) end)
             end
         end
         for i=1,28 do
             local frame = _G["AdiBagsBankItemButton"..i]
             if frame then
-                CIMI_AddToFrame(frame, AdiBagsItemButton_CIMIUpdateIcon)
+                C_Timer.After(.5, function() CIMI_AddToFrame(frame, AdiBagsItemButton_CIMIUpdateIcon) end)
             end
         end
     end
@@ -47,7 +47,10 @@ if IsAddOnLoaded("AdiBags") then
     end
     hooksecurefunc(CanIMogIt.frame, "ItemOverlayEvents", CIMI_AdiBagsEvents)
 
-    -- The bags are considered "updated" well before the world is ready, so adding a delay
-    -- to try to update the bags not long after the person logs in.
-    C_Timer.After(10, function() CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE") end)
+    function AdiBags_UpdateAfter()
+        C_Timer.After(.5, function() CIMI_AdiBagsAddFrame(nil, "PLAYER_LOGIN") end)
+        C_Timer.After(.5, function() CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE") end)
+    end
+    LibStub('ABEvent-1.0').RegisterMessage("CanIMogIt", "AdiBags_BagOpened", AdiBags_UpdateAfter)
+    LibStub('ABEvent-1.0').RegisterMessage("CanIMogIt", "AdiBags_ForceFullLayout", AdiBags_UpdateAfter)
 end
