@@ -130,6 +130,10 @@ local miscArmorExceptions = {
 }
 
 
+local APPEARANCES_ITEMS_TAB = 1
+local APPEARANCES_SETS_TAB = 2
+
+
 -- Get the name for Cosmetic. Uses http://www.wowhead.com/item=130064/deadeye-monocle.
 local COSMETIC_NAME = select(3, GetItemInfoInstant(130064))
 
@@ -464,7 +468,7 @@ end
 local function _GetAppearances()
     -- Core logic for getting the appearances.
     if getAppearancesDone then return end
-    C_TransmogCollection.ClearSearch()
+    C_TransmogCollection.ClearSearch(APPEARANCES_ITEMS_TAB)
     GetAppearancesTable()
     buffer = 0
 
