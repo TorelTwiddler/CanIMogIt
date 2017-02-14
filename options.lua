@@ -116,6 +116,7 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     self:OnVoidStorageOpened(event, ...)
     self:GetAppearancesEvent(event, ...)
     self:ItemOverlayEvents(event, ...)
+    self:TradeSkillEvents(event, ...)
 end)
 
 
