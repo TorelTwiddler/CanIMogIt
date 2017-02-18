@@ -1,4 +1,8 @@
 
+local function string_starts(String,Start)
+   return string.sub(String,1,string.len(Start))==Start
+end
+
 
 function CIMI_UpdateTradeSkillIcons()
     local tradeSkillFrame = _G["TradeSkillFrame"]
@@ -11,7 +15,7 @@ function CIMI_UpdateTradeSkillIcons()
             local itemLink = C_TradeSkillUI.GetRecipeItemLink(recipeID)
             if itemLink ~= nil then
                 local icon = CanIMogIt:GetIcon(itemLink)
-                if icon ~= nil then
+                if icon ~= nil and not string_starts(text, icon) then
                     text = icon .. text
                     button:SetText(text)
                 end
@@ -23,8 +27,16 @@ end
 
 function CanIMogIt.frame:TradeSkillEvents(event, addon)
     if event == "ADDON_LOADED" and addon == "Blizzard_TradeSkillUI" then
+
         local tradeSkillFrame = _G["TradeSkillFrame"]
-        local scrollBar = tradeSkillFrame.RecipeList.scrollBar
-        scrollBar:HookScript("OnValueChanged", CIMI_UpdateTradeSkillIcons)
+        -- Update on most things (like clicking)
+        hooksecurefunc(tradeSkillFrame.RecipeList, "RefreshDisplay", CIMI_UpdateTradeSkillIcons)
+        
+        -- Update on scroll
+        tradeSkillFrame.RecipeList.scrollBar:HookScript("OnValueChanged", CIMI_UpdateTradeSkillIcons)
+
+        -- Update on tab changes (with delay due to something updating after the change)
+        tradeSkillFrame.RecipeList.UnlearnedTab:HookScript("OnClick", function () C_Timer.After(.25, CIMI_UpdateTradeSkillIcons) end)
+        tradeSkillFrame.RecipeList.LearnedTab:HookScript("OnClick", function () C_Timer.After(.25, CIMI_UpdateTradeSkillIcons) end)
     end
 end
