@@ -38,5 +38,8 @@ function CanIMogIt.frame:TradeSkillEvents(event, addon)
         -- Update on tab changes (with delay due to something updating after the change)
         tradeSkillFrame.RecipeList.UnlearnedTab:HookScript("OnClick", function () C_Timer.After(.25, CIMI_UpdateTradeSkillIcons) end)
         tradeSkillFrame.RecipeList.LearnedTab:HookScript("OnClick", function () C_Timer.After(.25, CIMI_UpdateTradeSkillIcons) end)
+
+        -- Update when the user switches profession windows (with a delay due to something updating after the change)
+        hooksecurefunc(tradeSkillFrame.RecipeList, "OnDataSourceChanged", function () C_Timer.After(.25, CIMI_UpdateTradeSkillIcons) end)
     end
 end
