@@ -25,7 +25,7 @@ local resetDelay = .3
 ----------------------------
 
 
-function CIMI_CheckOverlayIconEnabled(frame)
+function CIMI_CheckOverlayIconEnabled()
     -- Checks if the item overlay option is enabled.
     if not CanIMogItOptions["showItemIconOverlay"] then
         return false
@@ -96,7 +96,7 @@ end
 
 function ContainerFrameItemButton_CIMIUpdateIcon(self)
     if not self or not self:GetParent() or not self:GetParent():GetParent() then return end
-    if not CIMI_CheckOverlayIconEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -113,7 +113,7 @@ function LootFrame_CIMIUpdateIcon(self)
     if not self then return end
     -- Sets the icon overlay for the loot frame.
     local lootID = self:GetParent():GetParent().rollID
-    if not CIMI_CheckOverlayIconEnabled(self) or lootID == nil then
+    if not CIMI_CheckOverlayIconEnabled() or lootID == nil then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -126,7 +126,7 @@ end
 
 function MerchantFrame_CIMIUpdateIcon(self)
     if not self then return end
-    if not CIMI_CheckOverlayIconEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -143,7 +143,7 @@ end
 
 function EncounterJournalFrame_CIMIUpdateIcon(self)
     if not self then return end
-    if not CIMI_CheckOverlayIconEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -172,7 +172,7 @@ end
 --     -- Sets the icon overlay for the auction frame.
 --     if calculatedFrames[tostring(self)] then return end
 --     calculatedFrames[tostring(self)] = true
---     if not CIMI_CheckOverlayIconEnabled(self) then return end
+--     if not CIMI_CheckOverlayIconEnabled() then return end
 --     local browseButtonID = self:GetParent():GetID()
 --     local index = BrowseScrollFrame.offset + browseButtonID
 --     local itemLink = GetAuctionItemLink("list", index)
@@ -182,7 +182,7 @@ end
 
 function MailFrame_CIMIUpdateIcon(self)
     if not self then return end
-    if not CIMI_CheckOverlayIconEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -210,7 +210,7 @@ end
 
 function GuildBankFrame_CIMIUpdateIcon(self)
     if not self then return end
-    if not CIMI_CheckOverlayIconEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -225,7 +225,7 @@ end
 
 function VoidStorageFrame_CIMIUpdateIcon(self)
     if not self then return end
-    if not CIMI_CheckOverlayIconEnabled(self) then
+    if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return

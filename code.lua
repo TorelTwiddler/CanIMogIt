@@ -1105,13 +1105,19 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
 end
 
 
-function CanIMogIt:GetIcon(itemLink, bag, slot)
+function CanIMogIt:GetIconText(itemLink, bag, slot)
     --[[
-        Gets the icon for this itemLink/bag+slot. Does not include the other text
+        Gets the icon as text for this itemLink/bag+slot. Does not include the other text
         that is also caluculated.
     ]]
     local text, unmodifiedText = CanIMogIt:GetTooltipText(itemLink, bag, slot)
-    return CanIMogIt.tooltipIcons[unmodifiedText]
+    local icon
+    if text ~= "" and text ~= nil then
+        icon = CanIMogIt.tooltipIcons[unmodifiedText]
+    else
+        icon = ""
+    end
+    return icon
 end
 
 

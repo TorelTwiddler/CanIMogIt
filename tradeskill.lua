@@ -5,6 +5,9 @@ end
 
 
 function CIMI_UpdateTradeSkillIcons()
+    if not CIMI_CheckOverlayIconEnabled() then
+        return
+    end
     local tradeSkillFrame = _G["TradeSkillFrame"]
     local buttons = tradeSkillFrame.RecipeList.buttons
 
@@ -14,7 +17,7 @@ function CIMI_UpdateTradeSkillIcons()
             local text = button:GetText()
             local itemLink = C_TradeSkillUI.GetRecipeItemLink(recipeID)
             if itemLink ~= nil then
-                local icon = CanIMogIt:GetIcon(itemLink)
+                local icon = CanIMogIt:GetIconText(itemLink)
                 if icon ~= nil and not string_starts(text, icon) then
                     text = icon .. text
                     button:SetText(text)
