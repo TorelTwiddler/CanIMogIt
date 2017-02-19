@@ -60,7 +60,7 @@ CanIMogItOptions_DisplayData = {
     },
     ["showSourceLocationTooltip"] = {
         ["displayName"] = L["Show Source Location Tooltip"] .. " " .. CanIMogIt.YELLOW .. L["(Experimental)"],
-        ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop)."] .. "\n\n" .. L["Please note that this may not always be correct as Blizzard's information is incomplete."]
+        ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop). This only works on items your current class can learn."] .. "\n\n" .. L["Please note that this may not always be correct as Blizzard's information is incomplete."]
     },
     ["printDatabaseScan"] = {
         ["displayName"] = L["Database Scanning chat messages"],
