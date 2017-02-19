@@ -2,7 +2,7 @@
     Check http://wow.gamepedia.com/Localizing_an_addon for how this works.
 ]]
 
-CanIMogIt = LibStub("AceAddon-3.0"):NewAddon("CanIMogIt", "AceConsole-3.0")
+CanIMogIt = LibStub("AceAddon-3.0"):NewAddon("CanIMogIt", "AceConsole-3.0", "AceEvent-3.0")
 
 CanIMogIt.L = CanIMogIt.L or setmetatable({}, {
     __index = function(t, k)

@@ -44,5 +44,12 @@ function CanIMogIt.frame:TradeSkillEvents(event, addon)
 
         -- Update when the user switches profession windows (with a delay due to something updating after the change)
         hooksecurefunc(tradeSkillFrame.RecipeList, "OnDataSourceChanged", function () C_Timer.After(.25, CIMI_UpdateTradeSkillIcons) end)
+
+        -- Update when an option changes (with delay)
+        local function UpdateTradskillWindow()
+            _G["TradeSkillFrame"].RecipeList:RefreshDisplay()
+        end
+
+        CanIMogIt:RegisterMessage("OptionUpdate", function () C_Timer.After(.25, UpdateTradskillWindow) end)
     end
 end

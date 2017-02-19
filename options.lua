@@ -133,6 +133,8 @@ local function checkboxOnClick(self)
     self:SetValue(checked)
     -- Reset the cache when an option changes.
     CanIMogIt:ResetCache()
+    
+    CanIMogIt:SendMessage("OptionUpdate")
 end
 
 

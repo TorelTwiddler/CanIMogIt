@@ -523,7 +523,8 @@ end
 function CanIMogIt:ResetCache()
     -- Resets the cache, and calls things relying on the cache being reset.
     CanIMogIt.cache:Clear()
-    -- Fake a BAG_UPDATE event to updating the icons.
+    CanIMogIt:SendMessage("ResetCache")
+    -- Fake a BAG_UPDATE event to updating the icons. TODO: Replace this with message
     CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
 end
 
