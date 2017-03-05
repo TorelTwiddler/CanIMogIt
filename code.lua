@@ -693,11 +693,14 @@ function CanIMogIt:CharacterCanEquipItem(itemLink)
     if CanIMogIt:IsItemArmor(itemLink) and CanIMogIt:IsArmorCosmetic(itemLink) then
         return true
     end
+    local redText = CanIMogItTooltipScanner:GetRedText(itemLink)
+    if redText == "" or redText == nil then
+        return true
+    end
     local itemID = CanIMogIt:GetItemID(itemLink)
-    for i=1,28 do
-        if C_TransmogCollection.IsCategoryValidForItem(i, itemID) then
-            return true
-        end
+    if redText == _G["ITEM_SPELL_KNOWN"] and C_Heirloom.IsItemHeirloom(itemID) then
+        -- Special case for heirloom items. They always have red text if it was learned.
+        return true
     end
     return false
 end
