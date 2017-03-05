@@ -109,6 +109,11 @@ function ContainerFrameItemButton_CIMIUpdateIcon(self)
 end
 
 
+function ContainerFrameItemButton_CIMIToggleBag(...)
+    CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
+end
+
+
 function LootFrame_CIMIUpdateIcon(self)
     if not self then return end
     -- Sets the icon overlay for the loot frame.
@@ -299,6 +304,11 @@ function CanIMogIt.frame:HookItemOverlay(event)
             end
         end
     end
+
+    hooksecurefunc("ToggleBag", ContainerFrameItemButton_CIMIToggleBag)
+    hooksecurefunc("OpenAllBags", function () C_Timer.After(.25, ContainerFrameItemButton_CIMIToggleBag) end)
+    hooksecurefunc("CloseAllBags", function () C_Timer.After(.25, ContainerFrameItemButton_CIMIToggleBag) end)
+    hooksecurefunc("ToggleAllBags", function () C_Timer.After(.25, ContainerFrameItemButton_CIMIToggleBag) end)
 
     -- Add hook for the main bank frame.
     for i=1,NUM_BANKGENERIC_SLOTS do
