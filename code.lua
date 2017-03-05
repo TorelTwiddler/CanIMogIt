@@ -461,6 +461,10 @@ local function AddAppearance(appearanceID)
 end
 
 
+-- Remembering iterators for later
+local appearancesIter, removeIter = nil, nil
+
+
 local function _GetAppearances()
     -- Core logic for getting the appearances.
     if getAppearancesDone then return end
@@ -468,15 +472,17 @@ local function _GetAppearances()
     GetAppearancesTable()
     buffer = 0
 
+    if appearancesIter == nil then appearancesIter = pairsByKeys(appearancesTable) end
     -- Add new appearances learned.
-    for appearanceID, collected in pairsByKeys(appearancesTable) do
+    for appearanceID, collected in appearancesIter do
         AddAppearance(appearanceID)
         if buffer >= CanIMogIt.bufferMax then return end
         appearancesTable[appearanceID] = nil
     end
 
+    if removeIter == nil then removeIter = pairsByKeys(removeAppearancesTable) end
     -- Remove appearances that are no longer learned.
-    for appearanceID, sources in pairsByKeys(removeAppearancesTable) do
+    for appearanceID, sources in removeIter do
         for sourceID, source in pairs(sources.sources) do
             if not C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID) then
                 CanIMogIt:DBRemoveItem(appearanceID, sourceID)
@@ -491,6 +497,8 @@ local function _GetAppearances()
     getAppearancesDone = true
     appearancesTable = {} -- cleanup
     CanIMogIt:ResetCache()
+    appearancesIter = nil
+    removeIter = nil
     CanIMogIt.frame:SetScript("OnUpdate", nil)
     if CanIMogItOptions["printDatabaseScan"] then
         CanIMogIt:Print(CanIMogIt.DATABASE_DONE_UPDATE_TEXT..CanIMogIt.BLUE.."+" .. sourcesAdded .. ", "..CanIMogIt.ORANGE.."-".. sourcesRemoved)
