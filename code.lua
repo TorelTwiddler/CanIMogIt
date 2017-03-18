@@ -1003,12 +1003,15 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         playerKnowsTransmog = CanIMogIt:PlayerKnowsTransmog(itemLink)
         if playerKnowsTransmog == nil then return end
 
+        characterCanLearnTransmog = CanIMogIt:CharacterCanLearnTransmog(itemLink)
+        if characterCanLearnTransmog == nil then return end
+
         if playerKnowsTransmogFromItem then
             if isValidAppearanceForCharacter then
                 text = CanIMogIt.KNOWN
                 unmodifiedText = CanIMogIt.KNOWN
             else
-                if characterIsTooLowLevel then
+                if characterCanLearnTransmog and characterIsTooLowLevel then
                     text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                     unmodifiedText = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                 else
@@ -1021,7 +1024,7 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
                 text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
                 unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
             else
-                if characterIsTooLowLevel then
+                if characterCanLearnTransmog and characterIsTooLowLevel then
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                     unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                 else
@@ -1030,9 +1033,6 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
                 end
             end
         else
-            characterCanLearnTransmog = CanIMogIt:CharacterCanLearnTransmog(itemLink)
-            if characterCanLearnTransmog == nil then return end
-
             if characterCanLearnTransmog then
                 text = CanIMogIt.UNKNOWN
                 unmodifiedText = CanIMogIt.UNKNOWN
