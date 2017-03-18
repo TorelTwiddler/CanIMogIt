@@ -1005,29 +1005,29 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
 
         if playerKnowsTransmogFromItem then
             if isValidAppearanceForCharacter then
+                text = CanIMogIt.KNOWN
+                unmodifiedText = CanIMogIt.KNOWN
+            else
                 if characterIsTooLowLevel then
                     text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                     unmodifiedText = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                 else
-                    text = CanIMogIt.KNOWN
-                    unmodifiedText = CanIMogIt.KNOWN
+                    text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
+                    unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
                 end
-            else
-                text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
-                unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
             end
         elseif playerKnowsTransmog then
             if isValidAppearanceForCharacter then
+                text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+                unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+            else
                 if characterIsTooLowLevel then
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                     unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                 else
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
                 end
-            else
-                text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-                unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
             end
         else
             characterCanLearnTransmog = CanIMogIt:CharacterCanLearnTransmog(itemLink)
