@@ -141,6 +141,9 @@ local COSMETIC_NAME = select(3, GetItemInfoInstant(130064))
 -- Built-in colors
 -- TODO: move to constants
 local BLIZZARD_RED = "|cffff1919"
+local BLIZZARD_GREEN = "|cff19ff19"
+local BLIZZARD_DARK_GREEN = "|cff40c040"
+local BLIZZARD_YELLOW = "|cffffd100"
 
 
 -------------------------
@@ -278,6 +281,10 @@ local function printDebug(tooltip, itemLink, bag, slot)
     local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
     addDoubleLine(tooltip, "Item appearanceID:", tostring(appearanceID))
 
+    local setID = CanIMogIt:SetsDBGetSetFromSourceID(sourceID) or "nil"
+    addDoubleLine(tooltip, "Item setID:", tostring(setID))
+
+
     addLine(tooltip, '--------')
 
     local playerHasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID)
@@ -398,6 +405,14 @@ end
 
 function CanIMogIt.cache:SetItemSourcesValue(itemLink, value)
     self.data["source"..itemLink] = value
+end
+
+function CanIMogIt.cache:GetSetsInfoTextValue(itemLink)
+    return self.data["sets"..itemLink]
+end
+
+function CanIMogIt.cache:SetSetsInfoTextValue(itemLink, value)
+    self.data["sets"..itemLink] = value
 end
 
 CanIMogIt.cache:Clear()
@@ -529,6 +544,89 @@ function CanIMogIt:GetAppearances()
     end
     removeAppearancesTable = copyTable(CanIMogIt.db.global.appearances)
     CanIMogIt.frame:SetScript("OnUpdate", GetAppearancesOnUpdate)
+end
+
+
+function CanIMogIt:GetSets()
+    -- Gets a table of all of the sets available to the character,
+    -- along with their items, and adds them to the sets database.
+    for i, set in pairs(C_TransmogSets.GetBaseSets()) do
+        -- This is a base set, so we need to get the variant sets as well
+        for i, sourceID in pairs(C_TransmogSets.GetAllSourceIDs(set.setID)) do
+            CanIMogIt:SetsDBAddSetItem(set, sourceID)
+        end
+
+        for i, variantSet in pairs(C_TransmogSets.GetVariantSets(set.setID)) do
+            for i, sourceID in pairs(C_TransmogSets.GetAllSourceIDs(variantSet.setID)) do
+                CanIMogIt:SetsDBAddSetItem(variantSet, sourceID)
+            end
+        end
+    end
+end
+
+
+function CanIMogIt:_GetRatioText(setID)
+    -- Gets the ratio text (and color) of known/total for the given setID.
+    local have = 0
+    local total = 0
+    for _, knownSource in pairs(C_TransmogSets.GetSetSources(setID)) do
+        total = total + 1
+        if knownSource then
+            have = have + 1
+        end
+    end
+
+    local ratioText = ""
+    if have == total then
+        ratioText = CanIMogIt.BLUE
+    else
+        ratioText = CanIMogIt.RED_ORANGE
+    end
+    ratioText = ratioText .. "(" .. have .. "/" .. total .. ")"
+    return ratioText
+end
+
+
+function CanIMogIt:CalculateSetsText(itemLink)
+    --[[
+        Gets the two lines of text to display on the tooltip related to sets.
+        This function is not cached, so avoid calling often!
+        Use GetSetsText whenever possible!
+    ]]
+    local sourceID = CanIMogIt:GetSourceID(itemLink)
+    if not sourceID then return end
+    local setID = CanIMogIt:SetsDBGetSetFromSourceID(sourceID)
+    if not setID then return end
+
+    local set = C_TransmogSets.GetSetInfo(setID)
+
+    local ratioText = CanIMogIt:_GetRatioText(setID)
+
+    local secondLineText = ""
+    if set.label and set.description then
+        secondLineText = CanIMogIt.WHITE .. set.label .. ": " .. BLIZZARD_GREEN ..  set.description .. " "
+    elseif set.label then
+        secondLineText = CanIMogIt.WHITE .. set.label .. " "
+    elseif set.description then
+        secondLineText = BLIZZARD_GREEN .. set.description .. " "
+    end
+    return CanIMogIt.WHITE .. set.name, secondLineText .. ratioText
+end
+
+
+function CanIMogIt:GetSetsText(itemLink)
+    -- Gets the cached text regarding the sets info for the given item.
+    local line1, line2;
+    if CanIMogIt.cache:GetSetsInfoTextValue(itemLink) then
+        line1, line2 = unpack(CanIMogIt.cache:GetSetsInfoTextValue(itemLink))
+        return line1, line2
+    end
+
+    line1, line2 = CanIMogIt:CalculateSetsText(itemLink)
+
+    CanIMogIt.cache:SetSetsInfoTextValue(itemLink, {line1, line2})
+
+    return line1, line2
 end
 
 
@@ -1168,6 +1266,16 @@ local function addToTooltip(tooltip, itemLink)
             addLine(tooltip, text)
         else
             addDoubleLine(tooltip, " ", text)
+        end
+    end
+
+    if CanIMogItOptions["showSetTooltipText"] then
+        local setFirstLineText, setSecondLineText = CanIMogIt:GetSetsText(itemLink)
+        if setFirstLineText and setFirstLineText ~= "" then
+            addDoubleLine(tooltip, " ", setFirstLineText)
+        end
+        if setSecondLineText and setSecondLineText ~= "" then
+            addDoubleLine(tooltip, " ", setSecondLineText)
         end
     end
 
