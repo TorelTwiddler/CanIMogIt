@@ -36,3 +36,4 @@ database.lua
 tooltipScanner.lua
 itemOverlay.lua
 addons.lua
+tradeskill.lua
