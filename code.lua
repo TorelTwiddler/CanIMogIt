@@ -110,6 +110,23 @@ local classArmorTypeMap = {
 }
 
 
+-- Class Masks
+local classMask = {
+    [1] = "WARRIOR",
+    [2] = "PALADIN",
+    [4] = "HUNTER",
+    [8] = "ROGUE",
+    [16] = "PRIEST",
+    [32] = "DEATHKNIGHT",
+    [64] = "SHAMAN",
+    [128] = "MAGE",
+    [256] = "WARLOCK",
+    [512] = "MONK",
+    [1024] = "DRUID",
+    [2048] = "DEMONHUNTER",
+}
+
+
 local armorTypeSlots = {
     [HEAD] = true,
     [SHOULDER] = true,
@@ -284,6 +301,8 @@ local function printDebug(tooltip, itemLink, bag, slot)
     local setID = CanIMogIt:SetsDBGetSetFromSourceID(sourceID) or "nil"
     addDoubleLine(tooltip, "Item setID:", tostring(setID))
 
+    local baseSetID = setID ~= nil and setID ~= "nil" and C_TransmogSets.GetBaseSetID(setID) or "nil"
+    addDoubleLine(tooltip, "Item baseSetID:", tostring(setID))
 
     addLine(tooltip, '--------')
 
@@ -550,15 +569,23 @@ end
 function CanIMogIt:GetSets()
     -- Gets a table of all of the sets available to the character,
     -- along with their items, and adds them to the sets database.
-    for i, set in pairs(C_TransmogSets.GetBaseSets()) do
+    for i, set in pairs(C_TransmogSets.GetAllSets()) do
         -- This is a base set, so we need to get the variant sets as well
         for i, sourceID in pairs(C_TransmogSets.GetAllSourceIDs(set.setID)) do
             CanIMogIt:SetsDBAddSetItem(set, sourceID)
         end
-
-        for i, variantSet in pairs(C_TransmogSets.GetVariantSets(set.setID)) do
-            for i, sourceID in pairs(C_TransmogSets.GetAllSourceIDs(variantSet.setID)) do
-                CanIMogIt:SetsDBAddSetItem(variantSet, sourceID)
+        local variantSets = C_TransmogSets.GetVariantSets(set.setID)
+        --[[
+            It seems that C_TransmogSets.GetVariantSets(setID) returns a number
+            (instead of the expected table of sets) if it can't find a matching
+            base set. We currently are checking that it's returning a table first
+            to prevent issues.
+        ]]
+        if type(variantSets) == "table" then
+            for i, variantSet in pairs(C_TransmogSets.GetVariantSets(set.setID)) do
+                for i, sourceID in pairs(C_TransmogSets.GetAllSourceIDs(variantSet.setID)) do
+                    CanIMogIt:SetsDBAddSetItem(variantSet, sourceID)
+                end
             end
         end
     end
@@ -587,9 +614,40 @@ function CanIMogIt:_GetRatioText(setID)
 end
 
 
+function CanIMogIt:GetSetClass(set)
+    --[[
+        Returns the set's class. If it belongs to more than one class,
+        return an empty string.
+
+        This is done based on the player's sex.
+        Player's sex
+        1 = Neutrum / Unknown
+        2 = Male
+        3 = Female
+    ]]
+    local playerSex = UnitSex("player")
+    local className
+    if playerSex == 2 then
+        className = LOCALIZED_CLASS_NAMES_MALE[classMask[set.classMask]]
+    else
+        className = LOCALIZED_CLASS_NAMES_FEMALE[classMask[set.classMask]]
+    end
+    return className or ""
+end
+
+
+local classSetIDs = nil
+
+
 function CanIMogIt:CalculateSetsText(itemLink)
     --[[
         Gets the two lines of text to display on the tooltip related to sets.
+
+        Example:
+
+        Demon Hunter: Garb of the Something or Other
+        Ulduar: 25 Man Normal (2/8)
+
         This function is not cached, so avoid calling often!
         Use GetSetsText whenever possible!
     ]]
@@ -602,6 +660,27 @@ function CanIMogIt:CalculateSetsText(itemLink)
 
     local ratioText = CanIMogIt:_GetRatioText(setID)
 
+    -- Build the classSetIDs table, if it hasn't been built yet.
+    if classSetIDs == nil then
+        classSetIDs = {}
+        for i, baseSet in pairs(C_TransmogSets.GetBaseSets()) do
+            classSetIDs[baseSet.setID] = true
+            for i, variantSet in pairs(C_TransmogSets.GetVariantSets(baseSet.setID)) do
+                classSetIDs[variantSet.setID] = true
+            end
+        end
+    end
+
+    local setNameColor, otherClass
+    if classSetIDs[set.setID] then
+        setNameColor = CanIMogIt.WHITE
+        otherClass = ""
+    else
+        setNameColor = CanIMogIt.GRAY
+        otherClass = CanIMogIt:GetSetClass(set) .. ": "
+    end
+
+
     local secondLineText = ""
     if set.label and set.description then
         secondLineText = CanIMogIt.WHITE .. set.label .. ": " .. BLIZZARD_GREEN ..  set.description .. " "
@@ -610,7 +689,7 @@ function CanIMogIt:CalculateSetsText(itemLink)
     elseif set.description then
         secondLineText = BLIZZARD_GREEN .. set.description .. " "
     end
-    return CanIMogIt.WHITE .. set.name, secondLineText .. ratioText
+    return setNameColor .. otherClass .. set.name, secondLineText .. ratioText
 end
 
 
