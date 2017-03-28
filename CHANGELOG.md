@@ -1,3 +1,14 @@
+7.2.0.01 Release
+
+Added tooltips for new Transmog Sets.
+
+18 Mar, 2017
+
+* [#70](https://gitlab.com/toreltwiddler/CanIMogIt/issues/70) & [#72](https://gitlab.com/toreltwiddler/CanIMogIt/issues/72) Added set information to the tooltip, along with an option to enable/disable.
+* [#55](https://gitlab.com/toreltwiddler/CanIMogIt/issues/55) Updated C_TransmogCollection.ClearSearch to use 7.2 api.
+
+*****
+
 7.1.5.05 Release
 
 Bug fixes.
