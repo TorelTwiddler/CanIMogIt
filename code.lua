@@ -569,6 +569,7 @@ end
 function CanIMogIt:GetSets()
     -- Gets a table of all of the sets available to the character,
     -- along with their items, and adds them to the sets database.
+    C_TransmogCollection.ClearSearch(APPEARANCES_SETS_TAB)
     for i, set in pairs(C_TransmogSets.GetAllSets()) do
         -- This is a base set, so we need to get the variant sets as well
         for i, sourceID in pairs(C_TransmogSets.GetAllSourceIDs(set.setID)) do
@@ -689,7 +690,9 @@ function CanIMogIt:CalculateSetsText(itemLink)
     elseif set.description then
         secondLineText = BLIZZARD_GREEN .. set.description .. " "
     end
-    return setNameColor .. otherClass .. set.name, secondLineText .. ratioText
+    -- TODO: replace CanIMogIt.WHITE with setNameColor, add otherClass
+    -- e.g.: setNameColor .. otherClass .. set.name
+    return CanIMogIt.WHITE .. set.name, secondLineText .. ratioText
 end
 
 
