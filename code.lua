@@ -400,6 +400,33 @@ function copyTable (t)
 end
 
 
+function spairs(t, order)
+    -- Returns an iterator that is a sorted table. order is the function to sort by.
+    -- http://stackoverflow.com/questions/15706270/sort-a-table-in-lua
+    -- Again, why is this not a built in function? ¯\_(ツ)_/¯
+
+    -- collect the keys
+    local keys = {}
+    for k in pairs(t) do keys[#keys+1] = k end
+
+    -- if order function given, sort by it by passing the table and keys a, b,
+    -- otherwise just sort the keys 
+    if order then
+        table.sort(keys, function(a,b) return order(t, a, b) end)
+    else
+        table.sort(keys)
+    end
+
+    -- return the iterator function
+    local i = 0
+    return function()
+        i = i + 1
+        if keys[i] then
+            return keys[i], t[keys[i]]
+        end
+    end
+end
+
 --------------------------------
 -- CanIMogIt Caching methods  --
 --------------------------------
@@ -432,6 +459,14 @@ end
 
 function CanIMogIt.cache:SetSetsInfoTextValue(itemLink, value)
     self.data["sets"..itemLink] = value
+end
+
+function CanIMogIt.cache:GetSetsSumRatioTextValue(key)
+    return self.data["setsSumRatio"..key]
+end
+
+function CanIMogIt.cache:SetSetsSumRatioTextValue(key, value)
+    self.data["setsSumRatio"..key] = value
 end
 
 CanIMogIt.cache:Clear()
@@ -566,6 +601,21 @@ function CanIMogIt:GetAppearances()
 end
 
 
+function CIMI_GetVariantSets(setID)
+    --[[
+        It seems that C_TransmogSets.GetVariantSets(setID) returns a number
+        (instead of the expected table of sets) if it can't find a matching
+        base set. We currently are checking that it's returning a table first
+        to prevent issues.
+    ]]
+    local variantSets = C_TransmogSets.GetVariantSets(setID)
+    if type(variantSets) == "table" then
+        return variantSets
+    end
+    return {}
+end
+
+
 function CanIMogIt:GetSets()
     -- Gets a table of all of the sets available to the character,
     -- along with their items, and adds them to the sets database.
@@ -575,26 +625,17 @@ function CanIMogIt:GetSets()
         for i, sourceID in pairs(C_TransmogSets.GetAllSourceIDs(set.setID)) do
             CanIMogIt:SetsDBAddSetItem(set, sourceID)
         end
-        local variantSets = C_TransmogSets.GetVariantSets(set.setID)
-        --[[
-            It seems that C_TransmogSets.GetVariantSets(setID) returns a number
-            (instead of the expected table of sets) if it can't find a matching
-            base set. We currently are checking that it's returning a table first
-            to prevent issues.
-        ]]
-        if type(variantSets) == "table" then
-            for i, variantSet in pairs(C_TransmogSets.GetVariantSets(set.setID)) do
-                for i, sourceID in pairs(C_TransmogSets.GetAllSourceIDs(variantSet.setID)) do
-                    CanIMogIt:SetsDBAddSetItem(variantSet, sourceID)
-                end
+        for i, variantSet in pairs(CIMI_GetVariantSets(set.setID)) do
+            for i, sourceID in pairs(C_TransmogSets.GetAllSourceIDs(variantSet.setID)) do
+                CanIMogIt:SetsDBAddSetItem(variantSet, sourceID)
             end
         end
     end
 end
 
 
-function CanIMogIt:_GetRatioText(setID)
-    -- Gets the ratio text (and color) of known/total for the given setID.
+function CanIMogIt:_GetRatio(setID)
+    -- Gets the count of known and total sources for the given setID.
     local have = 0
     local total = 0
     for _, knownSource in pairs(C_TransmogSets.GetSetSources(setID)) do
@@ -603,13 +644,26 @@ function CanIMogIt:_GetRatioText(setID)
             have = have + 1
         end
     end
+    return have, total
+end
 
-    local ratioText = ""
+
+function CanIMogIt:_GetRatioTextColor(have, total)
     if have == total then
-        ratioText = CanIMogIt.BLUE
+        return CanIMogIt.BLUE
+    elseif have > 0 then
+        return CanIMogIt.RED_ORANGE
     else
-        ratioText = CanIMogIt.RED_ORANGE
+        return CanIMogIt.GRAY
     end
+end
+
+
+function CanIMogIt:_GetRatioText(setID)
+    -- Gets the ratio text (and color) of known/total for the given setID.
+    local have, total = CanIMogIt:_GetRatio(setID)
+
+    local ratioText = CanIMogIt:_GetRatioTextColor(have, total)
     ratioText = ratioText .. "(" .. have .. "/" .. total .. ")"
     return ratioText
 end
@@ -709,6 +763,54 @@ function CanIMogIt:GetSetsText(itemLink)
     CanIMogIt.cache:SetSetsInfoTextValue(itemLink, {line1, line2})
 
     return line1, line2
+end
+
+
+function CanIMogIt:CalculateSetsVariantText(setID)
+    --[[
+        Given a setID, calculate the sum of all known sources for this set
+        and it's variants.
+    ]]
+
+    local baseSetID = C_TransmogSets.GetBaseSetID(setID)
+
+    local variantSets = {C_TransmogSets.GetSetInfo(baseSetID)}
+    for i, variantSet in ipairs(CIMI_GetVariantSets(baseSetID)) do
+        variantSets[#variantSets+1] = variantSet
+    end
+
+    local variantsText = ""
+
+    for i, variantSet in spairs(variantSets, function(t,a,b) return t[a].uiOrder < t[b].uiOrder end) do
+        local variantHave, variantTotal = CanIMogIt:_GetRatio(variantSet.setID)
+
+        variantsText = variantsText .. CanIMogIt:_GetRatioTextColor(variantHave, variantTotal)
+        
+        -- There is intentionally an extra space before the newline, for positioning.
+        variantsText = variantsText .. variantHave .. "/" .. variantTotal .. " \n"
+    end
+
+    -- uncomment for debug
+    -- variantsText = variantsText .. "setID: " .. setID
+
+    return string.sub(variantsText, 1, -2)
+end
+
+
+function CanIMogIt:GetSetsVariantText(setID)
+    -- Gets the cached text regarding the sets info for the given item.
+    if not setID then return end
+    local line1;
+    if CanIMogIt.cache:GetSetsSumRatioTextValue(setID) then
+        line1 = CanIMogIt.cache:GetSetsSumRatioTextValue(setID)
+        return line1
+    end
+
+    line1 = CanIMogIt:CalculateSetsVariantText(setID)
+
+    CanIMogIt.cache:SetSetsSumRatioTextValue(setID, line1)
+
+    return line1
 end
 
 
