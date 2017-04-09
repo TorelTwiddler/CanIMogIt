@@ -840,7 +840,7 @@ function CanIMogIt:CalculateSourceLocationText(itemLink)
         local totalUnknownType = 0
         local knownUnknownType = 0
         for _, source in pairs(sources) do
-            if source.sourceType ~= 0 then
+            if source.sourceType ~= 0 and source.sourceType ~= nil then
                 totalSourceTypes[source.sourceType] = totalSourceTypes[source.sourceType] + 1
                 if source.isCollected then
                     knownSourceTypes[source.sourceType] = knownSourceTypes[source.sourceType] + 1
