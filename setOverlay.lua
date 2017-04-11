@@ -48,4 +48,8 @@ CanIMogIt.frame:HookScript("OnEvent", function (self, event, addonName)
         _G["WardrobeCollectionFrameScrollFrameScrollBar"]:HookScript("OnValueChanged", WardrobeCollectionFrame_CIMIOnValueChanged)
         _G["WardrobeCollectionFrameTab2"]:HookScript("OnClick", WardrobeCollectionFrame_CIMIOnValueChanged)
     end
+    if event == "TRANSMOG_SEARCH_UPDATED" then
+        -- Must add a delay, as the frame updates after this is called.
+        C_Timer.After(.25, WardrobeCollectionFrame_CIMIOnValueChanged)
+    end
 end)
