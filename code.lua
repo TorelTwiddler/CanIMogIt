@@ -1453,7 +1453,7 @@ local function addToTooltip(tooltip, itemLink)
         end
     end
 
-    if CanIMogItOptions["showSetTooltipText"] then
+    if CanIMogItOptions["showSetInfo"] then
         local setFirstLineText, setSecondLineText = CanIMogIt:GetSetsText(itemLink)
         if setFirstLineText and setFirstLineText ~= "" then
             addDoubleLine(tooltip, " ", setFirstLineText)

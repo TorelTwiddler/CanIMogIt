@@ -13,7 +13,11 @@ function CIMI_AddToFrameSets(parentFrame)
         frame.CanIMogItSetText:SetPoint("BOTTOMRIGHT", -2, 2)
 
         function frame:UpdateText()
-            frame.CanIMogItSetText:SetText(CanIMogIt:GetSetsVariantText(parentFrame.setID) or "")
+            if CanIMogItOptions["showSetInfo"] then
+                frame.CanIMogItSetText:SetText(CanIMogIt:GetSetsVariantText(parentFrame.setID) or "")
+            else
+                frame.CanIMogItSetText:SetText("")
+            end
         end
     end
 end
