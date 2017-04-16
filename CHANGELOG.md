@@ -1,6 +1,20 @@
+7.2.0.01 Release - 2017/04/16
+
+New feature: Progress numbers added to the Appearance Sets list!
+
+![Appearance Sets Counter](http://i.imgur.com/FDdXyF2.png "Appearance Sets Counter")
+
+* [#79](https://gitlab.com/toreltwiddler/CanIMogIt/issues/79) Bugfix with Timewalking items and source type.
+* [#71](https://gitlab.com/toreltwiddler/CanIMogIt/issues/71) Added small ratio for variants in Sets window.
+* Updated TOC to 7.2.
+
+*****
+
 7.2.0.01 Release
 
 Added tooltips for new Transmog Sets.
+
+![Sets Tooltips](http://i.imgur.com/1cD68tw.png "Sets Tooltips")
 
 18 Mar, 2017
 
