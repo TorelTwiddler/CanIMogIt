@@ -1,4 +1,4 @@
-7.2.0.01 Release - 2017/04/16
+7.2.0.02 Release - 2017/04/16
 
 New feature: Progress numbers added to the Appearance Sets list!
 
