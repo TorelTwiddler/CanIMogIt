@@ -452,6 +452,7 @@ CIMIEvents = {
     ["VOID_STORAGE_OPEN"] = true,
     ["VOID_STORAGE_CONTENTS_UPDATE"] = true,
     ["GUILDBANKBAGSLOTS_CHANGED"] = true,
+    ["PLAYERREAGENTBANKSLOTS_CHANGED"] = true,
 }
 
 function CanIMogIt.frame:ItemOverlayEvents(event, ...)

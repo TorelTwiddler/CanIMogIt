@@ -36,5 +36,5 @@ database.lua
 tooltipScanner.lua
 itemOverlay.lua
 setOverlay.lua
-addons.lua
 tradeskill.lua
+plugins\_plugins.xml

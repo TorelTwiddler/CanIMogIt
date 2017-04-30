@@ -1,6 +1,3 @@
--- This file contains code for working with specific addons.
-
-
 if IsAddOnLoaded("AdiBags") then
     function AdiBagsItemButton_CIMIUpdateIcon(self)
         if not self or not self:GetParent() then return end
