@@ -60,12 +60,14 @@ if IsAddOnLoaded("ArkInventory") then
                 end
             end
         end
-    end      
+    end
 
     function CIMI_ArkInventoryEvents(self, event, ...)
         if not CIMIEvents[event] then return end
+        -- Make sure all CIMI frames exist
+        C_Timer.After(.5, function() CIMI_ArkInventoryAddFrame(self, "BANKFRAME_OPENED") end)
         -- Update event
-        CIMI_ArkInventoryUpdate() 
+        C_Timer.After(.6, CIMI_ArkInventoryUpdate)
     end
     hooksecurefunc(CanIMogIt.frame, "ItemOverlayEvents", CIMI_ArkInventoryEvents)
 
