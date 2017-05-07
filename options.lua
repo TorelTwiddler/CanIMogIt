@@ -224,6 +224,8 @@ function CanIMogIt:SlashCommands(input)
         self:OpenOptionsMenu()
     elseif input == 'PleaseDeleteMyDB' then
         self:DBReset()
+    elseif input == 'refresh' then
+        self:ResetCache()
     else
         self:Print("Unknown command!")
     end

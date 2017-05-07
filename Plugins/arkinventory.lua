@@ -62,41 +62,43 @@ if IsAddOnLoaded("ArkInventory") then
         end
     end
 
-    function CIMI_ArkInventoryEvents(self, event, ...)
-        if not CIMIEvents[event] then return end
-        -- Make sure all CIMI frames exist
-        C_Timer.After(.5, function() CIMI_ArkInventoryAddFrame(self, "BANKFRAME_OPENED") end)
-        -- Update event
-        C_Timer.After(.6, CIMI_ArkInventoryUpdate)
-    end
-    hooksecurefunc(CanIMogIt.frame, "ItemOverlayEvents", CIMI_ArkInventoryEvents)
-
     function CIMI_ArkInventoryUpdate()
+        -- Make sure all CIMI frames exist
+        CIMI_ArkInventoryAddFrame(nil, "BANKFRAME_OPENED")
+        -- Bags
         for i=1,NUM_CONTAINER_FRAMES do
             for j=1,MAX_CONTAINER_ITEMS do
                 local frame = _G["ARKINV_Frame1ScrollContainerBag"..i.."Item"..j]
                 if frame then
-                    C_Timer.After(.5, function() ArkInventoryItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
+                    ArkInventoryItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay)
                 end
             end
         end
+        -- Player Bank
         for i=1,12 do
             for j=1,200 do
                 local frame = _G["ARKINV_Frame3ScrollContainerBag"..i.."Item"..j]
                 if frame then
-                    C_Timer.After(.5, function() ArkInventoryItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
+                    ArkInventoryItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay)
                 end
             end
         end
+        -- Guild Bank
         for i=1,12 do
             for j=1,200 do
                 local frame = _G["ARKINV_Frame4ScrollContainerBag"..i.."Item"..j]
                 if frame then
-                    C_Timer.After(.5, function() ArkInventoryGuildBank_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
+                    -- The guild bank frame does extra stuff after the CIMI icon shows up,
+                    -- so need to add a slight delay.
+                    C_Timer.After(.1, function() ArkInventoryGuildBank_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
                 end
             end
         end
     end
 
-    C_Timer.After(5, CIMI_ArkInventoryUpdate)
+    ArkInventory:RegisterMessage("EVENT_ARKINV_BAG_UPDATE_BUCKET", CIMI_ArkInventoryUpdate)
+    ArkInventory:RegisterMessage("EVENT_ARKINV_VAULT_UPDATE_BUCKET", CIMI_ArkInventoryUpdate)
+    CanIMogIt:RegisterMessage("ResetCache", CIMI_ArkInventoryUpdate)
+    -- Makes sure things are updated if bags are open quickly after logging in. Won't always work, but better than nothing.
+    C_Timer.After(10, function() CanIMogIt:ResetCache() end)
 end
