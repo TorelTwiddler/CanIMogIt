@@ -1,3 +1,13 @@
+7.2.0.03 Release - 2017/05/07
+
+ArkInventory now supported!
+
+![ArkInventory support!](http://i.imgur.com/l4PNjqA.png "ArkInventory support!")
+
+*  Added ArkInventory support (with code from @Urtgard).
+
+*****
+
 7.2.0.02 Release - 2017/04/16
 
 New feature: Progress numbers added to the Appearance Sets list!
