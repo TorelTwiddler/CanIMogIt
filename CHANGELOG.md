@@ -4,7 +4,7 @@ ArkInventory now supported!
 
 ![ArkInventory support!](http://i.imgur.com/l4PNjqA.png "ArkInventory support!")
 
-*  Added ArkInventory support (with code from @Urtgard).
+* [#40](https://gitlab.com/toreltwiddler/CanIMogIt/issues/40) Added ArkInventory support (with code from @Urtgard).
 
 *****
 
