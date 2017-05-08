@@ -46,7 +46,7 @@ if IsAddOnLoaded("ArkInventory") then
                 end
             end
             -- Guild Bank
-            C_Timer.After(.5, CIMI_ArkInventoryAddGuildBankFrame)
+            C_Timer.After(.1, CIMI_ArkInventoryAddGuildBankFrame)
         end
     end
     hooksecurefunc(CanIMogIt.frame, "HookItemOverlay", CIMI_ArkInventoryAddFrame)
@@ -79,7 +79,8 @@ if IsAddOnLoaded("ArkInventory") then
             for j=1,200 do
                 local frame = _G["ARKINV_Frame3ScrollContainerBag"..i.."Item"..j]
                 if frame then
-                    ArkInventoryItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay)
+                    -- ArkInventoryItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay)
+                    C_Timer.After(.1, function() ArkInventoryItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
                 end
             end
         end
@@ -90,15 +91,21 @@ if IsAddOnLoaded("ArkInventory") then
                 if frame then
                     -- The guild bank frame does extra stuff after the CIMI icon shows up,
                     -- so need to add a slight delay.
-                    C_Timer.After(.1, function() ArkInventoryGuildBank_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
+                    C_Timer.After(.2, function() ArkInventoryGuildBank_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
                 end
             end
         end
     end
 
-    ArkInventory:RegisterMessage("EVENT_ARKINV_BAG_UPDATE_BUCKET", CIMI_ArkInventoryUpdate)
-    ArkInventory:RegisterMessage("EVENT_ARKINV_VAULT_UPDATE_BUCKET", CIMI_ArkInventoryUpdate)
     CanIMogIt:RegisterMessage("ResetCache", CIMI_ArkInventoryUpdate)
+
+    function CIMI_ArkInventoryEvents(self, event)
+        -- Update based on wow events
+        if not CIMIEvents[event] then return end
+        CIMI_ArkInventoryUpdate()
+    end
+    CanIMogIt.frame:HookScript("OnEvent", CIMI_ArkInventoryEvents)
+
     -- Makes sure things are updated if bags are open quickly after logging in. Won't always work, but better than nothing.
-    C_Timer.After(10, function() CanIMogIt:ResetCache() end)
+    C_Timer.After(15, function() CanIMogIt:ResetCache() end)
 end
