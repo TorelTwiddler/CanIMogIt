@@ -104,12 +104,16 @@ local EVENTS = {
     "TRANSMOG_COLLECTION_SOURCE_REMOVED",
     "TRANSMOG_SEARCH_UPDATED",
     "PLAYERREAGENTBANKSLOTS_CHANGED",
+    "LOADING_SCREEN_ENABLED",
+    "LOADING_SCREEN_DISABLED",
 }
 
 for i, event in pairs(EVENTS) do
     CanIMogIt.frame:RegisterEvent(event);
 end
 
+
+local skipItemOverlayEvents = false
 
 CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     -- Add functions you want to catch events here
@@ -121,8 +125,20 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     self:OnGuildBankOpened(event, ...)
     self:OnVoidStorageOpened(event, ...)
     self:GetAppearancesEvent(event, ...)
-    self:ItemOverlayEvents(event, ...)
     self:TradeSkillEvents(event, ...)
+
+    -- Prevent the ItemOverlayEvents handler from running when the loading screen
+    -- is up. This is here to prevent it from running at all, so that it doesn't
+    -- need to be added to all of the methods that hook it as well.
+    if event == "LOADING_SCREEN_ENABLED" then
+        skipItemOverlayEvents = true
+    elseif event == "LOADING_SCREEN_DISABLED" then
+        skipItemOverlayEvents = false
+    end
+
+    if not skipItemOverlayEvents then
+        self:ItemOverlayEvents(event, ...)
+    end
 end)
 
 
