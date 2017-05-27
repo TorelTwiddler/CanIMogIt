@@ -113,7 +113,9 @@ for i, event in pairs(EVENTS) do
 end
 
 
-local skipItemOverlayEvents = false
+-- Skip the itemOverlayEvents function until the loading screen is disabled.
+local skipItemOverlayEvents = true
+
 
 CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     -- Add functions you want to catch events here
