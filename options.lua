@@ -114,7 +114,8 @@ end
 
 
 -- Skip the itemOverlayEvents function until the loading screen is disabled.
-local skipItemOverlayEvents = true
+local lastOverlayEventCheck = 0
+local overlayEventCheckThreshold = .01 -- once per frame at 100 fps
 
 
 CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
@@ -129,16 +130,10 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     self:GetAppearancesEvent(event, ...)
     self:TradeSkillEvents(event, ...)
 
-    -- Prevent the ItemOverlayEvents handler from running when the loading screen
-    -- is up. This is here to prevent it from running at all, so that it doesn't
-    -- need to be added to all of the methods that hook it as well.
-    if event == "LOADING_SCREEN_ENABLED" then
-        skipItemOverlayEvents = true
-    elseif event == "LOADING_SCREEN_DISABLED" then
-        skipItemOverlayEvents = false
-    end
-
-    if not skipItemOverlayEvents then
+    -- Prevent the ItemOverlayEvents handler from running more than is needed.
+    local currentTime = GetTime()
+    if currentTime - lastOverlayEventCheck > overlayEventCheckThreshold then
+        lastOverlayEventCheck = currentTime
         self:ItemOverlayEvents(event, ...)
     end
 end)
