@@ -1,3 +1,9 @@
+7.2.0.04 Release - 2017/06/10
+
+Fixed log-in and loading screen lag. ([#58](https://gitlab.com/toreltwiddler/CanIMogIt/issues/58) & [#89](https://gitlab.com/toreltwiddler/CanIMogIt/issues/89))
+
+*****
+
 7.2.0.03 Release - 2017/05/07
 
 ArkInventory now supported!
