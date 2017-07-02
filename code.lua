@@ -342,13 +342,13 @@ local function printDebug(tooltip, itemLink, bag, slot)
     addLine(tooltip, '--------')
 
     if appearanceID ~= nil then
-        addDoubleLine(tooltip, "DBHasAppearance:", tostring(CanIMogIt:DBHasAppearance(appearanceID)))
+        addDoubleLine(tooltip, "DBHasAppearance:", tostring(CanIMogIt:DBHasAppearance(appearanceID, itemLink)))
     else
         addDoubleLine(tooltip, "DBHasAppearance:", 'nil')
     end
 
     if appearanceID ~= nil and sourceID ~= nil then
-        addDoubleLine(tooltip, "DBHasSource:", tostring(CanIMogIt:DBHasSource(appearanceID, sourceID)))
+        addDoubleLine(tooltip, "DBHasSource:", tostring(CanIMogIt:DBHasSource(appearanceID, sourceID, itemLink)))
     else
         addDoubleLine(tooltip, "DBHasSource:", 'nil')
     end
@@ -558,7 +558,8 @@ local function _GetAppearances()
     for appearanceID, sources in removeIter do
         for sourceID, source in pairs(sources.sources) do
             if not C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID) then
-                CanIMogIt:DBRemoveItem(appearanceID, sourceID)
+                local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+                CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink)
                 sourcesRemoved = sourcesRemoved + 1
             end
             buffer = buffer + 1
@@ -1107,10 +1108,10 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
     -- Returns whether this item's appearance is already known by the player.
     local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
     if appearanceID == nil then return false end
-    if CanIMogIt:DBHasAppearance(appearanceID) then
+    if CanIMogIt:DBHasAppearance(appearanceID, itemLink) then
         if CanIMogIt:IsItemArmor(itemLink) then
             -- The character knows the appearance, check that it's from the same armor type.
-            for sourceID, knownItem in pairs(CanIMogIt:DBGetSources(appearanceID)) do
+            for sourceID, knownItem in pairs(CanIMogIt:DBGetSources(appearanceID, itemLink)) do
                 if CanIMogIt:IsArmorSubClassName(knownItem.subClass, itemLink) 
                         or knownItem.subClass == COSMETIC_NAME then
                     return true
@@ -1142,7 +1143,7 @@ function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
     if sourceID == nil then return end
     
     -- First check the Database
-    if CanIMogIt:DBHasSource(appearanceID, sourceID) then
+    if CanIMogIt:DBHasSource(appearanceID, sourceID, itemLink) then
         return true
     end
 
