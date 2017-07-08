@@ -132,7 +132,7 @@ function CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
             CanIMogIt:Print("nil subclass: " .. itemLink)
         end
         -- For testing:
-        -- CanIMogIt:Print("New item found: " .. itemLink)
+        -- CanIMogIt:Print("New item found: " .. itemLink .. " sourceID: " .. sourceID .. " appearanceID: " .. appearanceID)
         return true
     end
     return false
@@ -148,8 +148,7 @@ function CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink)
             self:DBRemoveAppearance(appearanceID, itemLink)
         end
         -- For testing:
-        -- local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
-        -- CanIMogIt:Print("Item removed: " .. itemLink)
+        -- CanIMogIt:Print("Item removed: " .. CanIMogIt:GetItemLinkFromSourceID(sourceID) .. " sourceID: " .. sourceID .. " appearanceID: " .. appearanceID)
     end
 end
 

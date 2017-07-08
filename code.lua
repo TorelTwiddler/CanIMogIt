@@ -555,17 +555,18 @@ local function _GetAppearances()
 
     if removeIter == nil then removeIter = pairsByKeys(removeAppearancesTable) end
     -- Remove appearances that are no longer learned.
-    for appearanceID, sources in removeIter do
+    for appearanceHash, sources in removeIter do
         for sourceID, source in pairs(sources.sources) do
             if not C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID) then
                 local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+                local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
                 CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink)
                 sourcesRemoved = sourcesRemoved + 1
             end
             buffer = buffer + 1
         end
         if buffer >= CanIMogIt.bufferMax then return end
-        removeAppearancesTable[appearanceID] = nil
+        removeAppearancesTable[appearanceHash] = nil
     end
 
     getAppearancesDone = true
