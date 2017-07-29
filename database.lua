@@ -24,6 +24,9 @@ function CanIMogIt:OnInitialize()
         StaticPopup_Show("CANIMOGIT_NEW_DATABASE")
     end
     self.db = LibStub("AceDB-3.0"):New("CanIMogItDatabase", default)
+
+    -- Clean up old database stuff.
+    if self.db.appearances ~= nil then self.db.appearances = nil end
 end
 
 
