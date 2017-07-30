@@ -5,7 +5,7 @@ Can I Mog It? adds a line to item tooltips to tell you if you have learned a tra
 - [WoWInterface](http://www.wowinterface.com/downloads/info24015-CanIMogIt.html)
 - [GitLab Project](https://gitlab.com/toreltwiddler/CanIMogIt)
 - [Issues](https://gitlab.com/toreltwiddler/CanIMogIt/issues)
-- [Wiki/FAQ](https://gitlab.com/toreltwiddler/CanIMogIt/wikis/home)
+- [Wiki/FAQ](https://wow.curseforge.com/projects/can-i-mog-it/pages/faq)
 
 
 # Features
