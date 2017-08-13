@@ -132,6 +132,17 @@ CIMIEvents = {
     ["PLAYERREAGENTBANKSLOTS_CHANGED"] = true,
 }
 
+
+CanIMogIt.frame.itemOverlayEventFunctions = {}
+
 function CanIMogIt.frame:ItemOverlayEvents(event, ...)
     if not CIMIEvents[event] then return end
+    for i, func in ipairs(CanIMogIt.frame.itemOverlayEventFunctions) do
+        func(event, ...)
+    end
+end
+
+function CanIMogIt.frame:AddOverlayEventFunction(func)
+    -- Adds the func to the list of functions that are called for overlay events.
+    table.insert(CanIMogIt.frame.itemOverlayEventFunctions, func)
 end

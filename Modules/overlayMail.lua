@@ -54,7 +54,7 @@ end
 ----------------------------
 
 
-function CanIMogIt.frame:HookItemOverlay(event)
+local function HookOverlayMail(self, event)
     if event ~= "PLAYER_LOGIN" then return end
 
     -- Add hook for the Mail inbox frames.
@@ -74,6 +74,8 @@ function CanIMogIt.frame:HookItemOverlay(event)
         end
     end
 end
+
+hooksecurefunc(CanIMogIt.frame, "HookItemOverlay", HookOverlayMail)
 
 
 ------------------------

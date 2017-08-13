@@ -71,28 +71,11 @@ end
 -- Event functions    --
 ------------------------
 
-CIMIEvents = {
-    ["UNIT_INVENTORY_CHANGED"] = true,
-    ["PLAYER_SPECIALIZATION_CHANGED"] = true,
-    ["BAG_UPDATE"] = true,
-    ["BAG_NEW_ITEMS_UPDATED"] = true,
-    ["QUEST_ACCEPTED"] = true,
-    ["BAG_SLOT_FLAGS_UPDATED"] = true,
-    ["BANK_BAG_SLOT_FLAGS_UPDATED"] = true,
-    ["PLAYERBANKSLOTS_CHANGED"] = true,
-    ["BANKFRAME_OPENED"] = true,
-    ["START_LOOT_ROLL"] = true,
-    ["MERCHANT_SHOW"] = true,
-    ["VOID_STORAGE_OPEN"] = true,
-    ["VOID_STORAGE_CONTENTS_UPDATE"] = true,
-    ["GUILDBANKBAGSLOTS_CHANGED"] = true,
-    ["PLAYERREAGENTBANKSLOTS_CHANGED"] = true,
-}
 
-function CanIMogIt.frame:EncounterJournalOverlayEvents(event, ...)
-    if not CIMIEvents[event] then return end
-    
+local function EncounterJournalOverlayEvents(event, ...)
     if encounterJournalLoaded then
         EncounterJournalFrame_CIMIOnValueChanged()
     end
 end
+
+CanIMogIt.frame:AddOverlayEventFunction(EncounterJournalOverlayEvents)
