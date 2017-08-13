@@ -1,3 +1,21 @@
+7.2.5.01 Release - 2017/07/16
+
+Release of database change.  You cannot downgrade from this version to older versions!  If you do you will have to delete your CanIMogIt.lua save variables file!
+
+*****
+
+7.2.5.01 Beta - 2017/07/09
+
+Changed how the database stores items so that items of different types that share appearances are not stored together.
+
+*****
+
+7.2.0.04 Release - 2017/06/10
+
+Fixed log-in and loading screen lag. ([#58](https://gitlab.com/toreltwiddler/CanIMogIt/issues/58) & [#89](https://gitlab.com/toreltwiddler/CanIMogIt/issues/89))
+
+*****
+
 7.2.0.03 Release - 2017/05/07
 
 ArkInventory now supported!
