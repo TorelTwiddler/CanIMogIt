@@ -136,11 +136,12 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     self:AddonLoaded(event, ...)
     self:HookItemOverlay(event, ...)
     self:OnEncounterJournalLoaded(event, ...)
+    self:TransmogCollectionUpdated(event, ...)
     self:OnAuctionHouseShow(event, ...)
     self:OnAuctionHouseUpdate(event, ...)
     self:OnGuildBankOpened(event, ...)
     self:OnVoidStorageOpened(event, ...)
-    self:DatabaseScanEvent(event, ...)
+    self:GetAppearancesEvent(event, ...)
     self:TradeSkillEvents(event, ...)
 
     -- Prevent the ItemOverlayEvents handler from running more than is needed.
@@ -173,7 +174,7 @@ local function checkboxOnClick(self)
     self:SetValue(checked)
     -- Reset the cache when an option changes.
     CanIMogIt:ResetCache()
-
+    
     CanIMogIt:SendMessage("OptionUpdate")
 end
 
@@ -181,7 +182,7 @@ end
 local function newCheckbox(parent, variableName)
     -- Creates a new checkbox in the parent frame for the given variable name
     local displayData = CanIMogItOptions_DisplayData[variableName]
-    local checkbox = CreateFrame("CheckButton", "CanIMogItCheckbox" .. variableName,
+    local checkbox = CreateFrame("CheckButton", "CanIMogItCheckbox" .. variableName, 
             parent, "InterfaceOptionsCheckButtonTemplate")
 
     -- checkbox.value = CanIMogItOptions[variableName]
