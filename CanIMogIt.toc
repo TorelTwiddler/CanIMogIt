@@ -34,5 +34,5 @@ options.lua
 code.lua
 database.lua
 tooltipScanner.lua
-Modules\_modules.xml
+Overlay\_overlays.xml
 Plugins\_plugins.xml
