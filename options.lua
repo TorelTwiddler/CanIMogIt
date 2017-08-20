@@ -85,6 +85,7 @@ local EVENTS = {
     "PLAYER_LOGIN",
     -- "GET_ITEM_INFO_RECEIVED",
     "AUCTION_HOUSE_SHOW",
+    "AUCTION_ITEM_LIST_UPDATE",
     "GUILDBANKFRAME_OPENED",
     "VOID_STORAGE_OPEN",
     "UNIT_INVENTORY_CHANGED",
@@ -136,7 +137,8 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     self:HookItemOverlay(event, ...)
     self:OnEncounterJournalLoaded(event, ...)
     self:TransmogCollectionUpdated(event, ...)
-    -- self:OnAuctionHouseShow(event, ...)
+    self:OnAuctionHouseShow(event, ...)
+    self:OnAuctionHouseUpdate(event, ...)
     self:OnGuildBankOpened(event, ...)
     self:OnVoidStorageOpened(event, ...)
     self:GetAppearancesEvent(event, ...)

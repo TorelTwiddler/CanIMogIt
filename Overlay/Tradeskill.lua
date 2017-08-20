@@ -1,3 +1,9 @@
+-- Overlay for the crafting windows.
+
+
+----------------------------
+-- UpdateIcon functions   --
+----------------------------
 
 local function string_starts(String,Start)
    return string.sub(String,1,string.len(Start))==Start
@@ -26,6 +32,21 @@ function CIMI_UpdateTradeSkillIcons()
         end
     end
 end
+
+
+------------------------
+-- Function hooks     --
+------------------------
+
+
+----------------------------
+-- Begin adding to frames --
+----------------------------
+
+
+------------------------
+-- Event functions    --
+------------------------
 
 
 function CanIMogIt.frame:TradeSkillEvents(event, addon)

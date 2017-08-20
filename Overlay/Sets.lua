@@ -1,3 +1,9 @@
+-- Overlay for the Appearances > Sets collection.
+
+
+----------------------------
+-- UpdateIcon functions   --
+----------------------------
 
 
 function CIMI_AddToFrameSets(parentFrame)
@@ -23,6 +29,11 @@ function CIMI_AddToFrameSets(parentFrame)
 end
 
 
+------------------------
+-- Function hooks     --
+------------------------
+
+
 function WardrobeCollectionFrame_CIMIOnValueChanged()
     -- For each button, update the text value
     for i=1,12 do
@@ -32,6 +43,16 @@ function WardrobeCollectionFrame_CIMIOnValueChanged()
         end
     end
 end
+
+
+----------------------------
+-- Begin adding to frames --
+----------------------------
+
+
+------------------------
+-- Event functions    --
+------------------------
 
 
 CanIMogIt.frame:HookScript("OnEvent", function (self, event, addonName)
