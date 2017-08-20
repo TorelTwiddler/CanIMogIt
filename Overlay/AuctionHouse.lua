@@ -8,8 +8,6 @@
 
 local function AuctionFrame_OnUpdate(self)
      -- Sets the icon overlay for the auction frame.
-     -- if calculatedFrames[tostring(self)] then return end
-     -- calculatedFrames[tostring(self)] = true
     if not self then return end
     if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
@@ -35,25 +33,7 @@ end
 ----------------------------
 
 
-function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
-    -- The button frames don't exist until the auction house is open.
-    if event ~= "AUCTION_HOUSE_SHOW" then return end
-    -- Add hook for the Auction House frames.
-    local offset = FauxScrollFrame_GetOffset(BrowseScrollFrame)
-
-        for i=1, NUM_BROWSE_TO_DISPLAY do
-            local frame = _G["BrowseButton"..i.."Item"]
-            frame:SetID(i + offset)
-            -- print(i + offset)
-            CIMI_AddToFrame(frame, AuctionFrame_OnUpdate)
-        end
-    -- add hook for scroll event of auction scroll frame
-
-    local hookframe = _G["BrowseScrollFrame"]
-    hookframe:HookScript("OnVerticalScroll", VerticalScroll)
-end
-
-function VerticalScroll( self, offset)
+local function VerticalScroll(self, offset)
     local offset = FauxScrollFrame_GetOffset(BrowseScrollFrame)
 
     for i=1, NUM_BROWSE_TO_DISPLAY do
@@ -64,6 +44,25 @@ function VerticalScroll( self, offset)
         CIMI_SetIcon(frame, AuctionFrame_OnUpdate, CanIMogIt:GetTooltipText(itemLink))
     end
 end
+
+
+function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
+    -- The button frames don't exist until the auction house is open.
+    if event ~= "AUCTION_HOUSE_SHOW" then return end
+    -- Add hook for the Auction House frames.
+    local offset = FauxScrollFrame_GetOffset(BrowseScrollFrame)
+
+    for i=1, NUM_BROWSE_TO_DISPLAY do
+        local frame = _G["BrowseButton"..i.."Item"]
+        frame:SetID(i + offset)
+        CIMI_AddToFrame(frame, AuctionFrame_OnUpdate)
+    end
+    -- add hook for scroll event of auction scroll frame
+
+    local hookframe = _G["BrowseScrollFrame"]
+    hookframe:HookScript("OnVerticalScroll", VerticalScroll)
+end
+
 
 function CanIMogIt.frame:OnAuctionHouseUpdate(event, ...)
     -- The button frames don't exist until the auction house is open.

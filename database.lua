@@ -58,7 +58,7 @@ function CanIMogIt:OnInitialize()
     end
     self.db = LibStub("AceDB-3.0"):New("CanIMogItDatabase", default)
 
-    if not self.db.global.databaseVersion 
+    if not self.db.global.databaseVersion
             or self.db.global.databaseVersion < CanIMogIt_DatabaseVersion then
         UpdateDatabase()
     end
