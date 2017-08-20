@@ -1,3 +1,14 @@
+7.2.5.02 Release - 2017/08/20
+
+Auction House now has the overlay!
+
+![Auction House overlay!](http://i.imgur.com/5jrKJxs.png "Auction House overlay!")
+
+* [#24](https://gitlab.com/toreltwiddler/CanIMogIt/issues/24) Added the overlay to the default Auction House (code from crappyusername).
+* [#97](https://gitlab.com/toreltwiddler/CanIMogIt/issues/97) Separated the overlay code into different files and their own subfolder.
+
+*****
+
 7.2.5.01 Release - 2017/07/16
 
 Release of database change.  You cannot downgrade from this version to older versions!  If you do you will have to delete your CanIMogIt.lua save variables file!
