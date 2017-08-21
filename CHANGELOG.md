@@ -1,3 +1,9 @@
+7.2.5.03 Release - 2017/08/20
+
+Prevents errors with addons that overwrite the default Auction House.
+
+*****
+
 7.2.5.02 Release - 2017/08/20
 
 Auction House now has the overlay!
