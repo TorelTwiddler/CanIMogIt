@@ -38,10 +38,12 @@ local function VerticalScroll(self, offset)
 
     for i=1, NUM_BROWSE_TO_DISPLAY do
         local frame = _G["CIMIOverlayFrame_BrowseButton"..i.."Item"]
-        local index = i + offset
-        local itemLink = GetAuctionItemLink("list", index)
-        local text = CanIMogIt:GetTooltipText(itemLink)
-        CIMI_SetIcon(frame, AuctionFrame_OnUpdate, CanIMogIt:GetTooltipText(itemLink))
+        if frame then
+            local index = i + offset
+            local itemLink = GetAuctionItemLink("list", index)
+            local text = CanIMogIt:GetTooltipText(itemLink)
+            CIMI_SetIcon(frame, AuctionFrame_OnUpdate, CanIMogIt:GetTooltipText(itemLink))
+        end
     end
 end
 
@@ -54,13 +56,17 @@ function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
 
     for i=1, NUM_BROWSE_TO_DISPLAY do
         local frame = _G["BrowseButton"..i.."Item"]
-        frame:SetID(i + offset)
-        CIMI_AddToFrame(frame, AuctionFrame_OnUpdate)
+        if frame then
+            frame:SetID(i + offset)
+            CIMI_AddToFrame(frame, AuctionFrame_OnUpdate)
+        end
     end
     -- add hook for scroll event of auction scroll frame
 
     local hookframe = _G["BrowseScrollFrame"]
-    hookframe:HookScript("OnVerticalScroll", VerticalScroll)
+    if hookframe then
+        hookframe:HookScript("OnVerticalScroll", VerticalScroll)
+    end
 end
 
 
@@ -74,10 +80,12 @@ function CanIMogIt.frame:OnAuctionHouseUpdate(event, ...)
     -- refresh overlay of buttons created OnAuctionHouseShow function.
     for i=1, NUM_BROWSE_TO_DISPLAY do
         local frame = _G["CIMIOverlayFrame_BrowseButton"..i.."Item"]
-        local index = i + offset
-        local itemLink = GetAuctionItemLink("list", index)
-        local text = CanIMogIt:GetTooltipText(itemLink)
-        CIMI_SetIcon(frame, AuctionFrame_OnUpdate, CanIMogIt:GetTooltipText(itemLink))
+        if frame then
+            local index = i + offset
+            local itemLink = GetAuctionItemLink("list", index)
+            local text = CanIMogIt:GetTooltipText(itemLink)
+            CIMI_SetIcon(frame, AuctionFrame_OnUpdate, CanIMogIt:GetTooltipText(itemLink))
+        end
     end
 end
 
