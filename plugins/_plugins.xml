@@ -2,4 +2,5 @@
 ..\FrameXML\UI.xsd">
     <Script file="adibags.lua"/>
     <Script file="arkinventory.lua"/>
+    <Script file="elvui.lua"/>
 </Ui>
