@@ -1,4 +1,14 @@
+-- Adds overlays to items in the addon ArkInventory: https://mods.curse.com/addons/wow/ark-inventory
+
+
 if IsAddOnLoaded("ArkInventory") then
+    
+
+    ----------------------------
+    -- UpdateIcon functions   --
+    ----------------------------
+
+
     function ArkInventoryItemButton_CIMIUpdateIcon(self)
         if not self or not self:GetParent() then return end
         if not CIMI_CheckOverlayIconEnabled(self) then
@@ -23,6 +33,12 @@ if IsAddOnLoaded("ArkInventory") then
         local itemLink = GetGuildBankItemLink(tab, slot)
         CIMI_SetIcon(self, ArkInventoryGuildBank_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
     end
+
+
+    ----------------------------
+    -- Begin adding to frames --
+    ----------------------------
+
 
     function CIMI_ArkInventoryAddFrame(self, event)
         if event == "PLAYER_LOGIN" or event == "BANKFRAME_OPENED" or event == "GUILDBANKFRAME_OPENED" then
@@ -61,6 +77,12 @@ if IsAddOnLoaded("ArkInventory") then
             end
         end
     end
+
+
+    ------------------------
+    -- Event functions    --
+    ------------------------
+
 
     function CIMI_ArkInventoryUpdate()
         -- Make sure all CIMI frames exist
