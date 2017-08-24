@@ -18,17 +18,7 @@
 ## SavedVariables: CanIMogItOptions, CanIMogItDatabase
 embeds.xml
 core.lua
-Locale\enUS.lua
-Locale\deDE.lua
-Locale\esES.lua
-Locale\esMX.lua
-Locale\frFR.lua
-Locale\itIT.lua
-Locale\koKR.lua
-Locale\ptBR.lua
-Locale\ruRU.lua
-Locale\zhCN.lua
-Locale\zhTW.lua
+Locale\_locales.xml
 constants.lua
 options.lua
 code.lua
