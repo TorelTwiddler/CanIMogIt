@@ -170,7 +170,7 @@ end
 
 local function checkboxOnClick(self)
     local checked = self:GetChecked()
-    PlaySound(checked and "igMainMenuOptionCheckBoxOn" or "igMainMenuOptionCheckBoxOff")
+    PlaySound(PlaySoundKitID and "igMainMenuOptionCheckBoxOn" or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
     self:SetValue(checked)
     -- Reset the cache when an option changes.
     CanIMogIt:ResetCache()
