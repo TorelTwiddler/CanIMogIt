@@ -206,26 +206,26 @@ end
 
 local function createOptionsMenu()
     -- define the checkboxes
-    local debug = newCheckbox(CanIMogIt.frame, "debug")
-    local showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
-    local showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
-    local showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
-    local showSetInfo = newCheckbox(CanIMogIt.frame, "showSetInfo")
-    local showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
-    local showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
-    local showSourceLocationTooltip = newCheckbox(CanIMogIt.frame, "showSourceLocationTooltip")
-    local printDatabaseScan = newCheckbox(CanIMogIt.frame, "printDatabaseScan")
+    CanIMogIt.frame.debug =  newCheckbox(CanIMogIt.frame, "debug")
+    CanIMogIt.frame.showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
+    CanIMogIt.frame.showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
+    CanIMogIt.frame.showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
+    CanIMogIt.frame.showSetInfo = newCheckbox(CanIMogIt.frame, "showSetInfo")
+    CanIMogIt.frame.showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
+    CanIMogIt.frame.showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
+    CanIMogIt.frame.showSourceLocationTooltip = newCheckbox(CanIMogIt.frame, "showSourceLocationTooltip")
+    CanIMogIt.frame.printDatabaseScan = newCheckbox(CanIMogIt.frame, "printDatabaseScan")
 
     -- position the checkboxes
-    debug:SetPoint("TOPLEFT", 16, -16)
-    showEquippableOnly:SetPoint("TOPLEFT", debug, "BOTTOMLEFT")
-    showTransmoggableOnly:SetPoint("TOPLEFT", showEquippableOnly, "BOTTOMLEFT")
-    showUnknownOnly:SetPoint("TOPLEFT", showTransmoggableOnly, "BOTTOMLEFT")
-    showSetInfo:SetPoint("TOPLEFT", showUnknownOnly, "BOTTOMLEFT")
-    showItemIconOverlay:SetPoint("TOPLEFT", showSetInfo, "BOTTOMLEFT")
-    showVerboseText:SetPoint("TOPLEFT", showItemIconOverlay, "BOTTOMLEFT")
-    showSourceLocationTooltip:SetPoint("TOPLEFT", showVerboseText, "BOTTOMLEFT")
-    printDatabaseScan:SetPoint("TOPLEFT", showSourceLocationTooltip, "BOTTOMLEFT")
+    CanIMogIt.frame.debug:SetPoint("TOPLEFT", 16, -16)
+    CanIMogIt.frame.showEquippableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.debug, "BOTTOMLEFT")
+    CanIMogIt.frame.showTransmoggableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showEquippableOnly, "BOTTOMLEFT")
+    CanIMogIt.frame.showUnknownOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showTransmoggableOnly, "BOTTOMLEFT")
+    CanIMogIt.frame.showSetInfo:SetPoint("TOPLEFT", CanIMogIt.frame.showUnknownOnly, "BOTTOMLEFT")
+    CanIMogIt.frame.showItemIconOverlay:SetPoint("TOPLEFT", CanIMogIt.frame.showSetInfo, "BOTTOMLEFT")
+    CanIMogIt.frame.showVerboseText:SetPoint("TOPLEFT", CanIMogIt.frame.showItemIconOverlay, "BOTTOMLEFT")
+    CanIMogIt.frame.showSourceLocationTooltip:SetPoint("TOPLEFT", CanIMogIt.frame.showVerboseText, "BOTTOMLEFT")
+    CanIMogIt.frame.printDatabaseScan:SetPoint("TOPLEFT", CanIMogIt.frame.showSourceLocationTooltip, "BOTTOMLEFT")
 end
 
 
@@ -256,6 +256,18 @@ function CanIMogIt:SlashCommands(input)
     -- Slash command router.
     if input == "" then
         self:OpenOptionsMenu()
+    elseif input == 'debug' then
+        CanIMogIt.frame.debug:Click()
+    elseif input == 'overlay' then
+        CanIMogIt.frame.showItemIconOverlay:Click()
+    elseif input == 'verbose' then
+        CanIMogIt.frame.showVerboseText:Click()
+    elseif input == 'equiponly' then
+        CanIMogIt.frame.showEquippableOnly:Click()
+    elseif input == 'transmogonly' then
+        CanIMogIt.frame.showTransmoggableOnly:Click()
+    elseif input == 'unknownonly' then
+        CanIMogIt.frame.showUnknownOnly:Click()
     elseif input == 'PleaseDeleteMyDB' then
         self:DBReset()
     elseif input == 'refresh' then
