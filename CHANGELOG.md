@@ -1,3 +1,16 @@
+7.2.5.04 Release - 2017/08/26
+
+ElvUI bags and bank now have the overlay!
+
+![ElvUI bags & bank overlay!](http://i.imgur.com/5ZJMZGb.png "ElvUI bags & bank overlay!")
+
+* [#18](https://gitlab.com/toreltwiddler/CanIMogIt/issues/18) Added some more slash commands.
+* [#44](https://gitlab.com/toreltwiddler/CanIMogIt/issues/44) Added support for ElvUI bags and bank.  Also Tradeskills windows now update correctly.
+* [#106](https://gitlab.com/toreltwiddler/CanIMogIt/issues/106) Updated options menu checkbox sound to use 7.3 API.
+* [#112](https://gitlab.com/toreltwiddler/CanIMogIt/issues/112) Cleaned up Locales in TOC.
+
+*****
+
 7.2.5.03 Release - 2017/08/20
 
 Prevents errors with addons that overwrite the default Auction House.
