@@ -1,4 +1,4 @@
-## Interface: 70200
+## Interface: 70300
 ## Title: Can I Mog It?
 ## Author: TorelTwiddler, Ami Yuy
 ## Version: @project-version@
