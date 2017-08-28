@@ -1,3 +1,9 @@
+7.3.0.01 Release - 2017/08/29
+
+Bump TOC for 7.3.
+
+*****
+
 7.2.5.04 Release - 2017/08/26
 
 ElvUI bags and bank now have the overlay!
