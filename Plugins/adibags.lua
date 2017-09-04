@@ -29,7 +29,7 @@ if IsAddOnLoaded("AdiBags") then
     ----------------------------
 
 
-    function CIMI_AdiBagsAddFrame(self, event, addonName)
+    function CIMI_AdiBagsAddFrame(event, addonName)
         if event ~= "PLAYER_LOGIN" and event ~= "BANKFRAME_OPENED" and not CIMIEvents[event] then return end
         -- Add to frames
         for i=1,600 do
@@ -45,7 +45,7 @@ if IsAddOnLoaded("AdiBags") then
             end
         end
     end
-    hooksecurefunc(CanIMogIt.frame, "HookItemOverlay", CIMI_AdiBagsAddFrame)
+    CanIMogIt.frame:AddEventFunction(CIMI_AdiBagsAddFrame)
 
 
     ------------------------

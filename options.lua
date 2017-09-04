@@ -86,6 +86,7 @@ local EVENTS = {
     -- "GET_ITEM_INFO_RECEIVED",
     "AUCTION_HOUSE_SHOW",
     "AUCTION_ITEM_LIST_UPDATE",
+    "CHAT_MSG_LOOT",
     "GUILDBANKFRAME_OPENED",
     "VOID_STORAGE_OPEN",
     "UNIT_INVENTORY_CHANGED",
@@ -131,19 +132,30 @@ local function futureOverlay(event)
 end
 
 
-CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
-    -- Add functions you want to catch events here
-    self:AddonLoaded(event, ...)
-    self:HookItemOverlay(event, ...)
-    self:OnEncounterJournalLoaded(event, ...)
-    self:TransmogCollectionUpdated(event, ...)
-    self:OnAuctionHouseShow(event, ...)
-    self:OnAuctionHouseUpdate(event, ...)
-    self:OnGuildBankOpened(event, ...)
-    self:OnVoidStorageOpened(event, ...)
-    self:GetAppearancesEvent(event, ...)
-    self:TradeSkillEvents(event, ...)
+CanIMogIt.frame.eventFunctions = {}
 
+
+function CanIMogIt.frame:AddEventFunction(func)
+    -- Adds the func to the list of functions that are called for all events.
+    table.insert(CanIMogIt.frame.eventFunctions, func)
+end
+
+
+CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
+    --[[
+        To add functions you want to run with CIMI's "OnEvent", do:
+
+        local function MyOnEventFunc(event, ...)
+            Do stuff here
+        end
+        CanIMogIt.frame:AddEventFunction(MyOnEventFunc)
+        ]]
+
+    for i, func in ipairs(CanIMogIt.frame.eventFunctions) do
+        func(event, ...)
+    end
+
+    -- TODO: Move this to it's own event function.
     -- Prevent the ItemOverlayEvents handler from running more than is needed.
     -- If more than one occur in the same frame, we update the first time, then
     -- prepare a future update in a couple frames.
@@ -161,11 +173,12 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
 end)
 
 
-function CanIMogIt.frame:AddonLoaded(event, addonName)
+function CanIMogIt.frame.AddonLoaded(event, addonName)
     if event == "ADDON_LOADED" and addonName == "CanIMogIt" then
         CanIMogIt.frame.Loaded()
     end
 end
+CanIMogIt.frame:AddEventFunction(CanIMogIt.frame.AddonLoaded)
 
 
 local function checkboxOnClick(self)
@@ -174,7 +187,7 @@ local function checkboxOnClick(self)
     self:SetValue(checked)
     -- Reset the cache when an option changes.
     CanIMogIt:ResetCache()
-    
+
     CanIMogIt:SendMessage("OptionUpdate")
 end
 
@@ -182,7 +195,7 @@ end
 local function newCheckbox(parent, variableName)
     -- Creates a new checkbox in the parent frame for the given variable name
     local displayData = CanIMogItOptions_DisplayData[variableName]
-    local checkbox = CreateFrame("CheckButton", "CanIMogItCheckbox" .. variableName, 
+    local checkbox = CreateFrame("CheckButton", "CanIMogItCheckbox" .. variableName,
             parent, "InterfaceOptionsCheckButtonTemplate")
 
     -- checkbox.value = CanIMogItOptions[variableName]

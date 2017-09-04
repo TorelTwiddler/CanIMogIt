@@ -31,7 +31,7 @@ end
 ----------------------------
 
 
-local function HookOverlayLoot(self, event)
+local function HookOverlayLoot(event)
     if event ~= "PLAYER_LOGIN" then return end
 
     -- Add hook for the loot frames.
@@ -43,7 +43,7 @@ local function HookOverlayLoot(self, event)
     end
 end
 
-hooksecurefunc(CanIMogIt.frame, "HookItemOverlay", HookOverlayLoot)
+CanIMogIt.frame:AddEventFunction(HookOverlayLoot)
 
 
 ------------------------
@@ -61,3 +61,44 @@ local function LootOverlayEvents(event, ...)
 end
 
 CanIMogIt.frame:AddOverlayEventFunction(LootOverlayEvents)
+
+-- From ls: Toasts
+local LOOT_ITEM_PATTERN = LOOT_ITEM_SELF:gsub("%%s", "(.+)")
+local LOOT_ITEM_PUSHED_PATTERN = LOOT_ITEM_PUSHED_SELF:gsub("%%s", "(.+)")
+local LOOT_ITEM_MULTIPLE_PATTERN = LOOT_ITEM_SELF_MULTIPLE:gsub("%%s", "(.+)")
+local LOOT_ITEM_PUSHED_MULTIPLE_PATTERN = LOOT_ITEM_PUSHED_SELF_MULTIPLE:gsub("%%s", "(.+)")
+local PLAYER_NAME = UnitName("player")
+
+
+local function ChatMessageLootEvent(event, message, _, _, _, target)
+    -- Get the item link from the CHAT_MSG_LOOT event.
+    if event ~= "CHAT_MSG_LOOT" then return end
+    if target ~= PLAYER_NAME then
+        return
+    end
+
+    local link = message:match(LOOT_ITEM_MULTIPLE_PATTERN)
+
+    if not link then
+        link = message:match(LOOT_ITEM_PUSHED_MULTIPLE_PATTERN)
+
+        if not link then
+            link = message:match(LOOT_ITEM_PATTERN)
+
+            if not link then
+                link = message:match(LOOT_ITEM_PUSHED_PATTERN)
+
+                if not link then
+                    return
+                end
+            end
+        end
+    end
+
+    -- Remove the cache for this item
+    CanIMogIt.cache:SetItemTextValue(link, nil)
+    CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
+
+end
+
+CanIMogIt.frame:AddEventFunction(ChatMessageLootEvent)

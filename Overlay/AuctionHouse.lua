@@ -48,7 +48,7 @@ local function VerticalScroll(self, offset)
 end
 
 
-function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
+local function OnAuctionHouseShow(event, ...)
     -- The button frames don't exist until the auction house is open.
     if event ~= "AUCTION_HOUSE_SHOW" then return end
     -- Add hook for the Auction House frames.
@@ -68,9 +68,10 @@ function CanIMogIt.frame:OnAuctionHouseShow(event, ...)
         hookframe:HookScript("OnVerticalScroll", VerticalScroll)
     end
 end
+CanIMogIt.frame:AddEventFunction(OnAuctionHouseShow)
 
 
-function CanIMogIt.frame:OnAuctionHouseUpdate(event, ...)
+local function OnAuctionHouseUpdate(event, ...)
     -- The button frames don't exist until the auction house is open.
     if event ~= "AUCTION_ITEM_LIST_UPDATE" then return end
 
@@ -88,6 +89,7 @@ function CanIMogIt.frame:OnAuctionHouseUpdate(event, ...)
         end
     end
 end
+CanIMogIt.frame:AddEventFunction(OnAuctionHouseUpdate)
 
 
 ------------------------

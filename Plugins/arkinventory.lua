@@ -2,7 +2,7 @@
 
 
 if IsAddOnLoaded("ArkInventory") then
-    
+
 
     ----------------------------
     -- UpdateIcon functions   --
@@ -40,7 +40,7 @@ if IsAddOnLoaded("ArkInventory") then
     ----------------------------
 
 
-    function CIMI_ArkInventoryAddFrame(self, event)
+    function CIMI_ArkInventoryAddFrame(event)
         if event == "PLAYER_LOGIN" or event == "BANKFRAME_OPENED" or event == "GUILDBANKFRAME_OPENED" then
             -- Add to frames
             -- Bags
@@ -65,7 +65,9 @@ if IsAddOnLoaded("ArkInventory") then
             C_Timer.After(.1, CIMI_ArkInventoryAddGuildBankFrame)
         end
     end
-    hooksecurefunc(CanIMogIt.frame, "HookItemOverlay", CIMI_ArkInventoryAddFrame)
+
+    CanIMogIt.frame:AddEventFunction(CIMI_ArkInventoryAddFrame)
+
 
     function CIMI_ArkInventoryAddGuildBankFrame()
         for i=1,12 do

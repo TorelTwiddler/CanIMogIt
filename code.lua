@@ -410,7 +410,7 @@ function spairs(t, order)
     for k in pairs(t) do keys[#keys+1] = k end
 
     -- if order function given, sort by it by passing the table and keys a, b,
-    -- otherwise just sort the keys 
+    -- otherwise just sort the keys
     if order then
         table.sort(keys, function(a,b) return order(t, a, b) end)
     else
@@ -787,7 +787,7 @@ function CanIMogIt:CalculateSetsVariantText(setID)
         local variantHave, variantTotal = CanIMogIt:_GetRatio(variantSet.setID)
 
         variantsText = variantsText .. CanIMogIt:_GetRatioTextColor(variantHave, variantTotal)
-        
+
         -- There is intentionally an extra space before the newline, for positioning.
         variantsText = variantsText .. variantHave .. "/" .. variantTotal .. " \n"
     end
@@ -977,7 +977,7 @@ function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
     if slotName == nil then return end
     local isArmorCosmetic = CanIMogIt:IsArmorCosmetic(itemLink)
     if isArmorCosmetic == nil then return end
-    if armorTypeSlots[slotName] and isArmorCosmetic == false then 
+    if armorTypeSlots[slotName] and isArmorCosmetic == false then
         return playerArmorTypeID == CanIMogIt:GetItemSubClassName(itemLink)
     else
         return true
@@ -1113,7 +1113,7 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
         if CanIMogIt:IsItemArmor(itemLink) then
             -- The character knows the appearance, check that it's from the same armor type.
             for sourceID, knownItem in pairs(CanIMogIt:DBGetSources(appearanceID, itemLink)) do
-                if CanIMogIt:IsArmorSubClassName(knownItem.subClass, itemLink) 
+                if CanIMogIt:IsArmorSubClassName(knownItem.subClass, itemLink)
                         or knownItem.subClass == COSMETIC_NAME then
                     return true
                 end
@@ -1142,7 +1142,7 @@ function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
     end
     local appearanceID, sourceID = CanIMogIt:GetAppearanceID(itemLink)
     if sourceID == nil then return end
-    
+
     -- First check the Database
     if CanIMogIt:DBHasSource(appearanceID, sourceID, itemLink) then
         return true
@@ -1196,7 +1196,7 @@ function CanIMogIt:IsTransmogable(itemLink)
     if is_misc_subclass and miscArmorExceptions[CanIMogIt:GetItemSlotName(itemLink)] == nil then
         return false
     end
-    
+
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
 
     -- See if the game considers it transmoggable
@@ -1227,7 +1227,7 @@ end
 
 function CanIMogIt:PreLogicOptionsContinue(itemLink)
     -- Apply the options. Returns false if it should stop the logic.
-    if CanIMogItOptions["showEquippableOnly"] and 
+    if CanIMogItOptions["showEquippableOnly"] and
             not CanIMogIt:IsEquippable(itemLink) then
         -- Don't bother if it's not equipable.
         return false
@@ -1239,7 +1239,7 @@ end
 
 function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
     -- Apply the options to the text. Returns the relevant text.
-    
+
     if CanIMogItOptions["showUnknownOnly"] and not CanIMogIt:TextIsUnknown(unmodifiedText) then
         -- We don't want to show the tooltip if it's already known.
         return "", ""
@@ -1261,7 +1261,7 @@ end
 
 
 function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
-    --[[ 
+    --[[
         Calculate the tooltip text.
         No caching is done here, so don't call this often!
         Use GetTooltipText whenever possible!
@@ -1355,7 +1355,7 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     --[[
         Gets the text to display on the tooltip from the itemLink.
 
-        If bag and slot are given, this will use the itemLink from 
+        If bag and slot are given, this will use the itemLink from
         bag and slot instead.
 
         Returns two things:
@@ -1435,7 +1435,7 @@ local function addToTooltip(tooltip, itemLink)
     end
 
     local bag, slot;
-    if tooltip:GetOwner() and tooltip:GetOwner():GetName() 
+    if tooltip:GetOwner() and tooltip:GetOwner():GetName()
             and tooltip:GetOwner():GetName():find("ContainerFrame") then
         -- Get the bag and slot, if it's in the inventory.
         bag, slot = tooltip:GetOwner():GetParent():GetID(), tooltip:GetOwner():GetID()

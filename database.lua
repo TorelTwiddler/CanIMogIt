@@ -182,13 +182,15 @@ function CanIMogIt:SetsDBGetSetFromSourceID(sourceID)
 end
 
 
-function CanIMogIt.frame:GetAppearancesEvent(event, ...)
+local function GetAppearancesEvent(event, ...)
     if event == "PLAYER_LOGIN" then
         -- add all known appearanceID's to the database
         CanIMogIt:GetAppearances()
         CanIMogIt:GetSets()
     end
 end
+CanIMogIt.frame:AddEventFunction(GetAppearancesEvent)
+
 
 local transmogEvents = {
     ["TRANSMOG_COLLECTION_SOURCE_ADDED"] = true,
@@ -196,7 +198,7 @@ local transmogEvents = {
     ["TRANSMOG_COLLECTION_UPDATED"] = true,
 }
 
-function CanIMogIt.frame:TransmogCollectionUpdated(event, sourceID, ...)
+local function TransmogCollectionUpdated(event, sourceID, ...)
     if transmogEvents[event] then
         -- Get the appearanceID from the sourceID
         if event == "TRANSMOG_COLLECTION_SOURCE_ADDED" then
@@ -211,6 +213,8 @@ function CanIMogIt.frame:TransmogCollectionUpdated(event, sourceID, ...)
         CanIMogIt:ResetCache()
     end
 end
+
+CanIMogIt.frame:AddEventFunction(TransmogCollectionUpdated)
 
 
 -- function CanIMogIt.frame:GetItemInfoReceived(event, ...)

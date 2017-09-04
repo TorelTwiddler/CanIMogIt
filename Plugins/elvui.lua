@@ -25,7 +25,7 @@ if IsAddOnLoaded("ElvUI") then
     ----------------------------
 
 
-    function CIMI_ElvUIAddFrame(self, event, addonName)
+    function CIMI_ElvUIAddFrame(event, addonName)
         if event ~= "PLAYER_LOGIN" and event ~= "BANKFRAME_OPENED" and not CIMIEvents[event] then return end
         -- Add to frames
         -- Bags
@@ -66,8 +66,7 @@ if IsAddOnLoaded("ElvUI") then
 
     end
 
-
-    hooksecurefunc(CanIMogIt.frame, "HookItemOverlay", CIMI_ElvUIAddFrame)
+    CanIMogIt.frame:AddEventFunction(CIMI_ElvUIAddFrame)
 
 
     ------------------------

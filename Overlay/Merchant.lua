@@ -43,7 +43,7 @@ end
 ----------------------------
 
 
-local function HookOverlayMerchant(self, event)
+local function HookOverlayMerchant(event)
     if event ~= "PLAYER_LOGIN" then return end
 
     -- Add hook for the Merchant frames.
@@ -68,7 +68,7 @@ local function HookOverlayMerchant(self, event)
     end
 end
 
-hooksecurefunc(CanIMogIt.frame, "HookItemOverlay", HookOverlayMerchant)
+CanIMogIt.frame:AddEventFunction(HookOverlayMerchant)
 
 
 ------------------------

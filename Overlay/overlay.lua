@@ -105,10 +105,11 @@ end
 ----------------------------
 
 
-function CanIMogIt.frame:HookItemOverlay(event)
+local function HookItemOverlay(event)
     if event ~= "PLAYER_LOGIN" then return end
 end
 
+CanIMogIt.frame:AddEventFunction(HookItemOverlay)
 
 ------------------------
 -- Event functions    --
@@ -130,6 +131,7 @@ CIMIEvents = {
     ["VOID_STORAGE_CONTENTS_UPDATE"] = true,
     ["GUILDBANKBAGSLOTS_CHANGED"] = true,
     ["PLAYERREAGENTBANKSLOTS_CHANGED"] = true,
+    ["CHAT_MSG_LOOT"] = true,
 }
 
 

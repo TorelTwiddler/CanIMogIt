@@ -1,4 +1,4 @@
--- Overlay for player bags, bank, void storage, and guild banks. 
+-- Overlay for player bags, bank, void storage, and guild banks.
 
 
 ----------------------------
@@ -77,7 +77,7 @@ end
 ----------------------------
 
 
-local function HookOverlayContainers(self, event)
+local function HookOverlayContainers(event)
     if event ~= "PLAYER_LOGIN" then return end
 
     -- Add hook for each bag item.
@@ -104,13 +104,13 @@ local function HookOverlayContainers(self, event)
     end
 end
 
-hooksecurefunc(CanIMogIt.frame, "HookItemOverlay", HookOverlayContainers)
+CanIMogIt.frame:AddEventFunction(HookOverlayContainers)
 
 
 -- guild bank
 local guildBankLoaded = false
 
-function CanIMogIt.frame:OnGuildBankOpened(event, ...)
+local function OnGuildBankOpened(event, ...)
     if event ~= "GUILDBANKFRAME_OPENED" then return end
     if guildBankLoaded == true then return end
     guildBankLoaded = true
@@ -124,11 +124,12 @@ function CanIMogIt.frame:OnGuildBankOpened(event, ...)
     end
 end
 
+CanIMogIt.frame:AddEventFunction(OnGuildBankOpened)
 
 -- void storage
 local voidStorageLoaded = false
 
-function CanIMogIt.frame:OnVoidStorageOpened(event, ...)
+local function OnVoidStorageOpened(event, ...)
     -- Add the overlay to the void storage frame.
     if event ~= "VOID_STORAGE_OPEN" then return end
     if voidStorageLoaded == true then return end
@@ -147,6 +148,8 @@ function CanIMogIt.frame:OnVoidStorageOpened(event, ...)
         voidStorageFrame.Page2:HookScript("OnClick", VoidStorageFrame_CIMIOnClick)
     end
 end
+
+CanIMogIt.frame:AddEventFunction(OnVoidStorageOpened)
 
 ------------------------
 -- Event functions    --

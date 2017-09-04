@@ -53,7 +53,7 @@ end
 
 local encounterJournalLoaded = false
 
-function CanIMogIt.frame:OnEncounterJournalLoaded(event, addonName, ...)
+local function OnEncounterJournalLoaded(event, addonName, ...)
     if event ~= "ADDON_LOADED" then return end
     if addonName ~= "Blizzard_EncounterJournal" then return end
     for i=1,10 do
@@ -62,9 +62,12 @@ function CanIMogIt.frame:OnEncounterJournalLoaded(event, addonName, ...)
             CIMI_AddToFrame(frame, EncounterJournalFrame_CIMIUpdateIcon)
         end
     end
+    encounterJournalLoaded = true
     hooksecurefunc("EncounterJournal_SetLootButton", EncounterJournalFrame_CIMISetLootButton)
     _G["EncounterJournalEncounterFrameInfoLootScrollFrameScrollBar"]:HookScript("OnValueChanged", EncounterJournalFrame_CIMIOnValueChanged)
 end
+
+CanIMogIt.frame:AddEventFunction(OnEncounterJournalLoaded)
 
 
 ------------------------
