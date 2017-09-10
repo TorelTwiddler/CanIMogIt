@@ -1,3 +1,12 @@
+7.3.0.02 Release - 2017/09/10
+
+Bug fixes.
+
+* [#95](https://gitlab.com/toreltwiddler/CanIMogIt/issues/95) Tooltips and bags overlay will now properly display Cannot Learn: Soulbound instead of Cannot Learn: Reason if you moused over an item before looting.
+* [#98](https://gitlab.com/toreltwiddler/CanIMogIt/issues/98) Encounter Journal overlay will update if you have it open and then loot and learn an item.
+
+*****
+
 7.3.0.01 Release - 2017/08/29
 
 Bump TOC for 7.3.
