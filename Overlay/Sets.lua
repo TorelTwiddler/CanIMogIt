@@ -36,7 +36,7 @@ end
 
 function WardrobeCollectionFrame_CIMIOnValueChanged()
     -- For each button, update the text value
-    for i=1,12 do
+    for i=1,CanIMogIt.NUM_WARDROBE_COLLECTION_BUTTONS do
         local frame = _G["WardrobeCollectionFrameScrollFrameButton"..i]
         if frame and frame.CanIMogItOverlay then
             frame.CanIMogItOverlay:UpdateText()
@@ -58,7 +58,7 @@ end
 CanIMogIt.frame:HookScript("OnEvent", function (self, event, addonName)
     if event == "ADDON_LOADED" and addonName == "Blizzard_Collections" then
         -- Add to frame initially
-        for i=1,12 do
+        for i=1,CanIMogIt.NUM_WARDROBE_COLLECTION_BUTTONS do
             local frame = _G["WardrobeCollectionFrameScrollFrameButton"..i]
             if frame then
                 CIMI_AddToFrameSets(frame)

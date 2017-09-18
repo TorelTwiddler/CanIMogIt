@@ -17,8 +17,7 @@ function MailFrame_CIMIUpdateIcon(self)
     local frameID = self:GetParent():GetID()
 
     local messageIndex;
-    -- 7 is the number of visible inbox buttons at a time.
-    for i=1,7 do
+    for i=1,CanIMogIt.NUM_MAIL_INBOX_ITEMS do
         local mailFrame = _G["MailItem"..i.."Button"]
         if mailFrame:IsShown() and mailFrame:GetChecked() then
             messageIndex = mailFrame.index
@@ -66,8 +65,7 @@ local function HookOverlayMail(event)
     end
 
     -- Add hook for clicking on mail (since there is no event).
-    -- 7 is the number of visible inbox buttons at a time.
-    for i=1,7 do
+    for i=1,CanIMogIt.NUM_MAIL_INBOX_ITEMS do
         local frame = _G["MailItem"..i.."Button"]
         if frame then
             frame:HookScript("OnClick", MailFrame_CIMIOnClick)

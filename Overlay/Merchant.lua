@@ -29,7 +29,7 @@ end
 
 
 function MerchantFrame_CIMIOnClick()
-    for i=1,10 do
+    for i=1,CanIMogIt.NUM_MERCHANT_ITEMS do
         local frame = _G["MerchantItem"..i.."ItemButton"]
         if frame then
             MerchantFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
@@ -47,8 +47,7 @@ local function HookOverlayMerchant(event)
     if event ~= "PLAYER_LOGIN" then return end
 
     -- Add hook for the Merchant frames.
-    -- 10 is the number of merchant items visible at once.
-    for i=1,10 do
+    for i=1,CanIMogIt.NUM_MERCHANT_ITEMS do
         local frame = _G["MerchantItem"..i.."ItemButton"]
         if frame then
             CIMI_AddToFrame(frame, MerchantFrame_CIMIUpdateIcon)

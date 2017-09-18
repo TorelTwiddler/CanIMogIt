@@ -145,3 +145,23 @@ CanIMogIt.tooltipOverlayIcons = {
 
 CanIMogIt.DATABASE_START_UPDATE_TEXT = L["Updating appearances database."]
 CanIMogIt.DATABASE_DONE_UPDATE_TEXT = L["Items updated: "] -- followed by a number
+
+--------------------------------------------
+-- Blizzard frame constants --
+--------------------------------------------
+
+-- Auction House = NUM_BROWSE_TO_DISPLAY
+-- Bags = NUM_CONTAINER_FRAMES
+-- Bag Items = MAX_CONTAINER_ITEMS
+-- Bank = NUM_BANKGENERIC_SLOTS
+CanIMogIt.NUM_VOID_STORAGE_FRAMES = 80
+-- Guild Bank
+    CanIMogIt.NUM_GUILD_BANK_COLUMNS = 7
+    CanIMogIt.NUM_GUILD_BANK_BUTTONS = 14
+CanIMogIt.NUM_ENCOUNTER_JOURNAL_ENCOUNTER_LOOT_FRAMES = 10
+-- Loot Roll = NUM_GROUP_LOOT_FRAMES
+CanIMogIt.NUM_MAIL_INBOX_ITEMS = 7 
+-- Mail Attachments = ATTACHMENTS_MAX_SEND
+CanIMogIt.NUM_MERCHANT_ITEMS = 10
+CanIMogIt.NUM_WARDROBE_COLLECTION_BUTTONS = 12
+-- Trade Skill = no constants

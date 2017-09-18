@@ -51,7 +51,7 @@ function VoidStorageFrame_CIMIUpdateIcon(self)
 
     local page = _G["VoidStorageFrame"].page
     local buttonSlot = self:GetParent().slot
-    local voidSlot = buttonSlot + (80 * (page - 1))
+    local voidSlot = buttonSlot + (CanIMogIt.NUM_VOID_STORAGE_FRAMES * (page - 1))
     local itemLink = GetVoidItemHyperlinkString(voidSlot)
     CIMI_SetIcon(self, VoidStorageFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
 end
@@ -63,7 +63,7 @@ end
 
 
 function VoidStorageFrame_CIMIOnClick()
-    for i=1,80 do
+    for i=1,CanIMogIt.NUM_VOID_STORAGE_FRAMES do
         local frame = _G["VoidStorageStorageButton"..i]
         if frame then
             VoidStorageFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
@@ -114,8 +114,8 @@ local function OnGuildBankOpened(event, ...)
     if event ~= "GUILDBANKFRAME_OPENED" then return end
     if guildBankLoaded == true then return end
     guildBankLoaded = true
-    for column=1,7 do
-        for button=1,14 do
+    for column=1,CanIMogIt.NUM_GUILD_BANK_COLUMNS do
+        for button=1,CanIMogIt.NUM_GUILD_BANK_BUTTONS do
             local frame = _G["GuildBankColumn"..column.."Button"..button]
             if frame then
                 CIMI_AddToFrame(frame, GuildBankFrame_CIMIUpdateIcon)
@@ -134,7 +134,7 @@ local function OnVoidStorageOpened(event, ...)
     if event ~= "VOID_STORAGE_OPEN" then return end
     if voidStorageLoaded == true then return end
     voidStorageLoaded = true
-    for i=1,80 do
+    for i=1,CanIMogIt.NUM_VOID_STORAGE_FRAMES do
         local frame = _G["VoidStorageStorageButton"..i]
         if frame then
             CIMI_AddToFrame(frame, VoidStorageFrame_CIMIUpdateIcon)
@@ -182,8 +182,8 @@ local function ContainersOverlayEvents(event, ...)
 
     -- guild bank frames
     if guildBankLoaded then
-        for column=1,7 do
-            for button=1,14 do
+        for column=1,CanIMogIt.NUM_GUILD_BANK_COLUMNS do
+            for button=1,CanIMogIt.NUM_GUILD_BANK_BUTTONS do
                 local frame = _G["GuildBankColumn"..column.."Button"..button]
                 if frame then
                     GuildBankFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
