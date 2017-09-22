@@ -1029,6 +1029,12 @@ function CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
 end
 
 
+function CanIMogIt:IsItemBindOnEquip(itemLink, bag, slot)
+    if not bag and slot then return false end
+    return CanIMogItTooltipScanner:IsItemBindOnEquip(itemLink, bag, slot)
+end
+
+
 function CanIMogIt:GetItemClassRestrictions(itemLink)
     if not itemLink then return end
     return CanIMogItTooltipScanner:GetClassesRequired(itemLink)
@@ -1276,10 +1282,13 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     -- if isTransmogable == nil then return end
 
     local playerKnowsTransmogFromItem, isValidAppearanceForCharacter, characterIsTooLowLevel,
-        playerKnowsTransmog, characterCanLearnTransmog, isItemSoulbound;
+        playerKnowsTransmog, characterCanLearnTransmog, isItemSoulbound, isItemBindOnEquip;
 
     local isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
     if isItemSoulbound == nil then return end
+
+    local isItemBindOnEquip = CanIMogIt:IsItemBindOnEquip(itemLink, bag, slot)
+    if isItemBindOnEquip == nil then return end
 
     if isTransmogable then
         --Calculating the logic for each rule
@@ -1301,62 +1310,62 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         if playerKnowsTransmogFromItem then
             if isValidAppearanceForCharacter then
                 -- Player knows appearance and can transmog it
-                if isItemSoulbound then
-                    text = CanIMogIt.KNOWN
-                    unmodifiedText = CanIMogIt.KNOWN
-                else
+                if isItemBindOnEquip then
                     text = CanIMogIt.KNOWN_BOE
                     unmodifiedText = CanIMogIt.KNOWN_BOE
+                else
+                    text = CanIMogIt.KNOWN
+                    unmodifiedText = CanIMogIt.KNOWN
                 end
             else
                 -- Player knows appearance but this character cannot transmog it
                 if characterCanLearnTransmog and characterIsTooLowLevel then
                     -- If this character is too low level
-                    if isItemSoulbound then
-                        text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
-                        unmodifiedText = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
-                    else
+                    if isItemBindOnEquip then
                         text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL_BOE
                         unmodifiedText = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL_BOE
+                    else
+                        text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
+                        unmodifiedText = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                     end
                 else
                     -- If this character cannot use the transmog
-                    if isItemSoulbound then
-                        text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
-                        unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
-                    else
+                    if isItemBindOnEquip then
                         text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
                         unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
+                    else
+                        text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
+                        unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
                     end
                 end
             end
         elseif playerKnowsTransmog then
             if isValidAppearanceForCharacter then
                 -- Player knows appearance from another item
-                if isItemSoulbound then
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
-                else
+                if isItemBindOnEquip then
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
                     unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
+                else
+                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
                 end
             else
                 -- Player knows appearance from another item but cannot transmog it
                 if characterCanLearnTransmog and characterIsTooLowLevel then
-                    if isItemSoulbound then
-                        text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
-                        unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
-                    else
+                    if isItemBindOnEquip then
                         text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL_BOE
                         unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL_BOE
+                    else
+                        text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
+                        unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                     end
                 else
-                    if isItemSoulbound then
-                        text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-                        unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-                    else
+                    if isItemBindOnEquip then
                         text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
                         unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
+                    else
+                        text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+                        unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
                     end
                 end
             end
@@ -1380,12 +1389,12 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
             end
         end
     else
-        if isItemSoulbound then
-            text = CanIMogIt.NOT_TRANSMOGABLE
-            unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
-        else
+        if isItemBindOnEquip then
             text = CanIMogIt.NOT_TRANSMOGABLE_BOE
             unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE_BOE
+        else
+            text = CanIMogIt.NOT_TRANSMOGABLE
+            unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
         end
     end
 

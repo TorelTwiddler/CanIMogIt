@@ -69,6 +69,14 @@ local function IsItemSoulbound(text)
     return false
 end
 
+local function IsItemBindOnEquip(text)
+    if not text then return end
+    if text:GetText() == ITEM_BIND_ON_EQUIP then
+        return true
+    end
+    return false
+end
+
 
 -- local function GetRequiredText(text)
 --     -- Returns {Profession = level} if the text has a profession in it, 
@@ -162,6 +170,15 @@ function CanIMogItTooltipScanner:IsItemSoulbound(bag, slot)
         return self:ScanTooltipBreak(IsItemSoulbound, nil, bag, slot)
     else
         return false
+    end
+end
+
+function CanIMogItTooltipScanner:IsItemBindOnEquip(itemLink, bag, slot)
+    -- Returns whether the item is bind on equip or not.
+    if bag and slot then
+        return self:ScanTooltipBreak(IsItemBindOnEquip, nil, bag, slot)
+    else
+        return self:ScanTooltipBreak(IsItemBindOnEquip, itemLink)
     end
 end
 
