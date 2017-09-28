@@ -69,9 +69,10 @@ local function IsItemSoulbound(text)
     return false
 end
 
+
 local function IsItemBindOnEquip(text)
     if not text then return end
-    if text:GetText() == ITEM_BIND_ON_EQUIP then
+    if text:GetText() == ITEM_BIND_ON_EQUIP or text:GetText() == ITEM_BIND_ON_USE then
         return true
     end
     return false
@@ -172,6 +173,7 @@ function CanIMogItTooltipScanner:IsItemSoulbound(bag, slot)
         return false
     end
 end
+
 
 function CanIMogItTooltipScanner:IsItemBindOnEquip(itemLink, bag, slot)
     -- Returns whether the item is bind on equip or not.
