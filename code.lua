@@ -209,6 +209,12 @@ local knownTexts = {
 }
 
 
+local unknownTexts = {
+    [CanIMogIt.UNKNOWN] = true,
+    [CanIMogIt.UNKNOWABLE_BY_CHARACTER] = true,
+}
+
+
 -----------------------------
 -- Exceptions              --
 -----------------------------
@@ -1361,9 +1367,9 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         text = CanIMogIt.NOT_TRANSMOGABLE
         unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
     end
-    
+
     text, unmodifiedText = CanIMogIt:CheckItemBindType(text, unmodifiedText, itemLink, bag, slot)
-    
+
     return text, unmodifiedText
 end
 

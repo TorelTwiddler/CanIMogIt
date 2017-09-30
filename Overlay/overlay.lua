@@ -73,6 +73,7 @@ function CIMI_AddToFrame(parentFrame, updateIconFunc)
         frame.CIMIIconTexture:SetPoint("TOPRIGHT", -2, -2)
         frame.timeSinceCIMIIconCheck = 0
         frame:SetScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc))
+        return frame
     end
 end
 
