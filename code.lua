@@ -1032,13 +1032,12 @@ end
 
 
 function CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
-    if not bag and slot then return false end
+    if not (bag and slot) then return false end
     return CanIMogItTooltipScanner:IsItemSoulbound(bag, slot)
 end
 
 
 function CanIMogIt:IsItemBindOnEquip(itemLink, bag, slot)
-    if not bag and slot then return false end
     return CanIMogItTooltipScanner:IsItemBindOnEquip(itemLink, bag, slot)
 end
 
