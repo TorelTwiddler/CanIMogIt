@@ -1272,8 +1272,6 @@ function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
 end
 
 
-
-
 function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     --[[
         Calculate the tooltip text.
@@ -1367,7 +1365,10 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
     end
 
-    text, unmodifiedText = CanIMogIt:CheckItemBindType(text, unmodifiedText, itemLink, bag, slot)
+    if CanIMogItOptions["showBoEColors"] then
+        -- Apply the option, if it is enabled then check item bind.
+        text, unmodifiedText = CanIMogIt:CheckItemBindType(text, unmodifiedText, itemLink, bag, slot)
+    end
 
     return text, unmodifiedText
 end
