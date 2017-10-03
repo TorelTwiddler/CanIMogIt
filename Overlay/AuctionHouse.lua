@@ -42,9 +42,13 @@ local function UpdateBrowseButtons(self, offset)
 end
 
 
+local auctionHouseLoaded = false
+
+
 local function OnAuctionHouseShow(event, ...)
     -- The button frames don't exist until the auction house is open.
     if event ~= "AUCTION_HOUSE_SHOW" then return end
+    auctionHouseLoaded = true
     -- Add hook for the Auction House frames.
 
     for i=1, NUM_BROWSE_TO_DISPLAY do
@@ -72,7 +76,8 @@ CanIMogIt.frame:AddEventFunction(OnAuctionHouseShow)
 local function OnAuctionHouseUpdate(event, ...)
     -- The button frames don't exist until the auction house is open.
     if event ~= "AUCTION_ITEM_LIST_UPDATE" then return end
-
+    if not auctionHouseLoaded then return end
+    
     -- refresh overlay of buttons created OnAuctionHouseShow function.
     UpdateBrowseButtons()
 end
