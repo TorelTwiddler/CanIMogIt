@@ -1365,13 +1365,14 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
     end
 
-    if CanIMogItOptions["showBoEColors"] then
-        -- Apply the option, if it is enabled then check item bind.
-        text, unmodifiedText = CanIMogIt:CheckItemBindType(text, unmodifiedText, itemLink, bag, slot)
-    end
+    -- if CanIMogItOptions["showBoEColors"] then
+    --     -- Apply the option, if it is enabled then check item bind.
+    --     text, unmodifiedText = CanIMogIt:CheckItemBindType(text, unmodifiedText, itemLink, bag, slot)
+    -- end
 
     return text, unmodifiedText
 end
+
 
 function CanIMogIt:CheckItemBindType(text, unmodifiedText, itemLink, bag, slot)
     --[[
