@@ -1,3 +1,12 @@
+7.3.0.03 Release - 2017/10/08
+
+Bug fixes for overlay.
+
+* [#119](https://gitlab.com/toreltwiddler/CanIMogIt/issues/119) Overlay now uses Blizzard constants in more places, which means addons like Extended Vendor UI will work more often (although they may still have [issues](https://gitlab.com/toreltwiddler/CanIMogIt/issues/53)).
+* [#116](https://gitlab.com/toreltwiddler/CanIMogIt/issues/116) & [#117](https://gitlab.com/toreltwiddler/CanIMogIt/issues/117) Auction House overlay now updates when options are changed and is included in the Show Bag Icons option.
+
+*****
+
 7.3.0.02 Release - 2017/09/10
 
 Bug fixes.
