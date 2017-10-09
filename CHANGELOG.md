@@ -1,3 +1,11 @@
+7.3.0.04 Release - 2017/10/08
+
+Prevent Auctioneer from loading icons.
+
+* [#127](https://gitlab.com/toreltwiddler/CanIMogIt/issues/127) Prevent the icon overlays from showing up in the Auction House when Auctioneer is enabled (it is not yet supported).
+
+*****
+
 7.3.0.03 Release - 2017/10/08
 
 Bug fixes for overlay.
