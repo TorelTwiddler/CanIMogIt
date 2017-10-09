@@ -1,6 +1,19 @@
 -- Overlay for the auction house.
 -- Thanks to crappyusername on Curse for some of the code.
 
+local auctioneerLoaded;
+
+local function IsAuctioneerLoaded()
+    -- Used temporarily to prevent loading when Auctioneer is enabled.
+    -- Auctioneer appears to use the same frame names, but
+    -- not behave the same as the Blizzard frames.
+    if auctioneerLoaded == nil then
+        auctioneerLoaded = IsAddOnLoaded("Auc-Advanced")
+    end
+    return auctioneerLoaded
+end
+
+
 ----------------------------
 -- UpdateIcon functions   --
 ----------------------------
@@ -9,7 +22,7 @@
 local function AuctionFrame_OnUpdate(self)
      -- Sets the icon overlay for the auction frame.
     if not self then return end
-    if not CIMI_CheckOverlayIconEnabled() then
+    if not CIMI_CheckOverlayIconEnabled() or IsAuctioneerLoaded() then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
@@ -77,7 +90,7 @@ local function OnAuctionHouseUpdate(event, ...)
     -- The button frames don't exist until the auction house is open.
     if event ~= "AUCTION_ITEM_LIST_UPDATE" then return end
     if not auctionHouseLoaded then return end
-    
+
     -- refresh overlay of buttons created OnAuctionHouseShow function.
     UpdateBrowseButtons()
 end
