@@ -222,9 +222,11 @@ local unknownTexts = {
 
 local exceptionItems = {
     [HEAD] = {
-        [134110] = CanIMogIt.KNOWN, -- Hidden Helm
+        -- [134110] = CanIMogIt.KNOWN, -- Hidden Helm
         [133320] = CanIMogIt.NOT_TRANSMOGABLE, -- Illidari Blindfold (Alliance)
         [112450] = CanIMogIt.NOT_TRANSMOGABLE, -- Illidari Blindfold (Horde)
+        -- [150726] = CanIMogIt.NOT_TRANSMOGABLE, -- Illidari Blindfold (Alliance) - starting item
+        -- [150716] = CanIMogIt.NOT_TRANSMOGABLE, -- Illidari Blindfold (Horde) - starting item
     },
     [SHOULDER] = {
         [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
@@ -234,14 +236,19 @@ local exceptionItems = {
     [BODY] = {},
     [CHEST] = {},
     [ROBE] = {},
-    [WAIST] = {},
+    [WAIST] = {
+        [143539] = CanIMogIt.KNOWN, -- Hidden Belt
+    },
     [LEGS] = {},
     [FEET] = {},
     [WRIST] = {},
     [HAND] = {
         [119585] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards
     },
-    [CLOAK] = {},
+    [CLOAK] = {
+        -- [134111] = CanIMogIt.KNOWN, -- Hidden Cloak
+        [112462] = CanIMogIt.NOT_TRANSMOGABLE, -- Illidari Drape
+    },
     [WEAPON] = {},
     [SHIELD] = {},
     [WEAPON_2HAND] = {},
@@ -250,7 +257,9 @@ local exceptionItems = {
     [RANGED_RIGHT] = {},
     [WEAPON_OFF_HAND] = {},
     [HOLDABLE] = {},
-    [TABARD] = {},
+    [TABARD] = {
+        -- [142504] = CanIMogIt.KNOWN, -- Hidden Tabard
+    },
 }
 
 
