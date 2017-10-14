@@ -83,7 +83,7 @@ local inventorySlotsMap = {
     [RANGED_RIGHT] = {16},
     [WEAPON_OFF_HAND] = {17},
     [HOLDABLE] = {17},
-    [TABARD] = false,
+    [TABARD] = {19},
 }
 
 
@@ -1280,7 +1280,7 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     ]]
     local exception_text = CanIMogIt:GetExceptionText(itemLink)
     if exception_text then
-        return exception_text
+        return exception_text, exception_text
     end
 
     local isTransmogable = CanIMogIt:IsTransmogable(itemLink)
