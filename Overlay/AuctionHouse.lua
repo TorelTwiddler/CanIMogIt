@@ -1,15 +1,21 @@
 -- Overlay for the auction house.
 -- Thanks to crappyusername on Curse for some of the code.
 
+
 local auctioneerLoaded;
 
 local function IsAuctioneerLoaded()
-    -- Used temporarily to prevent loading when Auctioneer is enabled.
-    -- Auctioneer appears to use the same frame names, but
-    -- not behave the same as the Blizzard frames.
+    -- Used to prevent loading when Auctioneer's Compact UI is enabled.
     if auctioneerLoaded == nil then
         auctioneerLoaded = IsAddOnLoaded("Auc-Advanced")
-    end
+
+        if auctioneerLoaded then
+            if not AucAdvanced.Settings.GetSetting("util.compactui.activated") then
+                -- The compact UI isn't loaded, so pretend it's off.
+                auctioneerLoaded = false
+            end
+        end
+     end
     return auctioneerLoaded
 end
 
