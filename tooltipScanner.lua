@@ -1,7 +1,7 @@
 --[[
     source: http://forums.wowace.com/showthread.php?t=15588&page=2
 
-    To use: 
+    To use:
     CanIMogItTooltipScanner:SetHyperlink(itemLink)
 ]]
 
@@ -63,7 +63,7 @@ end
 
 local function IsItemSoulbound(text)
     if not text then return end
-    if text:GetText() == ITEM_SOULBOUND then
+    if text:GetText() == ITEM_SOULBOUND or text:GetText() == ITEM_BIND_ON_PICKUP then
         return true
     end
     return false
@@ -80,7 +80,7 @@ end
 
 
 -- local function GetRequiredText(text)
---     -- Returns {Profession = level} if the text has a profession in it, 
+--     -- Returns {Profession = level} if the text has a profession in it,
 --     if text and text:GetText() then
 --         return partOf(text:GetText(), ITEM_REQ_SKILL)
 --     end
@@ -151,8 +151,8 @@ end
 -- function CanIMogItTooltipScanner:GetProfessionInfo(itemLink)
 --     -- Returns all of the red text as space seperated string.
 --     local result = self:ScanTooltipBreak(GetProfessionText, itemLink)
-    
---     return 
+
+--     return
 -- end
 
 
@@ -165,12 +165,12 @@ function CanIMogItTooltipScanner:GetClassesRequired(itemLink)
 end
 
 
-function CanIMogItTooltipScanner:IsItemSoulbound(bag, slot)
+function CanIMogItTooltipScanner:IsItemSoulbound(itemLink, bag, slot)
     -- Returns whether the item is soulbound or not.
     if bag and slot then
         return self:ScanTooltipBreak(IsItemSoulbound, nil, bag, slot)
     else
-        return false
+        return self:ScanTooltipBreak(IsItemSoulbound, itemLink)
     end
 end
 
