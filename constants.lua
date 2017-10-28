@@ -196,12 +196,16 @@ CanIMogIt.DATABASE_DONE_UPDATE_TEXT = L["Items updated: "] -- followed by a numb
 -- Bag Items = MAX_CONTAINER_ITEMS
 -- Bank = NUM_BANKGENERIC_SLOTS
 CanIMogIt.NUM_VOID_STORAGE_FRAMES = 80 -- Blizzard functions are locals
+
 -- Guild Bank
-    -- Columns = NUM_GUILDBANK_COLUMNS
-    -- Buttons = NUM_SLOTS_PER_GUILDBANK_GROUP
+-- NOTE: For the guild bank, it appears that it gets unset sometimes. We are
+-- referencing it here so we don't error when that happens.
+CanIMogIt.NUM_GUILDBANK_COLUMNS = 7 -- Columns
+CanIMogIt.NUM_SLOTS_PER_GUILDBANK_GROUP = 14 -- Buttons
+
 CanIMogIt.NUM_ENCOUNTER_JOURNAL_ENCOUNTER_LOOT_FRAMES = 10 -- Blizzard functions are locals
 -- Loot Roll = NUM_GROUP_LOOT_FRAMES
-CanIMogIt.NUM_MAIL_INBOX_ITEMS = 7 
+CanIMogIt.NUM_MAIL_INBOX_ITEMS = 7
 -- Mail Attachments = ATTACHMENTS_MAX_SEND
 -- Merchant Items = MERCHANT_ITEMS_PER_PAGE
 CanIMogIt.NUM_WARDROBE_COLLECTION_BUTTONS = 12 -- Blizzard functions are locals
