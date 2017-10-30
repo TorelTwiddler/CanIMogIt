@@ -1,3 +1,18 @@
+7.3.2v1.0 Release - 2017/10/30
+
+Bug fixes including preventing an error caused by Bagnon.
+
+Tweaks to Auctioneer exception and Soulbound overlay display.
+
+* [#62](https://gitlab.com/toreltwiddler/CanIMogIt/issues/62) Fixed Exception items not showing the overlay.
+* [#63](https://gitlab.com/toreltwiddler/CanIMogIt/issues/63) Changed some exception items to show Cannot be learned instead of Learned because while they're invisible and share AppearanceID with the Hidden items, technically they cannot be learned themselves.  Added a few more exception items.
+* [#103](https://gitlab.com/toreltwiddler/CanIMogIt/issues/103) Fixed old work-around with Tabard assignment.
+* [#129](https://gitlab.com/toreltwiddler/CanIMogIt/issues/129) Improved Auctioneer check to only disable the overlay when CompactUI is enabled.
+* [#130](https://gitlab.com/toreltwiddler/CanIMogIt/issues/130) Bind on Pickup items that cannot be learned by your current character will now show the green negative icon everywhere (vendors, looting, etc.).
+* [#131](https://gitlab.com/toreltwiddler/CanIMogIt/issues/131) Fixed bug when Blizzard's guild bank frames aren't loaded due to an addon (Bagnon).
+
+*****
+
 7.3.0.04 Release - 2017/10/08
 
 Prevent Auctioneer from loading icons.
