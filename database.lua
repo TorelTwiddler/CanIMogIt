@@ -210,7 +210,9 @@ local function TransmogCollectionUpdated(event, sourceID, ...)
             local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
             CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink)
         end
-        CanIMogIt:ResetCache()
+        if sourceID then
+            CanIMogIt.sourceIDMap:ClearItemLinksFromCache(sourceID)
+        end
     end
 end
 

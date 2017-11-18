@@ -445,6 +445,54 @@ function spairs(t, order)
     end
 end
 
+------------------------------------
+-- CanIMogIt SourceID Map methods --
+------------------------------------
+
+--[[
+    The sourceIDMap is used to create a quick link between
+    the sourceID and the itemLinks that are known for it.
+    We need to keep the itemLinks used to get the sourceID
+    around because in order to delete the item from the
+    Cache, we need to know the exact original itemLink, not
+    the one generated from the sourceID.
+]]
+
+CanIMogIt.sourceIDMap = {}
+CanIMogIt.sourceIDMap["linkToSource"] = {}
+CanIMogIt.sourceIDMap["sourceToLinks"] = {}
+
+function CanIMogIt.sourceIDMap:GetSourceID(itemLink)
+    --[[
+        Gets the cached version of the sourceID, if available
+        otherwise calculates it and stores it in the sourceIDMap.
+    ]]
+    if self.linkToSource[itemLink] then
+        return self.linkToSource[itemLink]
+    end
+    local sourceID = CanIMogIt:CalculateSourceID(itemLink)
+    if not sourceID then return end
+    self.linkToSource[itemLink] = sourceID
+    self.sourceToLinks[sourceID] = {}
+    self.sourceToLinks[sourceID][itemLink] = true
+    return sourceID
+end
+
+function CanIMogIt.sourceIDMap:GetItemLinks(sourceID)
+    return self.sourceToLinks[sourceID]
+end
+
+function CanIMogIt.sourceIDMap:ClearItemLinksFromCache(sourceID)
+    -- Removes itemLinks associated with this sourceID from the cache
+    local itemLinks = CanIMogIt.sourceIDMap:GetItemLinks(sourceID)
+    if itemLinks then
+        for itemLink, _ in pairs(itemLinks) do
+            CanIMogIt.cache:RemoveItemTextValue(itemLink)
+        end
+    end
+    CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
+end
+
 --------------------------------
 -- CanIMogIt Caching methods  --
 --------------------------------
@@ -461,6 +509,10 @@ end
 
 function CanIMogIt.cache:SetItemTextValue(itemLink, value)
     self.data["text"..itemLink] = value
+end
+
+function CanIMogIt.cache:RemoveItemTextValue(itemLink)
+    self.data["text"..itemLink] = nil
 end
 
 function CanIMogIt.cache:GetItemSourcesValue(itemLink)
@@ -1076,8 +1128,7 @@ function CanIMogIt:IsEquippable(itemLink)
 end
 
 
-function CanIMogIt:GetSourceID(itemLink)
-    -- Gets the sourceID for the item.
+function CanIMogIt:CalculateSourceID(itemLink)
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
     local slots = inventorySlotsMap[slotName]
 
@@ -1091,6 +1142,11 @@ function CanIMogIt:GetSourceID(itemLink)
             return sourceID
         end
     end
+end
+
+function CanIMogIt:GetSourceID(itemLink)
+    -- Gets the sourceID for the item.
+    return CanIMogIt.sourceIDMap:GetSourceID(itemLink)
 end
 
 
