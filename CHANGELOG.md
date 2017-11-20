@@ -1,3 +1,11 @@
+7.3.2v1.1 Release - 2017/11/19
+
+Bug fix: Resolved the lag when learning or unlearning an appearance.
+
+* [#120](https://gitlab.com/toreltwiddler/CanIMogIt/issues/120) Learning an appearance now only clears that item from the cache.  The cache is no longer reset every time an item is learned.
+
+*****
+
 7.3.2v1.0 Release - 2017/10/30
 
 Bug fixes including preventing an error caused by Bagnon.
