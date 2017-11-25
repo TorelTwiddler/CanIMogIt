@@ -1632,3 +1632,12 @@ end
 
 
 hooksecurefunc(GameTooltip, "SetHyperlink", CanIMogIt_OnSetHyperlink)
+
+
+function CanIMogIt_AttachItemTooltipReagentItem(tooltip, itemID, index)
+    CanIMogIt.tooltip = tooltip
+    local link = C_TradeSkillUI.GetRecipeReagentItemLink(itemID, index)
+    addToTooltip(CanIMogIt.tooltip, link)
+end
+
+hooksecurefunc(GameTooltip, "SetRecipeReagentItem", CanIMogIt_AttachItemTooltipReagentItem)
