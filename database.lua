@@ -211,7 +211,7 @@ local function TransmogCollectionUpdated(event, sourceID, ...)
             CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink)
         end
         if sourceID then
-            CanIMogIt.sourceIDMap:ClearItemLinksFromCache(sourceID)
+            C_Timer.After(.5, function () CanIMogIt.sourceIDMap:ClearItemLinksFromCache(sourceID) end)
         end
     end
 end
