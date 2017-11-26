@@ -128,11 +128,9 @@ local function addToTooltip(tooltip, itemLink, bag, slot)
     -- display on the tooltip.
     if tooltip.CIMI_tooltipWritten then return end
     if not itemLink then return end
-    local itemInfo = GetItemInfo(itemLink)
-    if itemInfo == nil then
+    if not CanIMogIt:IsReadyForCalculations(itemLink) then
         return
     end
-
 
     if CanIMogItOptions["debug"] then
         printDebug(tooltip, itemLink, bag, slot)

@@ -885,6 +885,17 @@ function CanIMogIt:GetItemSlotName(itemLink)
 end
 
 
+function CanIMogIt:IsReadyForCalculations(itemLink)
+    -- Returns true of the item's GetItemInfo is ready, or if it's a keystone.
+    local itemInfo = GetItemInfo(itemLink)
+    local type = string.match(itemLink, ".*(keystone):.*")
+    if not itemInfo and type ~= "keystone" then
+        return false
+    end
+    return true
+end
+
+
 function CanIMogIt:IsItemArmor(itemLink)
     local itemClass = CanIMogIt:GetItemClassName(itemLink)
     if itemClass == nil then return end
@@ -1382,12 +1393,12 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
         end
     end
     if not itemLink then return "", "" end
+    if not CanIMogIt:IsReadyForCalculations(itemLink) then
+        return
+    end
+
     local text = ""
     local unmodifiedText = ""
-
-    -- Must have GetItemInfo available for item.
-    local itemInfo = GetItemInfo(itemLink)
-    if itemInfo == nil then return end
 
     if not CanIMogIt:PreLogicOptionsContinue(itemLink) then return "", "" end
 
