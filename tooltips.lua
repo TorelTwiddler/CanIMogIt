@@ -289,7 +289,7 @@ hooksecurefunc(GameTooltip, "SetQuestLogItem",
 
 hooksecurefunc(GameTooltip, "SetInboxItem",
     function(tooltip, mailIndex, attachmentIndex)
-        addToTooltip(tooltip, GetInboxItemLink(mailIndex, attachmentIndex))
+        addToTooltip(tooltip, GetInboxItemLink(mailIndex, attachmentIndex or 1))
     end
 )
 
