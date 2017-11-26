@@ -126,7 +126,7 @@ local itemLinks = {}
 local function addToTooltip(tooltip, itemLink, bag, slot)
     -- Does the calculations for determining what text to
     -- display on the tooltip.
-    if CanIMogIt.tooltipWritten then return end
+    if tooltip.CIMI_tooltipWritten then return end
     if not itemLink then return end
     local itemInfo = GetItemInfo(itemLink)
     if itemInfo == nil then
@@ -136,25 +136,25 @@ local function addToTooltip(tooltip, itemLink, bag, slot)
 
     if CanIMogItOptions["debug"] then
         printDebug(tooltip, itemLink, bag, slot)
-        CanIMogIt.tooltipWritten = true
+        tooltip.CIMI_tooltipWritten = true
     end
 
     local text;
     text = CanIMogIt.GetTooltipText(CanIMogIt, itemLink, bag, slot)
     if text and text ~= "" then
         addDoubleLine(tooltip, " ", text)
-        CanIMogIt.tooltipWritten = true
+        tooltip.CIMI_tooltipWritten = true
     end
 
     if CanIMogItOptions["showSetInfo"] then
         local setFirstLineText, setSecondLineText = CanIMogIt:GetSetsText(itemLink)
         if setFirstLineText and setFirstLineText ~= "" then
             addDoubleLine(tooltip, " ", setFirstLineText)
-            CanIMogIt.tooltipWritten = true
+            tooltip.CIMI_tooltipWritten = true
         end
         if setSecondLineText and setSecondLineText ~= "" then
             addDoubleLine(tooltip, " ", setSecondLineText)
-            CanIMogIt.tooltipWritten = true
+            tooltip.CIMI_tooltipWritten = true
         end
     end
 
@@ -162,7 +162,7 @@ local function addToTooltip(tooltip, itemLink, bag, slot)
         local sourceTypesText = CanIMogIt:GetSourceLocationText(itemLink)
         if sourceTypesText and sourceTypesText ~= "" then
             addDoubleLine(tooltip, " ", sourceTypesText)
-            CanIMogIt.tooltipWritten = true
+            tooltip.CIMI_tooltipWritten = true
         end
     end
 end
@@ -170,11 +170,16 @@ end
 
 local function TooltipCleared(tooltip)
     -- Clears the tooltipWritten flag once the tooltip is done rendering.
-    CanIMogIt.tooltipWritten = false
+    tooltip.CIMI_tooltipWritten = false
 end
 
 
 GameTooltip:HookScript("OnTooltipCleared", TooltipCleared)
+ItemRefTooltip:HookScript("OnTooltipCleared", TooltipCleared)
+ItemRefShoppingTooltip1:HookScript("OnTooltipCleared", TooltipCleared)
+ItemRefShoppingTooltip2:HookScript("OnTooltipCleared", TooltipCleared)
+ShoppingTooltip1:HookScript("OnTooltipCleared", TooltipCleared)
+ShoppingTooltip2:HookScript("OnTooltipCleared", TooltipCleared)
 WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", TooltipCleared)
 
 
@@ -188,6 +193,11 @@ end
 
 
 GameTooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+ItemRefTooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+ShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
+ShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
 WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
 
 
@@ -303,23 +313,14 @@ hooksecurefunc(GameTooltip, "SetSendMailItem",
 )
 
 
-hooksecurefunc(GameTooltip, "SetHyperlink",
-    function(tooltip, link)
-        local type, id = string.match(link, ".*(item):(%d+).*")
-        if not type or not id then return end
-        if type == "item" then
-            addToTooltip(tooltip, link)
-        end
+local function OnSetHyperlink(tooltip, link)
+    local type, id = string.match(link, ".*(item):(%d+).*")
+    if not type or not id then return end
+    if type == "item" then
+        addToTooltip(tooltip, link)
     end
-)
+end
 
 
-hooksecurefunc(ItemRefTooltip, "SetHyperlink",
-    function(tooltip, link)
-        local type, id = string.match(link, ".*(item):(%d+).*")
-        if not type or not id then return end
-        if type == "item" then
-            addToTooltip(tooltip, link)
-        end
-    end
-)
+hooksecurefunc(GameTooltip, "SetHyperlink", OnSetHyperlink)
+hooksecurefunc(ItemRefTooltip, "SetHyperlink", OnSetHyperlink)
