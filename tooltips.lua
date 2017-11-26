@@ -305,7 +305,7 @@ hooksecurefunc(GameTooltip, "SetSendMailItem",
 
 hooksecurefunc(GameTooltip, "SetHyperlink",
     function(tooltip, link)
-        local type, id = string.match(link, "^(%a+):(%d+)")
+        local type, id = string.match(link, ".*(item):(%d+).*")
         if not type or not id then return end
         if type == "item" then
             addToTooltip(tooltip, link)
@@ -316,7 +316,7 @@ hooksecurefunc(GameTooltip, "SetHyperlink",
 
 hooksecurefunc(ItemRefTooltip, "SetHyperlink",
     function(tooltip, link)
-        local type, id = string.match(link, "^(%a+):(%d+)")
+        local type, id = string.match(link, ".*(item):(%d+).*")
         if not type or not id then return end
         if type == "item" then
             addToTooltip(tooltip, link)
