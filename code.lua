@@ -354,7 +354,7 @@ function CanIMogIt.sourceIDMap:ClearItemLinksFromCache(sourceID)
     local itemLinks = CanIMogIt.sourceIDMap:GetItemLinks(sourceID)
     if itemLinks then
         for itemLink, _ in pairs(itemLinks) do
-            CanIMogIt.cache:RemoveItemTextValue(itemLink)
+            CanIMogIt.cache:RemoveItem(itemLink)
         end
     end
     CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
@@ -367,43 +367,54 @@ end
 CanIMogIt.cache = {}
 
 function CanIMogIt.cache:Clear()
-    self.data = {}
+    self.data = {
+        ["text"] = {},
+        ["source"] = {},
+        ["sets"] = {},
+        ["setsSumRatio"] = {},
+    }
 end
 
 function CanIMogIt.cache:GetItemTextValue(itemLink)
-    return self.data["text"..itemLink]
+    return self.data["text"][itemLink]
 end
 
 function CanIMogIt.cache:SetItemTextValue(itemLink, value)
-    self.data["text"..itemLink] = value
+    self.data["text"][itemLink] = value
 end
 
-function CanIMogIt.cache:RemoveItemTextValue(itemLink)
-    self.data["text"..itemLink] = nil
+function CanIMogIt.cache:RemoveItem(itemLink)
+    self.data["text"][itemLink] = nil
+    self.data["source"][itemLink] = nil
+    -- Have to remove all of the set data, since other itemLinks may cache
+    -- the same set information. Alternatively, we scan through and find
+    -- the same set on other items, but they're loaded on mouseover anyway,
+    -- so it shouldn't be slow.
+    self.data["sets"] = {}
 end
 
 function CanIMogIt.cache:GetItemSourcesValue(itemLink)
-    return self.data["source"..itemLink]
+    return self.data["source"][itemLink]
 end
 
 function CanIMogIt.cache:SetItemSourcesValue(itemLink, value)
-    self.data["source"..itemLink] = value
+    self.data["source"][itemLink] = value
 end
 
 function CanIMogIt.cache:GetSetsInfoTextValue(itemLink)
-    return self.data["sets"..itemLink]
+    return self.data["sets"][itemLink]
 end
 
 function CanIMogIt.cache:SetSetsInfoTextValue(itemLink, value)
-    self.data["sets"..itemLink] = value
+    self.data["sets"][itemLink] = value
 end
 
 function CanIMogIt.cache:GetSetsSumRatioTextValue(key)
-    return self.data["setsSumRatio"..key]
+    return self.data["setsSumRatio"][key]
 end
 
 function CanIMogIt.cache:SetSetsSumRatioTextValue(key, value)
-    self.data["setsSumRatio"..key] = value
+    self.data["setsSumRatio"][key] = value
 end
 
 CanIMogIt.cache:Clear()
