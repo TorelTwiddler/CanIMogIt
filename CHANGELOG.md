@@ -1,3 +1,22 @@
+7.3.2v1.2 Release - 2017/11/27
+
+Bug fixes
+
+* [#14](https://gitlab.com/toreltwiddler/CanIMogIt/issues/14) Duplicate tooltips should no longer happen (ElvUI, TipTac, Guild Rewards window, etc.)
+* [#105](https://gitlab.com/toreltwiddler/CanIMogIt/issues/105) Deadeye Monocle marked as Cannot be learned.
+* [#133](https://gitlab.com/toreltwiddler/CanIMogIt/issues/133) Slight delay added to tooltip/icon update to try to prevent it missing the event and not updating at all.
+* [#134](https://gitlab.com/toreltwiddler/CanIMogIt/issues/134) Patterns that craft an item now properly show tooltips.  (Only the pattern shows the tooltip, not the item listed on it.)
+* [#138](https://gitlab.com/toreltwiddler/CanIMogIt/issues/138) Set count now updates when learning/unlearning an item.
+* [#139](https://gitlab.com/toreltwiddler/CanIMogIt/issues/139) Hopefully fixed the bad sourceID issue which was causing Cannot Learn messages on unexpected items.
+
+Improvments
+
+* [#132](https://gitlab.com/toreltwiddler/CanIMogIt/issues/132) Tooltip and overlay added to Mythic Keystones.
+* Added tooltips to crafting reagents in crafting windows.
+* Rework of tooltip generation to be more consistent across the game.
+
+*****
+
 7.3.2v1.1 Release - 2017/11/19
 
 Bug fix: Resolved the lag when learning or unlearning an appearance.
