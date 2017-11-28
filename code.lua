@@ -357,6 +357,7 @@ function CanIMogIt.sourceIDMap:ClearItemLinksFromCache(sourceID)
             CanIMogIt.cache:RemoveItem(itemLink)
         end
     end
+    CanIMogIt.cache:ClearSetData()
     CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
 end
 
@@ -390,7 +391,7 @@ function CanIMogIt.cache:RemoveItem(itemLink)
     -- the same set information. Alternatively, we scan through and find
     -- the same set on other items, but they're loaded on mouseover anyway,
     -- so it shouldn't be slow.
-    self.data["sets"] = {}
+    self:ClearSetData()
 end
 
 function CanIMogIt.cache:GetItemSourcesValue(itemLink)
@@ -407,6 +408,10 @@ end
 
 function CanIMogIt.cache:SetSetsInfoTextValue(itemLink, value)
     self.data["sets"][itemLink] = value
+end
+
+function CanIMogIt.cache:ClearSetData()
+    self.data["sets"] = {}
 end
 
 function CanIMogIt.cache:GetSetsSumRatioTextValue(key)
