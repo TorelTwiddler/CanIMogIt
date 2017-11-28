@@ -1017,7 +1017,17 @@ function CanIMogIt:IsEquippable(itemLink)
 end
 
 
+local sourceIDGoodResultFound = false
+
+
 function CanIMogIt:CalculateSourceID(itemLink)
+    local sourceID = select(2, C_TransmogCollection.GetItemInfo(itemLink))
+    if sourceID then
+        return sourceID
+    end
+
+    -- Some items don't have the C_TransmogCollection.GetItemInfo data,
+    -- so use the old way to find the sourceID (using the DressUpModel).
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
     local slots = inventorySlotsMap[slotName]
 
@@ -1026,12 +1036,22 @@ function CanIMogIt:CalculateSourceID(itemLink)
     CanIMogIt.DressUpModel:Undress()
     for i, slot in pairs(slots) do
         CanIMogIt.DressUpModel:TryOn(itemLink, slot)
-        local sourceID = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
+        sourceID = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
         if sourceID ~= 0 then
+            if not sourceIDGoodResultFound then
+                local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
+                if not appearanceID then
+                    -- This likely means that the game hasn't finished loading things
+                    -- yet, so let's wait until we get good data first.
+                    return
+                end
+                sourceIDGoodResultFound = true
+            end
             return sourceID
         end
     end
 end
+
 
 function CanIMogIt:GetSourceID(itemLink)
     -- Gets the sourceID for the item.
