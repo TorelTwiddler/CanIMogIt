@@ -412,6 +412,7 @@ end
 
 function CanIMogIt.cache:ClearSetData()
     self.data["sets"] = {}
+    self.data["setsSumRatio"] = {}
 end
 
 function CanIMogIt.cache:GetSetsSumRatioTextValue(key)
