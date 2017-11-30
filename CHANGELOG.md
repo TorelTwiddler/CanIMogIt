@@ -1,3 +1,11 @@
+7.3.2v1.3 Release - 2017/11/29
+
+Bug fix: Set appearance list now properly updates.
+
+* [142](https://gitlab.com/toreltwiddler/CanIMogIt/issues/142) Fixed set list ratio text not updating when learning appearance.
+
+*****
+
 7.3.2v1.2 Release - 2017/11/27
 
 Bug fixes
