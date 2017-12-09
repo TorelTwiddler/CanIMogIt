@@ -312,119 +312,6 @@ function spairs(t, order)
     end
 end
 
-------------------------------------
--- CanIMogIt SourceID Map methods --
-------------------------------------
-
---[[
-    The sourceIDMap is used to create a quick link between
-    the sourceID and the itemLinks that are known for it.
-    We need to keep the itemLinks used to get the sourceID
-    around because in order to delete the item from the
-    Cache, we need to know the exact original itemLink, not
-    the one generated from the sourceID.
-]]
-
-CanIMogIt.sourceIDMap = {}
-CanIMogIt.sourceIDMap["linkToSource"] = {}
-CanIMogIt.sourceIDMap["sourceToLinks"] = {}
-
-function CanIMogIt.sourceIDMap:GetSourceID(itemLink)
-    --[[
-        Gets the cached version of the sourceID, if available
-        otherwise calculates it and stores it in the sourceIDMap.
-    ]]
-    if self.linkToSource[itemLink] then
-        return self.linkToSource[itemLink]
-    end
-    local sourceID = CanIMogIt:CalculateSourceID(itemLink)
-    if not sourceID then return end
-    self.linkToSource[itemLink] = sourceID
-    self.sourceToLinks[sourceID] = {}
-    self.sourceToLinks[sourceID][itemLink] = true
-    return sourceID
-end
-
-function CanIMogIt.sourceIDMap:GetItemLinks(sourceID)
-    return self.sourceToLinks[sourceID]
-end
-
-function CanIMogIt.sourceIDMap:ClearItemLinksFromCache(sourceID)
-    -- Removes itemLinks associated with this sourceID from the cache
-    local itemLinks = CanIMogIt.sourceIDMap:GetItemLinks(sourceID)
-    if itemLinks then
-        for itemLink, _ in pairs(itemLinks) do
-            CanIMogIt.cache:RemoveItem(itemLink)
-        end
-    end
-    CanIMogIt.cache:ClearSetData()
-    CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
-end
-
---------------------------------
--- CanIMogIt Caching methods  --
---------------------------------
-
-CanIMogIt.cache = {}
-
-function CanIMogIt.cache:Clear()
-    self.data = {
-        ["text"] = {},
-        ["source"] = {},
-        ["sets"] = {},
-        ["setsSumRatio"] = {},
-    }
-end
-
-function CanIMogIt.cache:GetItemTextValue(itemLink)
-    return self.data["text"][itemLink]
-end
-
-function CanIMogIt.cache:SetItemTextValue(itemLink, value)
-    self.data["text"][itemLink] = value
-end
-
-function CanIMogIt.cache:RemoveItem(itemLink)
-    self.data["text"][itemLink] = nil
-    self.data["source"][itemLink] = nil
-    -- Have to remove all of the set data, since other itemLinks may cache
-    -- the same set information. Alternatively, we scan through and find
-    -- the same set on other items, but they're loaded on mouseover anyway,
-    -- so it shouldn't be slow.
-    self:ClearSetData()
-end
-
-function CanIMogIt.cache:GetItemSourcesValue(itemLink)
-    return self.data["source"][itemLink]
-end
-
-function CanIMogIt.cache:SetItemSourcesValue(itemLink, value)
-    self.data["source"][itemLink] = value
-end
-
-function CanIMogIt.cache:GetSetsInfoTextValue(itemLink)
-    return self.data["sets"][itemLink]
-end
-
-function CanIMogIt.cache:SetSetsInfoTextValue(itemLink, value)
-    self.data["sets"][itemLink] = value
-end
-
-function CanIMogIt.cache:ClearSetData()
-    self.data["sets"] = {}
-    self.data["setsSumRatio"] = {}
-end
-
-function CanIMogIt.cache:GetSetsSumRatioTextValue(key)
-    return self.data["setsSumRatio"][key]
-end
-
-function CanIMogIt.cache:SetSetsSumRatioTextValue(key, value)
-    self.data["setsSumRatio"][key] = value
-end
-
-CanIMogIt.cache:Clear()
-
 -----------------------------
 -- CanIMogIt Core methods  --
 -----------------------------
@@ -1026,7 +913,7 @@ end
 local sourceIDGoodResultFound = false
 
 
-function CanIMogIt:CalculateSourceID(itemLink)
+function CanIMogIt:GetSourceID(itemLink)
     local sourceID = select(2, C_TransmogCollection.GetItemInfo(itemLink))
     if sourceID then
         return sourceID
@@ -1056,12 +943,6 @@ function CanIMogIt:CalculateSourceID(itemLink)
             return sourceID
         end
     end
-end
-
-
-function CanIMogIt:GetSourceID(itemLink)
-    -- Gets the sourceID for the item.
-    return CanIMogIt.sourceIDMap:GetSourceID(itemLink)
 end
 
 

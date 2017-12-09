@@ -38,6 +38,11 @@ local function printDebug(tooltip, itemLink, bag, slot)
 
     local itemID = CanIMogIt:GetItemID(itemLink)
     addDoubleLine(tooltip, "Item ID:", tostring(itemID))
+    if not itemID then
+        -- Keystones don't have an itemID...
+        addLine(tooltip, 'No ItemID found. Is this a Keystone?')
+        return
+    end
     local _, _, quality, _, _, itemClass, itemSubClass, _, equipSlot = GetItemInfo(itemID)
     addDoubleLine(tooltip, "Item quality:", tostring(quality))
     addDoubleLine(tooltip, "Item class:", tostring(itemClass))
