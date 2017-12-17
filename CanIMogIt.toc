@@ -22,8 +22,8 @@ core.lua
 Locale\_locales.xml
 constants.lua
 options.lua
-code.lua
 cache.lua
+code.lua
 tooltips.lua
 database.lua
 tooltipScanner.lua
