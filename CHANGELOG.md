@@ -1,3 +1,11 @@
+7.3.2v1.4 Release - 2017/12/16
+
+Bug fix: Overlay and tooltip should now always update after learning an item.  If it does not please let us know!
+
+* [#133](https://gitlab.com/toreltwiddler/CanIMogIt/issues/133) Changed how caching is stored, from itemLink to sourceID to hopefully properly remove items from the cache.
+
+*****
+
 7.3.2v1.3 Release - 2017/11/29
 
 Bug fix: Set appearance list now properly updates.
