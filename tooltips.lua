@@ -49,9 +49,10 @@ local function printDebug(tooltip, itemLink, bag, slot)
     addDoubleLine(tooltip, "Item subClass:", tostring(itemSubClass))
     addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
 
-    local sourceID = CanIMogIt:GetSourceID(itemLink)
+    local sourceID, sourceIDSource = CanIMogIt:GetSourceID(itemLink)
     if sourceID ~= nil then
         addDoubleLine(tooltip, "Item sourceID:", tostring(sourceID))
+        addDoubleLine(tooltip, "Item sourceIDSource:", tostring(sourceIDSource))
     else
         addDoubleLine(tooltip, "Item sourceID:", 'nil')
     end

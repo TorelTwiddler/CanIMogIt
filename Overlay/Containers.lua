@@ -91,9 +91,9 @@ local function HookOverlayContainers(event)
     end
 
     hooksecurefunc("ToggleBag", ContainerFrameItemButton_CIMIToggleBag)
-    hooksecurefunc("OpenAllBags", function () C_Timer.After(.25, ContainerFrameItemButton_CIMIToggleBag) end)
-    hooksecurefunc("CloseAllBags", function () C_Timer.After(.25, ContainerFrameItemButton_CIMIToggleBag) end)
-    hooksecurefunc("ToggleAllBags", function () C_Timer.After(.25, ContainerFrameItemButton_CIMIToggleBag) end)
+    hooksecurefunc("OpenAllBags", ContainerFrameItemButton_CIMIToggleBag)
+    hooksecurefunc("CloseAllBags", ContainerFrameItemButton_CIMIToggleBag)
+    hooksecurefunc("ToggleAllBags", ContainerFrameItemButton_CIMIToggleBag)
 
     -- Add hook for the main bank frame.
     for i=1,NUM_BANKGENERIC_SLOTS do

@@ -3,6 +3,7 @@
 local L = CanIMogIt.L
 
 CanIMogIt.DressUpModel = CreateFrame('DressUpModel')
+CanIMogIt.DressUpModel:SetUnit('player')
 
 
 -----------------------------
@@ -916,7 +917,7 @@ local sourceIDGoodResultFound = false
 function CanIMogIt:GetSourceID(itemLink)
     local sourceID = select(2, C_TransmogCollection.GetItemInfo(itemLink))
     if sourceID then
-        return sourceID
+        return sourceID, "C_TransmogCollection.GetItemInfo"
     end
 
     -- Some items don't have the C_TransmogCollection.GetItemInfo data,
@@ -925,7 +926,11 @@ function CanIMogIt:GetSourceID(itemLink)
     local slots = inventorySlotsMap[slotName]
 
     if slots == nil or slots == false or IsDressableItem(itemLink) == false then return end
-    CanIMogIt.DressUpModel:SetUnit('player')
+
+    cached_source = CanIMogIt.cache:GetDressUpModelSource(itemLink)
+    if cached_source then
+        return cached_source, "DressUpModel:GetSlotTransmogSources cache"
+    end
     CanIMogIt.DressUpModel:Undress()
     for i, slot in pairs(slots) do
         CanIMogIt.DressUpModel:TryOn(itemLink, slot)
@@ -940,7 +945,8 @@ function CanIMogIt:GetSourceID(itemLink)
                 end
                 sourceIDGoodResultFound = true
             end
-            return sourceID
+            CanIMogIt.cache:SetDressUpModelSource(itemLink, sourceID)
+            return sourceID, "DressUpModel:GetSlotTransmogSources"
         end
     end
 end

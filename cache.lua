@@ -4,6 +4,7 @@ function CanIMogIt.cache:Clear()
     self.data = {
         ["text"] = {},
         ["source"] = {},
+        ["dressup_source"] = {},
         ["sets"] = {},
         ["setsSumRatio"] = {},
     }
@@ -28,12 +29,15 @@ end
 local function CalculateCacheKey(itemLink)
     local sourceID = CanIMogIt:GetSourceID(itemLink)
     local itemID = CanIMogIt:GetItemID(itemLink)
+    local key;
     if sourceID then
-        return GetSourceIDKey(sourceID)
+        key = GetSourceIDKey(sourceID)
     elseif itemID then
-        return GetItemIDKey(itemID)
+        key = GetItemIDKey(itemID)
+    else
+        key = GetItemLinkKey(itemLink)
     end
-    return GetItemLinkKey(itemLink)
+    return key
 end
 
 
@@ -82,6 +86,15 @@ end
 
 function CanIMogIt.cache:SetSetsInfoTextValue(itemLink, value)
     self.data["sets"][CalculateCacheKey(itemLink)] = value
+end
+
+
+function CanIMogIt.cache:GetDressUpModelSource(itemLink)
+    return self.data["dressup_source"][itemLink]
+end
+
+function CanIMogIt.cache:SetDressUpModelSource(itemLink, value)
+    self.data["dressup_source"][itemLink] = value
 end
 
 
