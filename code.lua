@@ -935,6 +935,10 @@ function CanIMogIt:GetSourceID(itemLink)
     for i, slot in pairs(slots) do
         CanIMogIt.DressUpModel:TryOn(itemLink, slot)
         sourceID = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
+        if sourceID == 0 and sourceIDGoodResultFound then
+            CanIMogIt.DressUpModel = CreateFrame('DressUpModel')
+            CanIMogIt.DressUpModel:SetUnit('player')
+        end
         if sourceID ~= nil and sourceID ~= 0 then
             if not sourceIDGoodResultFound then
                 local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
