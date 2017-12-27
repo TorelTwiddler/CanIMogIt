@@ -213,6 +213,7 @@ local function TransmogCollectionUpdated(event, sourceID, ...)
         if sourceID then
             CanIMogIt.cache:RemoveItemBySourceID(sourceID)
         end
+        CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
     end
 end
 
