@@ -197,8 +197,17 @@ local function checkboxOnClick(self)
 end
 
 
-local function newCheckbox(parent, variableName)
+local function debugCheckboxOnClick(self)
+    local checked = self:GetChecked()
+    PlaySound(PlaySoundKitID and "igMainMenuOptionCheckBoxOn" or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+    self:SetValue(checked)
+    CanIMogIt:SendMessage("OptionUpdate")
+end
+
+
+local function newCheckbox(parent, variableName, onClickFunction)
     -- Creates a new checkbox in the parent frame for the given variable name
+    onClickFunction = onClickFunction or checkboxOnClick
     local displayData = CanIMogItOptions_DisplayData[variableName]
     local checkbox = CreateFrame("CheckButton", "CanIMogItCheckbox" .. variableName,
             parent, "InterfaceOptionsCheckButtonTemplate")
@@ -210,7 +219,7 @@ local function newCheckbox(parent, variableName)
     end
     checkbox.SetValue = function (self, value) CanIMogItOptions[variableName] = value end
 
-    checkbox:SetScript("OnClick", checkboxOnClick)
+    checkbox:SetScript("OnClick", onClickFunction)
     checkbox:SetChecked(checkbox:GetValue())
 
     checkbox.label = _G[checkbox:GetName() .. "Text"]
@@ -224,7 +233,7 @@ end
 
 local function createOptionsMenu()
     -- define the checkboxes
-    CanIMogIt.frame.debug =  newCheckbox(CanIMogIt.frame, "debug")
+    CanIMogIt.frame.debug =  newCheckbox(CanIMogIt.frame, "debug", debugCheckboxOnClick)
     CanIMogIt.frame.showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
     CanIMogIt.frame.showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
     CanIMogIt.frame.showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
