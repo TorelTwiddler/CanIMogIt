@@ -1,3 +1,13 @@
+7.3.2v1.5 Release - 2017/12/27
+
+Bug fix: Fix nil cache errors and compounding lag.
+
+* [#144](https://gitlab.com/toreltwiddler/CanIMogIt/issues/144) & [#145](https://gitlab.com/toreltwiddler/CanIMogIt/issues/145) Changed order of cache.lua and code.lua in TOC to prevent missing cache issue.
+* [#146](https://gitlab.com/toreltwiddler/CanIMogIt/issues/146) Fix compounding lag caused from getting source ID from DressUpModel frame. 
+* [#150](https://gitlab.com/toreltwiddler/CanIMogIt/issues/150) Changed the debug tooltip to not reset the cache.
+
+*****
+
 7.3.2v1.4 Release - 2017/12/16
 
 Bug fix: Overlay and tooltip should now always update after learning an item.  If it does not please let us know!
