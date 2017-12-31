@@ -168,18 +168,23 @@ CanIMogIt.DATABASE_DONE_UPDATE_TEXT = L["Items updated: "] -- followed by a numb
 -- Blizzard frame constants --
 --------------------------------------------
 
+
+---- Auction Houses ----
 -- Auction House = NUM_BROWSE_TO_DISPLAY
+CanIMogIt.NUM_BLACKMARKET_BUTTONS = 12  -- No Blizzard constant
+
+---- Containers ----
 -- Bags = NUM_CONTAINER_FRAMES
 -- Bag Items = MAX_CONTAINER_ITEMS
 -- Bank = NUM_BANKGENERIC_SLOTS
 CanIMogIt.NUM_VOID_STORAGE_FRAMES = 80 -- Blizzard functions are locals
-
 -- Guild Bank
 -- NOTE: For the guild bank, it appears that it gets unset sometimes. We are
 -- referencing it here so we don't error when that happens.
 CanIMogIt.NUM_GUILDBANK_COLUMNS = 7 -- Columns
 CanIMogIt.NUM_SLOTS_PER_GUILDBANK_GROUP = 14 -- Buttons
 
+---- Others ----
 CanIMogIt.NUM_ENCOUNTER_JOURNAL_ENCOUNTER_LOOT_FRAMES = 10 -- Blizzard functions are locals
 -- Loot Roll = NUM_GROUP_LOOT_FRAMES
 CanIMogIt.NUM_MAIL_INBOX_ITEMS = 7
