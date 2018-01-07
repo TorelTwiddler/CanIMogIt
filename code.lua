@@ -1129,7 +1129,9 @@ function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
         return "", ""
     end
 
-    if CanIMogItOptions["showTransmoggableOnly"] and (unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_BOE) then
+    if CanIMogItOptions["showTransmoggableOnly"]
+            and (unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE
+            or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_BOE) then
         -- If we don't want to show the tooltip if it's not transmoggable
         return "", ""
     end
@@ -1320,8 +1322,9 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     if not CanIMogIt:PreLogicOptionsContinue(itemLink) then return "", "" end
 
     -- Return cached items
-    if CanIMogIt.cache:GetItemTextValue(itemLink) then
-        local cachedText, cachedUnmodifiedText = unpack(CanIMogIt.cache:GetItemTextValue(itemLink))
+    local cachedData = CanIMogIt.cache:GetItemTextValue(itemLink)
+    if cachedData then
+        local cachedText, cachedUnmodifiedText = unpack(cachedData)
         return cachedText, cachedUnmodifiedText
     end
 
