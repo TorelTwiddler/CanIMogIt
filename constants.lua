@@ -192,4 +192,3 @@ CanIMogIt.NUM_MAIL_INBOX_ITEMS = 7
 -- Merchant Items = MERCHANT_ITEMS_PER_PAGE
 CanIMogIt.NUM_WARDROBE_COLLECTION_BUTTONS = 12 -- Blizzard functions are locals
 -- Trade Skill = no constants
-CanIMogIt.QUEST_INFO_REWARD_ITEMS = 12 -- Blizzard functions are locals
