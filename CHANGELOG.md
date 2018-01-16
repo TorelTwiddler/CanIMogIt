@@ -1,3 +1,14 @@
+7.3.2v1.6 Release - 2018/01/15
+
+Added Black Market Auction House overlay!
+
+![Black Market Auction House overlay!](https://i.imgur.com/j33ZMKb.png)
+
+* [#152](https://gitlab.com/toreltwiddler/CanIMogIt/issues/152) Added overlay to Black Market Auction House.
+* [#153](https://gitlab.com/toreltwiddler/CanIMogIt/issues/153) Hopefully prevented errors when the cache is reset mid-calculations.
+
+*****
+
 7.3.2v1.5 Release - 2017/12/27
 
 Bug fix: Fix nil cache errors and compounding lag.
