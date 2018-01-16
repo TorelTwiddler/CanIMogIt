@@ -2,31 +2,33 @@
 -- Note that the Blizzard functions are "Quest" vs "QuestLog"
 
 
+local function GetChoicesAndRewards()
+    local questInfoFrame = _G["QuestInfoFrame"]
+    if questInfoFrame.questLog then
+        return GetNumQuestLogChoices(), GetNumQuestLogRewards()
+    else
+        return GetNumQuestChoices(), GetNumQuestRewards()
+    end
+end
+
+
+local function GetItemLinkForQuests(rewardType, id)
+    local questInfoFrame = _G["QuestInfoFrame"]
+    if questInfoFrame.questLog then
+        return GetQuestLogItemLink(rewardType, id)
+    else
+        return GetQuestItemLink(rewardType, id)
+    end
+end
+
+
 ----------------------------
 -- UpdateIcon functions   --
 ----------------------------
 
 
-local function MapQuestFrameUpdateIcon(self)
-    -- Updates the icons for the MapQuest Frame
-    if not self then return end
-    if not CIMI_CheckOverlayIconEnabled() then
-        self.CIMIIconTexture:SetShown(false)
-        self:SetScript("OnUpdate", nil)
-        return
-    end
-
-    local itemLink = GetQuestLogItemLink(self.rewardType, self.id)
-    self.itemLink = itemLink
-    if itemLink == nil then
-        CIMI_SetIcon(self, MapQuestFrameUpdateIcon, nil)
-    else
-        CIMI_SetIcon(self, MapQuestFrameUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
-    end
-end
-
-
 local function QuestFrameUpdateIcon(self)
+    -- Updates the icons for the Quest Frame
     if not self then return end
     if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
@@ -34,7 +36,7 @@ local function QuestFrameUpdateIcon(self)
         return
     end
 
-    local itemLink = GetQuestItemLink(self.rewardType, self.id)
+    local itemLink = GetItemLinkForQuests(self.rewardType, self.id)
     self.itemLink = itemLink
     if itemLink == nil then
         CIMI_SetIcon(self, QuestFrameUpdateIcon, nil)
@@ -49,23 +51,11 @@ end
 ------------------------
 
 
-local function QuestOverlayOnClick()
-    local numChoices = GetNumQuestLogChoices()
-    local numRewards = GetNumQuestLogRewards()
-    local totalRewards = numChoices + numRewards
-
-    for i=1,totalRewards do
-        local frame = _G["MapQuestInfoRewardsFrameQuestInfoItem"..i]
-        if frame then
-            MapQuestFrameUpdateIcon(frame.CanIMogItOverlay)
-        end
-    end
-
-    local numChoices = GetNumQuestChoices()
-    local numRewards = GetNumQuestRewards()
+local function QuestOverlayOnEvent(frameName)
+    local numChoices, numRewards = GetChoicesAndRewards()
     local totalRewards = numChoices + numRewards
     for i=1,totalRewards do
-        local frame = _G["QuestInfoRewardsFrameQuestInfoItem"..i]
+        local frame = _G[frameName..i]
         if frame then
             QuestFrameUpdateIcon(frame.CanIMogItOverlay)
         end
@@ -95,16 +85,15 @@ local function AddIndexInfoToCIMIFrame(cimiFrame, numChoices, index, doingChoice
 end
 
 
-local function AddAndUpdateQuestFrames()
+local function AddAndUpdateQuestFrames(frameName)
     -- Add to the Quest Frame, and update if added.
-    local numChoices = GetNumQuestChoices()
-    local numRewards = GetNumQuestRewards()
+    local numChoices, numRewards = GetChoicesAndRewards()
     local totalRewards = numChoices + numRewards
 
     local doingChoices = true
     local index = 1
     for i=1,totalRewards do
-        local frame = _G["QuestInfoRewardsFrameQuestInfoItem"..i]
+        local frame = _G[frameName..i]
         if frame then
             local cimiFrame = CIMI_AddToFrame(frame, QuestFrameUpdateIcon)
             if frame.CanIMogItOverlay then
@@ -117,38 +106,18 @@ local function AddAndUpdateQuestFrames()
 end
 
 
-local function AddAndUpdateMapQuestFrames()
-    -- Add to the MapQuest frames, and update if added.
-    local numChoices = GetNumQuestLogChoices()
-    local numRewards = GetNumQuestLogRewards()
-    local totalRewards = numChoices + numRewards
-
-    local doingChoices = true
-    local index = 1
-    for i=1,totalRewards do
-        local frame = _G["MapQuestInfoRewardsFrameQuestInfoItem"..i]
-        if frame then
-            local cimiFrame = CIMI_AddToFrame(frame, MapQuestFrameUpdateIcon)
-            if frame.CanIMogItOverlay then
-                index, doingChoices = AddIndexInfoToCIMIFrame(frame.CanIMogItOverlay,
-                    numChoices, index, doingChoices)
-                MapQuestFrameUpdateIcon(frame.CanIMogItOverlay)
-            end
-        end
-    end
-end
-
-
 local function HookOverlayQuest(event)
     if event ~= "PLAYER_LOGIN" then return end
 
     -- Add hook for clicking on the Continue button in the
     -- quest frame (since there is no event).
     if _G["QuestInfoRewardsFrame"] then
-        _G["QuestInfoRewardsFrame"]:HookScript("OnShow", AddAndUpdateQuestFrames)
+        _G["QuestInfoRewardsFrame"]:HookScript("OnShow",
+            function () AddAndUpdateQuestFrames("QuestInfoRewardsFrameQuestInfoItem") end)
     end
     if _G["MapQuestInfoRewardsFrame"] then
-        _G["MapQuestInfoRewardsFrame"]:HookScript("OnShow", AddAndUpdateMapQuestFrames)
+        _G["MapQuestInfoRewardsFrame"]:HookScript("OnShow",
+            function () AddAndUpdateQuestFrames("MapQuestInfoRewardsFrameQuestInfoItem") end)
     end
 end
 
@@ -160,7 +129,8 @@ CanIMogIt.frame:AddEventFunction(HookOverlayQuest)
 ------------------------
 
 local function QuestOverlayEvents(event, ...)
-    QuestOverlayOnClick()
+    QuestOverlayOnEvent("QuestInfoRewardsFrameQuestInfoItem")
+    QuestOverlayOnEvent("MapQuestInfoRewardsFrameQuestInfoItem")
 end
 
 CanIMogIt.frame:AddOverlayEventFunction(QuestOverlayEvents)
