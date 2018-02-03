@@ -911,9 +911,6 @@ function CanIMogIt:IsEquippable(itemLink)
 end
 
 
-local sourceIDGoodResultFound = false
-
-
 function CanIMogIt:GetSourceID(itemLink)
     local sourceID = select(2, C_TransmogCollection.GetItemInfo(itemLink))
     if sourceID then
@@ -938,18 +935,13 @@ function CanIMogIt:GetSourceID(itemLink)
         CanIMogIt.DressUpModel:TryOn(itemLink, slot)
         sourceID = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
         if sourceID ~= nil and sourceID ~= 0 then
-            if not sourceIDGoodResultFound then
-                local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
-                if not appearanceID then
-                    -- This likely means that the game hasn't finished loading things
-                    -- yet, so let's wait until we get good data first.
-                    return
-                end
-                sourceIDGoodResultFound = true
+            local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
+            if not appearanceID then
+                -- This likely means that the game hasn't finished loading things
+                -- yet, so let's wait until we get good data before caching it.
+                return
             end
-            if sourceIDGoodResultFound then
-                CanIMogIt.cache:SetDressUpModelSource(itemLink, sourceID)
-            end
+            CanIMogIt.cache:SetDressUpModelSource(itemLink, sourceID)
             return sourceID, "DressUpModel:GetSlotTransmogSources"
         end
     end
