@@ -183,24 +183,6 @@ ShoppingTooltip2:HookScript("OnTooltipCleared", TooltipCleared)
 WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", TooltipCleared)
 
 
-local function CanIMogIt_AttachItemTooltip(tooltip)
-    -- Hook for normal tooltips.
-    local link = select(2, tooltip:GetItem())
-    if link then
-        addToTooltip(tooltip, link)
-    end
-end
-
-
-GameTooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
-ItemRefTooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
-ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
-ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
-ShoppingTooltip1:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
-ShoppingTooltip2:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
-WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip)
-
-
 hooksecurefunc(GameTooltip, "SetMerchantItem",
     function(tooltip, index)
         addToTooltip(tooltip, GetMerchantItemLink(index))
