@@ -927,7 +927,7 @@ function CanIMogIt:GetSourceID(itemLink)
 
     if slots == nil or slots == false or IsDressableItem(itemLink) == false then return end
 
-    cached_source = CanIMogIt.cache:GetDressUpModelSource(itemLink)
+    local cached_source = CanIMogIt.cache:GetDressUpModelSource(itemLink)
     if cached_source then
         return cached_source, "DressUpModel:GetSlotTransmogSources cache"
     end
