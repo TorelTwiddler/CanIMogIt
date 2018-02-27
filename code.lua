@@ -259,7 +259,7 @@ local exceptionItems = {
 -----------------------------
 
 
-function pairsByKeys (t, f)
+local function pairsByKeys(t, f)
     -- returns a sorted iterator for a table.
     -- https://www.lua.org/pil/19.3.html
     -- Why is it not a built in function? ¯\_(ツ)_/¯
@@ -277,7 +277,7 @@ function pairsByKeys (t, f)
 end
 
 
-function copyTable (t)
+local function copyTable(t)
     -- shallow-copy a table
     if type(t) ~= "table" then return t end
     local target = {}
