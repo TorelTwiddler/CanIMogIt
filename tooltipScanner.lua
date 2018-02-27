@@ -9,7 +9,7 @@ local _G = _G
 local L = CanIMogIt.L
 
 
-function stringSplit(input, sep)
+local function stringSplit(input, sep)
     local sep, fields = sep or ":", {}
     local pattern = string.format("([^%s]+)", sep)
     input:gsub(pattern, function(c) fields[#fields+1] = c end)
@@ -18,7 +18,7 @@ end
 
 
 local rootStringMemoized = {}
-function getBeforeAfter(rootString)
+local function getBeforeAfter(rootString)
     if not rootStringMemoized[rootString] then
         local s, e = string.find(rootString, '%%s')
         local before = string.sub(rootString, 1, s-1)
