@@ -220,8 +220,16 @@ local exceptionItems = {
         [130064] = CanIMogIt.NOT_TRANSMOGABLE, -- Deadeye Monocle
     },
     [SHOULDER] = {
-        [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
-        [119588] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons
+        [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 100 Salvage Yard ilvl 610
+        [117106] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 90 boost ilvl 483
+        [129714] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 100 trial/boost ilvl 640
+        [150642] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 100 trial/boost ilvl 600
+        [153810] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 110 trial/boost ilvl 870
+        [119588] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 100 Salvage Yard ilvl 610
+        [117138] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 90 boost ilvl 483
+        [129485] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 100 trial/boost ilvl 640
+        [150658] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 100 trial/boost ilvl 600
+        [153842] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 110 trial/boost ilvl 870
         [134112] = CanIMogIt.KNOWN, -- Hidden Shoulders
     },
     [BODY] = {},
@@ -234,7 +242,11 @@ local exceptionItems = {
     [FEET] = {},
     [WRIST] = {},
     [HAND] = {
-        [119585] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards
+        [119585] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 100 Salvage Yard ilvl 610
+        [117135] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 90 boost ilvl 483
+        [129482] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 100 trial/boost ilvl 640
+        [150655] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 100 trial/boost ilvl 600
+        [153839] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 110 trial/boost ilvl 870
     },
     [CLOAK] = {
         -- [134111] = CanIMogIt.KNOWN, -- Hidden Cloak
