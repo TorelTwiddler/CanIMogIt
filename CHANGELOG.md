@@ -1,3 +1,12 @@
+7.3.5v1.7 Release - 2018/03/25
+
+Bug fixes
+
+* [#151](https://gitlab.com/toreltwiddler/CanIMogIt/issues/151) Hopefully fixes the DressUpModel giving bad source IDs.
+* [#167](https://gitlab.com/toreltwiddler/CanIMogIt/issues/167) Add trial/boost versions of invisible Salvage Yard items to exception list.
+
+*****
+
 7.3.2v1.6 Release - 2018/01/15
 
 Added Black Market Auction House overlay!
@@ -14,7 +23,7 @@ Added Black Market Auction House overlay!
 Bug fix: Fix nil cache errors and compounding lag.
 
 * [#144](https://gitlab.com/toreltwiddler/CanIMogIt/issues/144) & [#145](https://gitlab.com/toreltwiddler/CanIMogIt/issues/145) Changed order of cache.lua and code.lua in TOC to prevent missing cache issue.
-* [#146](https://gitlab.com/toreltwiddler/CanIMogIt/issues/146) Fix compounding lag caused from getting source ID from DressUpModel frame. 
+* [#146](https://gitlab.com/toreltwiddler/CanIMogIt/issues/146) Fix compounding lag caused from getting source ID from DressUpModel frame.
 * [#150](https://gitlab.com/toreltwiddler/CanIMogIt/issues/150) Changed the debug tooltip to not reset the cache.
 
 *****
