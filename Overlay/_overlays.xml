@@ -3,6 +3,7 @@
     <!-- Overlay Modules -->
     <Script file="overlay.lua"/>
     <Script file="AuctionHouse.lua"/>
+    <Script file="BlackMarketAuctionHouse.lua"/>
     <Script file="Containers.lua"/>
     <Script file="EncounterJournal.lua"/>
     <Script file="Loot.lua"/>

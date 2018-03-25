@@ -220,8 +220,16 @@ local exceptionItems = {
         [130064] = CanIMogIt.NOT_TRANSMOGABLE, -- Deadeye Monocle
     },
     [SHOULDER] = {
-        [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
-        [119588] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons
+        [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 100 Salvage Yard ilvl 610
+        [117106] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 90 boost ilvl 483
+        [129714] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 100 trial/boost ilvl 640
+        [150642] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 100 trial/boost ilvl 600
+        [153810] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 110 trial/boost ilvl 870
+        [119588] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 100 Salvage Yard ilvl 610
+        [117138] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 90 boost ilvl 483
+        [129485] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 100 trial/boost ilvl 640
+        [150658] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 100 trial/boost ilvl 600
+        [153842] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 110 trial/boost ilvl 870
         [134112] = CanIMogIt.KNOWN, -- Hidden Shoulders
     },
     [BODY] = {},
@@ -234,7 +242,11 @@ local exceptionItems = {
     [FEET] = {},
     [WRIST] = {},
     [HAND] = {
-        [119585] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards
+        [119585] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 100 Salvage Yard ilvl 610
+        [117135] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 90 boost ilvl 483
+        [129482] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 100 trial/boost ilvl 640
+        [150655] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 100 trial/boost ilvl 600
+        [153839] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 110 trial/boost ilvl 870
     },
     [CLOAK] = {
         -- [134111] = CanIMogIt.KNOWN, -- Hidden Cloak
@@ -911,9 +923,6 @@ function CanIMogIt:IsEquippable(itemLink)
 end
 
 
-local sourceIDGoodResultFound = false
-
-
 function CanIMogIt:GetSourceID(itemLink)
     local sourceID = select(2, C_TransmogCollection.GetItemInfo(itemLink))
     if sourceID then
@@ -938,21 +947,28 @@ function CanIMogIt:GetSourceID(itemLink)
         CanIMogIt.DressUpModel:TryOn(itemLink, slot)
         sourceID = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
         if sourceID ~= nil and sourceID ~= 0 then
-            if not sourceIDGoodResultFound then
-                local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
-                if not appearanceID then
-                    -- This likely means that the game hasn't finished loading things
-                    -- yet, so let's wait until we get good data first.
-                    return
-                end
-                sourceIDGoodResultFound = true
+            if not CanIMogIt:IsSourceIDFromItemLink(sourceID, itemLink) then
+                -- This likely means that the game hasn't finished loading things
+                -- yet, so let's wait until we get good data before caching it.
+                return
             end
-            if sourceIDGoodResultFound then
-                CanIMogIt.cache:SetDressUpModelSource(itemLink, sourceID)
-            end
+            CanIMogIt.cache:SetDressUpModelSource(itemLink, sourceID)
             return sourceID, "DressUpModel:GetSlotTransmogSources"
         end
     end
+end
+
+
+function CanIMogIt:IsSourceIDFromItemLink(sourceID, itemLink)
+    -- Returns whether the source ID given matches the itemLink.
+    local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+    if not sourceItemLink then return false end
+    return CanIMogIt:DoItemIDsMatch(sourceItemLink, itemLink)
+end
+
+
+function CanIMogIt:DoItemIDsMatch(itemLinkA, itemLinkB)
+    return CanIMogIt:GetItemID(itemLinkA) == CanIMogIt:GetItemID(itemLinkB)
 end
 
 
@@ -1129,7 +1145,9 @@ function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
         return "", ""
     end
 
-    if CanIMogItOptions["showTransmoggableOnly"] and (unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_BOE) then
+    if CanIMogItOptions["showTransmoggableOnly"]
+            and (unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE
+            or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_BOE) then
         -- If we don't want to show the tooltip if it's not transmoggable
         return "", ""
     end
@@ -1320,8 +1338,9 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     if not CanIMogIt:PreLogicOptionsContinue(itemLink) then return "", "" end
 
     -- Return cached items
-    if CanIMogIt.cache:GetItemTextValue(itemLink) then
-        local cachedText, cachedUnmodifiedText = unpack(CanIMogIt.cache:GetItemTextValue(itemLink))
+    local cachedData = CanIMogIt.cache:GetItemTextValue(itemLink)
+    if cachedData then
+        local cachedText, cachedUnmodifiedText = unpack(cachedData)
         return cachedText, cachedUnmodifiedText
     end
 
