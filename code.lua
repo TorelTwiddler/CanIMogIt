@@ -947,8 +947,7 @@ function CanIMogIt:GetSourceID(itemLink)
         CanIMogIt.DressUpModel:TryOn(itemLink, slot)
         sourceID = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
         if sourceID ~= nil and sourceID ~= 0 then
-            local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
-            if not appearanceID then
+            if not CanIMogIt:IsSourceIDFromItemLink(sourceID, itemLink) then
                 -- This likely means that the game hasn't finished loading things
                 -- yet, so let's wait until we get good data before caching it.
                 return
@@ -957,6 +956,19 @@ function CanIMogIt:GetSourceID(itemLink)
             return sourceID, "DressUpModel:GetSlotTransmogSources"
         end
     end
+end
+
+
+function CanIMogIt:IsSourceIDFromItemLink(sourceID, itemLink)
+    -- Returns whether the source ID given matches the itemLink.
+    local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+    if not sourceItemLink then return false end
+    return CanIMogIt:DoItemIDsMatch(sourceItemLink, itemLink)
+end
+
+
+function CanIMogIt:DoItemIDsMatch(itemLinkA, itemLinkB)
+    return CanIMogIt:GetItemID(itemLinkA) == CanIMogIt:GetItemID(itemLinkB)
 end
 
 
