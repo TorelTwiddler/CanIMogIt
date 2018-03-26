@@ -9,11 +9,27 @@ local _G = _G
 local L = CanIMogIt.L
 
 
-local function stringSplit(input, sep)
-    local sep, fields = sep or ":", {}
-    local pattern = string.format("([^%s]+)", sep)
-    input:gsub(pattern, function(c) fields[#fields+1] = c end)
-    return fields
+local function strsplit(delimiter, text)
+    -- from http://lua-users.org/wiki/SplitJoin
+    -- Split text into a list consisting of the strings in text,
+    -- separated by strings matching delimiter (which may be a pattern).
+    -- example: strsplit(",%s*", "Anna, Bob, Charlie,Dolores")
+    local list = {}
+    local pos = 1
+    if strfind("", delimiter, 1) then -- this would result in endless loops
+       error("delimiter matches empty string!")
+    end
+    while 1 do
+       local first, last = strfind(text, delimiter, pos)
+       if first then -- found?
+          tinsert(list, strsub(text, pos, first-1))
+          pos = last+1
+       else
+          tinsert(list, strsub(text, pos))
+          break
+       end
+    end
+    return list
 end
 
 
@@ -160,7 +176,7 @@ function CanIMogItTooltipScanner:GetClassesRequired(itemLink)
     -- Returns a table of classes required for the item.
     local result = self:ScanTooltipBreak(GetClassesText, itemLink)
     if result then
-        return stringSplit(result, " ")
+        return strsplit(",%s*", result)
     end
 end
 
