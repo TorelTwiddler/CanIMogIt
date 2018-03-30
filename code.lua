@@ -940,7 +940,6 @@ function CanIMogIt:GetSourceID(itemLink)
     if cached_source then
         return cached_source, "DressUpModel:GetSlotTransmogSources cache"
     end
-    CanIMogIt.DressUpModel = CreateFrame('DressUpModel')
     CanIMogIt.DressUpModel:SetUnit('player')
     CanIMogIt.DressUpModel:Undress()
     for i, slot in pairs(slots) do
