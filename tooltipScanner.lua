@@ -16,16 +16,16 @@ local function strsplit(delimiter, text)
     -- example: strsplit(",%s*", "Anna, Bob, Charlie,Dolores")
     local list = {}
     local pos = 1
-    if strfind("", delimiter, 1) then -- this would result in endless loops
+    if string.find("", delimiter, 1) then -- this would result in endless loops
        error("delimiter matches empty string!")
     end
     while 1 do
-       local first, last = strfind(text, delimiter, pos)
+       local first, last = string.find(text, delimiter, pos)
        if first then -- found?
-          tinsert(list, strsub(text, pos, first-1))
+          table.insert(list, string.sub(text, pos, first-1))
           pos = last+1
        else
-          tinsert(list, strsub(text, pos))
+          table.insert(list, string.sub(text, pos))
           break
        end
     end

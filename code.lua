@@ -756,11 +756,6 @@ function CanIMogIt:GetItemID(itemLink)
 end
 
 
-function CanIMogIt:GetItemLink(itemID)
-    return select(2, CanIMogIt:GetItemInfo(itemID))
-end
-
-
 function CanIMogIt:GetItemLinkFromSourceID(sourceID)
     return select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
 end

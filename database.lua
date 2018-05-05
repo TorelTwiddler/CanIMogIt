@@ -115,14 +115,27 @@ function CanIMogIt:DBGetSources(appearanceID, itemLink)
 end
 
 
-function CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
-    -- Adds the item to the database. Returns true if it added something, false otherwise.
-    if appearanceID == nil or sourceID == nil then
-        appearanceID, sourceID = self:GetAppearanceID(itemLink)
+CanIMogIt.itemsToAdd = {}
+
+local function LateAddItems(event, itemID)
+    if event == "GET_ITEM_INFO_RECEIVED" and itemID then
+        if CanIMogIt.itemsToAdd[itemID] then
+            for sourceID, _ in pairs(CanIMogIt.itemsToAdd[itemID]) do
+                local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
+                local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+                CanIMogIt:_DBSetItem(itemLink, appearanceID, sourceID)
+            end
+            table.remove(CanIMogIt.itemsToAdd, itemID)
+        end
     end
-    if appearanceID == nil or sourceID == nil then return end
-    self:DBAddAppearance(appearanceID, itemLink)
-    if not self:DBHasSource(appearanceID, sourceID, itemLink) then
+end
+CanIMogIt.frame:AddEventFunction(LateAddItems)
+
+
+function CanIMogIt:_DBSetItem(itemLink, appearanceID, sourceID)
+    -- Sets the item in the database, or at least schedules for it to be set
+    -- when we get item infor back.
+    if GetItemInfo(itemLink) then
         local hash = self:GetAppearanceHash(appearanceID, itemLink)
         self.db.global.appearances[hash].sources[sourceID] = {
             ["subClass"] = self:GetItemSubClassName(itemLink),
@@ -133,6 +146,25 @@ function CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
         end
         -- For testing:
         -- CanIMogIt:Print("New item found: " .. itemLink .. " itemID: " .. CanIMogIt:GetItemID(itemLink) .. " sourceID: " .. sourceID .. " appearanceID: " .. appearanceID)
+    else
+        local itemID = CanIMogIt:GetItemID(itemLink)
+        if not CanIMogIt.itemsToAdd[itemID] then
+            CanIMogIt.itemsToAdd[itemID] = {}
+        end
+        CanIMogIt.itemsToAdd[itemID][sourceID] = true
+    end
+end
+
+
+function CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
+    -- Adds the item to the database. Returns true if it added something, false otherwise.
+    if appearanceID == nil or sourceID == nil then
+        appearanceID, sourceID = self:GetAppearanceID(itemLink)
+    end
+    if appearanceID == nil or sourceID == nil then return end
+    self:DBAddAppearance(appearanceID, itemLink)
+    if not self:DBHasSource(appearanceID, sourceID, itemLink) then
+        CanIMogIt:_DBSetItem(itemLink, appearanceID, sourceID)
         return true
     end
     return false
