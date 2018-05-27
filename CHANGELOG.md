@@ -1,3 +1,9 @@
+7.3.5v1.7.2 Release - 2018/05/27
+
+* [#169](https://gitlab.com/toreltwiddler/CanIMogIt/issues/169) Avoid lag when looting by only recalculating the looted item, not all items.
+
+*****
+
 7.3.5v1.7.1 Release - 2018/03/30
 
 * [#174](https://gitlab.com/toreltwiddler/CanIMogIt/issues/174) & [#175](https://gitlab.com/toreltwiddler/CanIMogIt/issues/175) Hopefully prevents memory leak by removing DressUpModel redraw.
