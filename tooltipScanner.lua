@@ -151,6 +151,15 @@ function CanIMogItTooltipScanner:ScanTooltip(func, itemLink, bag, slot)
 end
 
 
+function CanIMogItTooltipScanner:GetNumberOfLines(itemLink, bag, slot)
+    -- Returns the number of lines on the tooltip with this item
+    self:CIMI_SetItem(itemLink, bag, slot)
+    local numberOfLines = self:NumLines()
+    self:ClearLines()
+    return numberOfLines
+end
+
+
 function CanIMogItTooltipScanner:GetRedText(itemLink)
     -- Returns all of the red text as space seperated string.
     local results = self:ScanTooltip(GetRedText, itemLink)
@@ -199,15 +208,3 @@ function CanIMogItTooltipScanner:IsItemBindOnEquip(itemLink, bag, slot)
         return self:ScanTooltipBreak(IsItemBindOnEquip, itemLink)
     end
 end
-
-
--- function CanIMogItTooltipScanner:GetClassRestrictionsText(itemLink)
---     -- Returns the class restrictions text from the tooltip.
---     local result = self:ScanTooltip(GetRedText, itemLink)
---     if not result then
---         return {}
---     end
---     if result then
---         return split(result, " ")
---     end
--- end

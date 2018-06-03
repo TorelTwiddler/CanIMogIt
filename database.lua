@@ -16,19 +16,19 @@
 local L = CanIMogIt.L
 
 
-CanIMogIt_DatabaseVersion = 1.1
+CanIMogIt_DatabaseVersion = 1.2
 
 
 local default = {
     global = {
+        databaseVersion = CanIMogIt_DatabaseVersion,
         appearances = {},
         setItems = {}
     }
 }
 
 
-local function UpdateDatabase()
-    CanIMogIt:Print("Updating Database to version: " .. CanIMogIt_DatabaseVersion)
+local function UpdateTo1_1()
     local appearancesTable = copyTable(CanIMogIt.db.global.appearances)
     for appearanceID, appearance in pairs(appearancesTable) do
         local sources = appearance.sources
@@ -47,8 +47,44 @@ local function UpdateDatabase()
         -- Remove the old one
         CanIMogIt.db.global.appearances[appearanceID] = nil
     end
+end
+
+
+local function UpdateTo1_2()
+    for hash, sources in pairs(CanIMogIt.db.global.appearances) do
+        for sourceID, source in pairs(sources["sources"]) do
+            local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+            local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
+            if sourceID and appearanceID and itemLink then
+                CanIMogIt:_DBSetItem(itemLink, appearanceID, sourceID)
+            end
+        end
+    end
+end
+
+
+local function UpdateDatabase()
+    CanIMogIt:Print("Updating Database to version: " .. CanIMogIt_DatabaseVersion)
+    if not CanIMogIt.db.global.databaseVersion then
+        CanIMogIt.db.global.databaseVersion = 1.0
+    end
+    if  CanIMogIt.db.global.databaseVersion < 1.1 then
+        UpdateTo1_1()
+    end
+    if CanIMogIt.db.global.databaseVersion < 1.2 then
+        UpdateTo1_2()
+    end
     CanIMogIt.db.global.databaseVersion = CanIMogIt_DatabaseVersion
     CanIMogIt:Print("Database updated!")
+end
+
+
+local function UpdateDatabaseIfNeeded()
+    if next(CanIMogIt.db.global.appearances) and
+            (not CanIMogIt.db.global.databaseVersion
+            or CanIMogIt.db.global.databaseVersion < CanIMogIt_DatabaseVersion) then
+        UpdateDatabase()
+    end
 end
 
 
@@ -57,14 +93,7 @@ function CanIMogIt:OnInitialize()
         StaticPopup_Show("CANIMOGIT_NEW_DATABASE")
     end
     self.db = LibStub("AceDB-3.0"):New("CanIMogItDatabase", default)
-
-    if not self.db.global.databaseVersion
-            or self.db.global.databaseVersion < CanIMogIt_DatabaseVersion then
-        UpdateDatabase()
-    end
 end
-
-
 
 
 function CanIMogIt:GetAppearanceHash(appearanceID, itemLink)
@@ -134,9 +163,12 @@ CanIMogIt.frame:AddEventFunction(LateAddItems)
 
 function CanIMogIt:_DBSetItem(itemLink, appearanceID, sourceID)
     -- Sets the item in the database, or at least schedules for it to be set
-    -- when we get item infor back.
+    -- when we get item info back.
     if GetItemInfo(itemLink) then
         local hash = self:GetAppearanceHash(appearanceID, itemLink)
+        if self.db.global.appearances[hash] == nil then
+            return
+        end
         self.db.global.appearances[hash].sources[sourceID] = {
             ["subClass"] = self:GetItemSubClassName(itemLink),
             ["classRestrictions"] = self:GetItemClassRestrictions(itemLink),
@@ -216,6 +248,8 @@ end
 
 local function GetAppearancesEvent(event, ...)
     if event == "PLAYER_LOGIN" then
+        -- Make sure the database is updated to the latest version
+        UpdateDatabaseIfNeeded()
         -- add all known appearanceID's to the database
         CanIMogIt:GetAppearances()
         CanIMogIt:GetSets()
