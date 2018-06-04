@@ -64,7 +64,7 @@ end
 
 
 local function UpdateDatabase()
-    CanIMogIt:Print("Updating Database to version: " .. CanIMogIt_DatabaseVersion)
+    CanIMogIt:Print("Migrating Database version to: " .. CanIMogIt_DatabaseVersion)
     if not CanIMogIt.db.global.databaseVersion then
         CanIMogIt.db.global.databaseVersion = 1.0
     end
@@ -75,7 +75,7 @@ local function UpdateDatabase()
         UpdateTo1_2()
     end
     CanIMogIt.db.global.databaseVersion = CanIMogIt_DatabaseVersion
-    CanIMogIt:Print("Database updated!")
+    CanIMogIt:Print("Database migrated!")
 end
 
 
