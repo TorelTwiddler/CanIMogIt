@@ -8,13 +8,32 @@ local L = CanIMogIt.L
 local CREATE_DATABASE_TEXT = L["Can I Mog It? Important Message: Please log into all of your characters to compile complete transmog appearance data."]
 
 StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
-  text = CREATE_DATABASE_TEXT,
-  button1 = L["Okay, I'll go log onto all of my toons!"],
-  timeout = 0,
-  whileDead = true,
-  hideOnEscape = true,
-  preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+    text = CREATE_DATABASE_TEXT,
+    button1 = L["Okay, I'll go log onto all of my toons!"],
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
 }
+
+
+local DATABASE_MIGRATION = L["Can I Mog It?\nWe need to update our database.\nThis may freeze the game for a few seconds."]
+
+
+function CanIMogIt.CreateMigrationPopup(dialogName, onAcceptFunc)
+    StaticPopupDialogs[dialogName] = {
+        text = DATABASE_MIGRATION,
+        button1 = L["Okay"],
+        button2 = L["Ask me later"],
+        OnAccept = onAcceptFunc,
+        timeout = 0,
+        whileDead = true,
+        hideOnEscape = true,
+        preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+    }
+    StaticPopup_Show(dialogName)
+end
+
 
 CanIMogIt_OptionsVersion = "1.9"
 

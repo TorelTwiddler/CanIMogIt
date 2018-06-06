@@ -29,6 +29,7 @@ local default = {
 
 
 local function UpdateTo1_1()
+    CanIMogIt:Print("Migrating Database version to: 1.1")
     local appearancesTable = copyTable(CanIMogIt.db.global.appearances)
     for appearanceID, appearance in pairs(appearancesTable) do
         local sources = appearance.sources
@@ -47,10 +48,13 @@ local function UpdateTo1_1()
         -- Remove the old one
         CanIMogIt.db.global.appearances[appearanceID] = nil
     end
+    CanIMogIt.db.global.databaseVersion = 1.1
+    CanIMogIt:Print("Database migrated to 1.1!")
 end
 
 
 local function UpdateTo1_2()
+    CanIMogIt:Print("Migrating Database version to: 1.2")
     for hash, sources in pairs(CanIMogIt.db.global.appearances) do
         for sourceID, source in pairs(sources["sources"]) do
             local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
@@ -60,11 +64,12 @@ local function UpdateTo1_2()
             end
         end
     end
+    CanIMogIt.db.global.databaseVersion = 1.2
+    CanIMogIt:Print("Database migrated to 1.2!")
 end
 
 
 local function UpdateDatabase()
-    CanIMogIt:Print("Migrating Database version to: " .. CanIMogIt_DatabaseVersion)
     if not CanIMogIt.db.global.databaseVersion then
         CanIMogIt.db.global.databaseVersion = 1.0
     end
@@ -72,10 +77,8 @@ local function UpdateDatabase()
         UpdateTo1_1()
     end
     if CanIMogIt.db.global.databaseVersion < 1.2 then
-        UpdateTo1_2()
+        CanIMogIt.CreateMigrationPopup("CANIMOGIT_DB_MIGRATION_1_2", UpdateTo1_2)
     end
-    CanIMogIt.db.global.databaseVersion = CanIMogIt_DatabaseVersion
-    CanIMogIt:Print("Database migrated!")
 end
 
 
