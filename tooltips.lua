@@ -104,6 +104,13 @@ local function printDebug(tooltip, itemLink, bag, slot)
         addDoubleLine(tooltip, "DBHasAppearance:", 'nil')
     end
 
+    local requirements = CanIMogIt.Requirements:GetRequirements()
+    if appearanceID ~= nil then
+        addDoubleLine(tooltip, "DBHasAppearanceForRequirements:", tostring(CanIMogIt:DBHasAppearanceForRequirements(appearanceID, itemLink, requirements)))
+    else
+        addDoubleLine(tooltip, "DBHasAppearanceForRequirements:", 'nil')
+    end
+
     if appearanceID ~= nil and sourceID ~= nil then
         addDoubleLine(tooltip, "DBHasSource:", tostring(CanIMogIt:DBHasSource(appearanceID, sourceID, itemLink)))
     else

@@ -23,9 +23,11 @@ Locale\_locales.xml
 constants.lua
 options.lua
 cache.lua
+requirements.lua
 code.lua
 tooltips.lua
 database.lua
 tooltipScanner.lua
 Overlay\_overlays.xml
 Plugins\_plugins.xml
+Tests\_tests.xml

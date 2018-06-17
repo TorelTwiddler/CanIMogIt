@@ -105,6 +105,54 @@ function CanIMogIt:GetAppearanceHash(appearanceID, itemLink)
     return appearanceID .. ":" .. slot
 end
 
+local function SourcePassesRequirement(source, requirementName, requirementValue)
+    if source[requirementName] then
+        if type(source[requirementName]) == "string" then
+            -- single values, such as subClass = Plate
+            if source[requirementName] ~= requirementValue then
+                return false
+            end
+        elseif type(source[requirementName]) == "table" then
+            -- multi-values, such as classRestrictions = Shaman, Hunter
+            local found = false
+            for index, sourceValue in pairs(source[requirementName]) do
+                if sourceValue == requirementValue then
+                    found = true
+                end
+            end
+            if not found then
+                return false
+            end
+        else
+            return false
+        end
+    end
+    return true
+end
+
+
+function CanIMogIt:DBHasAppearanceForRequirements(appearanceID, itemLink, requirements)
+    --[[
+        @param requirements: a table of {requirementName: value}, which will be
+            iterated over for each known item to determine if all requirements are met.
+            If the requirements are not met for any item, this will return false.
+            For example, {"classRestrictions": "Druid"} would filter out any that don't
+            include Druid as a class restriction. If the item doesn't have a restriction, it
+            is assumed to not be a restriction at all.
+    ]]
+    if not self:DBHasAppearance(appearanceID, itemLink) then
+        return false
+    end
+    for sourceID, source in pairs(self:DBGetSources(appearanceID, itemLink)) do
+        for name, value in pairs(requirements) do
+            if SourcePassesRequirement(source, name, value) then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 
 function CanIMogIt:DBHasAppearance(appearanceID, itemLink)
     local hash = self:GetAppearanceHash(appearanceID, itemLink)
