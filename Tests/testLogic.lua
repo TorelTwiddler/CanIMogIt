@@ -1,7 +1,7 @@
 
 local function TestItemKnownForDifferentClass()
     --[[
-        Test that an appearance know by a specific class doesn't cause
+        #185 Test that an appearance know by a specific class doesn't cause
         all classes to show that appearance as known.
 
         Sources 44549 and 46684 share an appearance.
