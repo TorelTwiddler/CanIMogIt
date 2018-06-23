@@ -29,7 +29,7 @@ local default = {
 
 local function UpdateDatabase()
     CanIMogIt:Print("Updating Database to version: " .. CanIMogIt_DatabaseVersion)
-    local appearancesTable = copyTable(CanIMogIt.db.global.appearances)
+    local appearancesTable = CanIMogIt.Utils.copyTable(CanIMogIt.db.global.appearances)
     for appearanceID, appearance in pairs(appearancesTable) do
         local sources = appearance.sources
         for sourceID, source in pairs(sources) do

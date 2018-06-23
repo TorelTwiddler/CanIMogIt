@@ -270,8 +270,10 @@ local exceptionItems = {
 -- Helper functions        --
 -----------------------------
 
+CanIMogIt.Utils = {}
 
-function pairsByKeys (t, f)
+
+function CanIMogIt.Utils.pairsByKeys (t, f)
     -- returns a sorted iterator for a table.
     -- https://www.lua.org/pil/19.3.html
     -- Why is it not a built in function? ¯\_(ツ)_/¯
@@ -289,7 +291,7 @@ function pairsByKeys (t, f)
 end
 
 
-function copyTable (t)
+function CanIMogIt.Utils.copyTable (t)
     -- shallow-copy a table
     if type(t) ~= "table" then return t end
     local target = {}
@@ -298,7 +300,7 @@ function copyTable (t)
 end
 
 
-function spairs(t, order)
+function CanIMogIt.Utils.spairs(t, order)
     -- Returns an iterator that is a sorted table. order is the function to sort by.
     -- http://stackoverflow.com/questions/15706270/sort-a-table-in-lua
     -- Again, why is this not a built in function? ¯\_(ツ)_/¯
@@ -399,7 +401,7 @@ local function _GetAppearances()
     GetAppearancesTable()
     buffer = 0
 
-    if appearancesIter == nil then appearancesIter = pairsByKeys(appearancesTable) end
+    if appearancesIter == nil then appearancesIter = CanIMogIt.Utils.pairsByKeys(appearancesTable) end
     -- Add new appearances learned.
     for appearanceID, collected in appearancesIter do
         AddAppearance(appearanceID)
@@ -407,7 +409,7 @@ local function _GetAppearances()
         appearancesTable[appearanceID] = nil
     end
 
-    if removeIter == nil then removeIter = pairsByKeys(removeAppearancesTable) end
+    if removeIter == nil then removeIter = CanIMogIt.Utils.pairsByKeys(removeAppearancesTable) end
     -- Remove appearances that are no longer learned.
     for appearanceHash, sources in removeIter do
         for sourceID, source in pairs(sources.sources) do
@@ -452,7 +454,7 @@ function CanIMogIt:GetAppearances()
     if CanIMogItOptions["printDatabaseScan"] then
         CanIMogIt:Print(CanIMogIt.DATABASE_START_UPDATE_TEXT)
     end
-    removeAppearancesTable = copyTable(CanIMogIt.db.global.appearances)
+    removeAppearancesTable = CanIMogIt.Utils.copyTable(CanIMogIt.db.global.appearances)
     CanIMogIt.frame:SetScript("OnUpdate", GetAppearancesOnUpdate)
 end
 
@@ -637,7 +639,7 @@ function CanIMogIt:CalculateSetsVariantText(setID)
 
     local variantsText = ""
 
-    for i, variantSet in spairs(variantSets, function(t,a,b) return t[a].uiOrder < t[b].uiOrder end) do
+    for i, variantSet in CanIMogIt.Utils.spairs(variantSets, function(t,a,b) return t[a].uiOrder < t[b].uiOrder end) do
         local variantHave, variantTotal = CanIMogIt:_GetRatio(variantSet.setID)
 
         variantsText = variantsText .. CanIMogIt:_GetRatioTextColor(variantHave, variantTotal)
