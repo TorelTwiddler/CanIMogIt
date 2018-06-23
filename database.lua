@@ -21,7 +21,6 @@ CanIMogIt_DatabaseVersion = 1.2
 
 local default = {
     global = {
-        databaseVersion = CanIMogIt_DatabaseVersion,
         appearances = {},
         setItems = {}
     }
@@ -50,6 +49,26 @@ local function UpdateTo1_1()
     end
     CanIMogIt.db.global.databaseVersion = 1.1
     CanIMogIt:Print("Database migrated to 1.1!")
+end
+
+
+local function CleanDBOfNumbers()
+    --[[
+        Cleans the database of any numbers that may be left over from 1.0.
+        I'm unsure how they might be there, but this will prevent them
+        from continuing to break things for people.
+    ]]
+    if CanIMogIt.db.global.appearances then
+        local numbersToDelete = {}
+        for key, _ in pairs(CanIMogIt.db.global.appearances) do
+            if type(key) == 'number' then
+                numbersToDelete[key] = true
+            end
+        end
+        for key, _ in pairs(numbersToDelete) do
+            CanIMogIt.db.global.appearances[key] = nil
+        end
+    end
 end
 
 
@@ -83,10 +102,14 @@ end
 
 
 local function UpdateDatabaseIfNeeded()
+    CleanDBOfNumbers()
     if next(CanIMogIt.db.global.appearances) and
             (not CanIMogIt.db.global.databaseVersion
             or CanIMogIt.db.global.databaseVersion < CanIMogIt_DatabaseVersion) then
         UpdateDatabase()
+    else
+        -- There is no database, add the default.
+        CanIMogIt.db.global.databaseVersion = CanIMogIt_DatabaseVersion
     end
 end
 
