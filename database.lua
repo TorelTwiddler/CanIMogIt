@@ -27,8 +27,27 @@ local default = {
 }
 
 
+local function CleanDBOfNumbers()
+    --[[
+        Cleans the database of any numbers that may be left over from 1.0.
+        I'm unsure how they might be there, but this will prevent them
+        from continuing to break things for people.
+    ]]
+    if CanIMogIt.db.global.appearances and CanIMogIt.db.global.databaseVersion then
+        local numbersToDelete = {}
+        for key, _ in pairs(CanIMogIt.db.global.appearances) do
+            if type(key) == 'number' then
+                numbersToDelete[key] = true
+            end
+        end
+        for key, _ in pairs(numbersToDelete) do
+            CanIMogIt.db.global.appearances[key] = nil
+        end
+    end
+end
+
+
 local function UpdateTo1_1()
-    CanIMogIt:Print("Migrating Database version to: 1.1")
     local appearancesTable = copyTable(CanIMogIt.db.global.appearances)
     for appearanceID, appearance in pairs(appearancesTable) do
         local sources = appearance.sources
@@ -47,33 +66,10 @@ local function UpdateTo1_1()
         -- Remove the old one
         CanIMogIt.db.global.appearances[appearanceID] = nil
     end
-    CanIMogIt.db.global.databaseVersion = 1.1
-    CanIMogIt:Print("Database migrated to 1.1!")
-end
-
-
-local function CleanDBOfNumbers()
-    --[[
-        Cleans the database of any numbers that may be left over from 1.0.
-        I'm unsure how they might be there, but this will prevent them
-        from continuing to break things for people.
-    ]]
-    if CanIMogIt.db.global.appearances then
-        local numbersToDelete = {}
-        for key, _ in pairs(CanIMogIt.db.global.appearances) do
-            if type(key) == 'number' then
-                numbersToDelete[key] = true
-            end
-        end
-        for key, _ in pairs(numbersToDelete) do
-            CanIMogIt.db.global.appearances[key] = nil
-        end
-    end
 end
 
 
 local function UpdateTo1_2()
-    CanIMogIt:Print("Migrating Database version to: 1.2")
     for hash, sources in pairs(CanIMogIt.db.global.appearances) do
         for sourceID, source in pairs(sources["sources"]) do
             local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
@@ -83,8 +79,20 @@ local function UpdateTo1_2()
             end
         end
     end
-    CanIMogIt.db.global.databaseVersion = 1.2
-    CanIMogIt:Print("Database migrated to 1.2!")
+end
+
+
+local versionMigrationFunctions = {
+    [1.1] = UpdateTo1_1,
+    [1.2] = UpdateTo1_2
+}
+
+
+local function UpdateToVersion(version)
+    CanIMogIt:Print(L["Migrating Database version to:"], version)
+    versionMigrationFunctions[version]()
+    CanIMogIt.db.global.databaseVersion = version
+    CanIMogIt:Print(L["Database migrated to:"], version)
 end
 
 
@@ -93,10 +101,10 @@ local function UpdateDatabase()
         CanIMogIt.db.global.databaseVersion = 1.0
     end
     if  CanIMogIt.db.global.databaseVersion < 1.1 then
-        UpdateTo1_1()
+        UpdateToVersion(1.1)
     end
     if CanIMogIt.db.global.databaseVersion < 1.2 then
-        CanIMogIt.CreateMigrationPopup("CANIMOGIT_DB_MIGRATION_1_2", UpdateTo1_2)
+        CanIMogIt.CreateMigrationPopup("CANIMOGIT_DB_MIGRATION_1_2", function () UpdateToVersion(1.2) end)
     end
 end
 
