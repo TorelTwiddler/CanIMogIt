@@ -48,7 +48,7 @@ end
 
 
 local function UpdateTo1_1()
-    local appearancesTable = copyTable(CanIMogIt.db.global.appearances)
+    local appearancesTable = CanIMogIt.Utils.copyTable(CanIMogIt.db.global.appearances)
     for appearanceID, appearance in pairs(appearancesTable) do
         local sources = appearance.sources
         for sourceID, source in pairs(sources) do
