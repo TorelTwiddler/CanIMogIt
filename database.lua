@@ -27,21 +27,44 @@ local default = {
 }
 
 
-local function CleanDBOfNumbers()
+local function IsBadKey(key)
+    -- Good key: 12345:SOME_TYPE
+
+    -- If it's a number: 12345
+    if type(key) == 'number' then
+        -- Get the appearance hash for the source
+        return true
+    end
+
+    -- If it has two :'s in it: 12345:SOME_TYPE:SOME_TYPE
+    local _, count = string.gsub(key, ":", "")
+    if count >= 2 then
+        return true
+    end
+end
+
+
+local function CheckBadDB()
     --[[
-        Cleans the database of any numbers that may be left over from 1.0.
-        I'm unsure how they might be there, but this will prevent them
-        from continuing to break things for people.
+        Check if the database has been corrupted by a bad update or going
+        back too many versions.
     ]]
     if CanIMogIt.db.global.appearances and CanIMogIt.db.global.databaseVersion then
-        local numbersToDelete = {}
         for key, _ in pairs(CanIMogIt.db.global.appearances) do
-            if type(key) == 'number' then
-                numbersToDelete[key] = true
+            if IsBadKey(key) then
+                StaticPopupDialogs["CANIMOGIT_BAD_DATABASE"] = {
+                    text = L["Can I Mog It?\nSorry! It looks like there are corrupted entries in the database. This will likely cause errors and give incorrect results from CanIMogIt.\nPlease click below to reset the database."],
+                    button1 = L["Okay"],
+                    button2 = L["Ask me later"],
+                    OnAccept = function () CanIMogIt:DBReset() end,
+                    timeout = 0,
+                    whileDead = true,
+                    hideOnEscape = true,
+                    preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+                }
+                StaticPopup_Show("CANIMOGIT_BAD_DATABASE")
+                return
             end
-        end
-        for key, _ in pairs(numbersToDelete) do
-            CanIMogIt.db.global.appearances[key] = nil
         end
     end
 end
@@ -110,7 +133,7 @@ end
 
 
 local function UpdateDatabaseIfNeeded()
-    CleanDBOfNumbers()
+    CheckBadDB()
     if next(CanIMogIt.db.global.appearances) and
             (not CanIMogIt.db.global.databaseVersion
             or CanIMogIt.db.global.databaseVersion < CanIMogIt_DatabaseVersion) then

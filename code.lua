@@ -327,6 +327,41 @@ function CanIMogIt.Utils.spairs(t, order)
     end
 end
 
+
+function CanIMogIt.Utils.strsplit(delimiter, text)
+    -- from http://lua-users.org/wiki/SplitJoin
+    -- Split text into a list consisting of the strings in text,
+    -- separated by strings matching delimiter (which may be a pattern).
+    -- example: strsplit(",%s*", "Anna, Bob, Charlie,Dolores")
+    local list = {}
+    local pos = 1
+    if string.find("", delimiter, 1) then -- this would result in endless loops
+       error("delimiter matches empty string!")
+    end
+    while 1 do
+       local first, last = string.find(text, delimiter, pos)
+       if first then -- found?
+          table.insert(list, string.sub(text, pos, first-1))
+          pos = last+1
+       else
+          table.insert(list, string.sub(text, pos))
+          break
+       end
+    end
+    return list
+end
+
+
+function CanIMogIt.Utils.tablelength(T)
+    -- Count the number of keys in a table, because tables don't bother
+    -- counting themselves if it's filled with key-value pairs...
+    -- ¯\_(ツ)_/¯
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+end
+
+
 -----------------------------
 -- CanIMogIt Core methods  --
 -----------------------------
