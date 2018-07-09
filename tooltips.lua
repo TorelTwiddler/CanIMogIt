@@ -63,16 +63,35 @@ local function printDebug(tooltip, itemLink, bag, slot)
 
     addLine(tooltip, '--------')
 
+    if sourceID then
+        local playerCanCollectIsReady = select(1, C_TransmogCollection.PlayerCanCollectSource(sourceID))
+        if playerCanCollectIsReady ~= nil then
+            addDoubleLine(tooltip, "BLIZZ PlayerCanCollectSource_1_IsReady:", tostring(playerCanCollectIsReady))
+        end
+    end
+
+    if sourceID then
+        local playerCanCollect = select(2, C_TransmogCollection.PlayerCanCollectSource(sourceID))
+        if playerCanCollect ~= nil then
+            addDoubleLine(tooltip, "BLIZZ PlayerCanCollectSource_2_CanCollect:", tostring(playerCanCollect))
+        end
+    end
+
+    addLine(tooltip, '--------')
+
     local playerHasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID)
     if playerHasTransmog ~= nil then
         addDoubleLine(tooltip, "BLIZZ PlayerHasTransmog:", tostring(playerHasTransmog))
     end
+
     if sourceID then
         local playerHasTransmogItem = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
         if playerHasTransmogItem ~= nil then
             addDoubleLine(tooltip, "BLIZZ PlayerHasTransmogItemModifiedAppearance:", tostring(playerHasTransmogItem))
         end
     end
+
+    addLine(tooltip, '--------')
 
     addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemLink)))
     local playerKnowsTransmogFromItem = CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
