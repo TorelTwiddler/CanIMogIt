@@ -17,7 +17,7 @@ StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
 }
 
 
-local DATABASE_MIGRATION = L["Can I Mog It?\nWe need to update our database.\nThis may freeze the game for a few seconds."]
+local DATABASE_MIGRATION = "Can I Mog It?" .. "\n\n" .. L["We need to update our database. This may freeze the game for a few seconds."]
 
 
 function CanIMogIt.CreateMigrationPopup(dialogName, onAcceptFunc)

@@ -53,7 +53,7 @@ local function CheckBadDB()
         for key, _ in pairs(CanIMogIt.db.global.appearances) do
             if IsBadKey(key) then
                 StaticPopupDialogs["CANIMOGIT_BAD_DATABASE"] = {
-                    text = L["Can I Mog It?\nSorry! It looks like there are corrupted entries in the database. This will likely cause errors and give incorrect results from CanIMogIt.\nPlease click below to reset the database."],
+                    text = "Can I Mog It?" .. "\n\n" .. L["Sorry! Your database has corrupted entries. This will cause errors and give incorrect results. Please click below to reset the database."],
                     button1 = L["Okay"],
                     button2 = L["Ask me later"],
                     OnAccept = function () CanIMogIt:DBReset() end,
