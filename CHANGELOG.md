@@ -1,3 +1,12 @@
+8.0.0v1.9 Release - 2018/07/15
+
+Patch 8.0.
+
+* [#38](https://gitlab.com/toreltwiddler/CanIMogIt/issues/38) LiteBag support added by LiteBag author Xodiv.
+* Updated TOC.
+
+*****
+
 7.3.5v1.8 Release - 2018/07/09
 
 Items with Class Restrictions are now properly considered for if you know the appearance or not based on the class you are on.
