@@ -1,6 +1,8 @@
-8.0.0v1.9 Release - 2018/07/15
+8.0.0v1.9 Release - 2018/07/17
 
-Patch 8.0.
+Patch 8.0 and LiteBag support.
+
+![LiteBag overlay!](https://i.imgur.com/H1sDNSl.png)
 
 * [#38](https://gitlab.com/toreltwiddler/CanIMogIt/issues/38) LiteBag support added by LiteBag author Xodiv.
 * Updated TOC.
