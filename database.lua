@@ -370,7 +370,7 @@ local transmogEvents = {
 }
 
 local function TransmogCollectionUpdated(event, sourceID, ...)
-    if transmogEvents[event] then
+    if transmogEvents[event] and sourceID then
         -- Get the appearanceID from the sourceID
         if event == "TRANSMOG_COLLECTION_SOURCE_ADDED" then
             local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
