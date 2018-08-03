@@ -281,8 +281,9 @@ function CanIMogIt:_DBSetItem(itemLink, appearanceID, sourceID)
         if self:GetItemSubClassName(itemLink) == nil then
             CanIMogIt:Print("nil subclass: " .. itemLink)
         end
-        -- For testing:
-        -- CanIMogIt:Print("New item found: " .. itemLink .. " itemID: " .. CanIMogIt:GetItemID(itemLink) .. " sourceID: " .. sourceID .. " appearanceID: " .. appearanceID)
+        if CanIMogItOptions['databaseDebug'] then
+            CanIMogIt:Print("New item found: " .. itemLink .. " itemID: " .. CanIMogIt:GetItemID(itemLink) .. " sourceID: " .. sourceID .. " appearanceID: " .. appearanceID)
+        end
     else
         local itemID = CanIMogIt:GetItemID(itemLink)
         if not CanIMogIt.itemsToAdd[itemID] then
@@ -316,8 +317,9 @@ function CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink)
         if next(self.db.global.appearances[hash].sources) == nil then
             self:DBRemoveAppearance(appearanceID, itemLink)
         end
-        -- For testing:
-        -- CanIMogIt:Print("Item removed: " .. CanIMogIt:GetItemLinkFromSourceID(sourceID) .. " itemID: " .. CanIMogIt:GetItemID(itemLink) .. " sourceID: " .. sourceID .. " appearanceID: " .. appearanceID)
+        if CanIMogItOptions['databaseDebug'] then
+            CanIMogIt:Print("Item removed: " .. CanIMogIt:GetItemLinkFromSourceID(sourceID) .. " itemID: " .. CanIMogIt:GetItemID(itemLink) .. " sourceID: " .. sourceID .. " appearanceID: " .. appearanceID)
+        end
     end
 end
 
