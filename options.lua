@@ -8,13 +8,32 @@ local L = CanIMogIt.L
 local CREATE_DATABASE_TEXT = L["Can I Mog It? Important Message: Please log into all of your characters to compile complete transmog appearance data."]
 
 StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
-  text = CREATE_DATABASE_TEXT,
-  button1 = L["Okay, I'll go log onto all of my toons!"],
-  timeout = 0,
-  whileDead = true,
-  hideOnEscape = true,
-  preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+    text = CREATE_DATABASE_TEXT,
+    button1 = L["Okay, I'll go log onto all of my toons!"],
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
 }
+
+
+local DATABASE_MIGRATION = "Can I Mog It?" .. "\n\n" .. L["We need to update our database. This may freeze the game for a few seconds."]
+
+
+function CanIMogIt.CreateMigrationPopup(dialogName, onAcceptFunc)
+    StaticPopupDialogs[dialogName] = {
+        text = DATABASE_MIGRATION,
+        button1 = L["Okay"],
+        button2 = L["Ask me later"],
+        OnAccept = onAcceptFunc,
+        timeout = 0,
+        whileDead = true,
+        hideOnEscape = true,
+        preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+    }
+    StaticPopup_Show(dialogName)
+end
+
 
 CanIMogIt_OptionsVersion = "1.9"
 
@@ -88,7 +107,7 @@ local EVENTS = {
     "ADDON_LOADED",
     "TRANSMOG_COLLECTION_UPDATED",
     "PLAYER_LOGIN",
-    -- "GET_ITEM_INFO_RECEIVED",
+    "GET_ITEM_INFO_RECEIVED",
     "AUCTION_HOUSE_SHOW",
     "AUCTION_ITEM_LIST_UPDATE",
     "BLACK_MARKET_OPEN",
@@ -302,6 +321,10 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.showTransmoggableOnly:Click()
     elseif input == 'unknownonly' then
         CanIMogIt.frame.showUnknownOnly:Click()
+    elseif input == 'count' then
+        self:Print(CanIMogIt.Utils.tablelength(CanIMogIt.db.global.appearances))
+    elseif input == 'test' then
+        CanIMogIt.Tests:RunTests()
     elseif input == 'PleaseDeleteMyDB' then
         self:DBReset()
     elseif input == 'refresh' then

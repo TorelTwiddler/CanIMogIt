@@ -9,16 +9,8 @@ local _G = _G
 local L = CanIMogIt.L
 
 
-function stringSplit(input, sep)
-    local sep, fields = sep or ":", {}
-    local pattern = string.format("([^%s]+)", sep)
-    input:gsub(pattern, function(c) fields[#fields+1] = c end)
-    return fields
-end
-
-
 local rootStringMemoized = {}
-function getBeforeAfter(rootString)
+local function getBeforeAfter(rootString)
     if not rootStringMemoized[rootString] then
         local s, e = string.find(rootString, '%%s')
         local before = string.sub(rootString, 1, s-1)
@@ -135,6 +127,15 @@ function CanIMogItTooltipScanner:ScanTooltip(func, itemLink, bag, slot)
 end
 
 
+function CanIMogItTooltipScanner:GetNumberOfLines(itemLink, bag, slot)
+    -- Returns the number of lines on the tooltip with this item
+    self:CIMI_SetItem(itemLink, bag, slot)
+    local numberOfLines = self:NumLines()
+    self:ClearLines()
+    return numberOfLines
+end
+
+
 function CanIMogItTooltipScanner:GetRedText(itemLink)
     -- Returns all of the red text as space seperated string.
     local results = self:ScanTooltip(GetRedText, itemLink)
@@ -160,7 +161,7 @@ function CanIMogItTooltipScanner:GetClassesRequired(itemLink)
     -- Returns a table of classes required for the item.
     local result = self:ScanTooltipBreak(GetClassesText, itemLink)
     if result then
-        return stringSplit(result, " ")
+        return CanIMogIt.Utils.strsplit(",%s*", result)
     end
 end
 
@@ -183,15 +184,3 @@ function CanIMogItTooltipScanner:IsItemBindOnEquip(itemLink, bag, slot)
         return self:ScanTooltipBreak(IsItemBindOnEquip, itemLink)
     end
 end
-
-
--- function CanIMogItTooltipScanner:GetClassRestrictionsText(itemLink)
---     -- Returns the class restrictions text from the tooltip.
---     local result = self:ScanTooltip(GetRedText, itemLink)
---     if not result then
---         return {}
---     end
---     if result then
---         return split(result, " ")
---     end
--- end

@@ -220,8 +220,18 @@ local exceptionItems = {
         [130064] = CanIMogIt.NOT_TRANSMOGABLE, -- Deadeye Monocle
     },
     [SHOULDER] = {
-        [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders
-        [119588] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons
+        [119556] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 100 Salvage Yard ilvl 610
+        [117106] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 90 boost ilvl 483
+        [129714] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 100 trial/boost ilvl 640
+        [150642] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 100 trial/boost ilvl 600
+        [153810] = CanIMogIt.NOT_TRANSMOGABLE, -- Trailseeker Spaulders - 110 trial/boost ilvl 870
+        [162796] = CanIMogIt.NOT_TRANSMOGABLE, -- Wildguard Spaulders - 8.0 BfA Pre-Patch event
+        [119588] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 100 Salvage Yard ilvl 610
+        [117138] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 90 boost ilvl 483
+        [129485] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 100 trial/boost ilvl 640
+        [150658] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 100 trial/boost ilvl 600
+        [153842] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Pauldrons - 110 trial/boost ilvl 870
+        [162812] = CanIMogIt.NOT_TRANSMOGABLE, -- Serene Disciple's Padding - 8.0 BfA Pre-Patch event
         [134112] = CanIMogIt.KNOWN, -- Hidden Shoulders
     },
     [BODY] = {},
@@ -234,7 +244,12 @@ local exceptionItems = {
     [FEET] = {},
     [WRIST] = {},
     [HAND] = {
-        [119585] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards
+        [119585] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 100 Salvage Yard ilvl 610
+        [117135] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 90 boost ilvl 483
+        [129482] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 100 trial/boost ilvl 640
+        [150655] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 100 trial/boost ilvl 600
+        [153839] = CanIMogIt.NOT_TRANSMOGABLE, -- Mistdancer Handguards - 110 trial/boost ilvl 870
+        [162809] = CanIMogIt.NOT_TRANSMOGABLE, -- Serene Disciple's Handguards - 8.0 BfA Pre-Patch event
     },
     [CLOAK] = {
         -- [134111] = CanIMogIt.KNOWN, -- Hidden Cloak
@@ -258,8 +273,10 @@ local exceptionItems = {
 -- Helper functions        --
 -----------------------------
 
+CanIMogIt.Utils = {}
 
-function pairsByKeys (t, f)
+
+function CanIMogIt.Utils.pairsByKeys (t, f)
     -- returns a sorted iterator for a table.
     -- https://www.lua.org/pil/19.3.html
     -- Why is it not a built in function? ¯\_(ツ)_/¯
@@ -277,7 +294,7 @@ function pairsByKeys (t, f)
 end
 
 
-function copyTable (t)
+function CanIMogIt.Utils.copyTable (t)
     -- shallow-copy a table
     if type(t) ~= "table" then return t end
     local target = {}
@@ -286,7 +303,7 @@ function copyTable (t)
 end
 
 
-function spairs(t, order)
+function CanIMogIt.Utils.spairs(t, order)
     -- Returns an iterator that is a sorted table. order is the function to sort by.
     -- http://stackoverflow.com/questions/15706270/sort-a-table-in-lua
     -- Again, why is this not a built in function? ¯\_(ツ)_/¯
@@ -312,6 +329,41 @@ function spairs(t, order)
         end
     end
 end
+
+
+function CanIMogIt.Utils.strsplit(delimiter, text)
+    -- from http://lua-users.org/wiki/SplitJoin
+    -- Split text into a list consisting of the strings in text,
+    -- separated by strings matching delimiter (which may be a pattern).
+    -- example: strsplit(",%s*", "Anna, Bob, Charlie,Dolores")
+    local list = {}
+    local pos = 1
+    if string.find("", delimiter, 1) then -- this would result in endless loops
+       error("delimiter matches empty string!")
+    end
+    while 1 do
+       local first, last = string.find(text, delimiter, pos)
+       if first then -- found?
+          table.insert(list, string.sub(text, pos, first-1))
+          pos = last+1
+       else
+          table.insert(list, string.sub(text, pos))
+          break
+       end
+    end
+    return list
+end
+
+
+function CanIMogIt.Utils.tablelength(T)
+    -- Count the number of keys in a table, because tables don't bother
+    -- counting themselves if it's filled with key-value pairs...
+    -- ¯\_(ツ)_/¯
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+end
+
 
 -----------------------------
 -- CanIMogIt Core methods  --
@@ -387,7 +439,7 @@ local function _GetAppearances()
     GetAppearancesTable()
     buffer = 0
 
-    if appearancesIter == nil then appearancesIter = pairsByKeys(appearancesTable) end
+    if appearancesIter == nil then appearancesIter = CanIMogIt.Utils.pairsByKeys(appearancesTable) end
     -- Add new appearances learned.
     for appearanceID, collected in appearancesIter do
         AddAppearance(appearanceID)
@@ -395,7 +447,7 @@ local function _GetAppearances()
         appearancesTable[appearanceID] = nil
     end
 
-    if removeIter == nil then removeIter = pairsByKeys(removeAppearancesTable) end
+    if removeIter == nil then removeIter = CanIMogIt.Utils.pairsByKeys(removeAppearancesTable) end
     -- Remove appearances that are no longer learned.
     for appearanceHash, sources in removeIter do
         for sourceID, source in pairs(sources.sources) do
@@ -440,7 +492,7 @@ function CanIMogIt:GetAppearances()
     if CanIMogItOptions["printDatabaseScan"] then
         CanIMogIt:Print(CanIMogIt.DATABASE_START_UPDATE_TEXT)
     end
-    removeAppearancesTable = copyTable(CanIMogIt.db.global.appearances)
+    removeAppearancesTable = CanIMogIt.Utils.copyTable(CanIMogIt.db.global.appearances)
     CanIMogIt.frame:SetScript("OnUpdate", GetAppearancesOnUpdate)
 end
 
@@ -625,7 +677,7 @@ function CanIMogIt:CalculateSetsVariantText(setID)
 
     local variantsText = ""
 
-    for i, variantSet in spairs(variantSets, function(t,a,b) return t[a].uiOrder < t[b].uiOrder end) do
+    for i, variantSet in CanIMogIt.Utils.spairs(variantSets, function(t,a,b) return t[a].uiOrder < t[b].uiOrder end) do
         local variantHave, variantTotal = CanIMogIt:_GetRatio(variantSet.setID)
 
         variantsText = variantsText .. CanIMogIt:_GetRatioTextColor(variantHave, variantTotal)
@@ -741,11 +793,6 @@ end
 
 function CanIMogIt:GetItemID(itemLink)
     return tonumber(itemLink:match("item:(%d+)"))
-end
-
-
-function CanIMogIt:GetItemLink(itemID)
-    return select(2, CanIMogIt:GetItemInfo(itemID))
 end
 
 
@@ -911,9 +958,6 @@ function CanIMogIt:IsEquippable(itemLink)
 end
 
 
-local sourceIDGoodResultFound = false
-
-
 function CanIMogIt:GetSourceID(itemLink)
     local sourceID = select(2, C_TransmogCollection.GetItemInfo(itemLink))
     if sourceID then
@@ -927,32 +971,38 @@ function CanIMogIt:GetSourceID(itemLink)
 
     if slots == nil or slots == false or IsDressableItem(itemLink) == false then return end
 
-    cached_source = CanIMogIt.cache:GetDressUpModelSource(itemLink)
+    local cached_source = CanIMogIt.cache:GetDressUpModelSource(itemLink)
     if cached_source then
         return cached_source, "DressUpModel:GetSlotTransmogSources cache"
     end
-    CanIMogIt.DressUpModel = CreateFrame('DressUpModel')
     CanIMogIt.DressUpModel:SetUnit('player')
     CanIMogIt.DressUpModel:Undress()
     for i, slot in pairs(slots) do
         CanIMogIt.DressUpModel:TryOn(itemLink, slot)
         sourceID = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
         if sourceID ~= nil and sourceID ~= 0 then
-            if not sourceIDGoodResultFound then
-                local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
-                if not appearanceID then
-                    -- This likely means that the game hasn't finished loading things
-                    -- yet, so let's wait until we get good data first.
-                    return
-                end
-                sourceIDGoodResultFound = true
+            if not CanIMogIt:IsSourceIDFromItemLink(sourceID, itemLink) then
+                -- This likely means that the game hasn't finished loading things
+                -- yet, so let's wait until we get good data before caching it.
+                return
             end
-            if sourceIDGoodResultFound then
-                CanIMogIt.cache:SetDressUpModelSource(itemLink, sourceID)
-            end
+            CanIMogIt.cache:SetDressUpModelSource(itemLink, sourceID)
             return sourceID, "DressUpModel:GetSlotTransmogSources"
         end
     end
+end
+
+
+function CanIMogIt:IsSourceIDFromItemLink(sourceID, itemLink)
+    -- Returns whether the source ID given matches the itemLink.
+    local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+    if not sourceItemLink then return false end
+    return CanIMogIt:DoItemIDsMatch(sourceItemLink, itemLink)
+end
+
+
+function CanIMogIt:DoItemIDsMatch(itemLinkA, itemLinkB)
+    return CanIMogIt:GetItemID(itemLinkA) == CanIMogIt:GetItemID(itemLinkB)
 end
 
 
@@ -993,7 +1043,8 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
     -- Returns whether this item's appearance is already known by the player.
     local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
     if appearanceID == nil then return false end
-    if CanIMogIt:DBHasAppearance(appearanceID, itemLink) then
+    local requirements = CanIMogIt.Requirements:GetRequirements()
+    if CanIMogIt:DBHasAppearanceForRequirements(appearanceID, itemLink, requirements) then
         if CanIMogIt:IsItemArmor(itemLink) then
             -- The character knows the appearance, check that it's from the same armor type.
             for sourceID, knownItem in pairs(CanIMogIt:DBGetSources(appearanceID, itemLink)) do

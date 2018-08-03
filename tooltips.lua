@@ -63,16 +63,35 @@ local function printDebug(tooltip, itemLink, bag, slot)
 
     addLine(tooltip, '--------')
 
+    if sourceID then
+        local playerCanCollectIsReady = select(1, C_TransmogCollection.PlayerCanCollectSource(sourceID))
+        if playerCanCollectIsReady ~= nil then
+            addDoubleLine(tooltip, "BLIZZ PlayerCanCollectSource_1_IsReady:", tostring(playerCanCollectIsReady))
+        end
+    end
+
+    if sourceID then
+        local playerCanCollect = select(2, C_TransmogCollection.PlayerCanCollectSource(sourceID))
+        if playerCanCollect ~= nil then
+            addDoubleLine(tooltip, "BLIZZ PlayerCanCollectSource_2_CanCollect:", tostring(playerCanCollect))
+        end
+    end
+
+    addLine(tooltip, '--------')
+
     local playerHasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID)
     if playerHasTransmog ~= nil then
         addDoubleLine(tooltip, "BLIZZ PlayerHasTransmog:", tostring(playerHasTransmog))
     end
+
     if sourceID then
         local playerHasTransmogItem = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
         if playerHasTransmogItem ~= nil then
             addDoubleLine(tooltip, "BLIZZ PlayerHasTransmogItemModifiedAppearance:", tostring(playerHasTransmogItem))
         end
     end
+
+    addLine(tooltip, '--------')
 
     addDoubleLine(tooltip, "IsTransmogable:", tostring(CanIMogIt:IsTransmogable(itemLink)))
     local playerKnowsTransmogFromItem = CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
@@ -102,6 +121,13 @@ local function printDebug(tooltip, itemLink, bag, slot)
         addDoubleLine(tooltip, "DBHasAppearance:", tostring(CanIMogIt:DBHasAppearance(appearanceID, itemLink)))
     else
         addDoubleLine(tooltip, "DBHasAppearance:", 'nil')
+    end
+
+    local requirements = CanIMogIt.Requirements:GetRequirements()
+    if appearanceID ~= nil then
+        addDoubleLine(tooltip, "DBHasAppearanceForRequirements:", tostring(CanIMogIt:DBHasAppearanceForRequirements(appearanceID, itemLink, requirements)))
+    else
+        addDoubleLine(tooltip, "DBHasAppearanceForRequirements:", 'nil')
     end
 
     if appearanceID ~= nil and sourceID ~= nil then
@@ -168,9 +194,21 @@ local function addToTooltip(tooltip, itemLink, bag, slot)
 end
 
 
+-- Enable this to get a very verbose debug message for every tooltip
+-- change that occurs.
+local VVDebug = false
+
+function VVDebugPrint(tooltip, event)
+    if VVDebug then
+        CanIMogIt:Print(tooltip:GetName(), event)
+    end
+end
+
+
 local function TooltipCleared(tooltip)
     -- Clears the tooltipWritten flag once the tooltip is done rendering.
     tooltip.CIMI_tooltipWritten = false
+    VVDebugPrint(tooltip, "OnTooltipCleared")
 end
 
 
@@ -188,6 +226,7 @@ local function CanIMogIt_AttachItemTooltip(tooltip)
     local link = select(2, tooltip:GetItem())
     if link then
         addToTooltip(tooltip, link)
+        VVDebugPrint(tooltip, "OnTooltipSetItem")
     end
 end
 
@@ -204,6 +243,7 @@ WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipSetItem", CanIMogIt_Att
 hooksecurefunc(GameTooltip, "SetMerchantItem",
     function(tooltip, index)
         addToTooltip(tooltip, GetMerchantItemLink(index))
+        VVDebugPrint(tooltip, "SetMerchantItem")
     end
 )
 
@@ -211,6 +251,7 @@ hooksecurefunc(GameTooltip, "SetMerchantItem",
 hooksecurefunc(GameTooltip, "SetBuybackItem",
     function(tooltip, index)
         addToTooltip(tooltip, GetBuybackItemLink(index))
+        VVDebugPrint(tooltip, "SetBuybackItem")
     end
 )
 
@@ -218,6 +259,7 @@ hooksecurefunc(GameTooltip, "SetBuybackItem",
 hooksecurefunc(GameTooltip, "SetBagItem",
     function(tooltip, bag, slot)
         addToTooltip(tooltip, GetContainerItemLink(bag, slot), bag, slot)
+        VVDebugPrint(tooltip, "SetBagItem")
     end
 )
 
@@ -225,6 +267,7 @@ hooksecurefunc(GameTooltip, "SetBagItem",
 hooksecurefunc(GameTooltip, "SetAuctionItem",
     function(tooltip, type, index)
         addToTooltip(tooltip, GetAuctionItemLink(type, index))
+        VVDebugPrint(tooltip, "SetAuctionItem")
     end
 )
 
@@ -234,6 +277,7 @@ hooksecurefunc(GameTooltip, "SetAuctionSellItem",
         local name = GetAuctionSellItemInfo()
         local _, link = GetItemInfo(name)
         addToTooltip(tooltip, link)
+        VVDebugPrint(tooltip, "SetAuctionSellItem")
     end
 )
 
@@ -243,6 +287,7 @@ hooksecurefunc(GameTooltip, "SetLootItem",
         if LootSlotHasItem(slot) then
             local link = GetLootSlotLink(slot)
             addToTooltip(tooltip, link)
+            VVDebugPrint(tooltip, "SetLootItem")
         end
     end
 )
@@ -251,6 +296,7 @@ hooksecurefunc(GameTooltip, "SetLootItem",
 hooksecurefunc(GameTooltip, "SetLootRollItem",
     function(tooltip, slot)
         addToTooltip(tooltip, GetLootRollItemLink(slot))
+        VVDebugPrint(tooltip, "SetLootRollItem")
     end
 )
 
@@ -258,6 +304,7 @@ hooksecurefunc(GameTooltip, "SetLootRollItem",
 hooksecurefunc(GameTooltip, "SetInventoryItem",
     function(tooltip, unit, slot)
         addToTooltip(tooltip, GetInventoryItemLink(unit, slot))
+        VVDebugPrint(tooltip, "SetInventoryItem")
     end
 )
 
@@ -265,6 +312,7 @@ hooksecurefunc(GameTooltip, "SetInventoryItem",
 hooksecurefunc(GameTooltip, "SetGuildBankItem",
     function(tooltip, tab, slot)
         addToTooltip(tooltip, GetGuildBankItemLink(tab, slot))
+        VVDebugPrint(tooltip, "SetGuildBankItem")
     end
 )
 
@@ -272,6 +320,7 @@ hooksecurefunc(GameTooltip, "SetGuildBankItem",
 hooksecurefunc(GameTooltip, "SetRecipeResultItem",
     function(tooltip, itemID)
         addToTooltip(tooltip, C_TradeSkillUI.GetRecipeItemLink(itemID))
+        VVDebugPrint(tooltip, "SetRecipeResultItem")
     end
 )
 
@@ -279,6 +328,7 @@ hooksecurefunc(GameTooltip, "SetRecipeResultItem",
 hooksecurefunc(GameTooltip, "SetRecipeReagentItem",
     function(tooltip, itemID, index)
         addToTooltip(tooltip, C_TradeSkillUI.GetRecipeReagentItemLink(itemID, index))
+        VVDebugPrint(tooltip, "SetRecipeReagentItem")
     end
 )
 
@@ -286,6 +336,7 @@ hooksecurefunc(GameTooltip, "SetRecipeReagentItem",
 hooksecurefunc(GameTooltip, "SetTradeTargetItem",
     function(tooltip, index)
         addToTooltip(tooltip, GetTradeTargetItemLink(index))
+        VVDebugPrint(tooltip, "SetTradeTargetItem")
     end
 )
 
@@ -293,6 +344,7 @@ hooksecurefunc(GameTooltip, "SetTradeTargetItem",
 hooksecurefunc(GameTooltip, "SetQuestLogItem",
     function(tooltip, type, index)
         addToTooltip(tooltip, GetQuestLogItemLink(type, index))
+        VVDebugPrint(tooltip, "SetQuestLogItem")
     end
 )
 
@@ -300,6 +352,7 @@ hooksecurefunc(GameTooltip, "SetQuestLogItem",
 hooksecurefunc(GameTooltip, "SetInboxItem",
     function(tooltip, mailIndex, attachmentIndex)
         addToTooltip(tooltip, GetInboxItemLink(mailIndex, attachmentIndex or 1))
+        VVDebugPrint(tooltip, "SetInboxItem")
     end
 )
 
@@ -309,6 +362,7 @@ hooksecurefunc(GameTooltip, "SetSendMailItem",
         local name = GetSendMailItem(index)
         local _, link = GetItemInfo(name)
         addToTooltip(tooltip, link)
+        VVDebugPrint(tooltip, "SetSendMailItem")
     end
 )
 
@@ -318,9 +372,9 @@ local function OnSetHyperlink(tooltip, link)
     if not type or not id then return end
     if type == "item" then
         addToTooltip(tooltip, link)
+        VVDebugPrint(tooltip, "SetHyperlink")
     end
 end
 
 
 hooksecurefunc(GameTooltip, "SetHyperlink", OnSetHyperlink)
-hooksecurefunc(ItemRefTooltip, "SetHyperlink", OnSetHyperlink)

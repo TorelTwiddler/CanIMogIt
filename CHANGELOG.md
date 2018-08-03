@@ -1,9 +1,76 @@
+8.0.0v1.10 Release - 2018/07/29
+
+Fixed ArkInventory.
+
+* [#86](https://gitlab.com/toreltwiddler/CanIMogIt/issues/86) & [#190](https://gitlab.com/toreltwiddler/CanIMogIt/issues/190)  Fixed ArkInventory overlay and ArkInventory offline character mode.
+* [#187](https://gitlab.com/toreltwiddler/CanIMogIt/issues/187) Fixed overlay not always updating after certain actions.
+* [#191](https://gitlab.com/toreltwiddler/CanIMogIt/issues/191) Added 3 BfA pre-patch world quest items to exception list (monk shoulders, monk gloves, hunter shoulders).
+ 
+*****
+
+8.0.0v1.9 Release - 2018/07/17
+
+Patch 8.0 and LiteBag support.
+
+![LiteBag overlay!](https://i.imgur.com/H1sDNSl.png)
+
+* [#38](https://gitlab.com/toreltwiddler/CanIMogIt/issues/38) LiteBag support added by LiteBag author Xodiv.
+* Updated TOC.
+
+*****
+
+7.3.5v1.8 Release - 2018/07/09
+
+Items with Class Restrictions are now properly considered for if you know the appearance or not based on the class you are on.
+
+Bug fixes & Improvements
+
+* Added "/cimi count" which reports the total number of known appearances across all characters.
+* [#185](https://gitlab.com/toreltwiddler/CanIMogIt/issues/185) Fixed issue with class restrictions not being taken into account.
+* [#168](https://gitlab.com/toreltwiddler/CanIMogIt/issues/168) & [#176](https://gitlab.com/toreltwiddler/CanIMogIt/issues/176) Fixes for database storage of Class Restriction information.
+* [#182](https://gitlab.com/toreltwiddler/CanIMogIt/issues/182) Fixes PairByKeys error when jumping from a very old version of the addon to a new version.
+* [#172](https://gitlab.com/toreltwiddler/CanIMogIt/issues/172) Fixes the tooltip not showing up after multiple chat link clicks.
+
+*****
+
+7.3.5v1.7.2 Release - 2018/05/27
+
+* [#169](https://gitlab.com/toreltwiddler/CanIMogIt/issues/169) Avoid lag when looting by only recalculating the looted item, not all items.
+
+*****
+
+7.3.5v1.7.1 Release - 2018/03/30
+
+* [#174](https://gitlab.com/toreltwiddler/CanIMogIt/issues/174) & [#175](https://gitlab.com/toreltwiddler/CanIMogIt/issues/175) Hopefully prevents memory leak by removing DressUpModel redraw.
+
+*****
+
+7.3.5v1.7 Release - 2018/03/25
+
+Bug fixes
+
+* [#151](https://gitlab.com/toreltwiddler/CanIMogIt/issues/151) Hopefully fixes the DressUpModel giving bad source IDs.
+* [#167](https://gitlab.com/toreltwiddler/CanIMogIt/issues/167) Add trial/boost versions of invisible Salvage Yard items to exception list.
+
+*****
+
+7.3.2v1.6 Release - 2018/01/15
+
+Added Black Market Auction House overlay!
+
+![Black Market Auction House overlay!](https://i.imgur.com/j33ZMKb.png)
+
+* [#152](https://gitlab.com/toreltwiddler/CanIMogIt/issues/152) Added overlay to Black Market Auction House.
+* [#153](https://gitlab.com/toreltwiddler/CanIMogIt/issues/153) Hopefully prevented errors when the cache is reset mid-calculations.
+
+*****
+
 7.3.2v1.5 Release - 2017/12/27
 
 Bug fix: Fix nil cache errors and compounding lag.
 
 * [#144](https://gitlab.com/toreltwiddler/CanIMogIt/issues/144) & [#145](https://gitlab.com/toreltwiddler/CanIMogIt/issues/145) Changed order of cache.lua and code.lua in TOC to prevent missing cache issue.
-* [#146](https://gitlab.com/toreltwiddler/CanIMogIt/issues/146) Fix compounding lag caused from getting source ID from DressUpModel frame. 
+* [#146](https://gitlab.com/toreltwiddler/CanIMogIt/issues/146) Fix compounding lag caused from getting source ID from DressUpModel frame.
 * [#150](https://gitlab.com/toreltwiddler/CanIMogIt/issues/150) Changed the debug tooltip to not reset the cache.
 
 *****
