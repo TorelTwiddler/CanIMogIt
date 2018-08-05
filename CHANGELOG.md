@@ -1,3 +1,17 @@
+8.0.0v1.11 Release - 2018/08/05
+
+Added the overlay to the quests frame!
+
+![Quest Overlay](https://i.imgur.com/HAvpSIa.jpg)
+
+* [#25](https://gitlab.com/toreltwiddler/CanIMogIt/issues/25) Added the overlay to the quests frames.
+* [#192](https://gitlab.com/toreltwiddler/CanIMogIt/issues/192) Prevent error when sourceID is nil for learning appearances.
+* [#193](https://gitlab.com/toreltwiddler/CanIMogIt/issues/193) Added database debug print command, /cimi dbprint.
+* [#194](https://gitlab.com/toreltwiddler/CanIMogIt/issues/194) Add value of tooltip text result to debug tooltip.
+* Workaround for GET_ITEM_INFO_RECEIVED bug from 8.0 added by Resike.
+
+*****
+
 8.0.0v1.10 Release - 2018/07/29
 
 Fixed ArkInventory.
