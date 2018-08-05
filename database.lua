@@ -253,6 +253,7 @@ CanIMogIt.itemsToAdd = {}
 
 local function LateAddItems(event, itemID)
     if event == "GET_ITEM_INFO_RECEIVED" and itemID then
+        -- The 8.0.1 update is causing this event to return a bunch of itemID=0
         if itemID <= 0 then
             return
         end
