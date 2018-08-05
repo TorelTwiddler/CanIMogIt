@@ -253,6 +253,9 @@ CanIMogIt.itemsToAdd = {}
 
 local function LateAddItems(event, itemID)
     if event == "GET_ITEM_INFO_RECEIVED" and itemID then
+        if itemID <= 0 then
+            return
+        end
         if CanIMogIt.itemsToAdd[itemID] then
             for sourceID, _ in pairs(CanIMogIt.itemsToAdd[itemID]) do
                 local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
