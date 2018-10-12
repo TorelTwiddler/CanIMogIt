@@ -40,7 +40,7 @@ local function printDebug(tooltip, itemLink, bag, slot)
     addDoubleLine(tooltip, "Item ID:", tostring(itemID))
     if not itemID then
         -- Keystones don't have an itemID...
-        addLine(tooltip, 'No ItemID found. Is this a Keystone?')
+        addLine(tooltip, 'No ItemID found. Is this a Keystone or Battle Pet?')
         return
     end
     local _, _, quality, _, _, itemClass, itemSubClass, _, equipSlot = GetItemInfo(itemID)
