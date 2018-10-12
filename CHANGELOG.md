@@ -2,7 +2,7 @@
 
 Fixed issue with icons being left behind.
 
-* [#187](https://gitlab.com/toreltwiddler/CanIMogIt/issues/187) Added the overlay to the quests frames.
+* [#187](https://gitlab.com/toreltwiddler/CanIMogIt/issues/187) Changed containers to hook UpgradeIcon event.
 
 *****
 
