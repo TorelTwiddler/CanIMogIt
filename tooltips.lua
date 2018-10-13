@@ -170,6 +170,14 @@ local function addToTooltip(tooltip, itemLink, bag, slot)
         tooltip.CIMI_tooltipWritten = true
     end
 
+    -- If it's a battlepet, then don't add any lines. Battle Pet uses a
+    -- different tooltip frame than normal.
+    local isBattlepet = string.match(itemLink, ".*(battlepet):.*") == "battlepet"
+    if isBattlepet then
+        tooltip.CIMI_tooltipWritten = true
+        return
+    end
+
     local text;
     text = CanIMogIt:GetTooltipText(itemLink, bag, slot)
     if text and text ~= "" then
