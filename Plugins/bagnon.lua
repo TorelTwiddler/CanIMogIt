@@ -19,9 +19,14 @@ if IsAddOnLoaded("Bagnon") then
         if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
 
         -- For cached Bagnon bags, GetContainerItemLink(bag, slot) would not work in CanIMogIt:GetTooltipText(nil, bag, slot).
-        -- Therefore provide GetTooltipText() with itemLink here.
+        -- Therefore provide GetTooltipText() with itemLink when available.
+        -- If the itemLink isn't available, then try with the bag/slot as backup (fixes battle pets).
         local itemLink = self:GetParent():GetItem()
-        CIMI_SetIcon(self, BagnonItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+        if itemLink then
+            CIMI_SetIcon(self, BagnonItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+        else
+            CIMI_SetIcon(self, BagnonItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
+        end
     end
 
     function CIMI_BagnonUpdate(self)
@@ -30,5 +35,6 @@ if IsAddOnLoaded("Bagnon") then
     end
 
     hooksecurefunc(Bagnon.ItemSlot, "Update", CIMI_BagnonUpdate)
+    CanIMogIt:RegisterMessage("ResetCache", function () Bagnon:UpdateFrames() end)
 
 end
