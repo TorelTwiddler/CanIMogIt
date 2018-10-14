@@ -1,3 +1,11 @@
+8.0.0v1.12 Release - 2018/10/11
+
+Fixed issue with icons being left behind.
+
+* [#187](https://gitlab.com/toreltwiddler/CanIMogIt/issues/187) Changed containers to hook UpgradeIcon event.
+
+*****
+
 8.0.0v1.11 Release - 2018/08/05
 
 Added the overlay to the quests frame!
@@ -19,7 +27,7 @@ Fixed ArkInventory.
 * [#86](https://gitlab.com/toreltwiddler/CanIMogIt/issues/86) & [#190](https://gitlab.com/toreltwiddler/CanIMogIt/issues/190)  Fixed ArkInventory overlay and ArkInventory offline character mode.
 * [#187](https://gitlab.com/toreltwiddler/CanIMogIt/issues/187) Fixed overlay not always updating after certain actions.
 * [#191](https://gitlab.com/toreltwiddler/CanIMogIt/issues/191) Added 3 BfA pre-patch world quest items to exception list (monk shoulders, monk gloves, hunter shoulders).
- 
+
 *****
 
 8.0.0v1.9 Release - 2018/07/17
