@@ -22,7 +22,8 @@ if IsAddOnLoaded("Bagnon") then
         -- Therefore provide GetTooltipText() with itemLink when available.
         -- If the itemLink isn't available, then try with the bag/slot as backup (fixes battle pets).
         local itemLink = self:GetParent():GetItem()
-        if itemLink then
+        local cached = self:GetParent().info.cached
+        if itemLink or cached then
             CIMI_SetIcon(self, BagnonItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
         else
             CIMI_SetIcon(self, BagnonItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
