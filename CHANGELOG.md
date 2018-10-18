@@ -1,3 +1,12 @@
+8.0.0v1.13 Release - 2018/10/17
+
+Added Bagnon support (thanks to LudiusMaximus).
+
+* [#42](https://gitlab.com/toreltwiddler/CanIMogIt/issues/42) Added Bagnon support.
+* [#163](https://gitlab.com/toreltwiddler/CanIMogIt/issues/163) Fixed memory issue with Battle Pets.
+
+*****
+
 8.0.0v1.12 Release - 2018/10/11
 
 Fixed issue with icons being left behind.
