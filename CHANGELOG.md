@@ -1,3 +1,10 @@
+8.1.5v1.14 Release - 2019/03/14
+
+* [#202](https://gitlab.com/toreltwiddler/CanIMogIt/issues/202) Fixed error due to removal of WorldMapTooltip.
+* Updated TOC.
+
+*****
+
 8.0.0v1.13 Release - 2018/10/17
 
 Added Bagnon support (thanks to LudiusMaximus).
