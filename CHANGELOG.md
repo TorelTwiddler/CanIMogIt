@@ -1,3 +1,11 @@
+8.2.0v1.15 Release - 2019/06/25
+
+* [#204](https://gitlab.com/toreltwiddler/CanIMogIt/issues/204) Change Blizzard constant for mail attachments in received mail window.
+* [#205](https://gitlab.com/toreltwiddler/CanIMogIt/issues/205) ArkInventory overlay plugin update.
+* Updated TOC.
+
+*****
+
 8.1.5v1.14 Release - 2019/03/14
 
 * [#202](https://gitlab.com/toreltwiddler/CanIMogIt/issues/202) Fixed error due to removal of WorldMapTooltip.
