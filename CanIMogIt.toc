@@ -1,4 +1,4 @@
-## Interface: 80100
+## Interface: 80200
 ## Title: Can I Mog It?
 ## Author: TorelTwiddler, Ami Yuy
 ## Version: @project-version@
