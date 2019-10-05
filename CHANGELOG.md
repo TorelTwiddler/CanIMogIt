@@ -1,3 +1,13 @@
+8.2.5v1.16 Release - 2019/10/05
+
+Fixes for errors and TOC update.
+
+* [#207](https://gitlab.com/toreltwiddler/CanIMogIt/issues/207) No longer updates appearances during loading screens. 
+* [#208](https://gitlab.com/toreltwiddler/CanIMogIt/issues/208) Makes sure item link is valid before adding to DB.
+* * Updated TOC.
+
+*****
+
 8.2.0v1.15 Release - 2019/06/25
 
 * [#204](https://gitlab.com/toreltwiddler/CanIMogIt/issues/204) Change Blizzard constant for mail attachments in received mail window.
