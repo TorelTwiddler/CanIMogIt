@@ -296,7 +296,7 @@ local function newDropDown(parent, variableName)
     local text = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
     text:SetText("- " .. L["Requires /reload to take effect."])
     local text2 = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-    text2:SetText("- " .. L["Does not affect Quests or Advanture Journal."])
+    text2:SetText("- " .. L["Does not affect Quests or Adventure Journal."])
 
     frame:SetSize(300, 85)
 
