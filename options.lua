@@ -263,10 +263,11 @@ end
 
 local function newDropDown(parent, variableName)
     local displayData = CanIMogItOptions_DisplayData[variableName]
+    local frame = CreateFrame("Frame", "CanIMogItDropDownFrame" .. variableName, parent)
     local dropDown = CreateFrame("Frame", "CanIMogItDropDown" .. variableName,
-            parent, "UIDropDownMenuTemplate")
-    UIDropDownMenu_SetWidth(dropDown, 200)
-    UIDropDownMenu_SetText(dropDown, displayData["displayName"] .. CanIMogIt.LOCATIONS_TEXT[CanIMogItOptions[variableName]])
+            frame, "UIDropDownMenuTemplate")
+    UIDropDownMenu_SetWidth(dropDown, 150)
+    UIDropDownMenu_SetText(dropDown, CanIMogIt.LOCATIONS_TEXT[CanIMogItOptions[variableName]])
 
     UIDropDownMenu_Initialize(dropDown, function(self, level, menuList)
         local info = UIDropDownMenu_CreateInfo()
@@ -282,16 +283,34 @@ local function newDropDown(parent, variableName)
     dropDown.SetValue = function(self, newValue)
         CanIMogItOptions[variableName] = newValue
         -- TODO: This is hard-coded to locations, and will need to be changed for other dropdowns.
-        UIDropDownMenu_SetText(dropDown, displayData["displayName"] .. CanIMogIt.LOCATIONS_TEXT[CanIMogItOptions[variableName]])
+        UIDropDownMenu_SetText(dropDown, CanIMogIt.LOCATIONS_TEXT[CanIMogItOptions[variableName]])
         CloseDropDownMenus()
     end
 
     -- TODO: This is hard-coded to locations, and will need to be changed for other dropdowns.
-    local text = parent:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-    text:SetPoint("LEFT", dropDown, "RIGHT", 0, 3)
-    text:SetText("Requires /reload to take effect.")
 
-    return dropDown
+
+    local title = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    title:SetText(L["Icon Location"])
+
+    local text = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+    text:SetText("- " .. L["Requires /reload to take effect."])
+    local text2 = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+    text2:SetText("- " .. L["Does not affect Quests or Advanture Journal."])
+
+    frame:SetSize(300, 85)
+
+    title:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, -5)
+    dropDown:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -5)
+    text:SetPoint("TOPLEFT", dropDown, "BOTTOMLEFT", 30, 0)
+    text2:SetPoint("TOPLEFT", text, "BOTTOMLEFT", 0, -4)
+
+    -- Use this to show the bottom of the frame.
+    -- local sample = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+    -- sample:SetText("exmaple.")
+    -- sample:SetPoint("TOPLEFT", frame, "BOTTOMLEFT")
+
+    return frame
 end
 
 

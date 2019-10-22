@@ -165,7 +165,9 @@ CanIMogIt.DATABASE_START_UPDATE_TEXT = L["Updating appearances database."]
 CanIMogIt.DATABASE_DONE_UPDATE_TEXT = L["Items updated: "] -- followed by a number
 
 
--- Location constants
+--------------------------------------------
+-- Location constants                     --
+--------------------------------------------
 
 CanIMogIt.LOCATIONS_ORDER = {
     "TOPLEFT",
