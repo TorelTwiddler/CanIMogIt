@@ -2,6 +2,8 @@
 
 Icon location can now be changed! /cimi to open the options menu!
 
+![Icons move](https://i.imgur.com/eTUv7pI.gif)
+
 * [#11](https://gitlab.com/toreltwiddler/CanIMogIt/issues/11) Added option to move the icon location everywhere except for on Quests and in the Adventure Journal.
 * [#210](https://gitlab.com/toreltwiddler/CanIMogIt/issues/210) Fixed Bagnon not working in some cases by adding to Optional Dependencies.* 
 
