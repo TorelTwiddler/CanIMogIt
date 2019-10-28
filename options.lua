@@ -275,7 +275,7 @@ local function newRadioGrid(parent, variableName)
 
     local reloadButton = CreateFrame("Button", frameName .. "_ReloadButton",
             frame, "UIPanelButtonTemplate")
-    reloadButton:SetText("Reload to apply")
+    reloadButton:SetText(L["Reload to apply"])
     reloadButton:SetSize(120, 25)
     reloadButton:SetEnabled(false)
     reloadButton:SetScript("OnClick", function () ReloadUI() end)
@@ -284,7 +284,7 @@ local function newRadioGrid(parent, variableName)
     title:SetText(L["Icon Location"])
 
     local text = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-    text:SetText("- " .. L["Does not affect Quests or Adventure Journal."])
+    text:SetText(L["Does not affect Quests or Adventure Journal."])
 
     local radioTopLeft = CreateFrame("CheckButton", frameName .. "_TopLeft",
             frame, "UIRadioButtonTemplate")
