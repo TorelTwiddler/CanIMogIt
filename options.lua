@@ -216,10 +216,43 @@ end
 CanIMogIt.frame:AddEventFunction(CanIMogIt.frame.AddonLoaded)
 
 
+local changesSavedStack = {}
+
+
+local function changesSavedText()
+    local frame = CreateFrame("Frame", "CanIMogIt_ChangesSaved", CanIMogIt.frame)
+    local text = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    text:SetText(CanIMogIt.YELLOW .. L["Changes saved!"])
+
+    text:SetAllPoints()
+
+    frame:SetPoint("BOTTOMRIGHT", -20, 10)
+    frame:SetSize(100, 20)
+    frame:SetShown(false)
+    CanIMogIt.frame.changesSavedText = frame
+end
+
+
+local function hideChangesSaved()
+    table.remove(changesSavedStack, #changesSavedStack)
+    if #changesSavedStack == 0 then
+        CanIMogIt.frame.changesSavedText:SetShown(false)
+    end
+end
+
+
+local function showChangesSaved()
+    CanIMogIt.frame.changesSavedText:SetShown(true)
+    table.insert(changesSavedStack, #changesSavedStack + 1)
+    C_Timer.After(5, function () hideChangesSaved() end)
+end
+
+
 local function checkboxOnClick(self)
     local checked = self:GetChecked()
     PlaySound(PlaySoundKitID and "igMainMenuOptionCheckBoxOn" or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
     self:SetValue(checked)
+    showChangesSaved()
     -- Reset the cache when an option changes.
     CanIMogIt:ResetCache()
 
@@ -231,6 +264,7 @@ local function debugCheckboxOnClick(self)
     local checked = self:GetChecked()
     PlaySound(PlaySoundKitID and "igMainMenuOptionCheckBoxOn" or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
     self:SetValue(checked)
+    showChangesSaved()
     CanIMogIt:SendMessage("OptionUpdate")
 end
 
@@ -267,7 +301,7 @@ local function newRadioGrid(parent, variableName)
     local frame = CreateFrame("Frame", frameName, parent)
 
     frame.texture = CreateFrame("Frame", frameName .. "_Texture", frame)
-    frame.texture:SetSize(48, 48)
+    frame.texture:SetSize(58, 58)
     local texture = frame.texture:CreateTexture("CIMITextureFrame", "BACKGROUND")
     texture:SetTexture("Interface/ICONS/INV_Sword_1H_AllianceToy_A_01.blp")
     texture:SetAllPoints()
@@ -285,6 +319,9 @@ local function newRadioGrid(parent, variableName)
 
     local text = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
     text:SetText(L["Does not affect Quests or Adventure Journal."])
+
+    local text2 = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+    text2:SetText(L["Default"] .. ": " .. L["Top Right"])
 
     local radioTopLeft = CreateFrame("CheckButton", frameName .. "_TopLeft",
             frame, "UIRadioButtonTemplate")
@@ -344,6 +381,7 @@ local function newRadioGrid(parent, variableName)
                 self:SetChecked(true)
             end
             reloadButton:SetEnabled(true)
+            showChangesSaved()
         end
         return onRadioClicked
     end
@@ -361,18 +399,19 @@ local function newRadioGrid(parent, variableName)
     title:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, -5)
 
     radioTopLeft:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -5)
-    radioTop:SetPoint("TOPLEFT", radioTopLeft, "TOPRIGHT", 0, 0)
-    radioTopRight:SetPoint("TOPLEFT", radioTop, "TOPRIGHT", 0, 0)
-    radioLeft:SetPoint("TOPLEFT", radioTopLeft, "BOTTOMLEFT", 0, 0)
-    radioCenter:SetPoint("TOPLEFT", radioLeft, "TOPRIGHT", 0, 0)
-    radioRight:SetPoint("TOPLEFT", radioCenter, "TOPRIGHT", 0, 0)
-    radioBottomLeft:SetPoint("TOPLEFT", radioLeft, "BOTTOMLEFT", 0, 0)
-    radioBottom:SetPoint("TOPLEFT", radioBottomLeft, "TOPRIGHT", 0, 0)
-    radioBottomRight:SetPoint("TOPLEFT", radioBottom, "TOPRIGHT", 0, 0)
+    radioTop:SetPoint("TOPLEFT", radioTopLeft, "TOPRIGHT", 5, 0)
+    radioTopRight:SetPoint("TOPLEFT", radioTop, "TOPRIGHT", 5, 0)
+    radioLeft:SetPoint("TOPLEFT", radioTopLeft, "BOTTOMLEFT", 0, -5)
+    radioCenter:SetPoint("TOPLEFT", radioLeft, "TOPRIGHT", 5, 0)
+    radioRight:SetPoint("TOPLEFT", radioCenter, "TOPRIGHT", 5, 0)
+    radioBottomLeft:SetPoint("TOPLEFT", radioLeft, "BOTTOMLEFT", 0, -5)
+    radioBottom:SetPoint("TOPLEFT", radioBottomLeft, "TOPRIGHT", 5, 0)
+    radioBottomRight:SetPoint("TOPLEFT", radioBottom, "TOPRIGHT", 5, 0)
 
     text:SetPoint("TOPLEFT", radioTopRight, "TOPRIGHT", 14, -3)
+    text2:SetPoint("TOPLEFT", text, "BOTTOMLEFT", 0, -3)
 
-    reloadButton:SetPoint("TOPLEFT", text, "BOTTOMLEFT", 4, -8)
+    reloadButton:SetPoint("TOPLEFT", text2, "BOTTOMLEFT", 4, -8)
 
     frame.texture:SetPoint("TOPLEFT", radioTopLeft, "TOPLEFT")
 
@@ -413,6 +452,8 @@ local function createOptionsMenu()
     CanIMogIt.frame.showSourceLocationTooltip:SetPoint("TOPLEFT", CanIMogIt.frame.showVerboseText, "BOTTOMLEFT")
     CanIMogIt.frame.printDatabaseScan:SetPoint("TOPLEFT", CanIMogIt.frame.showSourceLocationTooltip, "BOTTOMLEFT")
     CanIMogIt.frame.iconLocation:SetPoint("TOPLEFT", CanIMogIt.frame.printDatabaseScan, "BOTTOMLEFT")
+
+    changesSavedText()
 end
 
 
@@ -433,6 +474,7 @@ function CanIMogIt.frame.Loaded()
         CanIMogItOptions_temp["version"] = CanIMogIt_OptionsVersion;
         CanIMogItOptions = CanIMogItOptions_temp;
     end
+    CanIMogIt.frame:SetAllPoints()
     createOptionsMenu()
 end
 
