@@ -1,8 +1,15 @@
+8.2.5v1.19 Release - 2019/11/12
+
+* [#213](https://gitlab.com/toreltwiddler/CanIMogIt/issues/213) Changed Icon Location dropdown to a radio button grid to avoid taint. 
+ 
+*****
+
 8.2.5v1.18 Release - 2019/10/23
 
 * [#212](https://gitlab.com/toreltwiddler/CanIMogIt/issues/212) Added C_Timer.After for ArkInventory so CIMI's options are loaded.
 
 *****
+
 8.2.5v1.17 Release - 2019/10/22
 
 Icon location can now be changed! /cimi to open the options menu!
