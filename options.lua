@@ -474,7 +474,6 @@ function CanIMogIt.frame.Loaded()
         CanIMogItOptions_temp["version"] = CanIMogIt_OptionsVersion;
         CanIMogItOptions = CanIMogItOptions_temp;
     end
-    CanIMogIt.frame:SetAllPoints()
     createOptionsMenu()
 end
 

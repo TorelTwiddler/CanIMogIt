@@ -1,7 +1,13 @@
+8.2.5v1.20 Release - 2019/11/12
+
+* [#214](https://gitlab.com/toreltwiddler/CanIMogIt/issues/214) Fixed options showing up outside of settings window.
+
+*****
+
 8.2.5v1.19 Release - 2019/11/12
 
-* [#213](https://gitlab.com/toreltwiddler/CanIMogIt/issues/213) Changed Icon Location dropdown to a radio button grid to avoid taint. 
- 
+* [#213](https://gitlab.com/toreltwiddler/CanIMogIt/issues/213) Changed Icon Location dropdown to a radio button grid to avoid taint.
+
 *****
 
 8.2.5v1.18 Release - 2019/10/23
