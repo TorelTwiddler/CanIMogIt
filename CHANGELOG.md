@@ -1,3 +1,9 @@
+8.2.5v1.21 Release - 2019/12/23
+
+* [#215](https://gitlab.com/toreltwiddler/CanIMogIt/issues/215) Fixed Bagnon Plugin errors after Bagnon update.
+
+*****
+
 8.2.5v1.20 Release - 2019/11/12
 
 * [#214](https://gitlab.com/toreltwiddler/CanIMogIt/issues/214) Fixed options showing up outside of settings window.
