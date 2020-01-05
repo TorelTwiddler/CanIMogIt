@@ -187,7 +187,6 @@ CanIMogIt.ICON_LOCATIONS = {
 
 
 ---- Auction Houses ----
--- Auction House = NUM_BROWSE_TO_DISPLAY
 CanIMogIt.NUM_BLACKMARKET_BUTTONS = 12  -- No Blizzard constant
 
 ---- Containers ----

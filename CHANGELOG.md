@@ -1,3 +1,9 @@
+8.3.0v1.22 Release - 2020/01/14
+
+* [#211](https://gitlab.com/toreltwiddler/CanIMogIt/issues/211) Removed old Auction House code, new Auction House code coming soon.
+
+*****
+
 8.2.5v1.21 Release - 2019/12/23
 
 * [#215](https://gitlab.com/toreltwiddler/CanIMogIt/issues/215) Fixed Bagnon Plugin errors after Bagnon update.
