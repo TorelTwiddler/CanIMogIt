@@ -2,19 +2,46 @@
 
 -- TODO: Clean up comments and notes
 
--- Auction house buttons:
--- AuctionHouseFrameScrollChild:GetParent().buttons
-
--- button.rowData.itemKey (itemID and itemSuffix?)
-
--- ITEM_NAME_CELL = 2
--- button.cells[ITEM_NAME_CELL].Icon
-
--- x = {["battlePetSpeciesID"] = 0, ["itemID"] = 2140, ["itemLevel"] = 11, ["itemSuffix"] = 0}
 
 ----------------------------
 -- UpdateIcon functions   --
 ----------------------------
+
+
+local function GetAuctionHouseItemLink(auctionHouseButton)
+    -- rowData format: {
+    --     ["battlePetSpeciesID"] = 0,
+    --     ["itemID"] = 2140,
+    --     ["itemLevel"] = 11,
+    --     ["itemSuffix"] = 0,
+    --     ["appearanceLink"] = 12345  -- Only sometimes
+    --}
+    local rowData = auctionHouseButton.rowData
+    if rowData then
+        if rowData.appearanceLink then
+            -- Items that have multiple appearances under the same itemID also include an appearance ID.
+            -- Use that to get the appearance instead.
+            local sourceID = string.match(rowData.appearanceLink, ".*transmogappearance:?(%d*)|.*")
+            if sourceID then
+                return CanIMogIt:GetItemLinkFromSourceID(sourceID)
+            else
+                -- This results in a bug from Blizzard, where the item is flagged as having an
+                -- appearanceLink (such as upgradable item appearances), but one is not provided.
+                -- Seem to be limited to crafted items. Making the same query twice causes the
+                -- data to be filled correctly.
+                return
+            end
+        else
+            -- Most items have a single appearance, and will use this code.
+            local itemKey = rowData.itemKey
+            return "|Hitem:".. itemKey.itemID .."|h"
+        end
+    else
+        -- No row data
+        return
+    end
+end
+
 
 function AuctionHouseFrame_CIMIUpdateIcon(self)
     if not self then return end
@@ -25,30 +52,11 @@ function AuctionHouseFrame_CIMIUpdateIcon(self)
     end
 
     local button = self:GetParent()
-    local rowData = button.rowData
-    local itemLink
-    -- TODO: refactor getting the item link to a separate function.
-    if rowData then
-        if rowData.appearanceLink then
-            -- Items that have multiple appearances under the same itemID also include an appearance ID.
-            -- Use that to get the appearance instead.
-            local sourceID = string.match(rowData.appearanceLink, ".*transmogappearance:?(%d*)|.*")
-            if sourceID then
-                itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
-            else
-                itemLink = nil
-            end
-        else
-            -- Most items have a single appearance, and will use this code.
-            local itemKey = rowData.itemKey
-            itemLink = "|Hitem:".. itemKey.itemID .."|h"
-        end
-    else
-        itemLink = nil
-    end
+    local itemLink = GetAuctionHouseItemLink(button)
 
     if itemLink == nil then
-        CIMI_SetIcon(self, AuctionHouseFrame_CIMIUpdateIcon, nil)
+        -- Mark the items we can't figure out as a question mark (rather than empty).
+        CIMI_SetIcon(self, AuctionHouseFrame_CIMIUpdateIcon, CanIMogIt.CANNOT_DETERMINE, CanIMogIt.CANNOT_DETERMINE)
     else
         CIMI_SetIcon(self, AuctionHouseFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
     end
@@ -79,8 +87,7 @@ local function HookOverlayAuctionHouse(event)
         local frame = button
         frame.CIMI_index = i
         if frame then
-            -- TODO: Move the CIMI frame either next to the icon, or next to the favorite star.
-            CIMI_AddToFrame(frame, AuctionHouseFrame_CIMIUpdateIcon, "AuctionHouse"..i, "LEFT")
+            CIMI_AddToFrame(frame, AuctionHouseFrame_CIMIUpdateIcon, "AuctionHouse"..i, "AUCTION_HOUSE")
         end
     end
     local scrollBar = _G["AuctionHouseFrame"].BrowseResultsFrame.ItemList.ScrollFrame.scrollBar
