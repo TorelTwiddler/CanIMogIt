@@ -1,8 +1,5 @@
 -- Overlay for the auction house.
 
--- TODO: Clean up comments and notes
-
-
 ----------------------------
 -- UpdateIcon functions   --
 ----------------------------
