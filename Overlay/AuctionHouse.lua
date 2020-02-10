@@ -80,6 +80,10 @@ local function HookOverlayAuctionHouse(event)
 
     -- Add hook for the Auction House frames.
     local buttons = _G["AuctionHouseFrameScrollChild"]:GetParent().buttons
+    if buttons == nil then
+        return
+    end
+
     for i, button in pairs(buttons) do
         local frame = button
         frame.CIMI_index = i
