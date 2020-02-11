@@ -1,3 +1,9 @@
+8.3.0v1.24 Release - 2020/02/10
+
+* [#221](https://gitlab.com/toreltwiddler/CanIMogIt/issues/221) Fix error due to TSM eating auction house window.
+
+*****
+
 8.3.0v1.23 Release - 2020/02/09
 
 Auction House overlay is back!
