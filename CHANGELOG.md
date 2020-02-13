@@ -1,3 +1,9 @@
+8.3.0v1.25 Release - 2020/02/12
+
+* [#221](https://gitlab.com/toreltwiddler/CanIMogIt/issues/221) Fix another error due to TSM eating AH window.
+
+*****
+
 8.3.0v1.24 Release - 2020/02/10
 
 * [#221](https://gitlab.com/toreltwiddler/CanIMogIt/issues/221) Fix error due to TSM eating auction house window.
