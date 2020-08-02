@@ -435,9 +435,11 @@ local function AddAppearance(appearanceID)
     -- Adds all of the sources for this appearanceID to the database.
     -- returns early if the buffer is reached.
     local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
-    for i, source in pairs(sources) do
-        if source.isCollected then
-            AddSource(source, appearanceID)
+    if sources then
+        for i, source in pairs(sources) do
+            if source.isCollected then
+                AddSource(source, appearanceID)
+            end
         end
     end
 end
