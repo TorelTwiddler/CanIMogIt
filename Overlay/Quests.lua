@@ -38,7 +38,11 @@ local function QuestFrameUpdateIcon(self)
         return
     end
 
-    if not self.rewardType or not self.id then return end
+    if not self.rewardType
+       or not self.id
+       or self.objectType ~= "item" then
+        return
+    end
     local itemLink = GetItemLinkForQuests(self.rewardType, self.id)
     self.itemLink = itemLink
     if itemLink == nil then
@@ -64,6 +68,7 @@ local function AddIndexInfoToCIMIFrame(cimiFrame, rewardButton)
     -- when figuring out the icon.
     cimiFrame.id = rewardButton:GetID()
     cimiFrame.rewardType = rewardButton.type
+    cimiFrame.objectType = rewardButton.objectType
     return index
 end
 
