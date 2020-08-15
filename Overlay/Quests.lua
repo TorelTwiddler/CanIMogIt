@@ -19,7 +19,7 @@ local function GetRewardButtons()
     -- Gets the reward buttons that the CIMI frame is attached to.
     -- Works for both the map quest details and the standalone quest details.
     local questInfoFrame = _G["QuestInfoFrame"]
-    if questInfoFrame and questInfoFrame.questLog and questInfoFrame.rewardsFrame then
+    if questInfoFrame and questInfoFrame.rewardsFrame then
         return questInfoFrame.rewardsFrame.RewardButtons
     end
 end
@@ -73,7 +73,7 @@ local function AddIndexInfoToCIMIFrame(cimiFrame, rewardButton)
 end
 
 
-local function AddAndUpdateQuestFrames(frameName)
+local function AddAndUpdateQuestFrames()
     -- Add to the Quest Frame, and update if added.
     -- Use MapQuestInfoRewardsFrameQuestInfoItem#, which has questID on it <-- map log details frame
     -- Use QuestInfoRewardsFrameQuestInfoItem#, which has questID on it <-- old stand alone details frame
@@ -100,11 +100,11 @@ local function HookOverlayQuest(event)
     -- quest frame (since there is no event).
     if _G["QuestInfoRewardsFrame"] then
         _G["QuestInfoRewardsFrame"]:HookScript("OnShow",
-            function () AddAndUpdateQuestFrames("QuestInfoRewardsFrameQuestInfoItem") end)
+            function () AddAndUpdateQuestFrames() end)
     end
     if _G["MapQuestInfoRewardsFrame"] then
         _G["MapQuestInfoRewardsFrame"]:HookScript("OnShow",
-            function () AddAndUpdateQuestFrames("MapQuestInfoRewardsFrameQuestInfoItem") end)
+            function () AddAndUpdateQuestFrames() end)
     end
 end
 
