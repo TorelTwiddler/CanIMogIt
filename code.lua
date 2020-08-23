@@ -830,6 +830,26 @@ function CanIMogIt:GetItemMinLevel(itemLink)
 end
 
 
+function CanIMogIt:GetItemExpansion(itemID)
+    return select(15, GetItemInfo(itemID))
+end
+
+
+function CanIMogIt:GetItemMinTransmogLevel(itemID)
+    -- Returns the minimum level required to transmog the item.
+    -- This uses the expansion ID of the item to figure it out.
+    -- Expansions before Shadowlands are all opened at level 10
+    -- as of 9.0. Shadowlands is opened at level 48.
+    local expansion = CanIMogIt:GetItemExpansion(itemID)
+    if expansion == nil or expansion == 0 then return end
+    if expansion < CanIMogIt.Expansions.SHADOWLANDS then
+        return CanIMogIt.MIN_TRANSMOG_LEVEL
+    else
+        return CanIMogIt.MIN_TRANSMOG_LEVEL_SHADOWLANDS
+    end
+end
+
+
 function CanIMogIt:GetItemClassName(itemLink)
     return select(2, GetItemInfoInstant(itemLink))
 end
@@ -937,8 +957,8 @@ end
 
 
 function CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)
-    local minLevel = CanIMogIt:GetItemMinLevel(itemLink)
-    if minLevel == nil then return end
+    local minLevel = CanIMogIt:GetItemMinTransmogLevel(itemLink)
+    if minLevel == nil then return false end
     return UnitLevel("player") < minLevel
 end
 
