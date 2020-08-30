@@ -1,3 +1,19 @@
+9.0.1v1.25alpha1 - 2020/08/30
+
+9.0 update and bugfixes!
+
+* [#135](https://gitlab.com/toreltwiddler/CanIMogIt/issues/135) Fixed bug when attempting to clean old DB items. No more phantom negative database prints!
+* [#162](https://gitlab.com/toreltwiddler/CanIMogIt/issues/162) Updated transmog level restrictions logic for 9.0.
+* [#197](https://gitlab.com/toreltwiddler/CanIMogIt/issues/197) Fixed non-item quest rewards showing icon.
+* [#226](https://gitlab.com/toreltwiddler/CanIMogIt/issues/226) & [#227](https://gitlab.com/toreltwiddler/CanIMogIt/issues/227) Tested all tooltips and overlays to ensure they are working as expected on 9.0.
+* [#228](https://gitlab.com/toreltwiddler/CanIMogIt/issues/228) Rework Quest overlay for 9.0 changes.
+* [#232](https://gitlab.com/toreltwiddler/CanIMogIt/issues/232) Update TOC for 9.0 and add checkmark texture after name.
+* [#233](https://gitlab.com/toreltwiddler/CanIMogIt/issues/233) Fixed overlay not displaying on new Quest Rewards frames.
+* [#234](https://gitlab.com/toreltwiddler/CanIMogIt/issues/234) Fixed pairs error going through portal.
+* [#236](https://gitlab.com/toreltwiddler/CanIMogIt/issues/236) Fixed MAX_CONTAINER_ITEMS being removed by Blizzard.
+
+*****
+
 8.3.0v1.25 Release - 2020/02/12
 
 * [#221](https://gitlab.com/toreltwiddler/CanIMogIt/issues/221) Fix another error due to TSM eating AH window.
