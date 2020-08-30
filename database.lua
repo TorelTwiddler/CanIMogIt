@@ -224,8 +224,8 @@ function CanIMogIt:DBAddAppearance(appearanceID, itemLink)
 end
 
 
-function CanIMogIt:DBRemoveAppearance(appearanceID, itemLink)
-    local hash = self:GetAppearanceHash(appearanceID, itemLink)
+function CanIMogIt:DBRemoveAppearance(appearanceID, itemLink, dbHash)
+    local hash = dbHash or self:GetAppearanceHash(appearanceID, itemLink)
     self.db.global.appearances[hash] = nil
 end
 
@@ -313,16 +313,31 @@ function CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
 end
 
 
-function CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink)
-    local hash = self:GetAppearanceHash(appearanceID, itemLink)
+function CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink, dbHash)
+    -- The specific dbHash can be passed in to bypass trying to generate it.
+    -- This is used mainly when Blizzard removes or changes item appearanceIDs.
+    local hash = dbHash or self:GetAppearanceHash(appearanceID, itemLink)
+    appearanceID = appearanceID or CanIMogIt.Utils.strsplit(":", hash)[1]
     if self.db.global.appearances[hash] == nil then return end
     if self.db.global.appearances[hash].sources[sourceID] ~= nil then
         self.db.global.appearances[hash].sources[sourceID] = nil
         if next(self.db.global.appearances[hash].sources) == nil then
-            self:DBRemoveAppearance(appearanceID, itemLink)
+            self:DBRemoveAppearance(appearanceID, itemLink, dbHash)
         end
         if CanIMogItOptions['databaseDebug'] then
-            CanIMogIt:Print("Item removed: " .. CanIMogIt:GetItemLinkFromSourceID(sourceID) .. " itemID: " .. CanIMogIt:GetItemID(itemLink) .. " sourceID: " .. sourceID .. " appearanceID: " .. appearanceID)
+            local itemID, itemLink
+            if itemLink then
+                itemID = CanIMogIt:GetItemID(itemLink)
+            else
+                itemID = "nil"
+            end
+            if sourceID then
+                itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+            end
+            if not itemLink then
+                itemLink = "nil"
+            end
+            CanIMogIt:Print("Item removed: " .. itemLink .. " itemID: " .. itemID .. " sourceID: " .. sourceID .. " appearanceID: " .. appearanceID)
         end
     end
 end

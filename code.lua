@@ -471,7 +471,7 @@ local function _GetAppearances()
             if not C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID) then
                 local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
                 local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
-                CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink)
+                CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink, appearanceHash)
                 sourcesRemoved = sourcesRemoved + 1
             end
             buffer = buffer + 1
