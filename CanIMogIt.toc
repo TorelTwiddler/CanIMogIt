@@ -30,4 +30,3 @@ database.lua
 tooltipScanner.lua
 Overlay\_overlays.xml
 Plugins\_plugins.xml
-Tests\_tests.xml
