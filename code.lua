@@ -927,6 +927,9 @@ end
 
 
 function CanIMogIt:CharacterCanEquipItem(itemLink)
+    if CanIMogIt:CharacterIsTooLowLevelForItem(itemLink) then
+        return false
+    end
     if CanIMogIt:IsItemArmor(itemLink) and CanIMogIt:IsArmorCosmetic(itemLink) then
         return true
     end
