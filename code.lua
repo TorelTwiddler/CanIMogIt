@@ -825,11 +825,6 @@ function CanIMogIt:GetItemQuality(itemID)
 end
 
 
-function CanIMogIt:GetItemMinLevel(itemLink)
-    return select(5, GetItemInfo(itemLink))
-end
-
-
 function CanIMogIt:GetItemExpansion(itemID)
     return select(15, GetItemInfo(itemID))
 end
@@ -927,9 +922,6 @@ end
 
 
 function CanIMogIt:CharacterCanEquipItem(itemLink)
-    if CanIMogIt:CharacterIsTooLowLevelForItem(itemLink) then
-        return false
-    end
     if CanIMogIt:IsItemArmor(itemLink) and CanIMogIt:IsArmorCosmetic(itemLink) then
         return true
     end
@@ -947,6 +939,9 @@ end
 
 
 function CanIMogIt:IsValidAppearanceForCharacter(itemLink)
+    if CanIMogIt:CharacterIsTooLowLevelForTransmog(itemLink) then
+        return false
+    end
     if CanIMogIt:CharacterCanEquipItem(itemLink) then
         if CanIMogIt:IsItemArmor(itemLink) then
             return CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
@@ -959,7 +954,7 @@ function CanIMogIt:IsValidAppearanceForCharacter(itemLink)
 end
 
 
-function CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)
+function CanIMogIt:CharacterIsTooLowLevelForTransmog(itemLink)
     local minLevel = CanIMogIt:GetItemMinTransmogLevel(itemLink)
     if minLevel == nil then return false end
     return UnitLevel("player") < minLevel
@@ -1253,8 +1248,9 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     local isTransmogable = CanIMogIt:IsTransmogable(itemLink)
     -- if isTransmogable == nil then return end
 
-    local playerKnowsTransmogFromItem, isValidAppearanceForCharacter, characterIsTooLowLevel,
-        playerKnowsTransmog, characterCanLearnTransmog, isItemSoulbound, text, unmodifiedText;
+    local playerKnowsTransmogFromItem, isValidAppearanceForCharacter,
+        characterIsTooLowLevelToTransmog, playerKnowsTransmog, characterCanLearnTransmog,
+        isItemSoulbound, text, unmodifiedText;
 
     local isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
 
@@ -1271,8 +1267,8 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         isValidAppearanceForCharacter = CanIMogIt:IsValidAppearanceForCharacter(itemLink)
         if isValidAppearanceForCharacter == nil then return end
 
-        characterIsTooLowLevel = CanIMogIt:CharacterIsTooLowLevelForItem(itemLink)
-        if characterIsTooLowLevel == nil then return end
+        characterIsTooLowLevelToTransmog = CanIMogIt:CharacterIsTooLowLevelForTransmog(itemLink)
+        if characterIsTooLowLevelToTransmog == nil then return end
 
         playerKnowsTransmog = CanIMogIt:PlayerKnowsTransmog(itemLink)
         if playerKnowsTransmog == nil then return end
@@ -1287,8 +1283,8 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
                 unmodifiedText = CanIMogIt.KNOWN
             else
                 -- Player knows appearance but this character cannot transmog it
-                if characterCanLearnTransmog and characterIsTooLowLevel then
-                    -- If this character is too low level
+                if characterCanLearnTransmog then
+                    -- If this character is too low level to transmog
                     text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                     unmodifiedText = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                 else
@@ -1304,7 +1300,7 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
                 unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
             else
                 -- Player knows appearance from another item but cannot transmog it
-                if characterCanLearnTransmog and characterIsTooLowLevel then
+                if characterCanLearnTransmog then
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                     unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                 else
