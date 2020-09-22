@@ -921,7 +921,23 @@ function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
 end
 
 
+local function IsHeirloomRedText(redText, itemLink)
+    local itemID = CanIMogIt:GetItemID(itemLink)
+    if redText == _G["ITEM_SPELL_KNOWN"] and C_Heirloom.IsItemHeirloom(itemID) then
+        return true
+    end
+end
+
+
+local function IsLevelRequirementRedText(redText)
+    if string.match(redText, _G["ITEM_MIN_LEVEL"]) then
+        return true
+    end
+end
+
+
 function CanIMogIt:CharacterCanEquipItem(itemLink)
+    -- Can the character equip this item eventually? (excluding level)
     if CanIMogIt:IsItemArmor(itemLink) and CanIMogIt:IsArmorCosmetic(itemLink) then
         return true
     end
@@ -929,9 +945,12 @@ function CanIMogIt:CharacterCanEquipItem(itemLink)
     if redText == "" or redText == nil then
         return true
     end
-    local itemID = CanIMogIt:GetItemID(itemLink)
-    if redText == _G["ITEM_SPELL_KNOWN"] and C_Heirloom.IsItemHeirloom(itemID) then
+    if IsHeirloomRedText(redText, itemLink) then
         -- Special case for heirloom items. They always have red text if it was learned.
+        return true
+    end
+    if IsLevelRequirementRedText(redText) then
+        -- We ignore the level, since it will be equipable eventually.
         return true
     end
     return false
@@ -940,7 +959,7 @@ end
 
 function CanIMogIt:IsValidAppearanceForCharacter(itemLink)
     -- Can the character transmog this appearance right now?
-    if CanIMogIt:CharacterIsTooLowLevelForTransmog(itemLink) then
+    if not CanIMogIt:CharacterIsHighEnoughLevelForTransmog(itemLink) then
         return false
     end
     if CanIMogIt:CharacterCanEquipItem(itemLink) then
@@ -955,10 +974,10 @@ function CanIMogIt:IsValidAppearanceForCharacter(itemLink)
 end
 
 
-function CanIMogIt:CharacterIsTooLowLevelForTransmog(itemLink)
+function CanIMogIt:CharacterIsHighEnoughLevelForTransmog(itemLink)
     local minLevel = CanIMogIt:GetItemMinTransmogLevel(itemLink)
-    if minLevel == nil then return false end
-    return UnitLevel("player") < minLevel
+    if minLevel == nil then return true end
+    return UnitLevel("player") > minLevel
 end
 
 
@@ -1250,7 +1269,7 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     -- if isTransmogable == nil then return end
 
     local playerKnowsTransmogFromItem, isValidAppearanceForCharacter,
-        characterIsTooLowLevelToTransmog, playerKnowsTransmog, characterCanLearnTransmog,
+        characterIsHighEnoughLevelToTransmog, playerKnowsTransmog, characterCanLearnTransmog,
         isItemSoulbound, text, unmodifiedText;
 
     local isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
@@ -1268,9 +1287,6 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
 
         isValidAppearanceForCharacter = CanIMogIt:IsValidAppearanceForCharacter(itemLink)
         if isValidAppearanceForCharacter == nil then return end
-
-        characterIsTooLowLevelToTransmog = CanIMogIt:CharacterIsTooLowLevelForTransmog(itemLink)
-        if characterIsTooLowLevelToTransmog == nil then return end
 
         playerKnowsTransmog = CanIMogIt:PlayerKnowsTransmog(itemLink)
         if playerKnowsTransmog == nil then return end
