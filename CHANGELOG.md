@@ -1,16 +1,21 @@
-9.0.1v1.25alpha1 - 2020/08/30
+9.0.1v1.26alpha2 - 2020/09/25
 
-9.0 update and bugfixes!
+9.0 update, bugfixes, and cargBags Nivaya support!
 
+![cargBags Nivaya support!](https://i.imgur.com/ou3ZdAt.png "cargBags Nivaya support!")
+
+* [#46](https://gitlab.com/toreltwiddler/CanIMogIt/issues/46) cargBags Nivaya support thanks to wcogan!
 * [#135](https://gitlab.com/toreltwiddler/CanIMogIt/issues/135) Fixed bug when attempting to clean old DB items. No more phantom negative database prints!
 * [#162](https://gitlab.com/toreltwiddler/CanIMogIt/issues/162) Updated transmog level restrictions logic for 9.0.
 * [#197](https://gitlab.com/toreltwiddler/CanIMogIt/issues/197) Fixed non-item quest rewards showing icon.
-* [#226](https://gitlab.com/toreltwiddler/CanIMogIt/issues/226) & [#227](https://gitlab.com/toreltwiddler/CanIMogIt/issues/227) Tested all tooltips and overlays to ensure they are working as expected on 9.0.
-* [#228](https://gitlab.com/toreltwiddler/CanIMogIt/issues/228) Rework Quest overlay for 9.0 changes.
-* [#232](https://gitlab.com/toreltwiddler/CanIMogIt/issues/232) Update TOC for 9.0 and add checkmark texture after name.
+* [#226](https://gitlab.com/toreltwiddler/CanIMogIt/issues/226),  [#227](https://gitlab.com/toreltwiddler/CanIMogIt/issues/227), [#237](https://gitlab.com/toreltwiddler/CanIMogIt/issues/237), [#238](https://gitlab.com/toreltwiddler/CanIMogIt/issues/238) Tested all tooltips and overlays to ensure they are working as expected on 9.0.
+* [#228](https://gitlab.com/toreltwiddler/CanIMogIt/issues/228) Reworked Quest overlay for 9.0 changes.
+* [#232](https://gitlab.com/toreltwiddler/CanIMogIt/issues/232) Updated TOC for 9.0 and add checkmark texture after name.
 * [#233](https://gitlab.com/toreltwiddler/CanIMogIt/issues/233) Fixed overlay not displaying on new Quest Rewards frames.
 * [#234](https://gitlab.com/toreltwiddler/CanIMogIt/issues/234) Fixed pairs error going through portal.
-* [#236](https://gitlab.com/toreltwiddler/CanIMogIt/issues/236) Fixed MAX_CONTAINER_ITEMS being removed by Blizzard.
+* [#236](https://gitlab.com/toreltwiddler/CanIMogIt/issues/236) Fixed `MAX_CONTAINER_ITEMS` being removed by Blizzard.
+* [#241](https://gitlab.com/toreltwiddler/CanIMogIt/issues/241) Limited length of red text on tooltip.
+* [PR #5](https://github.com/TorelTwiddler/CanIMogIt/pull/5) Merge pull request from Resike with small fix for database.
 
 *****
 
