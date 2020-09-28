@@ -8,7 +8,7 @@ if IsAddOnLoaded("Auctionator") then
     -- UpdateIcon functions   --
     ----------------------------
 
-    CanIMogIt.ICON_LOCATIONS["AUCTIONATOR"] = {"LEFT", 460, 0}
+    CanIMogIt.ICON_LOCATIONS["AUCTIONATOR"] = {"LEFT", 25, 0}
 
 
     local function GetAuctionatorItemLink(auctionatorButton)
@@ -70,13 +70,15 @@ if IsAddOnLoaded("Auctionator") then
     ------------------------
 
     function AuctionatorFrame_CIMIOnValueChanged()
-        local buttons = _G["AuctionatorShoppingListFrameScrollChild"]:GetParent().buttons
+        local buttons = _G["AuctionatorShoppingListFrame"].ResultsListing.ScrollFrame.buttons
         if buttons == nil then
             return
         end
 
         for i, button in pairs(buttons) do
-            AuctionatorFrame_CIMIUpdateIcon(button.CanIMogItOverlay)
+            -- This has a timer because it seems to have a race condition with the updating
+            -- scroll frames.
+            C_Timer.After(.1, function() AuctionatorFrame_CIMIUpdateIcon(button.CanIMogItOverlay) end)
         end
     end
 
@@ -101,13 +103,11 @@ if IsAddOnLoaded("Auctionator") then
         end
         local scrollBar = _G["AuctionatorShoppingListFrame"].ResultsListing.ScrollFrame.scrollBar
         scrollBar:HookScript("OnValueChanged", AuctionatorFrame_CIMIOnValueChanged)
-        
-        local function test(event,...)
-            print("Onclick Ran")
-        end
-        local headers = AuctionatorShoppingListFrame.ResultsListing.HeaderContainer:GetChildren()
-        for i, header in pairs(headers) do
-            header:HookScript("OnClick", test)
+
+        -- This GetChildren returns an _unpacked_ value for some reason, so we have to pack it in a table.
+        local headers = {AuctionatorShoppingListFrame.ResultsListing.HeaderContainer:GetChildren()}
+        for i, header in ipairs(headers) do
+            header:HookScript("OnClick", AuctionatorFrame_CIMIOnValueChanged)
         end
     end
 
