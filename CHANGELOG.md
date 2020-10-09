@@ -1,20 +1,25 @@
-9.0.1v1.26alpha2 - 2020/09/25
+9.0.1v1.26alpha3 - 2020/10/09
 
-9.0 update, bugfixes, and cargBags Nivaya support!
+9.0 update, bugfixes, cargBags Nivaya support, and Auctionator shopping list support!
 
 ![cargBags Nivaya support!](https://i.imgur.com/ou3ZdAt.png "cargBags Nivaya support!")
+
+![Auctionator Shopping List support!](https://i.imgur.com/aJHUqzq.png "Auctionator Shopping List support!")
 
 * [#46](https://gitlab.com/toreltwiddler/CanIMogIt/issues/46) cargBags Nivaya support thanks to wcogan!
 * [#135](https://gitlab.com/toreltwiddler/CanIMogIt/issues/135) Fixed bug when attempting to clean old DB items. No more phantom negative database prints!
 * [#162](https://gitlab.com/toreltwiddler/CanIMogIt/issues/162) Updated transmog level restrictions logic for 9.0.
 * [#197](https://gitlab.com/toreltwiddler/CanIMogIt/issues/197) Fixed non-item quest rewards showing icon.
-* [#226](https://gitlab.com/toreltwiddler/CanIMogIt/issues/226),  [#227](https://gitlab.com/toreltwiddler/CanIMogIt/issues/227), [#237](https://gitlab.com/toreltwiddler/CanIMogIt/issues/237), [#238](https://gitlab.com/toreltwiddler/CanIMogIt/issues/238) Tested all tooltips and overlays to ensure they are working as expected on 9.0.
+* [#226](https://gitlab.com/toreltwiddler/CanIMogIt/issues/226),  [#227](https://gitlab.com/toreltwiddler/CanIMogIt/issues/227), [#237](https://gitlab.com/toreltwiddler/CanIMogIt/issues/237), [#238](https://gitlab.com/toreltwiddler/CanIMogIt/issues/238) Tested tooltips and overlays to ensure they are working as expected on 9.0 including supported addons except for AdiBags.
 * [#228](https://gitlab.com/toreltwiddler/CanIMogIt/issues/228) Reworked Quest overlay for 9.0 changes.
-* [#232](https://gitlab.com/toreltwiddler/CanIMogIt/issues/232) Updated TOC for 9.0 and add checkmark texture after name.
+* [#232](https://gitlab.com/toreltwiddler/CanIMogIt/issues/232) Updated TOC for 9.0.1 and add checkmark texture after name.
 * [#233](https://gitlab.com/toreltwiddler/CanIMogIt/issues/233) Fixed overlay not displaying on new Quest Rewards frames.
 * [#234](https://gitlab.com/toreltwiddler/CanIMogIt/issues/234) Fixed pairs error going through portal.
 * [#236](https://gitlab.com/toreltwiddler/CanIMogIt/issues/236) Fixed `MAX_CONTAINER_ITEMS` being removed by Blizzard.
+* [#240](https://gitlab.com/toreltwiddler/CanIMogIt/issues/240) Added support for Auctionator's Shopping List.
 * [#241](https://gitlab.com/toreltwiddler/CanIMogIt/issues/241) Limited length of red text on tooltip.
+* [#246](https://gitlab.com/toreltwiddler/CanIMogIt/issues/246) Added support for Bagnon Guild Bank and Void Storage.
+* [CF #240](https://www.curseforge.com/wow/addons/can-i-mog-it/issues/240) & [Commit 39935715](https://gitlab.com/toreltwiddler/CanIMogIt/-/commit/3993571563d954213f4f958db8b6bfeb1052099d) Change localization L to non-global.
 * [PR #5](https://github.com/TorelTwiddler/CanIMogIt/pull/5) Merge pull request from Resike with small fix for database.
 
 *****
