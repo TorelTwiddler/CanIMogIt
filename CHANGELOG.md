@@ -1,4 +1,4 @@
-9.0.1v1.26alpha3 - 2020/10/09
+9.0.1v1.26 - 2020/10/13
 
 9.0 update, bugfixes, cargBags Nivaya support, and Auctionator shopping list support!
 
