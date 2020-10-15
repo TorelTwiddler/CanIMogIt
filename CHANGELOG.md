@@ -1,3 +1,9 @@
+9.0.1v1.27 - 2020/10/14
+
+* [#247](https://gitlab.com/toreltwiddler/CanIMogIt/issues/247) Fix LiteBag error.
+
+*****
+
 9.0.1v1.26 - 2020/10/13
 
 9.0 update, bugfixes, cargBags Nivaya support, and Auctionator shopping list support!
