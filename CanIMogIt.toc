@@ -17,7 +17,9 @@
 ## X-Website: http://mods.curse.com/addons/wow/can-i-mog-it
 ## SavedVariables: CanIMogItOptions, CanIMogItDatabase
 ## OptionalDeps: AdiBags, ArkInventory, ElvUI, LiteBag, Bagnon, cargBags_Nivaya, Auctionator
+#@no-lib-strip@
 embeds.xml
+#@end-no-lib-strip@
 core.lua
 Locale\_locales.xml
 constants.lua
