@@ -1,3 +1,10 @@
+9.0.1v1.28 - 2020/10/24
+
+* [#248](https://gitlab.com/toreltwiddler/CanIMogIt/issues/248) Fix error when TSM consumes Auctionator.
+* [#249](https://gitlab.com/toreltwiddler/CanIMogIt/issues/249) Fixed C stack overflow with Auctionator.
+
+*****
+
 9.0.1v1.27 - 2020/10/14
 
 * [#247](https://gitlab.com/toreltwiddler/CanIMogIt/issues/247) Fix LiteBag error.
