@@ -2,6 +2,7 @@
 
 * [#248](https://gitlab.com/toreltwiddler/CanIMogIt/issues/248) Fix error when TSM consumes Auctionator.
 * [#249](https://gitlab.com/toreltwiddler/CanIMogIt/issues/249) Fixed C stack overflow with Auctionator.
+* [CF #245](https://www.curseforge.com/wow/addons/can-i-mog-it/issues/245) Strip embeds.xml for nolib.
 
 *****
 
