@@ -1,3 +1,9 @@
+9.0.1v1.29 - 2020/11/08
+
+* [#248](https://gitlab.com/toreltwiddler/CanIMogIt/issues/248) Fix another nil error from TSM.
+
+*****
+
 9.0.1v1.28 - 2020/10/24
 
 * [#248](https://gitlab.com/toreltwiddler/CanIMogIt/issues/248) Fix error when TSM consumes Auctionator.
