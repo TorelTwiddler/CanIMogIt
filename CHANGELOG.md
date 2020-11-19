@@ -1,3 +1,9 @@
+9.0.2v1.30 - 2020/11/19
+
+* [#250](https://gitlab.com/toreltwiddler/CanIMogIt/issues/250) Updated TOC, removed nolib due to Curseforge bug.
+
+*****
+
 9.0.1v1.29 - 2020/11/08
 
 * [#248](https://gitlab.com/toreltwiddler/CanIMogIt/issues/248) Fix another nil error from TSM.

@@ -1,3 +1,5 @@
+enable-nolib-creation: no
+
 externals:
     Libs/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk
     Libs/AceAddon-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
