@@ -4,7 +4,6 @@ function CanIMogIt.cache:Clear()
     self.data = {
         ["text"] = {},
         ["source"] = {},
-        ["dressup_source"] = {},
         ["sets"] = {},
         ["setsSumRatio"] = {},
     }
@@ -86,15 +85,6 @@ end
 
 function CanIMogIt.cache:SetSetsInfoTextValue(itemLink, value)
     self.data["sets"][CalculateCacheKey(itemLink)] = value
-end
-
-
-function CanIMogIt.cache:GetDressUpModelSource(itemLink)
-    return self.data["dressup_source"][itemLink]
-end
-
-function CanIMogIt.cache:SetDressUpModelSource(itemLink, value)
-    self.data["dressup_source"][itemLink] = value
 end
 
 
