@@ -1,3 +1,13 @@
+9.1.0v1.31 - 2021/06/29
+
+9.1 update
+
+* Updated TOC.
+* [#255](https://gitlab.com/toreltwiddler/CanIMogIt/issues/255) Updated the renamed Blizzard endpoint from `C_Transmog.GetItemInfo` to the new name of `C_Transmog.CanTransmogItem`.
+* [#257](https://gitlab.com/toreltwiddler/CanIMogIt/issues/257) Updated the DressUpModel code to catch variations in items.
+
+*****
+
 9.0.2v1.30 - 2020/11/19
 
 * [#250](https://gitlab.com/toreltwiddler/CanIMogIt/issues/250) Updated TOC, removed nolib due to Curseforge bug.
