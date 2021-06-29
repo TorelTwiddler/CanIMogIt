@@ -2,6 +2,9 @@
 
 local L = CanIMogIt.L
 
+CanIMogIt.DressUpModel = CreateFrame('DressUpModel')
+CanIMogIt.DressUpModel:SetUnit('player')
+
 
 -----------------------------
 -- Maps                    --
@@ -1015,10 +1018,36 @@ end
 
 
 function CanIMogIt:GetSourceID(itemLink)
-    -- Gets the sourceID and string of where we got the sourceID from.
     local sourceID = select(2, C_TransmogCollection.GetItemInfo(itemLink))
     if sourceID then
         return sourceID, "C_TransmogCollection.GetItemInfo"
+    end
+
+    -- Some items don't have the C_TransmogCollection.GetItemInfo data,
+    -- so use the old way to find the sourceID (using the DressUpModel).
+    local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
+    local slots = inventorySlotsMap[slotName]
+
+    if slots == nil or slots == false or IsDressableItem(itemLink) == false then return end
+
+    local cached_source = CanIMogIt.cache:GetDressUpModelSource(itemLink)
+    if cached_source then
+        return cached_source, "DressUpModel:GetSlotTransmogSources cache"
+    end
+    CanIMogIt.DressUpModel:SetUnit('player')
+    CanIMogIt.DressUpModel:Undress()
+    for i, slot in pairs(slots) do
+        CanIMogIt.DressUpModel:TryOn(itemLink, slot)
+        sourceID = CanIMogIt.DressUpModel:GetSlotTransmogSources(slot)
+        if sourceID ~= nil and sourceID ~= 0 then
+            if not CanIMogIt:IsSourceIDFromItemLink(sourceID, itemLink) then
+                -- This likely means that the game hasn't finished loading things
+                -- yet, so let's wait until we get good data before caching it.
+                return
+            end
+            CanIMogIt.cache:SetDressUpModelSource(itemLink, sourceID)
+            return sourceID, "DressUpModel:GetSlotTransmogSources"
+        end
     end
 end
 
