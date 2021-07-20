@@ -1,7 +1,8 @@
 -- Adds overlays to items in the addon AdiBags: https://mods.curse.com/addons/wow/adibags
 
 
-if IsAddOnLoaded("AdiBags") then
+local _, P = ...;
+P:RegisterAddOnCallback("AdiBags", function()
 
 
     ----------------------------
@@ -72,4 +73,4 @@ if IsAddOnLoaded("AdiBags") then
     end
     LibStub('ABEvent-1.0').RegisterMessage("CanIMogIt", "AdiBags_BagOpened", AdiBags_UpdateAfter)
     LibStub('ABEvent-1.0').RegisterMessage("CanIMogIt", "AdiBags_ForceFullLayout", AdiBags_UpdateAfter)
-end
+end);
