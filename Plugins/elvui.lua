@@ -1,6 +1,7 @@
 -- Adds overlays to the UI Package ElvUI: https://www.tukui.org
 
-if IsAddOnLoaded("ElvUI") then
+local _, P = ...;
+P:RegisterAddOnCallback("ElvUI", function()
 
 
     ----------------------------
@@ -112,4 +113,4 @@ if IsAddOnLoaded("ElvUI") then
         CIMI_ElvUIUpdate()
     end
     CanIMogIt.frame:AddOverlayEventFunction(CIMI_ElvUIEvents)
-end
+end);

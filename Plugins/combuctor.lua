@@ -1,11 +1,11 @@
--- Adds overlays to Bagnon https://mods.curse.com/addons/wow/bagnon
+-- Adds overlays to Combuctor https://mods.curse.com/addons/wow/combuctor
 
 local _, P = ...;
-P:RegisterAddOnCallback("Bagnon", function()
+P:RegisterAddOnCallback("Combuctor", function()
 
     -- Needs a slightly modified version of ContainerFrameItemButton_CIMIUpdateIcon(),
-    -- to support cached Bagnon bags (e.g. bank when not at bank or other characters).
-    function BagnonItemButton_CIMIUpdateIcon(self)
+    -- to support cached Combuctor bags (e.g. bank when not at bank or other characters).
+    function CombuctorItemButton_CIMIUpdateIcon(self)
 
         if not self or not self:GetParent() or not self:GetParent():GetParent() then return end
         if not CIMI_CheckOverlayIconEnabled() then
@@ -19,7 +19,7 @@ P:RegisterAddOnCallback("Bagnon", function()
         -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
         if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
 
-        -- For cached Bagnon bags, GetContainerItemLink(bag, slot) would not work in CanIMogIt:GetTooltipText(nil, bag, slot).
+        -- For cached Combuctor bags, GetContainerItemLink(bag, slot) would not work in CanIMogIt:GetTooltipText(nil, bag, slot).
         -- Therefore provide GetTooltipText() with itemLink when available.
         -- If the itemLink isn't available, then try with the bag/slot as backup (fixes battle pets).
         local itemLink = self:GetParent():GetItem()
@@ -28,21 +28,21 @@ P:RegisterAddOnCallback("Bagnon", function()
             itemLink = self:GetParent():GetInfo().link
         end
         local cached = self:GetParent().info.cached
-        -- Need to prevent guild bank items from using bag/slot from Bagnon,
+        -- Need to prevent guild bank items from using bag/slot from Combuctor,
         -- since they don't match Blizzard's frames.
-        if itemLink or cached or self:GetParent().__name == "BagnonGuildItem" then
-            CIMI_SetIcon(self, BagnonItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+        if itemLink or cached or self:GetParent().__name == "CombuctorGuildItem" then
+            CIMI_SetIcon(self, CombuctorItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
         else
-            CIMI_SetIcon(self, BagnonItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
+            CIMI_SetIcon(self, CombuctorItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
         end
     end
 
-    function CIMI_BagnonUpdate(self)
-        CIMI_AddToFrame(self, BagnonItemButton_CIMIUpdateIcon)
-        BagnonItemButton_CIMIUpdateIcon(self.CanIMogItOverlay)
+    function CIMI_CombuctorUpdate(self)
+        CIMI_AddToFrame(self, CombuctorItemButton_CIMIUpdateIcon)
+        CombuctorItemButton_CIMIUpdateIcon(self.CanIMogItOverlay)
     end
 
-    hooksecurefunc(Bagnon.Item, "Update", CIMI_BagnonUpdate)
-    CanIMogIt:RegisterMessage("ResetCache", function () Bagnon.Frames:Update() end)
+    hooksecurefunc(Combuctor.Item, "Update", CIMI_CombuctorUpdate)
+    CanIMogIt:RegisterMessage("ResetCache", function () Combuctor.Frames:Update() end)
 
 end);

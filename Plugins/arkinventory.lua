@@ -1,7 +1,8 @@
 -- Adds overlays to items in the addon ArkInventory: https://mods.curse.com/addons/wow/ark-inventory
 
 
-if IsAddOnLoaded("ArkInventory") then
+local _, P = ...;
+P:RegisterAddOnCallback("ArkInventory", function()
 
     if ( ArkInventory.API.Version( ) ) < 30821 then
 
@@ -204,4 +205,4 @@ if IsAddOnLoaded("ArkInventory") then
 
     end
 
-end
+end);

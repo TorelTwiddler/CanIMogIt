@@ -1,7 +1,8 @@
 -- Adds overlays to items in the addon Auctionator: https://www.curseforge.com/wow/addons/auctionator
 
 
-if IsAddOnLoaded("Auctionator") then
+local _, P = ...;
+P:RegisterAddOnCallback("Auctionator", function()
 
 
     ----------------------------
@@ -130,4 +131,4 @@ if IsAddOnLoaded("Auctionator") then
 
 
 
-end
+end);

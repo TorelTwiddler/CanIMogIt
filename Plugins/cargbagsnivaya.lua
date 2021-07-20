@@ -1,6 +1,7 @@
 -- Adds overlays to items in the addon cargBags Nivaya: https://www.curseforge.com/wow/addons/cargbags-nivaya-mop-update
 
-if IsAddOnLoaded("cargBags_Nivaya") then
+local _, P = ...;
+P:RegisterAddOnCallback("cargBags_Nivaya", function()
 
 
     ----------------------------
@@ -72,4 +73,4 @@ if IsAddOnLoaded("cargBags_Nivaya") then
         CIMI_CargBagsNivayaUpdate()
     end
     CanIMogIt.frame:AddOverlayEventFunction(CIMI_CargBagsNivayaEvents)
-end
+end);
