@@ -1,3 +1,13 @@
+9.1.5v1.32 - 2021/12/01
+
+9.1.5 update
+
+* Updated TOC.
+* [#259](https://gitlab.com/toreltwiddler/CanIMogIt/issues/259) Fixed error for trial accounts in Auction House (Thanks @Adrian_G2).
+* [#260](https://gitlab.com/toreltwiddler/CanIMogIt/issues/260) Updated to support new Guild Bank code.
+
+*****
+
 9.1.0v1.31 - 2021/06/29
 
 9.1 update
