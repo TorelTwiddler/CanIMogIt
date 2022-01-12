@@ -1028,7 +1028,7 @@ function CanIMogIt:GetSourceID(itemLink)
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
     local slots = inventorySlotsMap[slotName]
 
-    if slots == nil or slots == false or IsDressableItem(itemLink) == false then return end
+    if slots == nil or slots == false or C_Item.IsDressableItemByID(itemID) == false then return end
 
     local cached_source = CanIMogIt.cache:GetDressUpModelSource(itemLink)
     if cached_source then
