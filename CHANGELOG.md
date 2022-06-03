@@ -1,3 +1,14 @@
+9.2.5v1.33 - 2022/06/02
+
+9.2.5 update
+
+* Updated TOC.
+* [#261](https://gitlab.com/toreltwiddler/CanIMogIt/issues/261) Updated API for dressable items.
+* [#262](https://gitlab.com/toreltwiddler/CanIMogIt/issues/262) Fixed nil error in guild bank with addons.
+* [#264](https://gitlab.com/toreltwiddler/CanIMogIt/issues/264) Fixed error from 9.2.5 update to Transmog API.
+
+*****
+
 9.1.5v1.32 - 2021/12/01
 
 9.1.5 update
