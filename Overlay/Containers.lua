@@ -194,5 +194,5 @@ local function UpdateContainerIcon(button, ...)
 end
 
 CanIMogIt.frame:AddOverlayEventFunction(ContainersOverlayEvents)
-hooksecurefunc("ContainerFrameItemButton_UpdateItemUpgradeIcon", UpdateContainerIcon)
+hooksecurefunc(ContainerFrameItemButtonMixin, "UpdateItemUpgradeIcon", UpdateContainerIcon)
 hooksecurefunc("BankFrameItemButton_Update", UpdateContainerIcon)
