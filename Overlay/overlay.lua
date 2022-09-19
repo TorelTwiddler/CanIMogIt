@@ -135,7 +135,6 @@ CIMIEvents = {
     ["BANKFRAME_OPENED"] = true,
     ["START_LOOT_ROLL"] = true,
     ["MERCHANT_SHOW"] = true,
-    ["VOID_STORAGE_OPEN"] = true,
     ["VOID_STORAGE_CONTENTS_UPDATE"] = true,
     ["GUILDBANKBAGSLOTS_CHANGED"] = true,
     ["PLAYERREAGENTBANKSLOTS_CHANGED"] = true,

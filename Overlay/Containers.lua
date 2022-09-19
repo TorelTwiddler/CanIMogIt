@@ -132,9 +132,10 @@ CanIMogIt.frame:AddEventFunction(OnGuildBankOpened)
 -- void storage
 local voidStorageLoaded = false
 
-local function OnVoidStorageOpened(event, ...)
+local function OnVoidStorageOpened(event, addonName, ...)
     -- Add the overlay to the void storage frame.
-    if event ~= "VOID_STORAGE_OPEN" then return end
+    if event ~= "ADDON_LOADED" then return end
+    if addonName ~= "Blizzard_VoidStorageUI" then return end
     if voidStorageLoaded == true then return end
     voidStorageLoaded = true
     for i=1,CanIMogIt.NUM_VOID_STORAGE_FRAMES do
