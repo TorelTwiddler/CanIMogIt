@@ -13,7 +13,7 @@ function ContainerFrameItemButton_CIMIUpdateIcon(self)
         self:SetScript("OnUpdate", nil)
         return
     end
-    local bag, slot = self:GetParent():GetParent():GetID(), self:GetParent():GetID()
+    local bag, slot = self:GetParent().bagID, self:GetParent():GetID()
     -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
     -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
     if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
