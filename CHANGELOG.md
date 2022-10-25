@@ -4,6 +4,7 @@
 
 * Updated TOC.
 * [#267](https://gitlab.com/toreltwiddler/CanIMogIt/issues/267) Various fixes for the Dragonflight pre-release patch (still a WIP, but no known errors).
+* [#270](https://gitlab.com/toreltwiddler/CanIMogIt/issues/270) Fixed Auctionator Shopping List not working and move CIMI icon to prevent overlap 
 
 *****
 
