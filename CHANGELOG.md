@@ -1,3 +1,12 @@
+10.0.0v1.34 - 2022/10/25
+
+10.0.0 update
+
+* Updated TOC.
+* [#267](https://gitlab.com/toreltwiddler/CanIMogIt/issues/267) Various fixes for the Dragonflight pre-release patch (still a WIP, but no known errors).
+
+*****
+
 9.2.5v1.33 - 2022/06/02
 
 9.2.5 update
