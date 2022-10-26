@@ -1,6 +1,8 @@
 10.0.0v1.35 - 2022/10/25
 
 * [#267](https://gitlab.com/toreltwiddler/CanIMogIt/issues/267) Fixed AuctionHouse not error and display.
+* Also fixed the Sets window and Encounter Journal from erroring.
+
 
 *****
 
