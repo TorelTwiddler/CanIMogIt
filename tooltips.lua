@@ -334,7 +334,7 @@ hooksecurefunc(GameTooltip, "SetGuildBankItem",
 -- TODO DF: Make sure this hook in still needed. The crafting system got reworked.
 hooksecurefunc(GameTooltip, "SetRecipeReagentItem",
     function(tooltip, itemID, index)
-        addToTooltip(tooltip, C_TradeSkillUI.GetRecipeReagentItemLink(itemID, index))
+        addToTooltip(tooltip, C_TradeSkillUI.GetRecipeFixedReagentItemLink(itemID, index))
         VVDebugPrint(tooltip, "SetRecipeReagentItem")
     end
 )
