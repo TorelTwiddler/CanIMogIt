@@ -1,8 +1,15 @@
+10.0.0v1.36 - 2022/10/29
+
+* [#267](https://gitlab.com/toreltwiddler/CanIMogIt/issues/267) Adventure Journal loot windows now work!.
+* [#269](https://gitlab.com/toreltwiddler/CanIMogIt/issues/269) Prevented the Trade Skill error, still a WIP.
+* [#271](https://gitlab.com/toreltwiddler/CanIMogIt/issues/271) Fixed small Saved Changes frame (thanks to dartraiden!).
+
+*****
+
 10.0.0v1.35 - 2022/10/25
 
 * [#267](https://gitlab.com/toreltwiddler/CanIMogIt/issues/267) Fixed AuctionHouse not error and display.
 * Also fixed the Sets window and Encounter Journal from erroring.
-
 
 *****
 
