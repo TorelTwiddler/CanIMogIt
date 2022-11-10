@@ -72,7 +72,7 @@ if IsAddOnLoaded("Auctionator") then
     function AuctionatorFrame_CIMIOnValueChanged()
         -- Some other addons *coughTSMcough* prevent this frame from loading.
         if _G["AuctionatorShoppingFrame"] == nil then return end
-        local buttons = _G["AuctionatorShoppingFrame"].ResultsListing.ScrollFrame.buttons
+        local buttons = _G["AuctionatorShoppingFrame"].ResultsListing.ScrollArea.buttons
         if buttons == nil then
             return
         end
