@@ -1,3 +1,9 @@
+10.0.0v1.37 - 2022/11/11
+
+* [#276](https://gitlab.com/toreltwiddler/CanIMogIt/issues/276) Fixes Shopping frame error with Auctionator (thanks to Reselsnark!)
+
+*****
+
 10.0.0v1.36 - 2022/10/29
 
 * [#267](https://gitlab.com/toreltwiddler/CanIMogIt/issues/267) Adventure Journal loot windows now work!.
