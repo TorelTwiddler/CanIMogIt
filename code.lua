@@ -568,8 +568,7 @@ function CanIMogIt:_GetRatio(setID)
     -- Gets the count of known and total sources for the given setID.
     local have = 0
     local total = 0
-    -- TODO: GetSetSources is nil here
-    for _, knownSource in pairs(C_TransmogSets.GetSetSources(setID)) do
+    for _, knownSource in pairs(C_TransmogSets.GetSetNewSources(setID)) do
         total = total + 1
         if knownSource then
             have = have + 1
