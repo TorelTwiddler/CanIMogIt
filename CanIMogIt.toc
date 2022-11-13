@@ -14,7 +14,10 @@
 ## Notes-zhCN: @localization(locale="zhCN", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
 ## Notes-zhTW: @localization(locale="zhTW", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
 ## X-Category: Transmogrify
-## X-Website: http://mods.curse.com/addons/wow/can-i-mog-it
+## X-Website: https://www.curseforge.com/wow/addons/can-i-mog-it
+## X-Curse-Project-ID: 100617
+## X-WoWI-ID: 24015
+## X-Wago-ID: Qb6mg9GP
 ## SavedVariables: CanIMogItOptions, CanIMogItDatabase
 ## OptionalDeps: AdiBags, ArkInventory, ElvUI, LiteBag, Bagnon, cargBags_Nivaya, Auctionator
 embeds.xml
