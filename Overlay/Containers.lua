@@ -110,8 +110,8 @@ CanIMogIt.frame:AddEventFunction(HookOverlayContainers)
 -- guild bank
 local guildBankLoaded = false
 
-local function OnGuildBankOpened(event, ...)
-    if event ~= "GUILDBANKFRAME_OPENED" then return end
+local function OnGuildBankOpened(event, addonName, ...)
+    if event ~= "ADDON_LOADED" or addonName ~= "Blizzard_GuildBankUI" then return end
     if guildBankLoaded == true then return end
     guildBankLoaded = true
     local guildBankFrame = _G["GuildBankFrame"]
