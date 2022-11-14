@@ -217,3 +217,5 @@ end
 CanIMogIt.frame:AddOverlayEventFunction(ContainersOverlayEvents)
 hooksecurefunc(ContainerFrameItemButtonMixin, "UpdateItemUpgradeIcon", UpdateContainerIcon)
 hooksecurefunc("BankFrameItemButton_Update", UpdateContainerIcon)
+
+CanIMogIt:RegisterMessage("OptionUpdate", function () ContainersOverlayEvents("BAG_UPDATE_DELAYED") end)

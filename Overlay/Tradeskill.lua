@@ -61,3 +61,5 @@ local function TradeSkillEvents(event)
 end
 
 CanIMogIt.frame:AddEventFunction(TradeSkillEvents)
+
+CanIMogIt:RegisterMessage("OptionUpdate", TradeSkillEvents)
