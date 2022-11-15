@@ -1,3 +1,14 @@
+10.0.2v1.39 - 2022/11/15
+
+* [#268](https://gitlab.com/toreltwiddler/CanIMogIt/issues/268) Fixed multiple issues related to how tooltips are handled.
+* [#269](https://gitlab.com/toreltwiddler/CanIMogIt/issues/269) Added overlay to the new Professions UI.
+* [#273](https://gitlab.com/toreltwiddler/CanIMogIt/issues/273) Fixed sets display in collection frame.
+* [#277](https://gitlab.com/toreltwiddler/CanIMogIt/issues/277) Fixed Guild bank overlay not loading.
+* [#281](https://gitlab.com/toreltwiddler/CanIMogIt/issues/281) Options now update all overlays immediately.
+* [#282](https://gitlab.com/toreltwiddler/CanIMogIt/issues/282) Fixed overlay not displaying on BMAH.
+
+*****
+
 10.0.0v1.38 - 2022/11/12
 
 * [#276](https://gitlab.com/toreltwiddler/CanIMogIt/issues/276) Actually fixes shopping frame error (my bad).
