@@ -1,3 +1,9 @@
+10.0.0v1.42 - 2022/11/16
+
+* [#289](https://gitlab.com/toreltwiddler/CanIMogIt/issues/289) Fixed Auctionator shopping tab not displaying CIMI icons.
+
+*****
+
 10.0.0v1.41 - 2022/11/16
 
 * [#287](https://gitlab.com/toreltwiddler/CanIMogIt/issues/287) Fixed Sets not displaying count correctly.
