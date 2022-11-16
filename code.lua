@@ -570,9 +570,9 @@ function CanIMogIt:_GetRatio(setID)
     -- Gets the count of known and total sources for the given setID.
     local have = 0
     local total = 0
-    for _, knownSource in pairs(C_TransmogSets.GetSetNewSources(setID)) do
+    for _, appearance in pairs(C_TransmogSets.GetSetPrimaryAppearances(setID)) do
         total = total + 1
-        if knownSource then
+        if appearance.collected then
             have = have + 1
         end
     end
@@ -723,7 +723,7 @@ function CanIMogIt:CalculateSetsVariantText(setID)
     end
 
     -- uncomment for debug
-    -- variantsText = variantsText .. "setID: " .. setID
+    -- variantsText = variantsText .. "setID: " .. setID .. "  "
 
     return string.sub(variantsText, 1, -2)
 end
