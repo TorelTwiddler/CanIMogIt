@@ -1,3 +1,9 @@
+10.0.0v1.40 - 2022/11/16
+
+* [#286](https://gitlab.com/toreltwiddler/CanIMogIt/issues/286) Fixed errors that occur when playing Evoker.
+
+*****
+
 10.0.2v1.39 - 2022/11/15
 
 * [#268](https://gitlab.com/toreltwiddler/CanIMogIt/issues/268) Fixed multiple issues related to how tooltips are handled.
