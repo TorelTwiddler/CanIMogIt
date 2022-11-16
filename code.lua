@@ -104,6 +104,7 @@ local classArmorTypeMap = {
     ["DEATHKNIGHT"] = PLATE,
     ["DEMONHUNTER"] = LEATHER,
     ["DRUID"] = LEATHER,
+    ["EVOKER"] = MAIL,
     ["HUNTER"] = MAIL,
     ["MAGE"] = CLOTH,
     ["MONK"] = LEATHER,
@@ -130,6 +131,7 @@ local classMask = {
     [512] = "MONK",
     [1024] = "DRUID",
     [2048] = "DEMONHUNTER",
+    [4096] = "EVOKER",
 }
 
 
