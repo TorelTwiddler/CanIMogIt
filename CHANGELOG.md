@@ -1,3 +1,9 @@
+10.0.2v1.43 - 2022/11/27
+
+* [#291](https://gitlab.com/toreltwiddler/CanIMogIt/issues/291) Added a throttling to overlay OnUpdate functions.
+
+*****
+
 10.0.0v1.42 - 2022/11/16
 
 * [#289](https://gitlab.com/toreltwiddler/CanIMogIt/issues/289) Fixed Auctionator shopping tab not displaying CIMI icons.
