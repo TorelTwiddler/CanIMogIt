@@ -1,22 +1,28 @@
+10.0.2v1.44 - 2022/11/29
+
+* [#292](https://gitlab.com/toreltwiddler/CanIMogIt/issues/292) Fixed error on Sets window.
+
+*****
+
 10.0.2v1.43 - 2022/11/27
 
 * [#291](https://gitlab.com/toreltwiddler/CanIMogIt/issues/291) Added a throttling to overlay OnUpdate functions.
 
 *****
 
-10.0.0v1.42 - 2022/11/16
+10.0.2v1.42 - 2022/11/16
 
 * [#289](https://gitlab.com/toreltwiddler/CanIMogIt/issues/289) Fixed Auctionator shopping tab not displaying CIMI icons.
 
 *****
 
-10.0.0v1.41 - 2022/11/16
+10.0.2v1.41 - 2022/11/16
 
 * [#287](https://gitlab.com/toreltwiddler/CanIMogIt/issues/287) Fixed Sets not displaying count correctly.
 
 *****
 
-10.0.0v1.40 - 2022/11/16
+10.0.2v1.40 - 2022/11/16
 
 * [#286](https://gitlab.com/toreltwiddler/CanIMogIt/issues/286) Fixed errors that occur when playing Evoker.
 
