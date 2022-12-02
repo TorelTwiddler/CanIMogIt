@@ -1,3 +1,9 @@
+10.0.2v1.45 - 2022/12/02
+
+* [#290](https://gitlab.com/toreltwiddler/CanIMogIt/issues/290) Fixed bug with new databases trying to update.
+
+*****
+
 10.0.2v1.44 - 2022/11/29
 
 * [#292](https://gitlab.com/toreltwiddler/CanIMogIt/issues/292) Fixed error on Sets window.
