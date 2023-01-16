@@ -216,6 +216,7 @@ local unknownTexts = {
 -- Exceptions              --
 -----------------------------
 
+-- This is a list of exceptions with a key of their itemID and a value of what their result should be.
 
 local exceptionItems = {
     [HEAD] = {
@@ -837,11 +838,6 @@ function CanIMogIt:GetItemLinkFromSourceID(sourceID)
 end
 
 
-function CanIMogIt:GetItemQuality(itemID)
-    return select(3, GetItemInfo(itemID))
-end
-
-
 function CanIMogIt:GetItemExpansion(itemID)
     return select(15, GetItemInfo(itemID))
 end
@@ -1202,13 +1198,6 @@ end
 
 function CanIMogIt:IsTransmogable(itemLink)
     -- Returns whether the item is transmoggable or not.
-
-    -- White items are not transmoggable.
-    local quality = CanIMogIt:GetItemQuality(itemLink)
-    if quality == nil then return end
-    if quality <= 1 then
-        return false
-    end
 
     local is_misc_subclass = CanIMogIt:IsArmorSubClassID(MISC, itemLink)
     if is_misc_subclass and miscArmorExceptions[CanIMogIt:GetItemSlotName(itemLink)] == nil then
