@@ -873,13 +873,22 @@ function CanIMogIt:GetItemSlotName(itemLink)
 end
 
 
+function CanIMogIt:IsItemBattlepet(itemLink)
+    return string.match(itemLink, ".*(battlepet):.*") == "battlepet"
+end
+
+
+function CanIMogIt:IsItemKeystone(itemLink)
+    return string.match(itemLink, ".*(keystone):.*") == "keystone"
+end
+
+
 function CanIMogIt:IsReadyForCalculations(itemLink)
     -- Returns true of the item's GetItemInfo is ready, or if it's a keystone,
     -- or if it's a battlepet.
-    local itemInfo = GetItemInfo(itemLink)
-    local isKeystone = string.match(itemLink, ".*(keystone):.*") == "keystone"
-    local isBattlepet = string.match(itemLink, ".*(battlepet):.*") == "battlepet"
-    if itemInfo or isKeystone or isBattlepet then
+    if GetItemInfo(itemLink)
+        or CanIMogIt:IsItemKeystone(itemLink)
+        or CanIMogIt:IsItemBattlepet(itemLink) then
         return true
     end
     return false
@@ -1205,6 +1214,12 @@ function CanIMogIt:IsTransmogable(itemLink)
     end
 
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
+
+    if CanIMogIt:IsItemBattlepet(itemLink) or CanIMogIt:IsItemKeystone(itemLink) then
+        -- Item is never transmoggable if it's a battlepet or keystone.
+        -- We can't wear battlepets on our heads yet!
+        return false
+    end
 
     -- See if the game considers it transmoggable
     local transmoggable = select(3, C_Transmog.CanTransmogItem(itemID))
