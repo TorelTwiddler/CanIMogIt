@@ -1,3 +1,12 @@
+10.0.5v1.46 - 2023/01/23
+
+* Updated TOC.
+* [#296](https://gitlab.com/toreltwiddler/CanIMogIt/issues/296) Fixed bags not updating when item is moved.
+* [#297](https://gitlab.com/toreltwiddler/CanIMogIt/issues/297) Removed restrictions on item quality.
+* [#279](https://gitlab.com/toreltwiddler/CanIMogIt/issues/279) Switched to BigWigs Packager (Thanks @AcidWeb!)
+
+*****
+
 10.0.2v1.45 - 2022/12/02
 
 * [#290](https://gitlab.com/toreltwiddler/CanIMogIt/issues/290) Fixed bug with new databases trying to update.

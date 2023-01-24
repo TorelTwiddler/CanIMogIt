@@ -1,4 +1,4 @@
-## Interface: 100002
+## Interface: 100005
 ## Title: Can I Mog It? |TInterface\Addons\CanIMogIt\Icons\KNOWN:0|t
 ## Author: TorelTwiddler, Ami Yuy
 ## Version: @project-version@
