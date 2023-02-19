@@ -1,3 +1,9 @@
+10.0.2v1.47 - 2023/02/19
+
+* [#278](https://gitlab.com/toreltwiddler/CanIMogIt/issues/278) Fixed ElvUI overlay icons (Thanks @Gwarii!)
+
+*****
+
 10.0.5v1.46 - 2023/01/23
 
 * Updated TOC.
