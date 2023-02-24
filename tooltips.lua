@@ -115,7 +115,13 @@ local function printDebug(tooltip, itemLink, bag, slot)
     addDoubleLine(tooltip, "CharacterCanEquipItem:", tostring(CanIMogIt:CharacterCanEquipItem(itemLink)))
     addDoubleLine(tooltip, "IsValidAppearanceForCharacter:", tostring(CanIMogIt:IsValidAppearanceForCharacter(itemLink)))
     addDoubleLine(tooltip, "CharacterIsHighEnoughLevelForTransmog:", tostring(CanIMogIt:CharacterIsHighEnoughLevelForTransmog(itemLink)))
-    addDoubleLine(tooltip, "Required Classes:", tostring(CIMIScanTooltip:GetClassesRequired(itemLink) or "nil"))
+
+    local classesRequired = CIMIScanTooltip:GetClassesRequired(itemLink)
+    if classesRequired ~= nil then
+        addDoubleLine(tooltip, "Required Classes:", tostring(table.concat(classesRequired, ", ") ))
+    else
+        addDoubleLine(tooltip, "Required Classes:", 'nil')
+    end
 
     addLine(tooltip, '--------')
 

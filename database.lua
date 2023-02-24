@@ -16,7 +16,7 @@
 local L = CanIMogIt.L
 
 
-CanIMogIt_DatabaseVersion = 1.2
+CanIMogIt_DatabaseVersion = 1.3
 
 
 local default = {
@@ -25,6 +25,11 @@ local default = {
         setItems = {}
     }
 }
+
+
+------------------------------------------------------------
+-- Database Migration Functions
+------------------------------------------------------------
 
 
 local function IsBadKey(key)
@@ -107,7 +112,10 @@ local function UpdateDatabase()
     -- if CanIMogIt.db.global.databaseVersion < 1.2 then
     --     CanIMogIt.CreateMigrationPopup("CANIMOGIT_DB_MIGRATION_1_2", function () UpdateToVersion(1.2) end)
     -- end
-    CanIMogIt.db.global.databaseVersion = CanIMogIt_DatabaseVersion
+    if CanIMogIt.db.global.databaseVersion < 1.3 then
+        CanIMogIt:FixMissingClassRestrictions()
+    end
+    -- CanIMogIt.db.global.databaseVersion = CanIMogIt_DatabaseVersion
 end
 
 
@@ -125,6 +133,116 @@ local function UpdateDatabaseIfNeeded()
 end
 
 
+-- Create a popup for the one-time database fix for FixMissingClassRestrictions
+function CanIMogIt.CreateBugFixPopup(dialogName, onAcceptFunc, estimatedTime)
+    StaticPopupDialogs[dialogName] = {
+        text = "Can I Mog It?" .. "\n\n" .. string.format(L["We need to update our database. This will cause about %s minutes of short lag spikes while we update the database."], estimatedTime),
+        button1 = L["Okay"],
+        button2 = L["Ask me later"],
+        OnAccept = onAcceptFunc,
+        timeout = 0,
+        whileDead = true,
+        hideOnEscape = true,
+        preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+    }
+    StaticPopup_Show(dialogName)
+end
+
+
+local delay = 1
+local buffer = 50
+local displayCounter = 0
+local itemsToFix = {}
+
+local function SetItemClassRestrictions(itemLink, hash, sourceID)
+    -- manually set the class restrictions for the item.
+    -- this will fix any items that are missing class restrictions or have wrong data.
+    local classRestrictions = CanIMogIt:GetItemClassRestrictions(itemLink)
+    if classRestrictions then
+        CanIMogIt.db.global.appearances[hash].sources[sourceID].classRestrictions = classRestrictions
+    else
+        CanIMogIt.db.global.appearances[hash].sources[sourceID].classRestrictions = nil
+    end
+end
+
+local function FixClassRestrictions()
+    for hash, appearance in pairs(CanIMogIt.db.global.appearances) do
+        for sourceID, source in pairs(appearance["sources"]) do
+            local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+            itemsToFix[sourceID] = {hash, itemLink}
+        end
+    end
+
+    -- iterate over the itemsToFix table with a buffer
+    -- with a delay between each batch.
+    local function FixItems()
+        local totalSources = 0
+        for hash, appearance in pairs(CanIMogIt.db.global.appearances) do
+            for sourceID, source in pairs(appearance["sources"]) do
+                totalSources = totalSources + 1
+            end
+        end
+        local i = 0
+        for sourceID, data in pairs(itemsToFix) do
+            local hash = data[1]
+            local itemLink = data[2]
+            if GetItemInfo(itemLink) then
+                SetItemClassRestrictions(itemLink, hash, sourceID)
+                itemsToFix[sourceID] = nil
+                i = i + 1
+            end
+            if i >= buffer then
+                break
+            end
+        end
+        if next(itemsToFix) ~= nil then
+            -- The buffer was reached, but there are still items to fix.
+            local countOfItemsToFix = 0
+            for itemLink, data in pairs(itemsToFix) do
+                countOfItemsToFix = countOfItemsToFix + 1
+            end
+            displayCounter = displayCounter + 1
+            if displayCounter == 10 then
+                CanIMogIt:Print("Still upgrading the database. "..countOfItemsToFix.." of "..totalSources.. " entries to update.")
+                displayCounter = 0
+            end
+            C_Timer.After(delay, FixItems)
+        else
+            -- We're done, update the database version and show a popup.
+            CanIMogIt.db.global.databaseVersion = CanIMogIt_DatabaseVersion
+            StaticPopupDialogs["CanIMogIt_BugFixComplete"] = {
+                text = L["Can I Mog It has finished updating the database. Please reload your UI to save the changes."],
+                button1 = L["Okay, reload now"],
+                button2 = L["I'll reload later"],
+                OnAccept = ReloadUI,
+                timeout = 0,
+                whileDead = true,
+                hideOnEscape = true,
+                preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+            }
+            StaticPopup_Show("CanIMogIt_BugFixComplete")
+        end
+    end
+    FixItems()
+end
+
+function CanIMogIt:FixMissingClassRestrictions()
+    -- Run DBAddItem again for all items in the database.
+    -- This will fix any items that are missing class restrictions.
+    local totalSources = 0
+    for hash, appearance in pairs(self.db.global.appearances) do
+        for sourceID, source in pairs(appearance["sources"]) do
+            totalSources = totalSources + 1
+        end
+    end
+
+    -- estimate the time it will take to fix the database, rounded up to the nearest minute.
+    local estimatedTime = math.ceil(totalSources / buffer * delay / 60)
+
+    CanIMogIt.CreateBugFixPopup("CanIMogIt_FixMissingClassRestrictions", FixClassRestrictions, estimatedTime)
+end
+
+
 function CanIMogIt:OnInitialize()
     if (not CanIMogItDatabase) then
         StaticPopup_Show("CANIMOGIT_NEW_DATABASE")
@@ -132,6 +250,9 @@ function CanIMogIt:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("CanIMogItDatabase", default)
 end
 
+------------------------------------------------------------
+-- Database Functions
+------------------------------------------------------------
 
 function CanIMogIt:GetAppearanceHash(appearanceID, itemLink)
     if not appearanceID or not itemLink then return end
@@ -237,18 +358,21 @@ local function LateAddItems(event, itemID, success)
         if not success or itemID <= 0 then
             return
         end
+        -- If the itemID is in itemsToAdd, first remove it from the table, then add it to the database.
         if CanIMogIt.itemsToAdd[itemID] then
             for sourceID, _ in pairs(CanIMogIt.itemsToAdd[itemID]) do
-                local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
                 local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
-                CanIMogIt:_DBSetItem(itemLink, appearanceID, sourceID)
+                local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
+                CanIMogIt.itemsToAdd[itemID][sourceID] = nil
+                CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
             end
-            table.remove(CanIMogIt.itemsToAdd, itemID)
+            if next(CanIMogIt.itemsToAdd[itemID]) == nil then
+                CanIMogIt.itemsToAdd[itemID] = nil
+            end
         end
     end
 end
 CanIMogIt.frame:AddEventFunction(LateAddItems)
-
 
 function CanIMogIt:_DBSetItem(itemLink, appearanceID, sourceID)
     -- Sets the item in the database, or at least schedules for it to be set
@@ -258,14 +382,22 @@ function CanIMogIt:_DBSetItem(itemLink, appearanceID, sourceID)
         if self.db.global.appearances[hash] == nil then
             return
         end
+        local subClass = self:GetItemSubClassName(itemLink)
+        local classRestrictions = self:GetItemClassRestrictions(itemLink)
+
         self.db.global.appearances[hash].sources[sourceID] = {
-            ["subClass"] = self:GetItemSubClassName(itemLink),
-            ["classRestrictions"] = self:GetItemClassRestrictions(itemLink),
+            ["subClass"] = subClass,
         }
-        if self:GetItemSubClassName(itemLink) == nil then
+        if classRestrictions then
+            self.db.global.appearances[hash].sources[sourceID]["classRestrictions"] = classRestrictions
+        else
+            self.db.global.appearances[hash].sources[sourceID]["classRestrictions"] = nil
+        end
+        if subClass == nil then
             CanIMogIt:Print("nil subclass: " .. itemLink)
         end
         if CanIMogItOptions['databaseDebug'] then
+            -- enabled/disabled via the `/cimi printdb` command
             CanIMogIt:Print("New item found: " .. itemLink .. " itemID: " .. CanIMogIt:GetItemID(itemLink) .. " sourceID: " .. sourceID .. " appearanceID: " .. appearanceID)
         end
     else
