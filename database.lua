@@ -166,6 +166,10 @@ local function SetItemClassRestrictions(itemLink, hash, sourceID)
 end
 
 local function FixClassRestrictions()
+    -- Pause the database scan while we fix the class restrictions.
+    CanIMogIt:PauseDatabaseScan()
+
+    -- Get the list of items to fix.
     for hash, appearance in pairs(CanIMogIt.db.global.appearances) do
         for sourceID, source in pairs(appearance["sources"]) do
             local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
@@ -193,6 +197,19 @@ local function FixClassRestrictions()
             end
             if i >= buffer then
                 break
+            end
+        end
+        --[[
+            If the itemsToFix table doesn't decrease, it means there are items that aren't
+            getting item data back from Blizzard. These are probably deprecated items. For now,
+            we will just make sure their format is correct and ignore them. We can't tell what
+            Blizzard will do with them in the future, so we are leaving them alone.
+        --]]
+        if i == 0 then
+            for sourceID, data in pairs(itemsToFix) do
+                local hash = data[1]
+                CanIMogIt.db.global.appearances[hash].sources[sourceID].classRestrictions = nil
+                itemsToFix[sourceID] = nil
             end
         end
         if next(itemsToFix) ~= nil then

@@ -1,3 +1,12 @@
+10.0.2v1.48 - 2023/02/26
+
+Fixed a couple of bugs related to the database
+
+* [#298](https://gitlab.com/toreltwiddler/CanIMogIt/issues/298) Class restrictions were recorded incorrectly and may have shown incorrect information for unknown items on characters that could not equip the item.  However it should never have told you that you knew an item incorrectly.
+* [#294](https://gitlab.com/toreltwiddler/CanIMogIt/issues/294) Appearances "Known from another item" may have incorrectly shown as "Known" until observed.  However once moused over or logging into a different character, they would have been removed from the database (so you may have seen removed items on login).
+
+*****
+
 10.0.2v1.47 - 2023/02/19
 
 * [#278](https://gitlab.com/toreltwiddler/CanIMogIt/issues/278) Fixed ElvUI overlay icons (Thanks @Gwarii!)

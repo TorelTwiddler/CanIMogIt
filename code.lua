@@ -510,6 +510,12 @@ local function _GetAppearances()
 end
 
 
+function CanIMogIt:PauseDatabaseScan()
+    CanIMogIt:Print(L["Database scan paused."])
+    CanIMogIt.frame:SetScript("OnUpdate", nil)
+end
+
+
 local timer = 0
 local function GetAppearancesOnUpdate(self, elapsed)
     -- OnUpdate function with a reset timer to throttle getting appearances.
