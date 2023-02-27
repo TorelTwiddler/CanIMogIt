@@ -510,8 +510,10 @@ local function _GetAppearances()
 end
 
 
-function CanIMogIt:PauseDatabaseScan()
-    CanIMogIt:Print(L["Database scan paused."])
+function CanIMogIt:PauseDatabaseScan(message)
+    if CanIMogItOptions["printDatabaseScan"] then
+        CanIMogIt:Print(message or L["Database scan paused."])
+    end
     CanIMogIt.frame:SetScript("OnUpdate", nil)
 end
 

@@ -167,7 +167,7 @@ end
 
 local function FixClassRestrictions()
     -- Pause the database scan while we fix the class restrictions.
-    CanIMogIt:PauseDatabaseScan()
+    CanIMogIt:PauseDatabaseScan(L["Pausing the database scan while we upgrade!"])
 
     -- Get the list of items to fix.
     for hash, appearance in pairs(CanIMogIt.db.global.appearances) do
@@ -226,6 +226,7 @@ local function FixClassRestrictions()
             C_Timer.After(delay, FixItems)
         else
             -- We're done, update the database version and show a popup.
+            CanIMogIt:Print(L["Finished updating the database!"])
             CanIMogIt.db.global.databaseVersion = CanIMogIt_DatabaseVersion
             StaticPopupDialogs["CanIMogIt_BugFixComplete"] = {
                 text = L["Can I Mog It has finished updating the database. Please reload your UI to save the changes."],
