@@ -1,3 +1,9 @@
+10.0.2v1.49 - 2023/03/01
+
+* [#301](https://gitlab.com/toreltwiddler/CanIMogIt/issues/301) Fix error with database update when the sourceID isn't valid.
+
+*****
+
 10.0.2v1.48 - 2023/02/26
 
 Fixed a couple of bugs related to the database

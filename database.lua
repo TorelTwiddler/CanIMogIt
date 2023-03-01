@@ -190,7 +190,11 @@ local function FixClassRestrictions()
         for sourceID, data in pairs(itemsToFix) do
             local hash = data[1]
             local itemLink = data[2]
-            if GetItemInfo(itemLink) then
+            if itemLink == nil then
+                -- if the itemLink is nil, just remove it from the table and continue.
+                itemsToFix[sourceID] = nil
+            elseif GetItemInfo(itemLink) then
+                -- If GetItemInfo returns real stuff, then we can set the class restrictions.
                 SetItemClassRestrictions(itemLink, hash, sourceID)
                 itemsToFix[sourceID] = nil
                 i = i + 1
