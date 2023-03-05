@@ -1346,10 +1346,17 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
                     text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                     unmodifiedText = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
                 else
-                    -- The player knows the appearance from this item, but
-                    -- the character can never use it.
-                    text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
-                    unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
+                    if isItemSoulbound then
+                        -- The player knows the appearance from this item, but
+                        -- the character can never use it.
+                        text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
+                        unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
+                    else
+                        -- The player knows the appearance from this item, but
+                        -- the character can never use it, but it is BoE.
+                        text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
+                        unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
+                    end
                 end
             end
         -- Does the player know the appearance from a different item?
@@ -1368,10 +1375,17 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                     unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
                 else
-                    -- The player knows the appearance from another item, but
-                    -- this charater can never use/learn the apperance.
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+                    if isItemSoulbound then
+                        -- The player knows the appearance from another item, but
+                        -- this charater can never use/learn the apperance.
+                        text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+                        unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+                    else
+                        -- The player knows the appearance from another item, but
+                        -- this charater can never use/learn the apperance, but it is BoE.
+                        text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
+                        unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
+                    end
                 end
             end
         else
