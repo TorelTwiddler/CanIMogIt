@@ -1,3 +1,9 @@
+10.0.2v1.50 - 2023/03/05
+
+* [#303](https://gitlab.com/toreltwiddler/CanIMogIt/issues/303) Support BoP and BoE tooltips and icons.
+
+*****
+
 10.0.2v1.49 - 2023/03/01
 
 * [#301](https://gitlab.com/toreltwiddler/CanIMogIt/issues/301) Fix error with database update when the sourceID isn't valid.

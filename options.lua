@@ -49,7 +49,6 @@ CanIMogItOptions_Defaults = {
         ["showUnknownOnly"] = false,
         ["showSetInfo"] = true,
         ["showItemIconOverlay"] = true,
-        -- ["showBoEColors"] = true,
         ["showVerboseText"] = false,
         ["showSourceLocationTooltip"] = false,
         ["printDatabaseScan"] = true,
@@ -83,10 +82,6 @@ CanIMogItOptions_DisplayData = {
         ["displayName"] = L["Show Bag Icons"],
         ["description"] = L["Shows the icon directly on the item in your bag."]
     },
-    -- ["showBoEColors"] = {
-    --     ["displayName"] = L["Show Bind on Equip Colors"],
-    --     ["description"] = L["Changes the color of icons and tooltips when an item is Bind on Equip or Bind on Account."]
-    -- },
     ["showVerboseText"] = {
         ["displayName"] = L["Verbose Text"],
         ["description"] = L["Shows a more detailed text for some of the tooltips."]
@@ -435,7 +430,6 @@ local function createOptionsMenu()
     CanIMogIt.frame.showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
     CanIMogIt.frame.showSetInfo = newCheckbox(CanIMogIt.frame, "showSetInfo")
     CanIMogIt.frame.showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
-    -- CanIMogIt.frame.showBoEColors = newCheckbox(CanIMogIt.frame, "showBoEColors")
     CanIMogIt.frame.showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
     CanIMogIt.frame.showSourceLocationTooltip = newCheckbox(CanIMogIt.frame, "showSourceLocationTooltip")
     CanIMogIt.frame.printDatabaseScan = newCheckbox(CanIMogIt.frame, "printDatabaseScan")
@@ -448,7 +442,6 @@ local function createOptionsMenu()
     CanIMogIt.frame.showUnknownOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showTransmoggableOnly, "BOTTOMLEFT")
     CanIMogIt.frame.showSetInfo:SetPoint("TOPLEFT", CanIMogIt.frame.showUnknownOnly, "BOTTOMLEFT")
     CanIMogIt.frame.showItemIconOverlay:SetPoint("TOPLEFT", CanIMogIt.frame.showSetInfo, "BOTTOMLEFT")
-    -- CanIMogIt.frame.showBoEColors:SetPoint("TOPLEFT", CanIMogIt.frame.showItemIconOverlay, "BOTTOMLEFT")
     CanIMogIt.frame.showVerboseText:SetPoint("TOPLEFT", CanIMogIt.frame.showItemIconOverlay, "BOTTOMLEFT")
     CanIMogIt.frame.showSourceLocationTooltip:SetPoint("TOPLEFT", CanIMogIt.frame.showVerboseText, "BOTTOMLEFT")
     CanIMogIt.frame.printDatabaseScan:SetPoint("TOPLEFT", CanIMogIt.frame.showSourceLocationTooltip, "BOTTOMLEFT")
@@ -509,8 +502,6 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.debug:Click()
     elseif input == 'overlay' then
         CanIMogIt.frame.showItemIconOverlay:Click()
-    -- elseif input == 'colors' then
-    --     CanIMogIt.frame.showBoEColors:Click()
     elseif input == 'verbose' then
         CanIMogIt.frame.showVerboseText:Click()
     elseif input == 'equiponly' then
