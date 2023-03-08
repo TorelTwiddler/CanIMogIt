@@ -1,4 +1,6 @@
-10.0.2v1.50 - 2023/03/05
+10.0.2v1.50 - 2023/03/08
+
+![BoE and BoP tooltips and overlay!](https://i.imgur.com/EWzgkpo.png "BoE and BoP tooltips and overlay!")
 
 * [#303](https://gitlab.com/toreltwiddler/CanIMogIt/issues/303) Support BoP and BoE tooltips and icons.
 
