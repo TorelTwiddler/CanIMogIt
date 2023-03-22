@@ -55,6 +55,12 @@ local function CheckBadDB()
         back too many versions.
     ]]
     local showPopup = false
+    -- If there are items in the database but no version. This either happens because the
+    -- version is too old or the database is corrupted.
+    if next(CanIMogIt.db.global.appearances) and CanIMogIt.db.global.databaseVersion == nil then
+        CanIMogIt.db.global.databaseVersion = 0
+        showPopup = true
+    end
     -- If the database is older than 1.2
     if CanIMogIt.db.global.databaseVersion and CanIMogIt.db.global.databaseVersion < 1.2 then
         showPopup = true
@@ -79,7 +85,9 @@ local function CheckBadDB()
             preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
         }
         StaticPopup_Show("CANIMOGIT_BAD_DATABASE")
+        return true
     end
+    return false
 end
 
 
@@ -120,7 +128,9 @@ end
 
 
 local function UpdateDatabaseIfNeeded()
-    CheckBadDB()
+    if CheckBadDB() then
+        return
+    end
     if next(CanIMogIt.db.global.appearances) and
             (CanIMogIt.db.global.databaseVersion == nil
             or CanIMogIt.db.global.databaseVersion < CanIMogIt_DatabaseVersion) then
