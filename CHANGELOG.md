@@ -1,4 +1,10 @@
-10.0.2v1.50 - 2023/03/08
+10.0.7v1.51 - 2023/03/21
+
+* [#305](https://gitlab.com/toreltwiddler/CanIMogIt/issues/305) Fix error when upgrading from old database
+
+*****
+
+10.0.5v1.50 - 2023/03/08
 
 ![BoE and BoP tooltips and overlay!](https://i.imgur.com/EWzgkpo.png "BoE and BoP tooltips and overlay!")
 
@@ -6,13 +12,13 @@
 
 *****
 
-10.0.2v1.49 - 2023/03/01
+10.0.5v1.49 - 2023/03/01
 
 * [#301](https://gitlab.com/toreltwiddler/CanIMogIt/issues/301) Fix error with database update when the sourceID isn't valid.
 
 *****
 
-10.0.2v1.48 - 2023/02/26
+10.0.5v1.48 - 2023/02/26
 
 Fixed a couple of bugs related to the database
 
@@ -21,7 +27,7 @@ Fixed a couple of bugs related to the database
 
 *****
 
-10.0.2v1.47 - 2023/02/19
+10.0.5v1.47 - 2023/02/19
 
 * [#278](https://gitlab.com/toreltwiddler/CanIMogIt/issues/278) Fixed ElvUI overlay icons (Thanks @Gwarii!)
 
