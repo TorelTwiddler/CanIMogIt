@@ -34,27 +34,19 @@ function CIMIScanTooltip:GetRedText(itemLink)
     local redTexts = {}
     local tooltipData = C_TooltipInfo.GetItemByID(CanIMogIt:GetItemID(itemLink))
     for i, line in pairs(tooltipData.lines) do
-        local leftText, rightText, leftColorRed, rightColorRed;
-        for j, arg in pairs(line.args) do
-            if arg.field == "leftText" then
-                leftText = arg.stringVal
-            end
-            if arg.field == "rightText" then
-                rightText = arg.stringVal
-            end
-            if arg.field == "leftColor" then
-                leftColorRed = IsColorValRed(arg.colorVal)
-            end
-            if arg.field == "rightColor" then
-                rightColorRed = IsColorValRed(arg.colorVal)
-            end
+        local leftColorRed, rightColorRed;
+        if line.leftColor then
+            leftColorRed = IsColorValRed(line.leftColor)
+        end
+        if line.rightColor then
+            rightColorRed = IsColorValRed(line.rightColor)
         end
 
         if leftColorRed then
-            table.insert(redTexts, leftText)
+            table.insert(redTexts, line.leftText)
         end
         if rightColorRed then
-            table.insert(redTexts, rightText)
+            table.insert(redTexts, line.rightText)
         end
     end
     return string.sub(table.concat(redTexts, " "), 1, 80)
@@ -71,15 +63,9 @@ function CIMIScanTooltip:GetClassesRequired(itemLink)
     -- Returns a table of classes required for the item, if any, or nil if none.
     local tooltipData = C_TooltipInfo.GetItemByID(CanIMogIt:GetItemID(itemLink))
     for i, line in pairs(tooltipData.lines) do
-        local leftText;
-        for j, arg in pairs(line.args) do
-            if arg.field == "leftText" then
-                leftText = arg.stringVal
-            end
-            local req_classes = GetClassesText(leftText)
-            if req_classes then
-                return CanIMogIt.Utils.strsplit(",%s*", req_classes)
-            end
+        local req_classes = GetClassesText(line.leftText)
+        if req_classes then
+            return CanIMogIt.Utils.strsplit(",%s*", req_classes)
         end
     end
 end

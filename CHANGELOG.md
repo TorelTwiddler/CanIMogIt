@@ -1,3 +1,10 @@
+10.1.0v1.52 - 2023/05/02
+
+* Fix error from new WoW version.
+* Updated TOC.
+
+*****
+
 10.0.7v1.51 - 2023/03/21
 
 * [#305](https://gitlab.com/toreltwiddler/CanIMogIt/issues/305) Fix error when upgrading from old database
