@@ -1,5 +1,6 @@
 ## Interface: 100100
-## Title: Can I Mog It? |TInterface\Addons\CanIMogIt\Icons\KNOWN:0|t
+## Title: Can I Mog It?
+## IconTexture: Interface\Addons\CanIMogIt\Icons\KNOWN
 ## Author: TorelTwiddler, Ami Yuy
 ## Version: @project-version@
 ## Notes: Adds tooltips to items showing if you have learned a transmog appearance.
