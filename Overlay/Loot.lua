@@ -35,7 +35,7 @@ local function HookOverlayLoot(event)
     if event ~= "PLAYER_LOGIN" then return end
 
     -- Add hook for the loot frames.
-    for i=1,NUM_GROUP_LOOT_FRAMES do
+    for i=1,CanIMogIt.NUM_GROUP_LOOT_FRAMES do
         local frame = _G["GroupLootFrame"..i].IconFrame
         if frame then
             CIMI_AddToFrame(frame, LootFrame_CIMIUpdateIcon)
@@ -52,7 +52,7 @@ CanIMogIt.frame:AddEventFunction(HookOverlayLoot)
 
 
 local function LootOverlayEvents(event, ...)
-    for i=1,NUM_GROUP_LOOT_FRAMES do
+    for i=1,CanIMogIt.NUM_GROUP_LOOT_FRAMES do
         local frame = _G["GroupLootFrame"..i].IconFrame
         if frame then
             LootFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)

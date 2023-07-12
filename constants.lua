@@ -215,11 +215,12 @@ CanIMogIt.Expansions.SHADOWLANDS = 8
 
 ---- Others ----
 CanIMogIt.NUM_ENCOUNTER_JOURNAL_ENCOUNTER_LOOT_FRAMES = 10 -- Blizzard functions are locals
--- Loot Roll = NUM_GROUP_LOOT_FRAMES
 CanIMogIt.NUM_MAIL_INBOX_ITEMS = 7
 -- Mail Attachments = ATTACHMENTS_MAX_RECEIVE
 -- Merchant Items = MERCHANT_ITEMS_PER_PAGE
 -- Trade Skill = no constants
+-- Loot Roll = NUM_GROUP_LOOT_FRAMES -- Blizzard removed in patch 10.1.5, using our own constant
+CanIMogIt.NUM_GROUP_LOOT_FRAMES = 4
 
 -- Expansions before Shadowlands are all opened at level 10 as of 9.0. Shadowlands is opened at level 48.
 CanIMogIt.MIN_TRANSMOG_LEVEL = 10

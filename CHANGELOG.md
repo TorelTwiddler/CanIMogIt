@@ -1,3 +1,11 @@
+10.1.5v1.53 - 2023/07/11
+
+* [#310](https://gitlab.com/toreltwiddler/CanIMogIt/issues/310) Fix error from removed constant.
+* Updated TOC.
+* [#308](https://gitlab.com/toreltwiddler/CanIMogIt/issues/308) Add icon to the AddOns menu.
+
+*****
+
 10.1.0v1.52 - 2023/05/02
 
 * Fix error from new WoW version.
