@@ -1,7 +1,7 @@
 -- Adds overlays to items in the addon AdiBags: https://mods.curse.com/addons/wow/adibags
 
 
-if IsAddOnLoaded("AdiBags") then
+if C_AddOns.IsAddOnLoaded("AdiBags") then
 
 
     ----------------------------

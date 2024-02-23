@@ -1,6 +1,6 @@
 -- Adds overlays to Bagnon https://mods.curse.com/addons/wow/bagnon
 
-if IsAddOnLoaded("Bagnon") then
+if C_AddOns.IsAddOnLoaded("Bagnon") then
 
     -- Needs a slightly modified version of ContainerFrameItemButton_CIMIUpdateIcon(),
     -- to support cached Bagnon bags (e.g. bank when not at bank or other characters).

@@ -1,6 +1,6 @@
 -- Adds overlays to items in the addon cargBags Nivaya: https://www.curseforge.com/wow/addons/cargbags-nivaya-mop-update
 
-if IsAddOnLoaded("cargBags_Nivaya") then
+if C_AddOns.IsAddOnLoaded("cargBags_Nivaya") then
 
 
     ----------------------------

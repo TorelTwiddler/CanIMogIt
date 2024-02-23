@@ -1,7 +1,7 @@
 -- Adds overlays to items in the addon Auctionator: https://www.curseforge.com/wow/addons/auctionator
 
 
-if IsAddOnLoaded("Auctionator") then
+if C_AddOns.IsAddOnLoaded("Auctionator") then
 
 
     ----------------------------

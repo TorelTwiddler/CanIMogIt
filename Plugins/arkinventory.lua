@@ -1,7 +1,7 @@
 -- Adds overlays to items in the addon ArkInventory: https://mods.curse.com/addons/wow/ark-inventory
 
 
-if IsAddOnLoaded("ArkInventory") then
+if C_AddOns.IsAddOnLoaded("ArkInventory") then
 
     if ( ArkInventory.API.Version( ) ) < 30821 then
 
