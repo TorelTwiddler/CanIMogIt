@@ -54,8 +54,9 @@ end
 ------------------------
 
 
-local function TradeSkillEvents(event)
-    if event == "TRADE_SKILL_SHOW" then
+local function TradeSkillEvents(event, addonName)
+    if event == "TRADE_SKILL_SHOW" or event == "ADDON_LOADED" and addonName == "Blizzard_Professions" then
+        if _G["ProfessionsFrame"] == nil then return end
         local tradeSkillFrame = _G["ProfessionsFrame"].CraftingPage.RecipeList
         tradeSkillFrame:HookScript("OnUpdate", CIMI_UpdateTradeSkillIcons)
     end
