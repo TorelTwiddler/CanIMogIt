@@ -711,6 +711,10 @@ function CanIMogIt:CalculateSetsVariantText(setID)
     --[[
         Given a setID, calculate the sum of all known sources for this set
         and it's variants.
+
+        We are assuming that there are never more than 8 variants for a set.
+        If there are, we'll have to modify this to add a third row I guess?
+        Or maybe change it entirely. ¯\_(ツ)_/¯
     ]]
 
     local baseSetID = C_TransmogSets.GetBaseSetID(setID)
@@ -720,21 +724,71 @@ function CanIMogIt:CalculateSetsVariantText(setID)
         variantSets[#variantSets+1] = variantSet
     end
 
-    local variantsText = ""
+    local variantsTexts = {}
 
-    for i, variantSet in CanIMogIt.Utils.spairs(variantSets, function(t,a,b) return t[a].uiOrder < t[b].uiOrder end) do
-        local variantHave, variantTotal = CanIMogIt:_GetRatio(variantSet.setID)
-
-        variantsText = variantsText .. CanIMogIt:_GetRatioTextColor(variantHave, variantTotal)
-
-        -- There is intentionally an extra space before the newline, for positioning.
-        variantsText = variantsText .. variantHave .. "/" .. variantTotal .. " \n"
+    -- sort by the uiOrder and then the setID
+    local function sortSets(t, a, b)
+        if t[a].uiOrder == t[b].uiOrder then
+            return t[a].setID < t[b].setID
+        end
+        return t[a].uiOrder < t[b].uiOrder
     end
 
-    -- uncomment for debug
-    -- variantsText = variantsText .. "setID: " .. setID .. "  "
+    -- Create the variant ratio text for each variant set.
+    for i, variantSet in CanIMogIt.Utils.spairs(variantSets, sortSets) do
+        local variantHave, variantTotal = CanIMogIt:_GetRatio(variantSet.setID)
 
-    return string.sub(variantsText, 1, -2)
+        -- Set the color of the variantsText based on the ratio.
+        local color = CanIMogIt:_GetRatioTextColor(variantHave, variantTotal)
+
+        -- Append the variantHave/variantTotal to the variantTexts table.
+        variantsTexts[#variantsTexts+1] = color .. variantHave .. "/" .. variantTotal
+    end
+
+    -- If there are 4 or less variants, we want to display them all on top of each other:
+    --[[
+        1/8
+        2/8
+        3/8
+        4/8
+    ]]
+    -- If there are 5 or more, we want to display them in a 2x2 grid, growing from the bottom:
+    --[[
+             1/8
+             2/8
+        5/8  3/8
+        6/8  4/8
+    ]]
+    local variantsTextTotal = ""
+    local numVariants = #variantsTexts
+    local grid = {}
+
+    for i = 1, numVariants do
+        -- The row is 1 through 4, then 1 through 4 again.
+        local row = i > 4 and i - 4 or i
+        -- The column is 1 for <= 4, 2 for > 4.
+        local col = i > 4 and 1 or 2
+        grid[row] = grid[row] or {}
+        grid[row][col] = variantsTexts[i]
+    end
+
+    -- For each variant greater than 4
+    for i = 1, 4-(8-numVariants) do
+        -- If there are fewer than 8 variants, cells in the left column move to the bottom.
+        grid[i+(8-numVariants)][1] = grid[i][1]
+        grid[i][1] = " "
+    end
+
+    -- Output the grid to a string.
+    for i = 1, #grid do
+        if grid[i][2] then
+            variantsTextTotal = variantsTextTotal .. (grid[i][1] or "") .. "  " .. (grid[i][2] or "") .. " \n"
+        else
+            variantsTextTotal = variantsTextTotal .. (grid[i][1] or "") .. " \n"
+        end
+    end
+
+    return string.sub(variantsTextTotal, 1, -2)
 end
 
 
