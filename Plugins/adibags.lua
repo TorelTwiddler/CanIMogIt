@@ -1,5 +1,7 @@
 -- Adds overlays to items in the addon AdiBags: https://mods.curse.com/addons/wow/adibags
 
+-- AdiBags is deprecated and no longer maintained.
+-- No further updates will be made to this file.
 
 if C_AddOns.IsAddOnLoaded("AdiBags") then
 

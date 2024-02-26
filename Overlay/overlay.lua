@@ -127,6 +127,7 @@ CIMIEvents = {
     ["UNIT_INVENTORY_CHANGED"] = true,
     ["PLAYER_SPECIALIZATION_CHANGED"] = true,
     ["BAG_UPDATE"] = true,
+    ["BAG_CONTAINER_UPDATE"] = true,
     ["BAG_NEW_ITEMS_UPDATED"] = true,
     ["QUEST_ACCEPTED"] = true,
     ["BAG_SLOT_FLAGS_UPDATED"] = true,
