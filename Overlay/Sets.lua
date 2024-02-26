@@ -16,7 +16,7 @@ function CIMI_AddToFrameSets(parentFrame)
 
         -- Create the font frame.
         frame.CanIMogItSetText = frame:CreateFontString("CIMIOverlayFrame_"..tostring(parentFrame:GetName()), "OVERLAY", "GameFontNormalSmall")
-        frame.CanIMogItSetText:SetPoint("BOTTOMRIGHT", -2, 2)
+        frame.CanIMogItSetText:SetPoint("BOTTOMRIGHT", -2, 3)
         frame.CanIMogItSetText:SetJustifyH("RIGHT")
 
         function frame:UpdateText()
