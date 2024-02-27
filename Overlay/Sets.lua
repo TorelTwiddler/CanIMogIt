@@ -6,7 +6,7 @@
 ----------------------------
 
 
-function CIMI_AddToFrameSets(parentFrame)
+function CIMI_AddToFrameSets(parentFrame, funcUpdateText)
     -- Create the Texture and set OnUpdate
     if parentFrame and not parentFrame.CanIMogItOverlay then
         local frame = CreateFrame("Frame", "CIMIOverlayFrame_"..tostring(parentFrame:GetName()), parentFrame)
@@ -19,12 +19,12 @@ function CIMI_AddToFrameSets(parentFrame)
         frame.CanIMogItSetText:SetPoint("BOTTOMRIGHT", -2, 3)
         frame.CanIMogItSetText:SetJustifyH("RIGHT")
 
-        function frame:UpdateText()
-            if CanIMogItOptions["showSetInfo"] then
-                frame.CanIMogItSetText:SetText(CanIMogIt:GetSetsVariantText(parentFrame.setID) or "")
-            else
-                frame.CanIMogItSetText:SetText("")
-            end
+        frame.UpdateText = funcUpdateText or function ()
+                if CanIMogItOptions["showSetInfo"] then
+                    frame.CanIMogItSetText:SetText(CanIMogIt:GetSetsVariantText(parentFrame.setID) or "")
+                else
+                    frame.CanIMogItSetText:SetText("")
+                end
         end
     end
 end

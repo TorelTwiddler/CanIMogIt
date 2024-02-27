@@ -575,7 +575,7 @@ function CanIMogIt:GetSets()
 end
 
 
-function CanIMogIt:_GetRatio(setID)
+function CanIMogIt.GetRatio(setID)
     -- Gets the count of known and total sources for the given setID.
     local have = 0
     local total = 0
@@ -589,7 +589,7 @@ function CanIMogIt:_GetRatio(setID)
 end
 
 
-function CanIMogIt:_GetRatioTextColor(have, total)
+function CanIMogIt.GetRatioTextColor(have, total)
     if have == total then
         return CanIMogIt.BLUE
     elseif have > 0 then
@@ -600,11 +600,11 @@ function CanIMogIt:_GetRatioTextColor(have, total)
 end
 
 
-function CanIMogIt:_GetRatioText(setID)
+function CanIMogIt.GetRatioText(setID)
     -- Gets the ratio text (and color) of known/total for the given setID.
-    local have, total = CanIMogIt:_GetRatio(setID)
+    local have, total = CanIMogIt.GetRatio(setID)
 
-    local ratioText = CanIMogIt:_GetRatioTextColor(have, total)
+    local ratioText = CanIMogIt.GetRatioTextColor(have, total)
     ratioText = ratioText .. "(" .. have .. "/" .. total .. ")"
     return ratioText
 end
@@ -654,7 +654,7 @@ function CanIMogIt:CalculateSetsText(itemLink)
 
     local set = C_TransmogSets.GetSetInfo(setID)
 
-    local ratioText = CanIMogIt:_GetRatioText(setID)
+    local ratioText = CanIMogIt.GetRatioText(setID)
 
     -- Build the classSetIDs table, if it hasn't been built yet.
     if classSetIDs == nil then
@@ -706,6 +706,43 @@ function CanIMogIt:GetSetsText(itemLink)
     return line1, line2
 end
 
+-- sort by the uiOrder and then the setID
+function CanIMogIt.SortSets(t, a, b)
+    if t[a].uiOrder == t[b].uiOrder then
+        return t[a].setID < t[b].setID
+    end
+    return t[a].uiOrder < t[b].uiOrder
+end
+
+
+function CanIMogIt.GetVariantSets(setID)
+    --[[
+        Given a setID, return a table of all the variant sets for that set.
+    ]]
+    local variantSets = {C_TransmogSets.GetSetInfo(setID)}
+    for i, variantSet in pairs(CIMI_GetVariantSets(setID)) do
+        variantSets[#variantSets+1] = variantSet
+    end
+    return variantSets
+end
+
+
+function CanIMogIt.GetVariantSetsTexts(variantSets)
+    --[[
+        Given a table of variant sets, return a table of the texts to display
+        for each variant set.
+    ]]
+    local variantSetsTexts = {}
+
+    for i, variantSet in CanIMogIt.Utils.spairs(variantSets, CanIMogIt.SortSets) do
+        local variantHave, variantTotal = CanIMogIt.GetRatio(variantSet.setID)
+        local color = CanIMogIt.GetRatioTextColor(variantHave, variantTotal)
+        variantSetsTexts[#variantSetsTexts+1] = color .. variantHave .. "/" .. variantTotal
+    end
+
+    return variantSetsTexts
+end
+
 
 function CanIMogIt:CalculateSetsVariantText(setID)
     --[[
@@ -717,33 +754,9 @@ function CanIMogIt:CalculateSetsVariantText(setID)
         Or maybe change it entirely. ¯\_(ツ)_/¯
     ]]
 
-    local baseSetID = C_TransmogSets.GetBaseSetID(setID)
+    local variantSets = CanIMogIt.GetVariantSets(setID)
 
-    local variantSets = {C_TransmogSets.GetSetInfo(baseSetID)}
-    for i, variantSet in ipairs(CIMI_GetVariantSets(baseSetID)) do
-        variantSets[#variantSets+1] = variantSet
-    end
-
-    local variantsTexts = {}
-
-    -- sort by the uiOrder and then the setID
-    local function sortSets(t, a, b)
-        if t[a].uiOrder == t[b].uiOrder then
-            return t[a].setID < t[b].setID
-        end
-        return t[a].uiOrder < t[b].uiOrder
-    end
-
-    -- Create the variant ratio text for each variant set.
-    for i, variantSet in CanIMogIt.Utils.spairs(variantSets, sortSets) do
-        local variantHave, variantTotal = CanIMogIt:_GetRatio(variantSet.setID)
-
-        -- Set the color of the variantsText based on the ratio.
-        local color = CanIMogIt:_GetRatioTextColor(variantHave, variantTotal)
-
-        -- Append the variantHave/variantTotal to the variantTexts table.
-        variantsTexts[#variantsTexts+1] = color .. variantHave .. "/" .. variantTotal
-    end
+    local variantsTexts = CanIMogIt.GetVariantSetsTexts(variantSets)
 
     -- If there are 4 or less variants, we want to display them all on top of each other:
     --[[
@@ -788,7 +801,7 @@ function CanIMogIt:CalculateSetsVariantText(setID)
         end
     end
 
-    return string.sub(variantsTextTotal, 1, -2)
+    return string.gsub(variantsTextTotal, " \n$", " ")
 end
 
 
