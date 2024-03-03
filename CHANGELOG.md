@@ -1,3 +1,14 @@
+10.2.5v1.54 - 2024/02/26
+
+* Updated TOC.
+* [#313](https://gitlab.com/toreltwiddler/CanIMogIt/issues/313) Fix Deprecated IsAddOnLoaded code.
+* [#314](https://gitlab.com/toreltwiddler/CanIMogIt/issues/314) Added support for BetterBags and deprecated AdiBags support.
+* [#315](https://gitlab.com/toreltwiddler/CanIMogIt/issues/315) Fix error when ProfessionsFrame isn't loaded. (No more errors with the Molinari addon)
+* [#316](https://gitlab.com/toreltwiddler/CanIMogIt/issues/316) Add grid for sets overlay. No more overlapping of Sets counts.
+* [#317](https://gitlab.com/toreltwiddler/CanIMogIt/issues/317) Reorganize Ace3 libs according to docs and update pkgmeta to correct links. (Thank you Sygon_Paul)
+
+*****
+
 10.1.5v1.53 - 2023/07/11
 
 * [#310](https://gitlab.com/toreltwiddler/CanIMogIt/issues/310) Fix error from removed constant.
