@@ -1,51 +1,33 @@
-
 if C_AddOns.IsAddOnLoaded("BetterBags") then
 
-    ----------------------------
-    -- UpdateIcon functions   --
-    ----------------------------
+    local betterBags = LibStub("AceAddon-3.0"):GetAddon("BetterBags")
+    local events = betterBags:GetModule("Events")
 
-    function BetterBagsItemButton_CIMIUpdateIcon(self)
-        if not self or not self:GetParent() then return end
-        if not CIMI_CheckOverlayIconEnabled(self) then
-            self.CIMIIconTexture:SetShown(false)
-            self:SetScript("OnUpdate", nil)
+    local function onItemUpdate(_, item)
+        local cimiFrame = item.button.CanIMogItOverlay
+        if not cimiFrame then
+            CIMI_AddToFrame(item.button, function () end)
+        end
+        if not cimiFrame then return end
+        if not CIMI_CheckOverlayIconEnabled() then
+            cimiFrame.CIMIIconTexture:SetShown(false)
+            cimiFrame:SetScript("OnUpdate", nil)
             return
         end
-        local slot, bag = self:GetParent():GetSlotAndBagID()
-        CIMI_SetIcon(self, BetterBagsItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
+        local slot, bag = item.data.slotid, item.data.bagid
+        CIMI_SetIcon(cimiFrame, function () end, CanIMogIt:GetTooltipText(nil, bag, slot))
     end
+    events:RegisterMessage('item/Updated', onItemUpdate)
 
-    ----------------------------
-    -- Begin adding to frames --
-    ----------------------------
-
-    function CIMI_BetterBagsAddFrame(event, addonName)
-        if event ~= "PLAYER_LOGIN" and event ~= "BANKFRAME_OPENED" and not CIMIEvents[event] then return end
-        -- Add to frames
-        for i=1,600 do
-            local frame = _G["BetterBagsItemButton"..i]
-            if frame then
-                C_Timer.After(.5, function() CIMI_AddToFrame(frame, BetterBagsItemButton_CIMIUpdateIcon) end)
-            end
+    local function onBagsOpenClose()
+        local bags = betterBags.Bags.Backpack
+        if not bags.currentView then return end
+        local itemList = bags.currentView.itemsByBagAndSlot
+        for _, item in pairs(itemList) do
+            onItemUpdate(_, item)
         end
     end
-    CanIMogIt.frame:AddEventFunction(CIMI_BetterBagsAddFrame)
+    events:RegisterMessage('bags/OpenClose', onBagsOpenClose)
 
-    ----------------------------
-    -- Event functions        --
-    ----------------------------
-
-    function CIMI_BetterBagsEvents(self, event, ...)
-        if not CIMIEvents[event] then return end
-        -- Update event
-        for i=1,600 do
-            local frame = _G["BetterBagsItemButton"..i]
-            if frame then
-                C_Timer.After(.5, function() BetterBagsItemButton_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
-            end
-        end
-    end
-    hooksecurefunc(CanIMogIt.frame, "ItemOverlayEvents", CIMI_BetterBagsEvents)
-
+    CanIMogIt:Print('BetterBags integration enabled.')
 end
