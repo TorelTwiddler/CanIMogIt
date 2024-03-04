@@ -6,7 +6,11 @@ if C_AddOns.IsAddOnLoaded("BetterBags") then
     local function onItemUpdate(_, item)
         local cimiFrame = item.button.CanIMogItOverlay
         if not cimiFrame then
-            CIMI_AddToFrame(item.button, function () end)
+            if item.button.frame then
+                CIMI_AddToFrame(item.button.frame, function () end)
+            else
+                CIMI_AddToFrame(item.button, function () end)
+            end
         end
         if not cimiFrame then return end
         if not CIMI_CheckOverlayIconEnabled() then

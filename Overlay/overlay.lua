@@ -63,10 +63,21 @@ local ICON_MIN_SIZE = 5
 local ICON_SIZE = 13
 local ICON_MAX_SIZE = 33
 
+local unknownFrameCounter = 1
+
 function CIMI_AddToFrame(parentFrame, updateIconFunc, frameSuffix, overrideIconLocation)
     -- Create the Texture and set OnUpdate
     if parentFrame and not parentFrame.CanIMogItOverlay then
-        frameSuffix = frameSuffix or tostring(parentFrame:GetName())
+        if parentFrame.GetName then
+            frameSuffix = frameSuffix or tostring(parentFrame:GetName())
+        else
+            frameSuffix = frameSuffix or ("Unknown" .. unknownFrameCounter)
+            unknownFrameCounter = unknownFrameCounter + 1
+        end
+        -- print all keys in the parentFrame
+        for k, v in pairs(parentFrame) do
+            print(k)
+        end
         local frame = CreateFrame("Frame", "CIMIOverlayFrame_"..frameSuffix, parentFrame)
         parentFrame.CanIMogItOverlay = frame
         -- Get the frame to match the shape/size of its parent
