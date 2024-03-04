@@ -74,10 +74,6 @@ function CIMI_AddToFrame(parentFrame, updateIconFunc, frameSuffix, overrideIconL
             frameSuffix = frameSuffix or ("Unknown" .. unknownFrameCounter)
             unknownFrameCounter = unknownFrameCounter + 1
         end
-        -- print all keys in the parentFrame
-        for k, v in pairs(parentFrame) do
-            print(k)
-        end
         local frame = CreateFrame("Frame", "CIMIOverlayFrame_"..frameSuffix, parentFrame)
         parentFrame.CanIMogItOverlay = frame
         -- Get the frame to match the shape/size of its parent
