@@ -1,4 +1,4 @@
-10.2.5v1.54 - 2024/02/26
+10.2.5v1.54 - 2024/03/09
 
 * Updated TOC.
 * [#313](https://gitlab.com/toreltwiddler/CanIMogIt/issues/313) Fix Deprecated IsAddOnLoaded code.
