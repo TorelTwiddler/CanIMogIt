@@ -36,7 +36,7 @@ end
 
 
 -- OptionsVersion: Keep this as an integer, so comparison is easy.
-CanIMogIt_OptionsVersion = "20"
+CanIMogIt_OptionsVersion = "21"
 
 
 CanIMogItOptions_Defaults = {
@@ -47,6 +47,7 @@ CanIMogItOptions_Defaults = {
         ["showEquippableOnly"] = true,
         ["showTransmoggableOnly"] = true,
         ["showUnknownOnly"] = false,
+        ["showMountItems"] = true,
         ["showSetInfo"] = true,
         ["showItemIconOverlay"] = true,
         ["showVerboseText"] = false,
@@ -73,6 +74,10 @@ CanIMogItOptions_DisplayData = {
     ["showUnknownOnly"] = {
         ["displayName"] = L["Unknown Items Only"],
         ["description"] = L["Only show on items that you haven't learned."]
+    },
+    ["showMountItems"] = {
+        ["displayName"] = L["Show Mount Items"],
+        ["description"] = L["Shows if you know mounts or not (otherwise, shows as not transmoggable)."]
     },
     ["showSetInfo"] = {
         ["displayName"] = L["Show Transmog Set Info"],
@@ -429,6 +434,7 @@ local function createOptionsMenu()
     CanIMogIt.frame.showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
     CanIMogIt.frame.showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
     CanIMogIt.frame.showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
+    CanIMogIt.frame.showMountItems = newCheckbox(CanIMogIt.frame, "showMountItems")
     CanIMogIt.frame.showSetInfo = newCheckbox(CanIMogIt.frame, "showSetInfo")
     CanIMogIt.frame.showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
     CanIMogIt.frame.showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
@@ -441,7 +447,8 @@ local function createOptionsMenu()
     CanIMogIt.frame.showEquippableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.debug, "BOTTOMLEFT")
     CanIMogIt.frame.showTransmoggableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showEquippableOnly, "BOTTOMLEFT")
     CanIMogIt.frame.showUnknownOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showTransmoggableOnly, "BOTTOMLEFT")
-    CanIMogIt.frame.showSetInfo:SetPoint("TOPLEFT", CanIMogIt.frame.showUnknownOnly, "BOTTOMLEFT")
+    CanIMogIt.frame.showMountItems:SetPoint("TOPLEFT", CanIMogIt.frame.showUnknownOnly, "BOTTOMLEFT")
+    CanIMogIt.frame.showSetInfo:SetPoint("TOPLEFT", CanIMogIt.frame.showMountItems, "BOTTOMLEFT")
     CanIMogIt.frame.showItemIconOverlay:SetPoint("TOPLEFT", CanIMogIt.frame.showSetInfo, "BOTTOMLEFT")
     CanIMogIt.frame.showVerboseText:SetPoint("TOPLEFT", CanIMogIt.frame.showItemIconOverlay, "BOTTOMLEFT")
     CanIMogIt.frame.showSourceLocationTooltip:SetPoint("TOPLEFT", CanIMogIt.frame.showVerboseText, "BOTTOMLEFT")
@@ -489,6 +496,7 @@ Can I Mog It? help:
     equiponly       Toggles showing overlay on non-equipable items.
     transmogonly    Toggles showing overlay on non-transmogable items.
     unknownonly     Toggles showing overlay on known items.
+    mountitems      Toggles showing overlay on mount items.
     count           Shows how many appearances CIMI has recorded.
     printdb         Toggles printing database debug messages when learning apperances.
     PleaseDeleteMyDB    WARNING: Completely deletes the database (for all characters)!
@@ -511,6 +519,8 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.showTransmoggableOnly:Click()
     elseif input == 'unknownonly' then
         CanIMogIt.frame.showUnknownOnly:Click()
+    elseif input == 'mountitems' then
+        CanIMogIt.frame.showMountItems:Click()
     elseif input == 'count' then
         self:Print(CanIMogIt.Utils.tablelength(CanIMogIt.db.global.appearances))
     elseif input == 'PleaseDeleteMyDB' then

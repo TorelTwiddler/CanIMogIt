@@ -1368,14 +1368,13 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         return exception_text, exception_text
     end
 
-    local isTransmogable = CanIMogIt:IsTransmogable(itemLink)
-    -- if isTransmogable == nil then return end
+    local isTransmogable, playerKnowsTransmogFromItem, isValidAppearanceForCharacter,
+        playerKnowsTransmog, characterCanLearnTransmog,
+        isItemSoulbound, isItemMount, text, unmodifiedText;
 
-    local playerKnowsTransmogFromItem, isValidAppearanceForCharacter,
-        characterIsHighEnoughLevelToTransmog, playerKnowsTransmog, characterCanLearnTransmog,
-        isItemSoulbound, text, unmodifiedText;
-
-    local isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
+    isTransmogable = CanIMogIt:IsTransmogable(itemLink)
+    isItemMount = CanIMogIt:IsItemMount(itemLink)
+    isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
 
     -- Is the item transmogable?
     if isTransmogable then
@@ -1480,6 +1479,9 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
                 end
             end
         end
+    elseif isItemMount then
+        -- This item is a mount, so let's figure out if we know it!
+        text, unmodifiedText = CanIMogIt:CalculateMountText(itemLink)
     else
         -- This item is never transmogable.
         text = CanIMogIt.NOT_TRANSMOGABLE

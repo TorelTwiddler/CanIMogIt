@@ -111,6 +111,16 @@ local function printDebug(tooltip, itemLink, bag, slot)
 
     addLine(tooltip, '--------')
 
+    local isMountItem = CanIMogIt:IsItemMount(itemLink)
+    if isMountItem ~= nil then
+        addDoubleLine(tooltip, "IsMountItem:", tostring(isMountItem))
+        if isMountItem then
+            addDoubleLine(tooltip, "PlayerKnowsMount:", tostring(CanIMogIt:PlayerKnowsMount(itemLink)))
+        end
+    end
+
+    addLine(tooltip, '--------')
+
     addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink, bag, slot)))
     addDoubleLine(tooltip, "CharacterCanEquipItem:", tostring(CanIMogIt:CharacterCanEquipItem(itemLink)))
     addDoubleLine(tooltip, "IsValidAppearanceForCharacter:", tostring(CanIMogIt:IsValidAppearanceForCharacter(itemLink)))
@@ -151,7 +161,12 @@ local function printDebug(tooltip, itemLink, bag, slot)
 
     addLine(tooltip, '--------')
 
-    addDoubleLine(tooltip, "Tooltip:", tostring(CanIMogIt:CalculateTooltipText(itemLink, bag, slot)))
+    local calculatedTooltipText = CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
+    if calculatedTooltipText ~= nil then
+        addDoubleLine(tooltip, "Tooltip:", tostring(calculatedTooltipText))
+    else
+        addDoubleLine(tooltip, "Tooltip:", 'nil')
+    end
 
     addLine(tooltip, '--------')
 
