@@ -1,5 +1,7 @@
 function CanIMogIt:IsItemMount(itemLink)
-    if C_MountJournal.GetMountFromItem(CanIMogIt:GetItemID(itemLink)) then
+    local itemID = CanIMogIt:GetItemID(itemLink)
+    if itemID == nil then return false end
+    if C_MountJournal.GetMountFromItem(itemID) then
         return true
     end
     return false
@@ -8,6 +10,7 @@ end
 
 function CanIMogIt:PlayerKnowsMount(itemLink)
     local itemID = CanIMogIt:GetItemID(itemLink)
+    if itemID == nil then return false end
     local mountID = C_MountJournal.GetMountFromItem(itemID)
     local playerKnowsMount = select(11, C_MountJournal.GetMountInfoByID(mountID))
     return playerKnowsMount
