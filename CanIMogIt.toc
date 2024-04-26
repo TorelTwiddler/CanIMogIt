@@ -33,5 +33,7 @@ tooltips.lua
 database.lua
 tooltipScanner.lua
 mounts.lua
+toys.lua
+pets.lua
 Overlay\_overlays.xml
 Plugins\_plugins.xml

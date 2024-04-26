@@ -36,7 +36,7 @@ end
 
 
 -- OptionsVersion: Keep this as an integer, so comparison is easy.
-CanIMogIt_OptionsVersion = "21"
+CanIMogIt_OptionsVersion = "23"
 
 
 CanIMogItOptions_Defaults = {
@@ -47,13 +47,15 @@ CanIMogItOptions_Defaults = {
         ["showEquippableOnly"] = true,
         ["showTransmoggableOnly"] = true,
         ["showUnknownOnly"] = false,
-        ["showMountItems"] = true,
         ["showSetInfo"] = true,
         ["showItemIconOverlay"] = true,
         ["showVerboseText"] = false,
         ["showSourceLocationTooltip"] = false,
         ["printDatabaseScan"] = true,
         ["iconLocation"] = "TOPRIGHT",
+        ["showToyItems"] = true,
+        ["showPetItems"] = true,
+        ["showMountItems"] = true,
     },
 }
 
@@ -74,10 +76,6 @@ CanIMogItOptions_DisplayData = {
     ["showUnknownOnly"] = {
         ["displayName"] = L["Unknown Items Only"],
         ["description"] = L["Only show on items that you haven't learned."]
-    },
-    ["showMountItems"] = {
-        ["displayName"] = L["Show Mount Items"],
-        ["description"] = L["Shows if you know mounts or not (otherwise, shows as not transmoggable)."]
     },
     ["showSetInfo"] = {
         ["displayName"] = L["Show Transmog Set Info"],
@@ -102,6 +100,18 @@ CanIMogItOptions_DisplayData = {
     ["iconLocation"] = {
         ["displayName"] = L["Location: "],
         ["description"] = L["Move the icon to a different location on all frames."]
+    },
+    ["showToyItems"] = {
+        ["displayName"] = L["Show Toy Items"],
+        ["description"] = L["Shows if you know toys or not (otherwise, shows as not transmoggable)."]
+    },
+    ["showPetItems"] = {
+        ["displayName"] = L["Show Pet Items"],
+        ["description"] = L["Shows if you know pets or not (otherwise, shows as not transmoggable)."]
+    },
+    ["showMountItems"] = {
+        ["displayName"] = L["Show Mount Items"],
+        ["description"] = L["Shows if you know mounts or not (otherwise, shows as not transmoggable)."]
     },
 }
 
@@ -434,26 +444,30 @@ local function createOptionsMenu()
     CanIMogIt.frame.showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
     CanIMogIt.frame.showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
     CanIMogIt.frame.showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
-    CanIMogIt.frame.showMountItems = newCheckbox(CanIMogIt.frame, "showMountItems")
     CanIMogIt.frame.showSetInfo = newCheckbox(CanIMogIt.frame, "showSetInfo")
     CanIMogIt.frame.showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
     CanIMogIt.frame.showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
     CanIMogIt.frame.showSourceLocationTooltip = newCheckbox(CanIMogIt.frame, "showSourceLocationTooltip")
     CanIMogIt.frame.printDatabaseScan = newCheckbox(CanIMogIt.frame, "printDatabaseScan")
     CanIMogIt.frame.iconLocation = newRadioGrid(CanIMogIt.frame, "iconLocation")
+    CanIMogIt.frame.showToyItems = newCheckbox(CanIMogIt.frame, "showToyItems")
+    CanIMogIt.frame.showPetItems = newCheckbox(CanIMogIt.frame, "showPetItems")
+    CanIMogIt.frame.showMountItems = newCheckbox(CanIMogIt.frame, "showMountItems")
 
     -- position the checkboxes
     CanIMogIt.frame.debug:SetPoint("TOPLEFT", 16, -16)
     CanIMogIt.frame.showEquippableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.debug, "BOTTOMLEFT")
     CanIMogIt.frame.showTransmoggableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showEquippableOnly, "BOTTOMLEFT")
     CanIMogIt.frame.showUnknownOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showTransmoggableOnly, "BOTTOMLEFT")
-    CanIMogIt.frame.showMountItems:SetPoint("TOPLEFT", CanIMogIt.frame.showUnknownOnly, "BOTTOMLEFT")
-    CanIMogIt.frame.showSetInfo:SetPoint("TOPLEFT", CanIMogIt.frame.showMountItems, "BOTTOMLEFT")
+    CanIMogIt.frame.showSetInfo:SetPoint("TOPLEFT", CanIMogIt.frame.showUnknownOnly, "BOTTOMLEFT")
     CanIMogIt.frame.showItemIconOverlay:SetPoint("TOPLEFT", CanIMogIt.frame.showSetInfo, "BOTTOMLEFT")
     CanIMogIt.frame.showVerboseText:SetPoint("TOPLEFT", CanIMogIt.frame.showItemIconOverlay, "BOTTOMLEFT")
     CanIMogIt.frame.showSourceLocationTooltip:SetPoint("TOPLEFT", CanIMogIt.frame.showVerboseText, "BOTTOMLEFT")
     CanIMogIt.frame.printDatabaseScan:SetPoint("TOPLEFT", CanIMogIt.frame.showSourceLocationTooltip, "BOTTOMLEFT")
     CanIMogIt.frame.iconLocation:SetPoint("TOPLEFT", CanIMogIt.frame.printDatabaseScan, "BOTTOMLEFT")
+    CanIMogIt.frame.showToyItems:SetPoint("TOPLEFT", CanIMogIt.frame.iconLocation, "BOTTOMLEFT")
+    CanIMogIt.frame.showPetItems:SetPoint("TOPLEFT", CanIMogIt.frame.showToyItems, "BOTTOMLEFT")
+    CanIMogIt.frame.showMountItems:SetPoint("TOPLEFT", CanIMogIt.frame.showPetItems, "BOTTOMLEFT")
 
     changesSavedText()
 end
@@ -496,6 +510,8 @@ Can I Mog It? help:
     equiponly       Toggles showing overlay on non-equipable items.
     transmogonly    Toggles showing overlay on non-transmogable items.
     unknownonly     Toggles showing overlay on known items.
+    toyitems        Toggles showing overlay on toy items.
+    petitems        Toggles showing overlay on pet items.
     mountitems      Toggles showing overlay on mount items.
     count           Shows how many appearances CIMI has recorded.
     printdb         Toggles printing database debug messages when learning apperances.
@@ -519,6 +535,10 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.showTransmoggableOnly:Click()
     elseif input == 'unknownonly' then
         CanIMogIt.frame.showUnknownOnly:Click()
+    elseif input == 'toyitems' then
+        CanIMogIt.frame.showToyItems:Click()
+    elseif input == 'petitems' then
+        CanIMogIt.frame.showPetItems:Click()
     elseif input == 'mountitems' then
         CanIMogIt.frame.showMountItems:Click()
     elseif input == 'count' then
