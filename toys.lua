@@ -28,3 +28,9 @@ function CanIMogIt:CalculateToyText(itemLink)
         return CanIMogIt.UNKNOWN, CanIMogIt.UNKNOWN
     end
 end
+
+
+function OnLearnedToy(itemID)
+    CanIMogIt:ResetCache()
+end
+CanIMogIt.frame:AddEventFunction(OnLearnedToy)

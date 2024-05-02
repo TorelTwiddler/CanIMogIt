@@ -154,6 +154,7 @@ local EVENTS = {
     "LOADING_SCREEN_ENABLED",
     "LOADING_SCREEN_DISABLED",
     "TRADE_SKILL_SHOW",
+    "NEW_TOY_ADDED",
 }
 
 for i, event in pairs(EVENTS) do
