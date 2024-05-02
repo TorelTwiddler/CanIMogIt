@@ -6,6 +6,27 @@
 ----------------------------
 
 
+local GetBagAndSlot = CanIMogIt.RetailWrapper(
+    function (frame)
+        -- Retail
+        local bag, slot
+        if frame:GetParent():GetParent() then
+            bag = frame:GetParent():GetBagID()
+            slot = frame:GetParent():GetID()
+        end
+        return bag, slot
+    end,
+    function (frame)
+        -- Classic
+        local bag, slot
+        if frame:GetParent():GetParent() then
+            bag = frame:GetParent():GetParent():GetID()
+            slot = frame:GetParent():GetID()
+        end
+        return bag, slot
+    end
+)
+
 function ContainerFrameItemButton_CIMIUpdateIcon(self)
     if not self or not self:GetParent() or not self:GetParent():GetParent() then return end
     if not CIMI_CheckOverlayIconEnabled() then
@@ -13,7 +34,7 @@ function ContainerFrameItemButton_CIMIUpdateIcon(self)
         self:SetScript("OnUpdate", nil)
         return
     end
-    local bag, slot = self:GetParent():GetBagID(), self:GetParent():GetID()
+    local bag, slot = GetBagAndSlot(self)
     -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
     -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
     if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end

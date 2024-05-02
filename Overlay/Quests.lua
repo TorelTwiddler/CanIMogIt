@@ -108,7 +108,9 @@ local function HookOverlayQuest(event)
     end
 end
 
-CanIMogIt.frame:AddEventFunction(HookOverlayQuest)
+if CanIMogIt.isRetail then
+    CanIMogIt.frame:AddEventFunction(HookOverlayQuest)
+end
 
 
 ------------------------
@@ -126,7 +128,7 @@ local function QuestOverlayEvents(event, ...)
     end
 end
 
-CanIMogIt.frame:AddOverlayEventFunction(QuestOverlayEvents)
-hooksecurefunc("QuestLogPopupDetailFrame_Update", QuestOverlayEvents)
+-- CanIMogIt.frame:AddOverlayEventFunction(QuestOverlayEvents)
+-- hooksecurefunc("QuestLogPopupDetailFrame_Update", QuestOverlayEvents)
 
-CanIMogIt:RegisterMessage("OptionUpdate", QuestOverlayEvents)
+-- CanIMogIt:RegisterMessage("OptionUpdate", QuestOverlayEvents)

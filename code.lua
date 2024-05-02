@@ -573,6 +573,7 @@ function CanIMogIt:GetSets()
         end
     end
 end
+CanIMogIt.GetSets = CanIMogIt.RetailWrapper(CanIMogIt.GetSets)
 
 
 function CanIMogIt.GetRatio(setID)
