@@ -30,7 +30,8 @@ function CanIMogIt:CalculateToyText(itemLink)
 end
 
 
-function OnLearnedToy(itemID)
+function OnLearnedToy(event)
+    if event ~= "NEW_TOY_ADDED" then return end
     CanIMogIt:ResetCache()
 end
 CanIMogIt.frame:AddEventFunction(OnLearnedToy)
