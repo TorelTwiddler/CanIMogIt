@@ -1115,12 +1115,7 @@ function CanIMogIt:IsEquippable(itemLink)
 end
 
 
-function CanIMogIt:GetSourceID(itemLink)
-    local sourceID = select(2, C_TransmogCollection.GetItemInfo(itemLink))
-    if sourceID then
-        return sourceID, "C_TransmogCollection.GetItemInfo"
-    end
-
+local function RetailOldGetSourceID(itemLink)
     -- Some items don't have the C_TransmogCollection.GetItemInfo data,
     -- so use the old way to find the sourceID (using the DressUpModel).
     local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
@@ -1154,6 +1149,20 @@ function CanIMogIt:GetSourceID(itemLink)
             return sourceID, "DressUpModel:GetItemTransmogInfo"
         end
     end
+end
+
+local function ClassicOldGetSourceID(itemLink)
+end
+
+local OldGetSourceID = CanIMogIt.RetailWrapper(RetailOldGetSourceID, ClassicOldGetSourceID)
+
+function CanIMogIt:GetSourceID(itemLink)
+    local sourceID = select(2, C_TransmogCollection.GetItemInfo(itemLink))
+    if sourceID then
+        return sourceID, "C_TransmogCollection.GetItemInfo"
+    end
+
+    return OldGetSourceID(itemLink)
 end
 
 

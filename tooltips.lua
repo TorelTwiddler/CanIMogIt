@@ -28,8 +28,14 @@ local function printDebug(tooltip, itemLink, bag, slot)
     addDoubleLine(tooltip, "Addon Version:", GetAddOnMetadata("CanIMogIt", "Version"))
     local playerClass = select(2, UnitClass("player"))
     local playerLevel = UnitLevel("player")
-    local playerSpec = GetSpecialization()
-    local playerSpecName = playerSpec and select(2, GetSpecializationInfo(playerSpec)) or "None"
+    local playerSpecName
+    if CanIMogIt.isRetail then
+        local playerSpec = GetSpecialization()
+        playerSpecName = playerSpec and select(2, GetSpecializationInfo(playerSpec)) or "None"
+    else
+        playerSpecName = "Classic, unknown"
+    end
+
     addDoubleLine(tooltip, "Player Class:", playerClass)
     addDoubleLine(tooltip, "Player Spec:", playerSpecName)
     addDoubleLine(tooltip, "Player Level:", playerLevel)
