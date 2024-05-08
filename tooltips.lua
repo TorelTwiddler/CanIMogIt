@@ -124,6 +124,20 @@ local function printDebug(tooltip, itemLink, bag, slot)
             addDoubleLine(tooltip, "PlayerKnowsMount:", tostring(CanIMogIt:PlayerKnowsMount(itemLink)))
         end
     end
+    local isPetItem = CanIMogIt:IsItemPet(itemLink)
+    if isPetItem ~= nil then
+        addDoubleLine(tooltip, "IsPetItem:", tostring(isPetItem))
+        if isPetItem then
+            addDoubleLine(tooltip, "PlayerKnowsPet:", tostring(CanIMogIt:PlayerKnowsPet(itemLink)))
+        end
+    end
+    local isToyItem = CanIMogIt:IsItemToy(itemLink)
+    if isToyItem ~= nil then
+        addDoubleLine(tooltip, "IsToyItem:", tostring(isToyItem))
+        if isToyItem then
+            addDoubleLine(tooltip, "PlayerKnowsToy:", tostring(CanIMogIt:PlayerKnowsToy(itemLink)))
+        end
+    end
 
     addLine(tooltip, '--------')
 

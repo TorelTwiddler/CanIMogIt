@@ -63,12 +63,12 @@ CanIMogIt.isRetail = IsRetail()
 
 function CanIMogIt.RetailWrapper(funcRetail, funcClassic)
     -- If funcClassic isn't a function, then it's the value we should return instead.
-    if type(funcClassic) ~= "function" then
-        return function() return funcClassic end
-    end
     if CanIMogIt.isRetail then
         return funcRetail
     else
+        if type(funcClassic) ~= "function" then
+            return function() return funcClassic end
+        end
         return funcClassic
     end
 end
