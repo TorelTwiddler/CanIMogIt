@@ -62,6 +62,7 @@ local WEAPON_OFF_HAND = "INVTYPE_WEAPONOFFHAND"
 local HOLDABLE = "INVTYPE_HOLDABLE"
 local TABARD = "INVTYPE_TABARD"
 local BAG = "INVTYPE_BAG"
+local NONEQUIP = "INVTYPE_NON_EQUIP_IGNORE"
 
 
 local inventorySlotsMap = {
@@ -160,7 +161,7 @@ local APPEARANCES_SETS_TAB = 2
 
 
 -- Get the name for Cosmetic. Uses http://www.wowhead.com/item=130064/deadeye-monocle.
-local COSMETIC_NAME = select(3, GetItemInfoInstant(130064))
+local COSMETIC_NAME = select(3, C_Item.GetItemInfoInstant(130064))
 
 
 -- Built-in colors
@@ -915,7 +916,7 @@ end
 
 
 function CanIMogIt:GetItemExpansion(itemID)
-    return select(15, GetItemInfo(itemID))
+    return select(15, C_Item.GetItemInfo(itemID))
 end
 
 
@@ -935,17 +936,17 @@ end
 
 
 function CanIMogIt:GetItemClassName(itemLink)
-    return select(2, GetItemInfoInstant(itemLink))
+    return select(2, C_Item.GetItemInfoInstant(itemLink))
 end
 
 
 function CanIMogIt:GetItemSubClassName(itemLink)
-    return select(3, GetItemInfoInstant(itemLink))
+    return select(3, C_Item.GetItemInfoInstant(itemLink))
 end
 
 
 function CanIMogIt:GetItemSlotName(itemLink)
-    return select(4, GetItemInfoInstant(itemLink))
+    return select(4, C_Item.GetItemInfoInstant(itemLink))
 end
 
 
@@ -962,7 +963,7 @@ end
 function CanIMogIt:IsReadyForCalculations(itemLink)
     -- Returns true of the item's GetItemInfo is ready, or if it's a keystone,
     -- or if it's a battlepet.
-    if GetItemInfo(itemLink)
+    if C_Item.GetItemInfo(itemLink)
         or CanIMogIt:IsItemKeystone(itemLink)
         or CanIMogIt:IsItemBattlepet(itemLink) then
         return true
@@ -1111,14 +1112,14 @@ function CanIMogIt:IsEquippable(itemLink)
     -- Returns whether the item is equippable or not (exluding bags)
     local slotName = CanIMogIt:GetItemSlotName(itemLink)
     if slotName == nil then return end
-    return slotName ~= "" and slotName ~= BAG
+    return slotName ~= "" and slotName ~= NONEQUIP and slotName ~= BAG
 end
 
 
 local function RetailOldGetSourceID(itemLink)
     -- Some items don't have the C_TransmogCollection.GetItemInfo data,
     -- so use the old way to find the sourceID (using the DressUpModel).
-    local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
+    local itemID, _, _, slotName = C_Item.GetItemInfoInstant(itemLink)
     local slots = inventorySlotsMap[slotName]
 
     if slots == nil or slots == false or C_Item.IsDressableItemByID(itemID) == false then return end
@@ -1298,7 +1299,7 @@ function CanIMogIt:IsTransmogable(itemLink)
         return false
     end
 
-    local itemID, _, _, slotName = GetItemInfoInstant(itemLink)
+    local itemID, _, _, slotName = C_Item.GetItemInfoInstant(itemLink)
 
     if CanIMogIt:IsItemBattlepet(itemLink) or CanIMogIt:IsItemKeystone(itemLink) then
         -- Item is never transmoggable if it's a battlepet or keystone.
