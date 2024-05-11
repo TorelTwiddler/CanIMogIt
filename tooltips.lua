@@ -43,12 +43,21 @@ local function printDebug(tooltip, itemLink, bag, slot)
     addLine(tooltip, '--------')
 
     local itemID = CanIMogIt:GetItemID(itemLink)
-    addDoubleLine(tooltip, "Item ID:", tostring(itemID))
     if not itemID then
+        if string.find(itemLink, "battlepet:") then
+            local _, _, petSpeciesID = string.find(itemLink, "battlepet:(%d+):")
+            addDoubleLine(tooltip, "BattlePet Species ID:", tostring(petSpeciesID))
+            local collected, total = C_PetJournal.GetNumCollectedInfo(tonumber(petSpeciesID) or 0)
+            addDoubleLine(tooltip, "Number Collected:", collected .. "/" .. total)
+            addLine(tooltip, '--------')
+            return
+        end
         -- Keystones don't have an itemID...
         addLine(tooltip, 'No ItemID found. Is this a Keystone or Battle Pet?')
+        addLine(tooltip, '--------')
         return
     end
+    addDoubleLine(tooltip, "Item ID:", tostring(itemID))
     local _, _, quality, _, _, itemClass, itemSubClass, _, equipSlot, _, _, _, _, _, expansion = GetItemInfo(itemID)
     addDoubleLine(tooltip, "Item quality:", tostring(quality))
     addDoubleLine(tooltip, "Item class:", tostring(itemClass))

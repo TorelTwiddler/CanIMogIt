@@ -32,3 +32,9 @@ function CanIMogIt:CalculateMountText(itemLink)
     end
 end
 
+
+local function OnMountAdded(event)
+    if event ~= "NEW_MOUNT_ADDED" then return end
+    CanIMogIt:ResetCache()
+end
+CanIMogIt.frame:AddEventFunction(OnMountAdded)

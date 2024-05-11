@@ -30,7 +30,7 @@ function CanIMogIt:CalculateToyText(itemLink)
 end
 
 
-function OnLearnedToy(event)
+local function OnLearnedToy(event)
     if event ~= "NEW_TOY_ADDED" then return end
     CanIMogIt:ResetCache()
 end

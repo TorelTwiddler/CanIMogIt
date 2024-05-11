@@ -151,6 +151,7 @@ local EVENTS = {
     "LOADING_SCREEN_DISABLED",
     "TRADE_SKILL_SHOW",
     "NEW_TOY_ADDED",
+    "NEW_MOUNT_ADDED",
 }
 
 if CanIMogIt.isRetail then
@@ -158,6 +159,7 @@ if CanIMogIt.isRetail then
     table.insert(EVENTS, "AUCTION_HOUSE_BROWSE_RESULTS_UPDATED")
     table.insert(EVENTS, "AUCTION_HOUSE_NEW_RESULTS_RECEIVED")
     table.insert(EVENTS, "PLAYERREAGENTBANKSLOTS_CHANGED")
+    table.insert(EVENTS, "PET_JOURNAL_LIST_UPDATE")
 end
 
 
