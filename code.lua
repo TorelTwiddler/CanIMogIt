@@ -1333,12 +1333,19 @@ function CanIMogIt:TextIsUnknown(unmodifiedText)
 end
 
 
-function CanIMogIt:PreLogicOptionsContinue(itemLink)
+function CanIMogIt:PreLogicOptionsContinue(isItemMount, isItemToy, isItemPet,
+        isItemEquippable)
     -- Apply the options. Returns false if it should stop the logic.
-    if CanIMogItOptions["showEquippableOnly"] and
-            not CanIMogIt:IsEquippable(itemLink) then
-        -- Don't bother if it's not equipable.
-        return false
+    mountCheck = CanIMogItOptions["showMountItems"] and isItemMount
+    toyCheck = CanIMogItOptions["showToyItems"] and isItemToy
+    petCheck = CanIMogItOptions["showPetItems"] and isItemPet
+
+    -- If showEquippableOnly is checked, only show equippable items.
+    if CanIMogItOptions["showEquippableOnly"] and not isItemEquippable then
+        -- Unless it's a mount, toy, or pet, and their respective option is enabled.
+        if not (mountCheck or toyCheck or petCheck) then
+            return false
+        end
     end
 
     return true
@@ -1380,7 +1387,7 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     end
 
     local isTransmogable, playerKnowsTransmogFromItem, isValidAppearanceForCharacter,
-        playerKnowsTransmog, characterCanLearnTransmog,
+        playerKnowsTransmog, characterCanLearnTransmog, isItemEquippable,
         isItemSoulbound, isItemMount, isItemToy, isItemPet, text, unmodifiedText;
 
     isTransmogable = CanIMogIt:IsTransmogable(itemLink)
@@ -1388,6 +1395,13 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     isItemToy = CanIMogIt:IsItemToy(itemLink)
     isItemPet = CanIMogIt:IsItemPet(itemLink)
     isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
+    isItemEquippable = CanIMogIt:IsEquippable(itemLink)
+
+    if not CanIMogIt:PreLogicOptionsContinue(
+            isItemMount, isItemToy, isItemPet,
+            isItemEquippable) then
+        return "", ""
+    end
 
     -- Is the item transmogable?
     if isTransmogable then
@@ -1583,8 +1597,6 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
 
     local text = ""
     local unmodifiedText = ""
-
-    if not CanIMogIt:PreLogicOptionsContinue(itemLink) then return "", "" end
 
     -- Return cached items
     local cachedData = CanIMogIt.cache:GetItemTextValue(itemLink)
