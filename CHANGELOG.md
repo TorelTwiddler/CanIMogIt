@@ -1,3 +1,15 @@
+10.2.7v1.55 - 2024/05/12
+
+* Updated TOC.
+* [#319](https://gitlab.com/toreltwiddler/CanIMogIt/issues/319) Added icon overlay to Mounts!
+* [#321](https://gitlab.com/toreltwiddler/CanIMogIt/issues/321) Added icon overlay to Battle Pets!
+* [#322](https://gitlab.com/toreltwiddler/CanIMogIt/issues/322) Added icon overlay to Toys!
+* [#323](https://gitlab.com/toreltwiddler/CanIMogIt/issues/323) Cataclysm support!
+* [#324](https://gitlab.com/toreltwiddler/CanIMogIt/issues/324) Removed "(Experimental)" from Show Source Location Tooltip option.
+* [#325](https://gitlab.com/toreltwiddler/CanIMogIt/issues/325) Fixes for 10.2.6 ItemInfo changes. (Thank you Jonathan Ferro!)
+
+*****
+
 10.2.5v1.54 - 2024/03/09
 
 * Updated TOC.
