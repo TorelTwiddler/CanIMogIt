@@ -845,8 +845,8 @@ function CanIMogIt:CalculateSourceLocationText(itemLink)
     if appearanceID == nil then return end
     local sources = C_TransmogCollection.GetAppearanceSources(appearanceID, 1, transmogLocation)
     if sources then
-        local totalSourceTypes = { 0, 0, 0, 0, 0, 0 }
-        local knownSourceTypes = { 0, 0, 0, 0, 0, 0 }
+        local totalSourceTypes = { 0, 0, 0, 0, 0, 0, 0 }
+        local knownSourceTypes = { 0, 0, 0, 0, 0, 0, 0 }
         local totalUnknownType = 0
         local knownUnknownType = 0
         for _, source in pairs(sources) do
