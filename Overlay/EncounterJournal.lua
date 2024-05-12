@@ -68,7 +68,9 @@ local function OnEncounterJournalLoaded(event, addonName, ...)
     encounterJournalLootFrame:HookScript("OnUpdate", EncounterJournalFrame_CIMIOnValueChanged)
 end
 
-CanIMogIt.frame:AddEventFunction(OnEncounterJournalLoaded)
+if CanIMogIt.isRetail then
+    CanIMogIt.frame:AddEventFunction(OnEncounterJournalLoaded)
+end
 
 
 ------------------------
@@ -82,6 +84,8 @@ local function EncounterJournalOverlayEvents(event, ...)
     end
 end
 
-CanIMogIt.frame:AddOverlayEventFunction(EncounterJournalOverlayEvents)
+if CanIMogIt.isRetail then
+    CanIMogIt.frame:AddOverlayEventFunction(EncounterJournalOverlayEvents)
 
-CanIMogIt:RegisterMessage("OptionUpdate", EncounterJournalOverlayEvents)
+    CanIMogIt:RegisterMessage("OptionUpdate", EncounterJournalOverlayEvents)
+end
