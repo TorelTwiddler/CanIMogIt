@@ -1,6 +1,6 @@
 -- Adds overlays to the UI Package ElvUI: https://www.tukui.org
 
-if C_AddOns.IsAddOnLoaded("ElvUI") then
+if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
 
 
     ----------------------------
