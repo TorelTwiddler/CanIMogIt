@@ -90,7 +90,7 @@ CanIMogItOptions_DisplayData = {
         ["description"] = L["Shows a more detailed text for some of the tooltips."]
     },
     ["showSourceLocationTooltip"] = {
-        ["displayName"] = L["Show Source Location Tooltip"] .. " " .. CanIMogIt.YELLOW .. L["(Experimental)"],
+        ["displayName"] = L["Show Source Location Tooltip"],
         ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop). This only works on items your current class can learn."] .. "\n\n" .. L["Please note that this may not always be correct as Blizzard's information is incomplete."]
     },
     ["printDatabaseScan"] = {
@@ -103,15 +103,15 @@ CanIMogItOptions_DisplayData = {
     },
     ["showToyItems"] = {
         ["displayName"] = L["Show Toy Items"],
-        ["description"] = L["Shows if you know toys or not (otherwise, shows as not transmoggable)."]
+        ["description"] = L["Show tooltips and overlays on toys (otherwise, shows as not transmoggable)."]
     },
     ["showPetItems"] = {
         ["displayName"] = L["Show Pet Items"],
-        ["description"] = L["Shows if you know pets or not (otherwise, shows as not transmoggable)."]
+        ["description"] = L["Show tooltips and overlays on pets (otherwise, shows as not transmoggable)."]
     },
     ["showMountItems"] = {
         ["displayName"] = L["Show Mount Items"],
-        ["description"] = L["Shows if you know mounts or not (otherwise, shows as not transmoggable)."]
+        ["description"] = L["Show tooltips and overlays on mounts (otherwise, shows as not transmoggable)."]
     },
 }
 
