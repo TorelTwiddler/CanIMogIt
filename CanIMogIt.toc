@@ -36,5 +36,6 @@ tooltipScanner.lua
 mounts.lua
 toys.lua
 pets.lua
+ensembles.lua
 Overlay\_overlays.xml
 Plugins\_plugins.xml

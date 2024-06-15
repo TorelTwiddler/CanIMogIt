@@ -1388,12 +1388,14 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
 
     local isTransmogable, playerKnowsTransmogFromItem, isValidAppearanceForCharacter,
         playerKnowsTransmog, characterCanLearnTransmog, isItemEquippable,
-        isItemSoulbound, isItemMount, isItemToy, isItemPet, text, unmodifiedText;
+        isItemSoulbound, isItemMount, isItemToy, isItemPet, isItemEnsemble,
+        text, unmodifiedText;
 
     isTransmogable = CanIMogIt:IsTransmogable(itemLink)
     isItemMount = CanIMogIt:IsItemMount(itemLink)
     isItemToy = CanIMogIt:IsItemToy(itemLink)
     isItemPet = CanIMogIt:IsItemPet(itemLink)
+    isItemEnsemble = CanIMogIt:IsItemEnsemble(itemLink)
     isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
     isItemEquippable = CanIMogIt:IsEquippable(itemLink)
 
@@ -1515,6 +1517,9 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     elseif isItemPet then
         -- This item is a pet, so let's figure out if we know it!
         text, unmodifiedText = CanIMogIt:CalculatePetText(itemLink)
+    elseif isItemEnsemble then
+        -- This item is an ensemble, so let's figure out if we know it!
+        text, unmodifiedText = CanIMogIt:CalculateEnsembleText(itemLink)
     else
         -- This item is never transmogable.
         text = CanIMogIt.NOT_TRANSMOGABLE
