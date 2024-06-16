@@ -9,24 +9,27 @@ end
 
 
 function CanIMogIt:EnsembleItemsKnown(itemLink)
-    -- Returns the number of items known, and the number of items total in the ensemble.
+    -- Returns the number of appearances known, and the number of appearances total in the ensemble.
     local itemID = CanIMogIt:GetItemID(itemLink)
     if itemID == nil then return 0, 0 end
     local setID = C_Item.GetItemLearnTransmogSet(itemID)
     if setID == nil then return 0, 0 end
-    local setInfo = C_TransmogSets.GetSetPrimaryAppearances(setID)
+    local setAppearances = C_Transmog.GetAllSetAppearancesByID(setID)
     local known = 0
     local total = 0
-    if setInfo then
-        for _, appearanceInfo in ipairs(setInfo) do
-            total = total + 1
-            if appearanceInfo["collected"] then
-                known = known + 1
-            end
+    if setAppearances == nil then return 0, 0 end
+    for _, source in ipairs(setAppearances) do
+        -- We have to use our custom function for this, since the WoW one doesn't include
+        -- checking if items are from the correct armor type.
+        local sourceID = source.itemModifiedAppearanceID
+        local sourceItemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+        local playerKnowsTransmog = CanIMogIt:PlayerKnowsTransmog(sourceItemLink)
+        if playerKnowsTransmog then
+            known = known + 1
         end
-        return known, total
+        total = total + 1
     end
-    return 0, 0
+    return known, total
 end
 
 
