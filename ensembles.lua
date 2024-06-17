@@ -37,9 +37,13 @@ function CanIMogIt:CalculateEnsembleText(itemLink)
     -- Displays the standard KNOWN or UNKNOWN, then include the ratio of known to total.
     local known, total = CanIMogIt:EnsembleItemsKnown(itemLink)
     local ratio = known .. "/" .. total
-    if known == total then
+    if total == 0 then
+        return CanIMogIt.NOT_TRANSMOGABLE, CanIMogIt.NOT_TRANSMOGABLE
+    elseif known == total then
         return CanIMogIt.KNOWN .. " " .. ratio, CanIMogIt.KNOWN
-    else
+    elseif known > 0 then
+        return CanIMogIt.PARTIAL .. " " .. ratio, CanIMogIt.PARTIAL
+    elseif known == 0 then
         return CanIMogIt.UNKNOWN .. " " .. ratio, CanIMogIt.UNKNOWN
     end
 end
