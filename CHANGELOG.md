@@ -1,3 +1,9 @@
+10.2.7v1.56 - 2024/06/19
+
+* [#73](https://gitlab.com/toreltwiddler/CanIMogIt/issues/73) Added support for Ensembles and Arsenals!
+
+*****
+
 10.2.7v1.55 - 2024/05/16
 
 * Updated TOC.
