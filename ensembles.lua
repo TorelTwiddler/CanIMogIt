@@ -6,6 +6,7 @@ function CanIMogIt:IsItemEnsemble(itemLink)
     end
     return false
 end
+CanIMogIt.IsItemEnsemble = CanIMogIt.RetailWrapper(CanIMogIt.IsItemEnsemble, false)
 
 
 function CanIMogIt:EnsembleItemsKnown(itemLink)

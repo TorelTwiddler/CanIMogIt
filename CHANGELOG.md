@@ -1,3 +1,9 @@
+10.2.7v1.57 - 2024/06/19
+
+* [#73](https://gitlab.com/toreltwiddler/CanIMogIt/issues/73) Fix error from Cataclysm with Ensembles.
+
+*****
+
 10.2.7v1.56 - 2024/06/19
 
 * [#73](https://gitlab.com/toreltwiddler/CanIMogIt/issues/73) Added support for Ensembles and Arsenals!
