@@ -17,17 +17,32 @@ function CanIMogIt:EnsembleItemsKnown(itemLink)
     local setAppearances = C_Transmog.GetAllSetAppearancesByID(setID)
     local known = 0
     local total = 0
+    -- knownAppearances keys are the "appearanceIDs|armorSubClass" and the values are true if it's known.
+    local knownAppearances = {}
+    -- totalAppearances keys are the "appearanceIDs|armorSubClass" and the values are always true.
+    local totalAppearances = {}
     if setAppearances == nil then return 0, 0 end
     for _, source in ipairs(setAppearances) do
         -- We have to use our custom function for this, since the WoW one doesn't include
         -- checking if items are from the correct armor type.
         local sourceID = source.itemModifiedAppearanceID
+        local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
         local sourceItemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
         local playerKnowsTransmog = CanIMogIt:PlayerKnowsTransmog(sourceItemLink)
-        if playerKnowsTransmog then
+        local itemSubClass = "unknown"
+        -- If it's armor, get the subclass. If not, it should be fine as unknown.
+        if CanIMogIt:IsItemArmor(itemLink) then
+            itemSubClass = CanIMogIt:GetItemSubClassName(sourceItemLink) or "unknown"
+        end
+        local key = appearanceID .. "|" .. itemSubClass
+        if playerKnowsTransmog and not knownAppearances[key] then
+            knownAppearances[key] = true
             known = known + 1
         end
-        total = total + 1
+        if not totalAppearances[key] then
+            totalAppearances[key] = true
+            total = total + 1
+        end
     end
     return known, total
 end
