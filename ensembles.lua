@@ -29,7 +29,8 @@ function CanIMogIt:EnsembleItemsKnown(itemLink)
         local sourceID = source.itemModifiedAppearanceID
         local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
         local sourceItemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
-        local playerKnowsTransmog = CanIMogIt:PlayerKnowsTransmog(sourceItemLink)
+        local playerKnowsTransmog = CanIMogIt:PlayerKnowsTransmogFromItem(sourceItemLink)
+            or CanIMogIt:PlayerKnowsTransmog(sourceItemLink)
         local itemSubClass = "unknown"
         -- If it's armor, get the subclass. If not, it should be fine as unknown.
         if CanIMogIt:IsItemArmor(itemLink) then
