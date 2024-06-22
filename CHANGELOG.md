@@ -1,3 +1,9 @@
+10.2.7v1.58 - 2024/06/22
+
+* [#333](https://gitlab.com/toreltwiddler/CanIMogIt/issues/333) Fix bug with Ensembles and class restrictions.
+
+*****
+
 10.2.7v1.57 - 2024/06/19
 
 * [#73](https://gitlab.com/toreltwiddler/CanIMogIt/issues/73) Fix error from Cataclysm with Ensembles.
