@@ -79,17 +79,35 @@ if CanIMogIt.isRetail then
         if bag and slot then
             return C_Container.GetContainerItemInfo(bag, slot).isBound
         else
-            return select(14, GetItemInfo(itemLink)) == 1
+            return select(14, C_Item.GetItemInfo(itemLink)) == 1
         end
     end
 
+    function CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot)
+        -- Returns whether the item is warbound or not.
+        if bag and slot then
+            return C_Container.GetContainerItemInfo(bag, slot).isBound
+        else
+            return select(14, C_Item.GetItemInfo(itemLink)) == 1
+        end
+
+        -- TODO: This doesn't work. It seems their API is still buggy.
+        -- local itemLocation = ItemLocation:CreateEmpty()
+        -- itemLocation:SetBagAndSlot(bag, slot)
+        -- if bag and slot then
+        --     -- return C_Container.GetContainerItemInfo(bag, slot).isBound
+        --     return C_Item.IsBoundToAccountUntilEquip(itemLocation)
+        -- else
+        --     -- return select(14, C_Item.GetItemInfo(itemLink)) == 1
+        -- end
+    end
 
     function CIMIScanTooltip:IsItemBindOnEquip(itemLink, bag, slot)
         -- Returns whether the item is bind on equip or not.
         if bag and slot and not itemLink then
             itemLink = C_Container.GetContainerItemLink(bag, slot)
         end
-        local bind_type = select(14, GetItemInfo(itemLink))
+        local bind_type = select(14, C_Item.GetItemInfo(itemLink))
         return bind_type == 2 or bind_type == 3
     end
 else

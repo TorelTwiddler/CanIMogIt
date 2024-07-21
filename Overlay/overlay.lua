@@ -70,8 +70,11 @@ function CIMI_AddToFrame(parentFrame, updateIconFunc, frameSuffix, overrideIconL
     if parentFrame and not parentFrame.CanIMogItOverlay then
         if parentFrame.GetName then
             frameSuffix = frameSuffix or tostring(parentFrame:GetName())
-        else
-            frameSuffix = frameSuffix or ("Unknown" .. unknownFrameCounter)
+        elseif parentFrame.GetID then
+            frameSuffix = frameSuffix or tostring(parentFrame:GetID())
+        end
+        if frameSuffix == nil or frameSuffix == "nil" then
+            frameSuffix = "Unknown" .. unknownFrameCounter
             unknownFrameCounter = unknownFrameCounter + 1
         end
         local frame = CreateFrame("Frame", "CIMIOverlayFrame_"..frameSuffix, parentFrame)

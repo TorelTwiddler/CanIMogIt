@@ -63,7 +63,8 @@ local function OnEncounterJournalLoaded(event, addonName, ...)
     if event ~= "ADDON_LOADED" then return end
     if addonName ~= "Blizzard_EncounterJournal" then return end
     encounterJournalLoaded = true
-    hooksecurefunc("EncounterJournal_SetLootButton", EncounterJournalFrame_CIMISetLootButton)
+    -- FIXME
+    -- hooksecurefunc("EncounterJournal_SetLootButton", EncounterJournalFrame_CIMISetLootButton)
     local encounterJournalLootFrame = _G["EncounterJournalEncounterFrameInfo"].LootContainer
     encounterJournalLootFrame:HookScript("OnUpdate", EncounterJournalFrame_CIMIOnValueChanged)
 end

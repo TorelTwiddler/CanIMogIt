@@ -25,7 +25,7 @@ local function printDebug(tooltip, itemLink, bag, slot)
 
     addLine(tooltip, '--------')
 
-    addDoubleLine(tooltip, "Addon Version:", GetAddOnMetadata("CanIMogIt", "Version"))
+    addDoubleLine(tooltip, "Addon Version:", C_AddOns.GetAddOnMetadata("CanIMogIt", "Version"))
     local playerClass = select(2, UnitClass("player"))
     local playerLevel = UnitLevel("player")
     local playerSpecName
@@ -58,7 +58,7 @@ local function printDebug(tooltip, itemLink, bag, slot)
         return
     end
     addDoubleLine(tooltip, "Item ID:", tostring(itemID))
-    local _, _, quality, _, _, itemClass, itemSubClass, _, equipSlot, _, _, _, _, _, expansion = GetItemInfo(itemID)
+    local _, _, quality, _, _, itemClass, itemSubClass, _, equipSlot, _, _, _, _, _, expansion = C_Item.GetItemInfo(itemID)
     addDoubleLine(tooltip, "Item quality:", tostring(quality))
     addDoubleLine(tooltip, "Item class:", tostring(itemClass))
     addDoubleLine(tooltip, "Item subClass:", tostring(itemSubClass))
@@ -168,32 +168,6 @@ local function printDebug(tooltip, itemLink, bag, slot)
         addDoubleLine(tooltip, "Required Classes:", tostring(table.concat(classesRequired, ", ") ))
     else
         addDoubleLine(tooltip, "Required Classes:", 'nil')
-    end
-
-    addLine(tooltip, '--------')
-
-    if appearanceID ~= nil then
-        addDoubleLine(tooltip, "DBHasAppearance:", tostring(CanIMogIt:DBHasAppearance(appearanceID, itemLink)))
-    else
-        addDoubleLine(tooltip, "DBHasAppearance:", 'nil')
-    end
-
-    local requirements = CanIMogIt.Requirements:GetRequirements()
-    if appearanceID ~= nil then
-        addDoubleLine(tooltip, "DBHasAppearanceForRequirements:", tostring(CanIMogIt:DBHasAppearanceForRequirements(appearanceID, itemLink, requirements)))
-    else
-        addDoubleLine(tooltip, "DBHasAppearanceForRequirements:", 'nil')
-    end
-
-    if appearanceID ~= nil and sourceID ~= nil then
-        addDoubleLine(tooltip, "DBHasSource:", tostring(CanIMogIt:DBHasSource(appearanceID, sourceID, itemLink)))
-    else
-        addDoubleLine(tooltip, "DBHasSource:", 'nil')
-    end
-    if CanIMogIt:DBHasItem(itemLink) ~= nil then
-        addDoubleLine(tooltip, "DBHasItem:", tostring(CanIMogIt:DBHasItem(itemLink)))
-    else
-        addDoubleLine(tooltip, "DBHasItem:", 'nil')
     end
 
     addLine(tooltip, '--------')
@@ -406,7 +380,7 @@ hooksecurefunc(GameTooltip, "SetInboxItem",
 hooksecurefunc(GameTooltip, "SetSendMailItem",
     function(tooltip, index)
         local name = GetSendMailItem(index)
-        local _, link = GetItemInfo(name)
+        local _, link = C_Item.GetItemInfo(name)
         addToTooltip(tooltip, link)
         VVDebugPrint(tooltip, "SetSendMailItem")
     end

@@ -388,160 +388,6 @@ end
 -- CanIMogIt Core methods  --
 -----------------------------
 
--- Variables for managing updating appearances.
-local appearanceIndex = 0
-local sourceIndex = 0
-local getAppearancesDone = false;
-local sourceCount = 0
-local appearanceCount = 0
-local buffer = 0
-local sourcesAdded = 0
-local sourcesRemoved = 0
-local loadingScreen = true
-
-
-local appearancesTable = {}
-local removeAppearancesTable = nil
-local appearancesTableGotten = false
-local doneAppearances = {}
-
-
-local function LoadingScreenStarted(event)
-    if event ~= "LOADING_SCREEN_ENABLED" then return end
-    loadingScreen = true
-end
-CanIMogIt.frame:AddEventFunction(LoadingScreenStarted)
-
-
-local function LoadingScreenEnded(event)
-    if event ~= "LOADING_SCREEN_DISABLED" then return end
-    loadingScreen = false
-end
-CanIMogIt.frame:AddEventFunction(LoadingScreenEnded)
-
-
-local function GetAppearancesTable()
-    -- Sort the C_TransmogCollection.GetCategoryAppearances tables into something
-    -- more usable.
-    if appearancesTableGotten then return end
-    for categoryID=1,28 do
-        local categoryAppearances = C_TransmogCollection.GetCategoryAppearances(categoryID, transmogLocation)
-        for i, categoryAppearance in pairs(categoryAppearances) do
-            if categoryAppearance.isCollected then
-                appearanceCount = appearanceCount + 1
-                appearancesTable[categoryAppearance.visualID] = true
-            end
-        end
-    end
-    appearancesTableGotten = true
-end
-
-
-local function AddSource(source, appearanceID)
-    -- Adds the source to the database, and increments the buffer.
-    buffer = buffer + 1
-    sourceCount = sourceCount + 1
-    local sourceID = source.sourceID
-    local sourceItemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
-    local added = CanIMogIt:DBAddItem(sourceItemLink, appearanceID, sourceID)
-    if added then
-        sourcesAdded = sourcesAdded + 1
-    end
-end
-
-
-local function AddAppearance(appearanceID)
-    -- Adds all of the sources for this appearanceID to the database.
-    -- returns early if the buffer is reached.
-    local sources = C_TransmogCollection.GetAppearanceSources(appearanceID, 1, transmogLocation)
-    if sources then
-        for i, source in pairs(sources) do
-            if source.isCollected then
-                AddSource(source, appearanceID)
-            end
-        end
-    end
-end
-
-
--- Remembering iterators for later
-local appearancesIter, removeIter = nil, nil
-
-
-local function _GetAppearances()
-    -- Core logic for getting the appearances.
-    if getAppearancesDone then return end
-    C_TransmogCollection.ClearSearch(APPEARANCES_ITEMS_TAB)
-    GetAppearancesTable()
-    buffer = 0
-
-    if appearancesIter == nil then appearancesIter = CanIMogIt.Utils.pairsByKeys(appearancesTable) end
-    -- Add new appearances learned.
-    for appearanceID, collected in appearancesIter do
-        AddAppearance(appearanceID)
-        if buffer >= CanIMogIt.bufferMax then return end
-        appearancesTable[appearanceID] = nil
-    end
-
-    if removeIter == nil then removeIter = CanIMogIt.Utils.pairsByKeys(removeAppearancesTable) end
-    -- Remove appearances that are no longer learned.
-    for appearanceHash, sources in removeIter do
-        for sourceID, source in pairs(sources.sources) do
-            if not C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID) then
-                local itemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
-                local appearanceID = CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
-                CanIMogIt:DBRemoveItem(appearanceID, sourceID, itemLink, appearanceHash)
-                sourcesRemoved = sourcesRemoved + 1
-            end
-            buffer = buffer + 1
-        end
-        if buffer >= CanIMogIt.bufferMax then return end
-        removeAppearancesTable[appearanceHash] = nil
-    end
-
-    getAppearancesDone = true
-    appearancesTable = {} -- cleanup
-    CanIMogIt:ResetCache()
-    appearancesIter = nil
-    removeIter = nil
-    CanIMogIt.frame:SetScript("OnUpdate", nil)
-    if CanIMogItOptions["printDatabaseScan"] then
-        CanIMogIt:Print(CanIMogIt.DATABASE_DONE_UPDATE_TEXT..CanIMogIt.BLUE.."+" .. sourcesAdded .. ", "..CanIMogIt.ORANGE.."-".. sourcesRemoved)
-    end
-end
-
-
-function CanIMogIt:PauseDatabaseScan(message)
-    if CanIMogItOptions["printDatabaseScan"] then
-        CanIMogIt:Print(message or L["Database scan paused."])
-    end
-    CanIMogIt.frame:SetScript("OnUpdate", nil)
-end
-
-
-local timer = 0
-local function GetAppearancesOnUpdate(self, elapsed)
-    -- OnUpdate function with a reset timer to throttle getting appearances.
-    -- We also don't run things if the loading screen is currently up, as some
-    -- functions don't return values when loading.
-    timer = timer + elapsed
-    if timer >= CanIMogIt.throttleTime and not loadingScreen then
-        _GetAppearances()
-        timer = 0
-    end
-end
-
-
-function CanIMogIt:GetAppearances()
-    -- Gets a table of all the appearances known to
-    -- a character and adds it to the database.
-    if CanIMogItOptions["printDatabaseScan"] then
-        CanIMogIt:Print(CanIMogIt.DATABASE_START_UPDATE_TEXT)
-    end
-    removeAppearancesTable = CanIMogIt.Utils.copyTable(CanIMogIt.db.global.appearances)
-    CanIMogIt.frame:SetScript("OnUpdate", GetAppearancesOnUpdate)
-end
-
 
 function CIMI_GetVariantSets(setID)
     --[[
@@ -824,6 +670,11 @@ function CanIMogIt:GetSetsVariantText(setID)
 end
 
 
+---------------------------
+-- End of sets functions --
+---------------------------
+
+
 function CanIMogIt:ResetCache()
     -- Resets the cache, and calls things relying on the cache being reset.
     CanIMogIt.cache:Clear()
@@ -901,7 +752,7 @@ end
 
 function CanIMogIt:GetPlayerArmorTypeName()
     local playerArmorTypeID = classArmorTypeMap[select(2, UnitClass("player"))]
-    return select(1, GetItemSubClassInfo(4, playerArmorTypeID))
+    return select(1, C_Item.GetItemSubClassInfo(4, playerArmorTypeID))
 end
 
 
@@ -936,7 +787,7 @@ end
 
 
 function CanIMogIt:GetItemClassName(itemLink)
-    return select(2, C_Item.GetItemInfoInstant(itemLink))
+    return select(2, C_Item.GetItemClassInfo(C_Item.GetItemInfoInstant(itemLink)))
 end
 
 
@@ -975,14 +826,14 @@ end
 function CanIMogIt:IsItemArmor(itemLink)
     local itemClass = CanIMogIt:GetItemClassName(itemLink)
     if itemClass == nil then return end
-    return GetItemClassInfo(4) == itemClass
+    return C_Item.GetItemClassInfo(4) == itemClass
 end
 
 
 function CanIMogIt:IsArmorSubClassID(subClassID, itemLink)
     local itemSubClass = CanIMogIt:GetItemSubClassName(itemLink)
     if itemSubClass == nil then return end
-    return select(1, GetItemSubClassInfo(4, subClassID)) == itemSubClass
+    return select(1, C_Item.GetItemSubClassInfo(4, subClassID)) == itemSubClass
 end
 
 
@@ -1082,6 +933,11 @@ end
 
 function CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
     return CIMIScanTooltip:IsItemSoulbound(itemLink, bag, slot)
+end
+
+
+function CanIMogIt:IsItemWarbound(itemLink, bag, slot)
+    return CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot)
 end
 
 
@@ -1217,28 +1073,7 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
     -- Returns whether this item's appearance is already known by the player.
     local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
     if appearanceID == nil then return false end
-    local requirements = CanIMogIt.Requirements:GetRequirements()
-    if CanIMogIt:DBHasAppearanceForRequirements(appearanceID, itemLink, requirements) then
-        if CanIMogIt:IsItemArmor(itemLink) then
-            -- The character knows the appearance, check that it's from the same armor type.
-            for sourceID, knownItem in pairs(CanIMogIt:DBGetSources(appearanceID, itemLink)) do
-                if CanIMogIt:IsArmorSubClassName(knownItem.subClass, itemLink)
-                        or knownItem.subClass == COSMETIC_NAME then
-                    return true
-                end
-            end
-        else
-            -- Is not armor, don't worry about same appearance for different types
-            return true
-        end
-    end
-
-    -- Don't know from the database, try using the API.
-    local knowsTransmog = CanIMogIt:_PlayerKnowsTransmog(itemLink, appearanceID)
-    if knowsTransmog then
-        CanIMogIt:DBAddItem(itemLink)
-    end
-    return knowsTransmog
+    return CanIMogIt:_PlayerKnowsTransmog(itemLink, appearanceID)
 end
 
 
@@ -1252,18 +1087,8 @@ function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
     local appearanceID, sourceID = CanIMogIt:GetAppearanceID(itemLink)
     if sourceID == nil then return end
 
-    -- First check the Database
-    if CanIMogIt:DBHasSource(appearanceID, sourceID, itemLink) then
-        return true
-    end
-
     local hasTransmog;
     hasTransmog = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
-
-    -- Update Database
-    if hasTransmog then
-        CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
-    end
 
     return hasTransmog
 end
@@ -1271,8 +1096,6 @@ end
 
 function CanIMogIt:CharacterCanLearnTransmog(itemLink)
     -- Returns whether the player can learn the item or not.
-    local slotName = CanIMogIt:GetItemSlotName(itemLink)
-    if slotName == TABARD then return true end
     local sourceID = CanIMogIt:GetSourceID(itemLink)
     if sourceID == nil then return end
     if select(2, C_TransmogCollection.PlayerCanCollectSource(sourceID)) then
@@ -1388,7 +1211,7 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
 
     local isTransmogable, playerKnowsTransmogFromItem, isValidAppearanceForCharacter,
         playerKnowsTransmog, characterCanLearnTransmog, isItemEquippable,
-        isItemSoulbound, isItemMount, isItemToy, isItemPet, isItemEnsemble,
+        isItemSoulbound, isItemWarbound, isItemMount, isItemToy, isItemPet, isItemEnsemble,
         text, unmodifiedText;
 
     isTransmogable = CanIMogIt:IsTransmogable(itemLink)
@@ -1397,6 +1220,7 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     isItemPet = CanIMogIt:IsItemPet(itemLink)
     isItemEnsemble = CanIMogIt:IsItemEnsemble(itemLink)
     isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
+    isItemWarbound = CanIMogIt:IsItemWarbound(itemLink, bag, slot)
     isItemEquippable = CanIMogIt:IsEquippable(itemLink)
 
     if not CanIMogIt:PreLogicOptionsContinue(
@@ -1407,11 +1231,10 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
 
     -- Is the item transmogable?
     if isTransmogable then
-        --Calculating the logic for each rule
-
         -- If the item is transmogable, bug didn't give a result for soulbound state, it's
         -- probably not ready yet.
         if isItemSoulbound == nil then return end
+        if isItemWarbound == nil then return end
 
         playerKnowsTransmogFromItem = CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
         if playerKnowsTransmogFromItem == nil then return end
@@ -1425,83 +1248,96 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         characterCanLearnTransmog = CanIMogIt:CharacterCanLearnTransmog(itemLink)
         if characterCanLearnTransmog == nil then return end
 
-        -- Is the item transmogable?
         if playerKnowsTransmogFromItem then
-            -- Is this an appearance that the character can use now?
             if isValidAppearanceForCharacter then
                 -- The player knows the appearance from this item
                 -- and the character can transmog it.
-                text = CanIMogIt.KNOWN
-                unmodifiedText = CanIMogIt.KNOWN
+                if isItemSoulbound then
+                    -- Blue Check
+                    text = CanIMogIt.KNOWN
+                    unmodifiedText = CanIMogIt.KNOWN
+                elseif isItemWarbound then
+                    -- Pink Check
+                    text = CanIMogIt.KNOWN_WARBOUND
+                    unmodifiedText = CanIMogIt.KNOWN_WARBOUND
+                else -- BoE
+                    -- Yellow Check
+                    text = CanIMogIt.KNOWN_BOE
+                    unmodifiedText = CanIMogIt.KNOWN_BOE
+                end
             else
-                -- Can the character use the appearance eventually?
-                if characterCanLearnTransmog then
-                    -- The player knows the appearance from this item, but
-                    -- the character is too low level to use the appearance.
-                    text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
-                    unmodifiedText = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL
-                else
-                    if isItemSoulbound then
-                        -- The player knows the appearance from this item, but
-                        -- the character can never use it.
-                        text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
-                        unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
-                    else
-                        -- The player knows the appearance from this item, but
-                        -- the character can never use it, but it is BoE.
-                        text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
-                        unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
-                    end
+                -- The player knows the appearance from this item, but
+                -- the character can't use this appearance.
+                if isItemSoulbound then
+                    -- Green Check
+                    text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
+                    unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
+                elseif isItemWarbound then
+                    -- Pink Check
+                    text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND
+                    unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND
+                else -- BoE
+                    -- Yellow Check
+                    text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
+                    unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
                 end
             end
         -- Does the player know the appearance from a different item?
         elseif playerKnowsTransmog then
-            -- Is this an appearance that the character can use/learn now?
             if isValidAppearanceForCharacter then
                 -- The player knows the appearance from another item, and
                 -- the character can use it.
-                text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
-                unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+                if isItemSoulbound then
+                    -- Blue Circle Check
+                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+                elseif isItemWarbound then
+                    -- Pink Circle Check
+                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND
+                else -- BoE
+                    -- Yellow Circle Check
+                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
+                end
             else
-                -- Can the character use/learn the appearance from the item eventually?
-                if characterCanLearnTransmog then
-                    -- The player knows the appearance from another item, but
-                    -- the character is too low level to use/learn the appareance.
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL
+                -- The player knows the appearance from another item, but
+                -- this character can never use/learn the appearance.
+                if isItemSoulbound then
+                    -- Green Circle Check
+                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+                elseif isItemWarbound then
+                    -- Pink Circle Check
+                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND
                 else
-                    if isItemSoulbound then
-                        -- The player knows the appearance from another item, but
-                        -- this charater can never use/learn the apperance.
-                        text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-                        unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-                    else
-                        -- The player knows the appearance from another item, but
-                        -- this charater can never use/learn the apperance, but it is BoE.
-                        text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
-                        unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
-                    end
+                    -- Yellow Circle Check
+                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
                 end
             end
         else
-            -- Can the character learn the appearance?
             if characterCanLearnTransmog then
                 -- The player does not know the appearance and the character
                 -- can learn this appearance.
+                -- Orange X
                 text = CanIMogIt.UNKNOWN
                 unmodifiedText = CanIMogIt.UNKNOWN
             else
-                -- Is the item Soulbound?
+                -- Warbound shouldn't be possible in this state.
                 if isItemSoulbound then
                     -- The player does not know the appearance, the character
                     -- cannot use the appearance, and the item cannot be mailed
                     -- because it is soulbound.
+                    -- Green Dash
                     text = CanIMogIt.UNKNOWABLE_SOULBOUND
                             .. BLIZZARD_RED .. CanIMogIt:GetReason(itemLink)
                     unmodifiedText = CanIMogIt.UNKNOWABLE_SOULBOUND
                 else
-                    -- The player does not know the apperance, and the character
+                    -- The player does not know the appearance, and the character
                     -- cannot use/learn the appearance.
+                    -- Yellow Star
                     text = CanIMogIt.UNKNOWABLE_BY_CHARACTER
                             .. BLIZZARD_RED .. CanIMogIt:GetReason(itemLink)
                     unmodifiedText = CanIMogIt.UNKNOWABLE_BY_CHARACTER
@@ -1522,47 +1358,11 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         text, unmodifiedText = CanIMogIt:CalculateEnsembleText(itemLink)
     else
         -- This item is never transmogable.
+        -- Gray Circle-Slash
         text = CanIMogIt.NOT_TRANSMOGABLE
         unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
     end
 
-    return text, unmodifiedText
-end
-
-
-function CanIMogIt:CheckItemBindType(text, unmodifiedText, itemLink, bag, slot)
-    --[[
-        Check what binding text is used on the tooltip and then
-        change the Can I Mog It text where appropirate.
-    ]]
-    local isItemBindOnEquip = CanIMogIt:IsItemBindOnEquip(itemLink, bag, slot)
-    if isItemBindOnEquip == nil then return end
-
-    if isItemBindOnEquip then
-        if unmodifiedText == CanIMogIt.KNOWN then
-            text = CanIMogIt.KNOWN_BOE
-            unmodifiedText = CanIMogIt.KNOWN_BOE
-        elseif unmodifiedText == CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL then
-            text = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL_BOE
-            unmodifiedText = CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL_BOE
-        elseif unmodifiedText == CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER then
-            text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
-            unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
-        elseif unmodifiedText == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM then
-            text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
-            unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
-        elseif unmodifiedText == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL then
-            text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL_BOE
-            unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL_BOE
-        elseif unmodifiedText == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER then
-            text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
-            unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
-        elseif unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE then
-            text = CanIMogIt.NOT_TRANSMOGABLE_BOE
-            unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE_BOE
-        end
-    -- elseif BoA
-    end
     return text, unmodifiedText
 end
 

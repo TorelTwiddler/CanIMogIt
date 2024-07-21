@@ -1,3 +1,4 @@
 Libs/
 *.code-workspace
 .release
+*.vscode
