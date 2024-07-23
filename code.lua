@@ -1252,14 +1252,14 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
             if isValidAppearanceForCharacter then
                 -- The player knows the appearance from this item
                 -- and the character can transmog it.
-                if isItemSoulbound then
-                    -- Blue Check
-                    text = CanIMogIt.KNOWN
-                    unmodifiedText = CanIMogIt.KNOWN
-                elseif isItemWarbound then
+                if isItemWarbound then
                     -- Pink Check
                     text = CanIMogIt.KNOWN_WARBOUND
                     unmodifiedText = CanIMogIt.KNOWN_WARBOUND
+                elseif isItemSoulbound then
+                    -- Blue Check
+                    text = CanIMogIt.KNOWN
+                    unmodifiedText = CanIMogIt.KNOWN
                 else -- BoE
                     -- Yellow Check
                     text = CanIMogIt.KNOWN_BOE
@@ -1268,14 +1268,14 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
             else
                 -- The player knows the appearance from this item, but
                 -- the character can't use this appearance.
-                if isItemSoulbound then
-                    -- Green Check
-                    text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
-                    unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
-                elseif isItemWarbound then
+                if isItemWarbound then
                     -- Pink Check
                     text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND
                     unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND
+                elseif isItemSoulbound then
+                    -- Green Check
+                    text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
+                    unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
                 else -- BoE
                     -- Yellow Check
                     text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
@@ -1287,14 +1287,14 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
             if isValidAppearanceForCharacter then
                 -- The player knows the appearance from another item, and
                 -- the character can use it.
-                if isItemSoulbound then
-                    -- Blue Circle Check
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
-                elseif isItemWarbound then
+                if isItemWarbound then
                     -- Pink Circle Check
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND
                     unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND
+                elseif isItemSoulbound then
+                    -- Blue Circle Check
+                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
                 else -- BoE
                     -- Yellow Circle Check
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
@@ -1303,14 +1303,14 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
             else
                 -- The player knows the appearance from another item, but
                 -- this character can never use/learn the appearance.
-                if isItemSoulbound then
-                    -- Green Circle Check
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-                elseif isItemWarbound then
+                if isItemWarbound then
                     -- Pink Circle Check
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND
                     unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND
+                elseif isItemSoulbound then
+                    -- Green Circle Check
+                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
+                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
                 else
                     -- Yellow Circle Check
                     text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
@@ -1358,9 +1358,19 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         text, unmodifiedText = CanIMogIt:CalculateEnsembleText(itemLink)
     else
         -- This item is never transmogable.
-        -- Gray Circle-Slash
-        text = CanIMogIt.NOT_TRANSMOGABLE
-        unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
+        if isItemWarbound then
+            -- Pink Circle-Slash
+            text = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND
+            unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND
+        elseif isItemSoulbound then
+            -- Gray Circle-Slash
+            text = CanIMogIt.NOT_TRANSMOGABLE
+            unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
+        else
+            -- Yellow Circle-Slash
+            text = CanIMogIt.NOT_TRANSMOGABLE_BOE
+            unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE_BOE
+        end
     end
 
     return text, unmodifiedText

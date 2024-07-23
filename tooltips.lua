@@ -77,6 +77,8 @@ local function printDebug(tooltip, itemLink, bag, slot)
     local baseSetID = setID ~= nil and setID ~= "nil" and C_TransmogSets.GetBaseSetID(setID) or "nil"
     addDoubleLine(tooltip, "Item baseSetID:", tostring(setID))
 
+    addDoubleLine(tooltip, "Bag, Slot:", tostring(bag) .. ", " .. tostring(slot))
+
     addLine(tooltip, '--------')
 
     if sourceID then
@@ -159,6 +161,7 @@ local function printDebug(tooltip, itemLink, bag, slot)
     addLine(tooltip, '--------')
 
     addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink, bag, slot)))
+    addDoubleLine(tooltip, "IsItemWarbound:", tostring(CanIMogIt:IsItemWarbound(itemLink, bag, slot)))
     addDoubleLine(tooltip, "CharacterCanEquipItem:", tostring(CanIMogIt:CharacterCanEquipItem(itemLink)))
     addDoubleLine(tooltip, "IsValidAppearanceForCharacter:", tostring(CanIMogIt:IsValidAppearanceForCharacter(itemLink)))
     addDoubleLine(tooltip, "CharacterIsHighEnoughLevelForTransmog:", tostring(CanIMogIt:CharacterIsHighEnoughLevelForTransmog(itemLink)))
@@ -270,19 +273,20 @@ if CanIMogIt.isRetail then
     GameTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", TooltipCleared)
 end
 
+-- TODO: This is conflicting with the bag tooltip. Need to figure out
+-- how to have it run after the other call.
+-- local function CanIMogIt_AttachItemTooltip(tooltip)
+--     -- Hook for normal tooltips.
+--     if tooltip.GetItem == nil then return end
+--     local link = select(2, tooltip:GetItem())
+--     if link then
+--         addToTooltip(tooltip, link)
+--         VVDebugPrint(tooltip, "OnTooltipSetItem")
+--     end
+-- end
 
-local function CanIMogIt_AttachItemTooltip(tooltip)
-    -- Hook for normal tooltips.
-    if tooltip.GetItem == nil then return end
-    local link = select(2, tooltip:GetItem())
-    if link then
-        addToTooltip(tooltip, link)
-        VVDebugPrint(tooltip, "OnTooltipSetItem")
-    end
-end
 
-
-TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, CanIMogIt_AttachItemTooltip)
+-- TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, CanIMogIt_AttachItemTooltip)
 
 
 hooksecurefunc(GameTooltip, "SetMerchantItem",

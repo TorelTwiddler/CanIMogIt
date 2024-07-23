@@ -62,6 +62,8 @@ CanIMogIt.NOT_TRANSMOGABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TR
 CanIMogIt.NOT_TRANSMOGABLE_ICON_OVERLAY = "Interface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE_OVERLAY"
 CanIMogIt.NOT_TRANSMOGABLE_BOE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE_BOE:0|t "
 CanIMogIt.NOT_TRANSMOGABLE_BOE_ICON_OVERLAY = "Interface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE_BOE_OVERLAY"
+CanIMogIt.NOT_TRANSMOGABLE_WARBOUND_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE_WARBOUND:0|t "
+CanIMogIt.NOT_TRANSMOGABLE_WARBOUND_ICON_OVERLAY = "Interface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE_WARBOUND_OVERLAY"
 CanIMogIt.QUESTIONABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\QUESTIONABLE:0|t "
 CanIMogIt.QUESTIONABLE_ICON_OVERLAY = "Interface\\Addons\\CanIMogIt\\Icons\\QUESTIONABLE_OVERLAY"
 
@@ -97,6 +99,7 @@ local UNKNOWN =                                         L["Not learned."]
 local PARTIAL =                                         UNKNOWN
 local NOT_TRANSMOGABLE =                                L["Cannot be learned."]
 local NOT_TRANSMOGABLE_BOE =                            L["Cannot be learned."]
+local NOT_TRANSMOGABLE_WARBOUND =                       L["Cannot be learned."]
 local CANNOT_DETERMINE =                                L["Cannot determine status on other characters."]
 
 
@@ -124,6 +127,7 @@ CanIMogIt.UNKNOWN =                                         CanIMogIt.UNKNOWN_IC
 CanIMogIt.PARTIAL =                                         CanIMogIt.PARTIAL_ICON .. CanIMogIt.RED_ORANGE .. PARTIAL
 CanIMogIt.NOT_TRANSMOGABLE =                                CanIMogIt.NOT_TRANSMOGABLE_ICON .. CanIMogIt.GRAY .. NOT_TRANSMOGABLE
 CanIMogIt.NOT_TRANSMOGABLE_BOE =                            CanIMogIt.NOT_TRANSMOGABLE_BOE_ICON .. CanIMogIt.YELLOW .. NOT_TRANSMOGABLE
+CanIMogIt.NOT_TRANSMOGABLE_WARBOUND =                            CanIMogIt.NOT_TRANSMOGABLE_WARBOUND_ICON .. CanIMogIt.PINK .. NOT_TRANSMOGABLE
 CanIMogIt.CANNOT_DETERMINE =                                CanIMogIt.QUESTIONABLE_ICON
 
 
@@ -152,6 +156,7 @@ CanIMogIt.tooltipIcons = {
     [CanIMogIt.PARTIAL] = CanIMogIt.PARTIAL_ICON,
     [CanIMogIt.NOT_TRANSMOGABLE] = CanIMogIt.NOT_TRANSMOGABLE_ICON,
     [CanIMogIt.NOT_TRANSMOGABLE_BOE] = CanIMogIt.NOT_TRANSMOGABLE_BOE_ICON,
+    [CanIMogIt.NOT_TRANSMOGABLE_WARBOUND] = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND_ICON,
     [CanIMogIt.CANNOT_DETERMINE] = CanIMogIt.QUESTIONABLE_ICON,
 }
 
@@ -182,6 +187,7 @@ CanIMogIt.tooltipOverlayIcons = {
     [CanIMogIt.PARTIAL] = CanIMogIt.PARTIAL_ICON_OVERLAY,
     [CanIMogIt.NOT_TRANSMOGABLE] = CanIMogIt.NOT_TRANSMOGABLE_ICON_OVERLAY,
     [CanIMogIt.NOT_TRANSMOGABLE_BOE] = CanIMogIt.NOT_TRANSMOGABLE_BOE_ICON_OVERLAY,
+    [CanIMogIt.NOT_TRANSMOGABLE_WARBOUND] = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND_ICON_OVERLAY,
     [CanIMogIt.CANNOT_DETERMINE] = CanIMogIt.QUESTIONABLE_ICON_OVERLAY,
 }
 

@@ -2,6 +2,8 @@
 
 CIMIScanTooltip = {}
 
+local CIMIScannedTooltip = CreateFrame("GameTooltip", "CIMIScannedTooltip", UIParent, "GameTooltipTemplate")
+
 if CanIMogIt.isRetail then
     -- This only works for Retail.
 
@@ -85,13 +87,38 @@ if CanIMogIt.isRetail then
 
     function CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot)
         -- Returns whether the item is warbound or not.
-        local itemLocation = ItemLocation:CreateFromBagAndSlot(bag, slot)
         if bag and slot then
-            return C_Item.IsBoundToAccountUntilEquip(itemLocation)
+            CIMIScannedTooltip:SetBagItem(bag, slot)
         else
-            print("IsItemWarbound: GetItemInfo 14: ", select(14, C_Item.GetItemInfo(itemLink)))
-            return select(14, C_Item.GetItemInfo(itemLink)) == 2
+            CIMIScannedTooltip:SetHyperlink(itemLink)
         end
+        local function IsItemWarbound(text)
+            if not text then return end
+            if text == ITEM_ACCOUNTBOUND
+                or text == ITEM_ACCOUNTBOUND_UNTIL_EQUIP then
+                return true
+            end
+            return false
+        end
+        local result;
+        -- make sure that all of CIMIScannedTooltip.infoList[1].tooltipData.lines aren't nil
+        if not CIMIScannedTooltip.infoList
+            or not CIMIScannedTooltip.infoList[1]
+            or not CIMIScannedTooltip.infoList[1].tooltipData
+            or not CIMIScannedTooltip.infoList[1].tooltipData.lines then
+            CIMIScannedTooltip:ClearLines()
+            return false
+        end
+        for i, line in ipairs(CIMIScannedTooltip.infoList[1].tooltipData.lines) do
+            result = IsItemWarbound(line.leftText) or
+                IsItemWarbound(line.rightText)
+            if result then break end
+        end
+        CIMIScannedTooltip:ClearLines()
+        if result == nil then
+            result = false
+        end
+        return result
     end
 
     function CIMIScanTooltip:IsItemBindOnEquip(itemLink, bag, slot)
