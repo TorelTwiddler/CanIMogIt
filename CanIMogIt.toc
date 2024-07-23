@@ -1,4 +1,4 @@
-## Interface: 100207
+## Interface: 110002
 ## Interface-Cata: 40400
 ## Title: Can I Mog It?
 ## IconTexture: Interface\Addons\CanIMogIt\Icons\KNOWN
