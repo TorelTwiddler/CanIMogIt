@@ -1,8 +1,9 @@
-11.0.2v1.58 - 2024/07/23
+11.0.2v2.0 - 2024/07/23
 
 Initial support for The War Within Prepatch and Warbands.
 
-Warbound items have Pink icons!
+* Warbound items have Pink icons!
+* Database is gone! Thank you Blizzard for letting us see all our transmogs across our account!
 
 *****
 
