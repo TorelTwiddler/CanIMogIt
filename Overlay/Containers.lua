@@ -135,14 +135,12 @@ local function UpdateContainerFrames()
 
     -- Combined bags frame
     local combinedBags = _G["ContainerFrameCombinedBags"]
-    combinedBags:UpdateItemSlots()
     for i, frame in ipairs(combinedBags.Items) do
         cimiFrame = frame.CanIMogItOverlay
         if not cimiFrame then
             cimiFrame = AddToContainerFrame(frame)
         end
         ContainerFrame_CIMIUpdateIcon(cimiFrame)
-
     end
 
     -- Separate bags frame
