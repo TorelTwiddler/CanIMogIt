@@ -87,7 +87,7 @@ if CanIMogIt.isRetail then
 
     function CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot)
         -- Returns whether the item is warbound or not.
-        if bag and slot then
+        if bag and slot and not CanIMogIt:IsItemBattlepet(itemLink) then
             CIMIScannedTooltip:SetBagItem(bag, slot)
         else
             CIMIScannedTooltip:SetHyperlink(itemLink)
