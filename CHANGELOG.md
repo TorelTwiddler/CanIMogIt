@@ -1,3 +1,11 @@
+11.0.2v2.1 - 2024/07/24
+
+* [#343](https://gitlab.com/toreltwiddler/CanIMogIt/issues/343) Fix combined bags frame being empty.
+* [#345](https://gitlab.com/toreltwiddler/CanIMogIt/issues/345) Fix Overlay not updating when learning appearances.
+* [#346](https://gitlab.com/toreltwiddler/CanIMogIt/issues/346) Fix error from BattlePet cages.
+
+*****
+
 11.0.2v2.0 - 2024/07/23
 
 Initial support for The War Within Prepatch and Warbands.
