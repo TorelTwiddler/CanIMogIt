@@ -114,4 +114,12 @@ function CanIMogIt.cache:SetSetsSumRatioTextValue(key, value)
 end
 
 
+local function OnClearCacheEvent(event)
+    if event == "TRANSMOG_COLLECTION_UPDATED" then
+        CanIMogIt.cache:Clear()
+    end
+end
+
+CanIMogIt.frame:AddEventFunction(OnClearCacheEvent)
+
 CanIMogIt.cache:Clear()

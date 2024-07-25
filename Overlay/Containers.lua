@@ -177,6 +177,7 @@ local containerFrameEvents = {
     "BAG_UPDATE",
     "BANKFRAME_OPENED",
     "PLAYERBANKSLOTS_CHANGED",
+    "TRANSMOG_COLLECTION_UPDATED",
 }
 
 local function OnContainerFramesEvent(event)
