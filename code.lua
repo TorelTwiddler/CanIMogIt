@@ -931,18 +931,13 @@ function CanIMogIt:CharacterIsHighEnoughLevelForTransmog(itemLink)
 end
 
 
-function CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
-    return CIMIScanTooltip:IsItemSoulbound(itemLink, bag, slot)
+function CanIMogIt:IsItemSoulbound(itemLink, bag, slot, tooltipData)
+    return CIMIScanTooltip:IsItemSoulbound(itemLink, bag, slot, tooltipData)
 end
 
 
-function CanIMogIt:IsItemWarbound(itemLink, bag, slot)
-    return CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot)
-end
-
-
-function CanIMogIt:IsItemBindOnEquip(itemLink, bag, slot)
-    return CIMIScanTooltip:IsItemBindOnEquip(itemLink, bag, slot)
+function CanIMogIt:IsItemWarbound(itemLink, bag, slot, tooltipData)
+    return CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot, tooltipData)
 end
 
 
@@ -1198,7 +1193,7 @@ function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
 end
 
 
-function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
+function CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
     --[[
         Calculate the tooltip text.
         No caching is done here, so don't call this often!
@@ -1219,8 +1214,8 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     isItemToy = CanIMogIt:IsItemToy(itemLink)
     isItemPet = CanIMogIt:IsItemPet(itemLink)
     isItemEnsemble = CanIMogIt:IsItemEnsemble(itemLink)
-    isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
-    isItemWarbound = CanIMogIt:IsItemWarbound(itemLink, bag, slot)
+    isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot, tooltipData)
+    isItemWarbound = CanIMogIt:IsItemWarbound(itemLink, bag, slot, tooltipData)
     isItemEquippable = CanIMogIt:IsEquippable(itemLink)
 
     if not CanIMogIt:PreLogicOptionsContinue(
@@ -1380,12 +1375,15 @@ end
 local foundAnItemFromBags = false
 
 
-function CanIMogIt:GetTooltipText(itemLink, bag, slot)
+function CanIMogIt:GetTooltipText(itemLink, bag, slot, tooltipData)
     --[[
         Gets the text to display on the tooltip from the itemLink.
 
         If bag and slot are given, this will use the itemLink from
         bag and slot instead.
+
+        If tooltipData is given, it will be used to get TooltipScanner info,
+        instead of calculating it.
 
         Returns two things:
             the text to display.
@@ -1420,7 +1418,7 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot)
         return cachedText, cachedUnmodifiedText
     end
 
-    text, unmodifiedText = CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
+    text, unmodifiedText = CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
 
     text = CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
 

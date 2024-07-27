@@ -2,8 +2,6 @@
 
 CIMIScanTooltip = {}
 
-local CIMIScannedTooltip = CreateFrame("GameTooltip", "CIMIScannedTooltip", UIParent, "GameTooltipTemplate")
-
 if CanIMogIt.isRetail then
     -- This only works for Retail.
 
@@ -76,8 +74,18 @@ if CanIMogIt.isRetail then
     end
 
 
-    function CIMIScanTooltip:IsItemSoulbound(itemLink, bag, slot)
+    function CIMIScanTooltip:IsItemSoulbound(itemLink, bag, slot, tooltipData)
         -- Returns whether the item is soulbound or not.
+        if tooltipData and tooltipData.lines then
+            for i, line in pairs(tooltipData.lines) do
+                if line.leftText == ITEM_SOULBOUND then
+                    return true
+                end
+                if line.rightText == ITEM_SOULBOUND then
+                    return true
+                end
+            end
+        end
         if bag and slot then
             return C_Container.GetContainerItemInfo(bag, slot).isBound
         else
@@ -85,50 +93,30 @@ if CanIMogIt.isRetail then
         end
     end
 
-    function CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot)
+    function CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot, tooltipData)
         -- Returns whether the item is warbound or not.
-        if bag and slot and not CanIMogIt:IsItemBattlepet(itemLink) then
-            CIMIScannedTooltip:SetBagItem(bag, slot)
-        else
-            CIMIScannedTooltip:SetHyperlink(itemLink)
-        end
-        local function IsItemWarbound(text)
-            if not text then return end
-            if text == ITEM_ACCOUNTBOUND
-                or text == ITEM_ACCOUNTBOUND_UNTIL_EQUIP then
-                return true
+        if not tooltipData then
+            if bag and slot then
+                tooltipData = C_TooltipInfo.GetBagItem(bag, slot)
+            else
+                tooltipData = C_TooltipInfo.GetHyperlink(itemLink)
             end
-            return false
         end
-        local result;
-        -- make sure that all of CIMIScannedTooltip.infoList[1].tooltipData.lines aren't nil
-        if not CIMIScannedTooltip.infoList
-            or not CIMIScannedTooltip.infoList[1]
-            or not CIMIScannedTooltip.infoList[1].tooltipData
-            or not CIMIScannedTooltip.infoList[1].tooltipData.lines then
-            CIMIScannedTooltip:ClearLines()
-            return false
+        if tooltipData and tooltipData.lines then
+            for i, line in pairs(tooltipData.lines) do
+                if line.leftText == ITEM_ACCOUNTBOUND
+                    or line.leftText == ITEM_ACCOUNTBOUND_UNTIL_EQUIP then
+                    return true
+                end
+                if line.rightText == ITEM_ACCOUNTBOUND
+                    or line.rightText == ITEM_ACCOUNTBOUND_UNTIL_EQUIP then
+                    return true
+                end
+            end
         end
-        for i, line in ipairs(CIMIScannedTooltip.infoList[1].tooltipData.lines) do
-            result = IsItemWarbound(line.leftText) or
-                IsItemWarbound(line.rightText)
-            if result then break end
-        end
-        CIMIScannedTooltip:ClearLines()
-        if result == nil then
-            result = false
-        end
-        return result
+        return false
     end
 
-    function CIMIScanTooltip:IsItemBindOnEquip(itemLink, bag, slot)
-        -- Returns whether the item is bind on equip or not.
-        if bag and slot and not itemLink then
-            itemLink = C_Container.GetContainerItemLink(bag, slot)
-        end
-        local bind_type = select(14, C_Item.GetItemInfo(itemLink))
-        return bind_type == 2 or bind_type == 3
-    end
 else
 
     -- This works for Classic, though it is slower and more limited.

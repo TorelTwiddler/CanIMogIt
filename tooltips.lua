@@ -193,7 +193,7 @@ end
 
 local itemLinks = {}
 
-local function addToTooltip(tooltip, itemLink, bag, slot)
+local function addToTooltip(tooltip, itemLink, bag, slot, tooltipData)
     -- Does the calculations for determining what text to
     -- display on the tooltip.
     if tooltip.CIMI_tooltipWritten then return end
@@ -216,7 +216,7 @@ local function addToTooltip(tooltip, itemLink, bag, slot)
     end
 
     local text;
-    text = CanIMogIt:GetTooltipText(itemLink, bag, slot)
+    text = CanIMogIt:GetTooltipText(itemLink, bag, slot, tooltipData)
     if text and text ~= "" then
         addDoubleLine(tooltip, " ", text)
         tooltip.CIMI_tooltipWritten = true
@@ -273,132 +273,16 @@ if CanIMogIt.isRetail then
     GameTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", TooltipCleared)
 end
 
--- TODO: This is conflicting with the bag tooltip. Need to figure out
--- how to have it run after the other call.
--- local function CanIMogIt_AttachItemTooltip(tooltip)
---     -- Hook for normal tooltips.
---     if tooltip.GetItem == nil then return end
---     local link = select(2, tooltip:GetItem())
---     if link then
---         addToTooltip(tooltip, link)
---         VVDebugPrint(tooltip, "OnTooltipSetItem")
---     end
--- end
 
-
--- TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, CanIMogIt_AttachItemTooltip)
-
-
-hooksecurefunc(GameTooltip, "SetMerchantItem",
-    function(tooltip, index)
-        addToTooltip(tooltip, GetMerchantItemLink(index))
-        VVDebugPrint(tooltip, "SetMerchantItem")
-    end
-)
-
-
-hooksecurefunc(GameTooltip, "SetBuybackItem",
-    function(tooltip, index)
-        addToTooltip(tooltip, GetBuybackItemLink(index))
-        VVDebugPrint(tooltip, "SetBuybackItem")
-    end
-)
-
-
-hooksecurefunc(GameTooltip, "SetBagItem",
-    function(tooltip, bag, slot)
-        addToTooltip(tooltip, C_Container.GetContainerItemLink(bag, slot), bag, slot)
-        VVDebugPrint(tooltip, "SetBagItem")
-    end
-)
-
-
-hooksecurefunc(GameTooltip, "SetLootItem",
-    function(tooltip, slot)
-        if LootSlotHasItem(slot) then
-            local link = GetLootSlotLink(slot)
-            addToTooltip(tooltip, link)
-            VVDebugPrint(tooltip, "SetLootItem")
-        end
-    end
-)
-
-
-hooksecurefunc(GameTooltip, "SetLootRollItem",
-    function(tooltip, slot)
-        addToTooltip(tooltip, GetLootRollItemLink(slot))
-        VVDebugPrint(tooltip, "SetLootRollItem")
-    end
-)
-
-
-hooksecurefunc(GameTooltip, "SetInventoryItem",
-    function(tooltip, unit, slot)
-        addToTooltip(tooltip, GetInventoryItemLink(unit, slot))
-        VVDebugPrint(tooltip, "SetInventoryItem")
-    end
-)
-
-
-hooksecurefunc(GameTooltip, "SetGuildBankItem",
-    function(tooltip, tab, slot)
-        addToTooltip(tooltip, GetGuildBankItemLink(tab, slot))
-        VVDebugPrint(tooltip, "SetGuildBankItem")
-    end
-)
-
-
--- TODO DF: Make sure this hook in still needed. The crafting system got reworked.
--- hooksecurefunc(GameTooltip, "SetRecipeReagentItem",
---     function(tooltip, itemID, index)
---         addToTooltip(tooltip, C_TradeSkillUI.GetRecipeReagentItemLink(itemID, index))
---         VVDebugPrint(tooltip, "SetRecipeReagentItem")
---     end
--- )
-
-
-hooksecurefunc(GameTooltip, "SetTradeTargetItem",
-    function(tooltip, index)
-        addToTooltip(tooltip, GetTradeTargetItemLink(index))
-        VVDebugPrint(tooltip, "SetTradeTargetItem")
-    end
-)
-
-
-hooksecurefunc(GameTooltip, "SetQuestLogItem",
-    function(tooltip, type, index)
-        addToTooltip(tooltip, GetQuestLogItemLink(type, index))
-        VVDebugPrint(tooltip, "SetQuestLogItem")
-    end
-)
-
-
-hooksecurefunc(GameTooltip, "SetInboxItem",
-    function(tooltip, mailIndex, attachmentIndex)
-        addToTooltip(tooltip, GetInboxItemLink(mailIndex, attachmentIndex or 1))
-        VVDebugPrint(tooltip, "SetInboxItem")
-    end
-)
-
-
-hooksecurefunc(GameTooltip, "SetSendMailItem",
-    function(tooltip, index)
-        local name = GetSendMailItem(index)
-        local _, link = C_Item.GetItemInfo(name)
-        addToTooltip(tooltip, link)
-        VVDebugPrint(tooltip, "SetSendMailItem")
-    end
-)
-
-
-local function OnSetHyperlink(tooltip, link)
-    local type, id = string.match(link, ".*(item):(%d+).*")
-    if not type or not id then return end
-    if type == "item" then
-        addToTooltip(tooltip, link)
-        VVDebugPrint(tooltip, "SetHyperlink")
+local function CanIMogIt_AttachItemTooltip(tooltip, tooltipData)
+    -- Hook for normal tooltips.
+    if tooltip.GetItem == nil then return end
+    local link = select(2, tooltip:GetItem())
+    if link then
+        addToTooltip(tooltip, link, tooltipData)
+        VVDebugPrint(tooltip, "OnTooltipSetItem")
     end
 end
 
 
-hooksecurefunc(GameTooltip, "SetHyperlink", OnSetHyperlink)
+TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, CanIMogIt_AttachItemTooltip)
