@@ -1,3 +1,12 @@
+11.0.2v2.2 - 2024/07/29
+
+Database is back...  Blizzard still doesn't give us all of the information on every character unfortunately.  So sometimes we would be telling you that you didn't know an item when you may have known it from another appearance (X when it should have been a circle check).  For now we have added the database back to prevent this and have put in a bug report with Blizzard.
+
+* [#342](https://gitlab.com/toreltwiddler/CanIMogIt/issues/349) Improve tooltip hook code so it shows up everywhere again.
+* [#349](https://gitlab.com/toreltwiddler/CanIMogIt/issues/349) Add Database back.
+
+*****
+
 11.0.2v2.1 - 2024/07/24
 
 * [#343](https://gitlab.com/toreltwiddler/CanIMogIt/issues/343) Fix combined bags frame being empty.
