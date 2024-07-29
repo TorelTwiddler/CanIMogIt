@@ -4,6 +4,7 @@ Database is back...  Blizzard still doesn't give us all of the information on ev
 
 * [#342](https://gitlab.com/toreltwiddler/CanIMogIt/issues/349) Improve tooltip hook code so it shows up everywhere again.
 * [#349](https://gitlab.com/toreltwiddler/CanIMogIt/issues/349) Add Database back.
+* [#350](https://gitlab.com/toreltwiddler/CanIMogIt/issues/350) Buying back a BoE item will now properly show Warbound pink colors.
 
 *****
 
