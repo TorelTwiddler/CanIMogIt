@@ -19,7 +19,7 @@ end
 -----------------------------
 
 
-local function printDebug(tooltip, itemLink, tooltipData)
+local function printDebug(tooltip, itemLink, bag, slot)
     -- Add debug statements to the tooltip, to make it easier to understand
     -- what may be going wrong.
 
@@ -59,6 +59,7 @@ local function printDebug(tooltip, itemLink, tooltipData)
     end
     addDoubleLine(tooltip, "Item ID:", tostring(itemID))
     local _, _, quality, _, _, itemClass, itemSubClass, _, equipSlot, _, _, _, _, _, expansion = C_Item.GetItemInfo(itemID)
+    addDoubleLine(tooltip, "Item quality:", tostring(quality))
     addDoubleLine(tooltip, "Item class:", tostring(itemClass))
     addDoubleLine(tooltip, "Item subClass:", tostring(itemSubClass))
     addDoubleLine(tooltip, "Item equipSlot:", tostring(equipSlot))
@@ -66,6 +67,7 @@ local function printDebug(tooltip, itemLink, tooltipData)
 
     local sourceID, sourceIDSource = CanIMogIt:GetSourceID(itemLink)
     addDoubleLine(tooltip, "Item sourceID:", tostring(sourceID))
+    addDoubleLine(tooltip, "Item sourceIDSource:", tostring(sourceIDSource))
     local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
     addDoubleLine(tooltip, "Item appearanceID:", tostring(appearanceID))
 
@@ -74,6 +76,8 @@ local function printDebug(tooltip, itemLink, tooltipData)
 
     local baseSetID = setID ~= nil and setID ~= "nil" and C_TransmogSets.GetBaseSetID(setID) or "nil"
     addDoubleLine(tooltip, "Item baseSetID:", tostring(setID))
+
+    addDoubleLine(tooltip, "Bag, Slot:", tostring(bag) .. ", " .. tostring(slot))
 
     addLine(tooltip, '--------')
 
@@ -90,6 +94,8 @@ local function printDebug(tooltip, itemLink, tooltipData)
             addDoubleLine(tooltip, "BLIZZ PlayerCanCollectSource_2_CanCollect:", tostring(playerCanCollect))
         end
     end
+
+    addLine(tooltip, '--------')
 
     local playerHasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID)
     if playerHasTransmog ~= nil then
@@ -111,9 +117,9 @@ local function printDebug(tooltip, itemLink, tooltipData)
         addDoubleLine(tooltip, "PlayerKnowsTransmogFromItem:", tostring(playerKnowsTransmogFromItem))
     end
 
-    local playerKnowsTransmog = CanIMogIt:PlayerKnowsTransmog(itemLink)
-    if playerKnowsTransmog ~= nil then
-        addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(playerKnowsTransmog))
+    local playerKnowsTrasmog = CanIMogIt:_PlayerKnowsTransmog(itemLink, appearanceID)
+    if playerKnowsTrasmog ~= nil then
+        addDoubleLine(tooltip, "PlayerKnowsTransmog:", tostring(playerKnowsTrasmog))
     end
     local characterCanLearnTransmog = CanIMogIt:CharacterCanLearnTransmog(itemLink)
     if characterCanLearnTransmog ~= nil then
@@ -152,6 +158,8 @@ local function printDebug(tooltip, itemLink, tooltipData)
         end
     end
 
+    addLine(tooltip, '--------')
+
     addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink, bag, slot)))
     addDoubleLine(tooltip, "IsItemWarbound:", tostring(CanIMogIt:IsItemWarbound(itemLink, bag, slot)))
     addDoubleLine(tooltip, "CharacterCanEquipItem:", tostring(CanIMogIt:CharacterCanEquipItem(itemLink)))
@@ -167,7 +175,7 @@ local function printDebug(tooltip, itemLink, tooltipData)
 
     addLine(tooltip, '--------')
 
-    local calculatedTooltipText = CanIMogIt:CalculateTooltipText(itemLink, tooltipData)
+    local calculatedTooltipText = CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     if calculatedTooltipText ~= nil then
         addDoubleLine(tooltip, "Tooltip:", tostring(calculatedTooltipText))
     else
@@ -185,7 +193,7 @@ end
 
 local itemLinks = {}
 
-local function addToTooltip(tooltip, itemLink, tooltipData)
+local function addToTooltip(tooltip, itemLink, bag, slot, tooltipData)
     -- Does the calculations for determining what text to
     -- display on the tooltip.
     if tooltip.CIMI_tooltipWritten then return end
@@ -195,7 +203,7 @@ local function addToTooltip(tooltip, itemLink, tooltipData)
     end
 
     if CanIMogItOptions["debug"] then
-        printDebug(tooltip, itemLink, tooltipData)
+        printDebug(tooltip, itemLink, bag, slot)
         tooltip.CIMI_tooltipWritten = true
     end
 

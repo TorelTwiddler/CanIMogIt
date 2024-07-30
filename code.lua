@@ -1068,28 +1068,7 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
     -- Returns whether this item's appearance is already known by the player.
     local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
     if appearanceID == nil then return false end
-    local requirements = CanIMogIt.Requirements:GetRequirements()
-    if CanIMogIt:DBHasAppearanceForRequirements(appearanceID, itemLink, requirements) then
-        if CanIMogIt:IsItemArmor(itemLink) then
-            -- The character knows the appearance, check that it's from the same armor type.
-            for sourceID, knownItem in pairs(CanIMogIt:DBGetSources(appearanceID, itemLink)) do
-                if CanIMogIt:IsArmorSubClassName(knownItem.subClass, itemLink)
-                        or knownItem.subClass == COSMETIC_NAME then
-                    return true
-                end
-            end
-        else
-            -- Is not armor, don't worry about same appearance for different types
-            return true
-        end
-    end
-
-    -- Don't know from the database, try using the API.
-    local knowsTransmog = CanIMogIt:_PlayerKnowsTransmog(itemLink, appearanceID)
-    if knowsTransmog then
-        CanIMogIt:DBAddItem(itemLink)
-    end
-    return knowsTransmog
+    return CanIMogIt:_PlayerKnowsTransmog(itemLink, appearanceID)
 end
 
 
@@ -1103,18 +1082,8 @@ function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
     local appearanceID, sourceID = CanIMogIt:GetAppearanceID(itemLink)
     if sourceID == nil then return end
 
-    -- First check the Database
-    if CanIMogIt:DBHasSource(appearanceID, sourceID, itemLink) then
-        return true
-    end
-
     local hasTransmog;
     hasTransmog = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
-
-    -- Update Database
-    if hasTransmog then
-        CanIMogIt:DBAddItem(itemLink, appearanceID, sourceID)
-    end
 
     return hasTransmog
 end

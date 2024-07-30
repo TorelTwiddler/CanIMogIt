@@ -64,7 +64,7 @@ if CanIMogIt.isRetail then
 
     function CIMIScanTooltip:GetClassesRequired(itemLink)
         -- Returns a table of classes required for the item, if any, or nil if none.
-        local tooltipData = C_TooltipInfo.GetHyperlink(itemLink)
+        local tooltipData = C_TooltipInfo.GetItemByID(CanIMogIt:GetItemID(itemLink))
         for i, line in pairs(tooltipData.lines) do
             local req_classes = GetClassesText(line.leftText)
             if req_classes then

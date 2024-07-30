@@ -4,9 +4,6 @@
 
 CanIMogIt = LibStub("AceAddon-3.0"):NewAddon("CanIMogIt", "AceConsole-3.0", "AceEvent-3.0")
 
--- This just fixes VSCode's intellisense, so it doesn't complain about not finding Print.
-CanIMogIt.Print = CanIMogIt.Print
-
 CanIMogIt.L = CanIMogIt.L or setmetatable({}, {
     __index = function(t, k)
         rawset(t, k, k)
