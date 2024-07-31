@@ -236,6 +236,21 @@ end
 CanIMogIt.frame:AddEventFunction(CanIMogIt.frame.AddonLoaded)
 
 
+local transmogEvents = {
+    ["TRANSMOG_COLLECTION_SOURCE_ADDED"] = true,
+    ["TRANSMOG_COLLECTION_SOURCE_REMOVED"] = true,
+    ["TRANSMOG_COLLECTION_UPDATED"] = true,
+}
+
+local function TransmogCollectionUpdated(event, ...)
+    if transmogEvents[event] then
+        CanIMogIt:ResetCache()
+    end
+end
+
+CanIMogIt.frame:AddEventFunction(TransmogCollectionUpdated)
+
+
 local changesSavedStack = {}
 
 

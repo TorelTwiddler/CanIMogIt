@@ -1047,28 +1047,25 @@ function CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
 end
 
 
-function CanIMogIt:_PlayerKnowsTransmog(itemLink, appearanceID)
+function CanIMogIt:PlayerKnowsTransmog(itemLink)
     -- Internal logic for determining if the item is known or not.
     -- Does not use the CIMI database.
-    if itemLink == nil or appearanceID == nil then return end
-    local sources = C_TransmogCollection.GetAppearanceSources(appearanceID, 1, transmogLocation)
-    if sources then
-        for i, source in pairs(sources) do
-            local sourceItemLink = CanIMogIt:GetItemLinkFromSourceID(source.sourceID)
-            if CanIMogIt:IsItemSubClassIdentical(itemLink, sourceItemLink) and source.isCollected then
-                return true
+    if itemLink == nil then return end
+    local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
+    if appearanceID == nil then return false end
+    local sourceIDs = C_TransmogCollection.GetAllAppearanceSources(appearanceID)
+    if sourceIDs then
+        for i, sourceID in pairs(sourceIDs) do
+            local hasSource = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
+            if hasSource then
+                local sourceItemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+                if CanIMogIt:IsItemSubClassIdentical(itemLink, sourceItemLink) then
+                    return true
+                end
             end
         end
     end
     return false
-end
-
-
-function CanIMogIt:PlayerKnowsTransmog(itemLink)
-    -- Returns whether this item's appearance is already known by the player.
-    local appearanceID = CanIMogIt:GetAppearanceID(itemLink)
-    if appearanceID == nil then return false end
-    return CanIMogIt:_PlayerKnowsTransmog(itemLink, appearanceID)
 end
 
 
