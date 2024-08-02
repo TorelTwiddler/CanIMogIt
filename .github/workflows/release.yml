@@ -20,7 +20,3 @@ jobs:
           fetch-depth: 0
       - name: Package and release - Retail
         uses: BigWigsMods/packager@v2
-      - name: Package and release - Cata
-        uses: BigWigsMods/packager@v2
-        with:
-          args: -g cata
