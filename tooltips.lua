@@ -154,7 +154,6 @@ local function printDebug(tooltip, itemLink, tooltipData)
 
     addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink, bag, slot)))
     addDoubleLine(tooltip, "IsItemWarbound:", tostring(CanIMogIt:IsItemWarbound(itemLink, bag, slot)))
-    addDoubleLine(tooltip, "CharacterCanEquipItem:", tostring(CanIMogIt:CharacterCanEquipItem(itemLink)))
     addDoubleLine(tooltip, "IsValidAppearanceForCharacter:", tostring(CanIMogIt:IsValidAppearanceForCharacter(itemLink)))
     addDoubleLine(tooltip, "CharacterIsHighEnoughLevelForTransmog:", tostring(CanIMogIt:CharacterIsHighEnoughLevelForTransmog(itemLink)))
 

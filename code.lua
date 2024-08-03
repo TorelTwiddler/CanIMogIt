@@ -871,39 +871,13 @@ function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
 end
 
 
-local function IsHeirloomRedText(redText, itemLink)
-    local itemID = CanIMogIt:GetItemID(itemLink)
-    if redText == _G["ITEM_SPELL_KNOWN"] and C_Heirloom.IsItemHeirloom(itemID) then
-        return true
-    end
-end
-
-
-local function IsLevelRequirementRedText(redText)
-    if string.match(redText, _G["ITEM_MIN_LEVEL"]) then
-        return true
-    end
-end
-
-
-function CanIMogIt:CharacterCanEquipItem(itemLink)
-    -- Can the character equip this item eventually? (excluding level)
-    if CanIMogIt:IsItemArmor(itemLink) and CanIMogIt:IsArmorCosmetic(itemLink) then
-        return true
-    end
-    local redText = CIMIScanTooltip:GetRedText(itemLink)
-    if redText == "" or redText == nil then
-        return true
-    end
-    if IsHeirloomRedText(redText, itemLink) then
-        -- Special case for heirloom items. They always have red text if it was learned.
-        return true
-    end
-    if IsLevelRequirementRedText(redText) then
-        -- We ignore the level, since it will be equipable eventually.
-        return true
-    end
-    return false
+function CanIMogIt:IsAppearanceUsable(itemLink)
+    if not itemLink then return end
+    local sourceID = CanIMogIt:GetSourceID(itemLink)
+    if not sourceID then return end
+    local appearanceInfo = C_TransmogCollection.GetAppearanceInfoBySource(sourceID)
+    if not appearanceInfo then return end
+    return appearanceInfo.appearanceIsUsable
 end
 
 
@@ -912,12 +886,8 @@ function CanIMogIt:IsValidAppearanceForCharacter(itemLink)
     if not CanIMogIt:CharacterIsHighEnoughLevelForTransmog(itemLink) then
         return false
     end
-    if CanIMogIt:CharacterCanEquipItem(itemLink) then
-        if CanIMogIt:IsItemArmor(itemLink) then
-            return CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
-        else
-            return true
-        end
+    if CanIMogIt:IsAppearanceUsable(itemLink) then
+        return true
     else
         return false
     end
