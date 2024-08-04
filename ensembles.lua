@@ -1,3 +1,5 @@
+local L = CanIMogIt.L
+
 function CanIMogIt:IsItemEnsemble(itemLink)
     local itemID = CanIMogIt:GetItemID(itemLink)
     if itemID == nil then return false end
@@ -59,7 +61,7 @@ function CanIMogIt:CalculateEnsembleText(itemLink)
     local knownAppearances, totalAppearances, knownSources, totalSources = CanIMogIt:EnsembleItemsKnown(itemLink)
     local ratio = knownAppearances .. "/" .. totalAppearances
     if CanIMogItOptions["showVerboseText"] then
-        ratio = ratio .. "\nSources: " .. knownSources .. "/" .. totalSources
+        ratio = ratio .. " (".. L["Sources"] .. ": " .. knownSources .. "/" .. totalSources .. ")"
         if totalAppearances == 0 then
             return CanIMogIt.NOT_TRANSMOGABLE .. " " .. ratio, CanIMogIt.NOT_TRANSMOGABLE
         elseif knownSources == totalSources then
