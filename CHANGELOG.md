@@ -1,8 +1,12 @@
-11.0.0v2.2 - 2024/07/30
+11.0.0v2.2 - 2024/08/03
 
 * [#342](https://gitlab.com/toreltwiddler/CanIMogIt/issues/342) Improve tooltip hook code so it shows up everywhere again.
+* [#348](https://gitlab.com/toreltwiddler/CanIMogIt/issues/348) Fix Battle Pet Cages in Auction House.
 * [#349](https://gitlab.com/toreltwiddler/CanIMogIt/issues/349) Fix missing appearance logic.
 * [#350](https://gitlab.com/toreltwiddler/CanIMogIt/issues/350) Buying back a BoE item will now properly show Warbound pink colors.
+* [#351](https://gitlab.com/toreltwiddler/CanIMogIt/issues/351) Add Sources count for Ensembles that will show when Verbose Text is enabled.
+* [#353](https://gitlab.com/toreltwiddler/CanIMogIt/issues/353) Remove Deadeye Monocle from Exceptions List.
+* [#354](https://gitlab.com/toreltwiddler/CanIMogIt/issues/354) Properly consider class armor type.
 
 *****
 
