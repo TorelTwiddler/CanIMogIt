@@ -93,6 +93,13 @@ if CanIMogIt.isRetail then
         end
     end
 
+    local accountBoundTexts = {
+        ITEM_ACCOUNTBOUND,
+        ITEM_ACCOUNTBOUND_UNTIL_EQUIP,
+        ITEM_BIND_TO_ACCOUNT,
+        ITEM_BIND_TO_ACCOUNT_UNTIL_EQUIP,
+    }
+
     function CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot, tooltipData)
         -- Returns whether the item is warbound or not.
         if not tooltipData then
@@ -104,13 +111,13 @@ if CanIMogIt.isRetail then
         end
         if tooltipData and tooltipData.lines then
             for i, line in pairs(tooltipData.lines) do
-                if line.leftText == ITEM_ACCOUNTBOUND
-                    or line.leftText == ITEM_ACCOUNTBOUND_UNTIL_EQUIP then
-                    return true
-                end
-                if line.rightText == ITEM_ACCOUNTBOUND
-                    or line.rightText == ITEM_ACCOUNTBOUND_UNTIL_EQUIP then
-                    return true
+                for _, accountBoundText in pairs(accountBoundTexts) do
+                    if line.leftText == accountBoundText then
+                        return true
+                    end
+                    if line.rightText == accountBoundText then
+                        return true
+                    end
                 end
             end
         end
