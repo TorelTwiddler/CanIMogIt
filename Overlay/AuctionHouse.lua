@@ -28,6 +28,13 @@ local function GetAuctionHouseItemLink(auctionHouseButton)
                 -- data to be filled correctly.
                 return
             end
+        elseif rowData.itemKey.battlePetSpeciesID ~= 0 then
+            -- Battle pets are a special case.
+            local name = C_PetJournal.GetPetInfoBySpeciesID(rowData.itemKey.battlePetSpeciesID)
+            if name == nil then return end
+            local petID = C_PetJournal.FindPetIDByName(name)
+            if petID == nil then return end
+            return "|Hbattlepet:".. petID .."|h"
         else
             -- Most items have a single appearance, and will use this code.
             local itemKey = rowData.itemKey

@@ -20,7 +20,7 @@ function CanIMogIt:PlayerKnowsPet(itemLink)
     if itemID ~= nil then
         speciesID = select(13, C_PetJournal.GetPetInfoByItemID(itemID))
     else
-        _, _, speciesID = string.find(itemLink, "battlepet:(%d+):")
+        _, _, speciesID = string.find(itemLink, "battlepet:(%d+)")
         if speciesID ~= nil then
             speciesID = tonumber(speciesID)
         end
