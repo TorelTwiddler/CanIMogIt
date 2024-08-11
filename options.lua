@@ -154,6 +154,7 @@ local EVENTS = {
     "TRADE_SKILL_SHOW",
     "NEW_TOY_ADDED",
     "NEW_MOUNT_ADDED",
+    "ITEM_LOCK_CHANGED",
 }
 
 if CanIMogIt.isRetail then

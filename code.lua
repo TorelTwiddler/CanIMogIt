@@ -164,14 +164,6 @@ local APPEARANCES_SETS_TAB = 2
 local COSMETIC_NAME = select(3, C_Item.GetItemInfoInstant(130064))
 
 
--- Built-in colors
--- TODO: move to constants
-local BLIZZARD_RED = "|cffff1919"
-local BLIZZARD_GREEN = "|cff19ff19"
-local BLIZZARD_DARK_GREEN = "|cff40c040"
-local BLIZZARD_YELLOW = "|cffffd100"
-
-
 -------------------------
 -- Text related tables --
 -------------------------
@@ -526,11 +518,11 @@ function CanIMogIt:CalculateSetsText(itemLink)
 
     local secondLineText = ""
     if set.label and set.description then
-        secondLineText = CanIMogIt.WHITE .. set.label .. ": " .. BLIZZARD_GREEN ..  set.description .. " "
+        secondLineText = CanIMogIt.WHITE .. set.label .. ": " .. CanIMogIt.BLIZZARD_GREEN ..  set.description .. " "
     elseif set.label then
         secondLineText = CanIMogIt.WHITE .. set.label .. " "
     elseif set.description then
-        secondLineText = BLIZZARD_GREEN .. set.description .. " "
+        secondLineText = CanIMogIt.BLIZZARD_GREEN .. set.description .. " "
     end
     -- TODO: replace CanIMogIt.WHITE with setNameColor, add otherClass
     -- e.g.: setNameColor .. otherClass .. set.name
@@ -1120,9 +1112,9 @@ end
 function CanIMogIt:PreLogicOptionsContinue(isItemMount, isItemToy, isItemPet,
         isItemEquippable)
     -- Apply the options. Returns false if it should stop the logic.
-    mountCheck = CanIMogItOptions["showMountItems"] and isItemMount
-    toyCheck = CanIMogItOptions["showToyItems"] and isItemToy
-    petCheck = CanIMogItOptions["showPetItems"] and isItemPet
+    local mountCheck = CanIMogItOptions["showMountItems"] and isItemMount
+    local toyCheck = CanIMogItOptions["showToyItems"] and isItemToy
+    local petCheck = CanIMogItOptions["showPetItems"] and isItemPet
 
     -- If showEquippableOnly is checked, only show equippable items.
     if CanIMogItOptions["showEquippableOnly"] and not isItemEquippable then
@@ -1159,10 +1151,73 @@ function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
 end
 
 
+function CanIMogIt:GetAppearanceData(itemLink)
+    -- Returns the appearance data for the item. Uses the cache if available.
+    local appData
+
+    appData = CanIMogIt.cache:GetAppearanceDataValue(itemLink)
+    if appData then
+        return appData
+    end
+
+    appData = CanIMogIt.AppearanceData.FromItemLink(itemLink)
+    if appData == nil then return end
+
+    CanIMogIt.cache:SetAppearanceDataValue(appData)
+    return appData
+end
+
+
+function CanIMogIt:GetItemData(itemLink)
+    -- Returns the item data for the item. Uses the cache if available.
+    local itemData
+
+    itemData = CanIMogIt.cache:GetItemDataValue(itemLink)
+    if itemData then
+        return itemData
+    end
+
+    itemData = CanIMogIt.ItemData.FromItemLink(itemLink)
+    if itemData == nil then return end
+
+    CanIMogIt.cache:SetItemDataValue(itemData)
+    return itemData
+end
+
+
+function CanIMogIt:GetBindData(itemLink, bag, slot, tooltipData)
+    -- Returns the bind data for the item. Uses the cache if available.
+    local bindData
+
+    bindData = CanIMogIt.cache:GetBindDataValue(itemLink, bag, slot)
+    if bindData then
+        return bindData
+    end
+
+    bindData = CanIMogIt.BindData:new(itemLink, bag, slot, tooltipData)
+    if bindData == nil then return end
+
+    CanIMogIt.cache:SetBindDataValue(bindData)
+    return bindData
+end
+
+
+function CanIMogIt:CalculateKey(itemLink)
+    local sourceID = CanIMogIt:GetSourceID(itemLink)
+    local itemID = CanIMogIt:GetItemID(itemLink)
+    if sourceID then
+        return "source:" .. sourceID
+    elseif itemID then
+        return "item:" .. itemID
+    else
+        return "itemlink:" .. itemLink
+    end
+end
+
+
 function CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
     --[[
         Calculate the tooltip text.
-        No caching is done here, so don't call this often!
         Use GetTooltipText whenever possible!
     ]]
     local exception_text = CanIMogIt:GetExceptionText(itemLink)
@@ -1170,160 +1225,43 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
         return exception_text, exception_text
     end
 
-    local isTransmogable, playerKnowsTransmogFromItem, isValidAppearanceForCharacter,
-        playerKnowsTransmog, characterCanLearnTransmog, isItemEquippable,
-        isItemSoulbound, isItemWarbound, isItemMount, isItemToy, isItemPet, isItemEnsemble,
-        text, unmodifiedText;
+    local text, unmodifiedText;
 
-    isTransmogable = CanIMogIt:IsTransmogable(itemLink)
-    isItemMount = CanIMogIt:IsItemMount(itemLink)
-    isItemToy = CanIMogIt:IsItemToy(itemLink)
-    isItemPet = CanIMogIt:IsItemPet(itemLink)
-    isItemEnsemble = CanIMogIt:IsItemEnsemble(itemLink)
-    isItemSoulbound = CanIMogIt:IsItemSoulbound(itemLink, bag, slot, tooltipData)
-    isItemWarbound = CanIMogIt:IsItemWarbound(itemLink, bag, slot, tooltipData)
-    isItemEquippable = CanIMogIt:IsEquippable(itemLink)
+    local itemData = CanIMogIt:GetItemData(itemLink)
+    if itemData == nil then return end
+    local bindData = CanIMogIt:GetBindData(itemLink, bag, slot, tooltipData)
+    if bindData == nil then return end
 
     if not CanIMogIt:PreLogicOptionsContinue(
-            isItemMount, isItemToy, isItemPet,
-            isItemEquippable) then
+            itemData.isItemMount, itemData.isItemToy, itemData.isItemPet,
+            itemData.isItemEquippable) then
         return "", ""
     end
 
     -- Is the item transmogable?
-    if isTransmogable then
-        -- If the item is transmogable, bug didn't give a result for soulbound state, it's
-        -- probably not ready yet.
-        if isItemSoulbound == nil then return end
-        if isItemWarbound == nil then return end
-
-        playerKnowsTransmogFromItem = CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
-        if playerKnowsTransmogFromItem == nil then return end
-
-        isValidAppearanceForCharacter = CanIMogIt:IsValidAppearanceForCharacter(itemLink)
-        if isValidAppearanceForCharacter == nil then return end
-
-        playerKnowsTransmog = CanIMogIt:PlayerKnowsTransmog(itemLink)
-        if playerKnowsTransmog == nil then return end
-
-        characterCanLearnTransmog = CanIMogIt:CharacterCanLearnTransmog(itemLink)
-        if characterCanLearnTransmog == nil then return end
-
-        if playerKnowsTransmogFromItem then
-            if isValidAppearanceForCharacter then
-                -- The player knows the appearance from this item
-                -- and the character can transmog it.
-                if isItemWarbound then
-                    -- Pink Check
-                    text = CanIMogIt.KNOWN_WARBOUND
-                    unmodifiedText = CanIMogIt.KNOWN_WARBOUND
-                elseif isItemSoulbound then
-                    -- Blue Check
-                    text = CanIMogIt.KNOWN
-                    unmodifiedText = CanIMogIt.KNOWN
-                else -- BoE
-                    -- Yellow Check
-                    text = CanIMogIt.KNOWN_BOE
-                    unmodifiedText = CanIMogIt.KNOWN_BOE
-                end
-            else
-                -- The player knows the appearance from this item, but
-                -- the character can't use this appearance.
-                if isItemWarbound then
-                    -- Pink Check
-                    text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND
-                    unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND
-                elseif isItemSoulbound then
-                    -- Green Check
-                    text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
-                    unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
-                else -- BoE
-                    -- Yellow Check
-                    text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
-                    unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
-                end
-            end
-        -- Does the player know the appearance from a different item?
-        elseif playerKnowsTransmog then
-            if isValidAppearanceForCharacter then
-                -- The player knows the appearance from another item, and
-                -- the character can use it.
-                if isItemWarbound then
-                    -- Pink Circle Check
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND
-                elseif isItemSoulbound then
-                    -- Blue Circle Check
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
-                else -- BoE
-                    -- Yellow Circle Check
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
-                end
-            else
-                -- The player knows the appearance from another item, but
-                -- this character can never use/learn the appearance.
-                if isItemWarbound then
-                    -- Pink Circle Check
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND
-                elseif isItemSoulbound then
-                    -- Green Circle Check
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-                else
-                    -- Yellow Circle Check
-                    text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
-                    unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
-                end
-            end
-        else
-            if characterCanLearnTransmog then
-                -- The player does not know the appearance and the character
-                -- can learn this appearance.
-                -- Orange X
-                text = CanIMogIt.UNKNOWN
-                unmodifiedText = CanIMogIt.UNKNOWN
-            else
-                -- Warbound shouldn't be possible in this state.
-                if isItemSoulbound then
-                    -- The player does not know the appearance, the character
-                    -- cannot use the appearance, and the item cannot be mailed
-                    -- because it is soulbound.
-                    -- Green Dash
-                    text = CanIMogIt.UNKNOWABLE_SOULBOUND
-                            .. BLIZZARD_RED .. CanIMogIt:GetReason(itemLink)
-                    unmodifiedText = CanIMogIt.UNKNOWABLE_SOULBOUND
-                else
-                    -- The player does not know the appearance, and the character
-                    -- cannot use/learn the appearance.
-                    -- Yellow Star
-                    text = CanIMogIt.UNKNOWABLE_BY_CHARACTER
-                            .. BLIZZARD_RED .. CanIMogIt:GetReason(itemLink)
-                    unmodifiedText = CanIMogIt.UNKNOWABLE_BY_CHARACTER
-                end
-            end
-        end
-    elseif isItemMount then
+    if itemData.type == CanIMogIt.ItemTypes.Transmogable then
+        local appData = CanIMogIt:GetAppearanceData(itemLink)
+        if appData == nil then return end
+        text, unmodifiedText = appData:CalculateBindStateText(bindData)
+    elseif itemData.type == CanIMogIt.ItemTypes.Mount then
         -- This item is a mount, so let's figure out if we know it!
         text, unmodifiedText = CanIMogIt:CalculateMountText(itemLink)
-    elseif isItemToy then
+    elseif itemData.type == CanIMogIt.ItemTypes.Toy then
         -- This item is a toy, so let's figure out if we know it!
         text, unmodifiedText = CanIMogIt:CalculateToyText(itemLink)
-    elseif isItemPet then
+    elseif itemData.type == CanIMogIt.ItemTypes.Pet then
         -- This item is a pet, so let's figure out if we know it!
         text, unmodifiedText = CanIMogIt:CalculatePetText(itemLink)
-    elseif isItemEnsemble then
+    elseif itemData.type == CanIMogIt.ItemTypes.Ensemble then
         -- This item is an ensemble, so let's figure out if we know it!
         text, unmodifiedText = CanIMogIt:CalculateEnsembleText(itemLink)
-    else
+    else  -- itemData.type == CanIMogIt.ItemTypes.Other
         -- This item is never transmogable.
-        if isItemWarbound then
+        if bindData.type == CanIMogIt.BindTypes.Warbound then
             -- Pink Circle-Slash
             text = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND
             unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND
-        elseif isItemSoulbound then
+        elseif bindData.type == CanIMogIt.BindTypes.Soulbound then
             -- Gray Circle-Slash
             text = CanIMogIt.NOT_TRANSMOGABLE
             unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE
@@ -1333,7 +1271,6 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
             unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE_BOE
         end
     end
-
     return text, unmodifiedText
 end
 
@@ -1377,21 +1314,9 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot, tooltipData)
     local text = ""
     local unmodifiedText = ""
 
-    -- Return cached items
-    local cachedData = CanIMogIt.cache:GetItemTextValue(itemLink)
-    if cachedData then
-        local cachedText, cachedUnmodifiedText = unpack(cachedData)
-        return cachedText, cachedUnmodifiedText
-    end
-
     text, unmodifiedText = CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
 
     text = CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
-
-    -- Update cached items
-    if text ~= nil then
-        CanIMogIt.cache:SetItemTextValue(itemLink, {text, unmodifiedText})
-    end
 
     return text, unmodifiedText
 end

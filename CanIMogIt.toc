@@ -25,6 +25,9 @@ embeds.xml
 core.lua
 Locale\_locales.xml
 constants.lua
+classes\appearanceData.lua
+classes\bindData.lua
+classes\itemData.lua
 options.lua
 cache.lua
 requirements.lua

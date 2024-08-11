@@ -207,7 +207,7 @@ local function addToTooltip(tooltip, itemLink, tooltipData)
     end
 
     local text;
-    text = CanIMogIt:GetTooltipText(itemLink, bag, slot, tooltipData)
+    text = CanIMogIt:GetTooltipText(itemLink, nil, nil, tooltipData)
     if text and text ~= "" then
         addDoubleLine(tooltip, " ", text)
         tooltip.CIMI_tooltipWritten = true

@@ -253,3 +253,9 @@ CanIMogIt.NUM_GROUP_LOOT_FRAMES = 4
 -- Expansions before Shadowlands are all opened at level 10 as of 9.0. Shadowlands is opened at level 48.
 CanIMogIt.MIN_TRANSMOG_LEVEL = 10
 CanIMogIt.MIN_TRANSMOG_LEVEL_SHADOWLANDS = 48
+
+-- Built-in colors
+CanIMogIt.BLIZZARD_RED = "|cffff1919"
+CanIMogIt.BLIZZARD_GREEN = "|cff19ff19"
+CanIMogIt.BLIZZARD_DARK_GREEN = "|cff40c040"
+CanIMogIt.BLIZZARD_YELLOW = "|cffffd100"
