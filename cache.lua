@@ -47,10 +47,15 @@ end
 
 
 function CanIMogIt.cache:DeleteBindDataValue(itemLink, bag, slot)
+    if itemLink == nil and (bag == nil or slot == nil) then
+        return
+    end
     if itemLink == nil then
         itemLink = C_Container.GetContainerItemLink(bag, slot)
     end
-    self.data["bindData"][CanIMogIt.BindData.CalculateKey(itemLink, bag, slot)] = nil
+    if self.data["bindData"][CanIMogIt.BindData.CalculateKey(itemLink, bag, slot)] ~= nil then
+        self.data["bindData"][CanIMogIt.BindData.CalculateKey(itemLink, bag, slot)] = nil
+    end
     if itemLink then
         -- Delete the itemLink key as well, since it may be cached without the bag and slot.
         self.data["bindData"][CanIMogIt:CalculateKey(itemLink)] = nil
