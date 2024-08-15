@@ -987,6 +987,9 @@ function CanIMogIt:PlayerKnowsTransmog(itemLink)
             local hasSource = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
             if hasSource then
                 local sourceItemLink = CanIMogIt:GetItemLinkFromSourceID(sourceID)
+                if CanIMogIt:IsArmorCosmetic(sourceItemLink) then
+                    return true
+                end
                 if CanIMogIt:IsItemSubClassIdentical(itemLink, sourceItemLink) then
                     return true
                 end
