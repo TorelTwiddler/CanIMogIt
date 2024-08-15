@@ -230,6 +230,8 @@ CanIMogIt.MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS or 36
 -- Bank = NUM_BANKGENERIC_SLOTS
 CanIMogIt.NUM_VOID_STORAGE_FRAMES = 80 -- Blizzard functions are locals
 
+CanIMogIt.NUM_WARBANK_ITEMS = 112
+
 ---- Expansions ----
 CanIMogIt.Expansions = {}
 CanIMogIt.Expansions.BC = 1
