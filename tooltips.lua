@@ -155,7 +155,6 @@ local function printDebug(tooltip, itemLink, tooltipData)
     addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink, bag, slot)))
     addDoubleLine(tooltip, "IsItemWarbound:", tostring(CanIMogIt:IsItemWarbound(itemLink, bag, slot)))
     addDoubleLine(tooltip, "IsValidAppearanceForCharacter:", tostring(CanIMogIt:IsValidAppearanceForCharacter(itemLink)))
-    addDoubleLine(tooltip, "CharacterIsHighEnoughLevelForTransmog:", tostring(CanIMogIt:CharacterIsHighEnoughLevelForTransmog(itemLink)))
 
     local classesRequired = CIMIScanTooltip:GetClassesRequired(itemLink)
     if classesRequired ~= nil then

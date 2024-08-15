@@ -17,7 +17,7 @@ The default UI tooltip only tells about items the character you are on can wear.
 
 - If you have learned it.
 - If you have learned it, but from a different item.
-- If you have learned it, but can't transmog it (wrong armor type or too low level).
+- If you have learned it, but can't transmog it (wrong armor type, faction).
 - If you can learn it.
 - If you can't learn it on this character.
 - If it can't be learned (necks, trinkets, rings, etc.).

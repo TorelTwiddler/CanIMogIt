@@ -173,10 +173,6 @@ local COSMETIC_NAME = select(3, C_Item.GetItemInfoInstant(130064))
 local simpleTextMap = {
     [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = CanIMogIt.KNOWN,
     [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE] = CanIMogIt.KNOWN_BOE,
-    [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = CanIMogIt.KNOWN,
-    [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL_BOE] = CanIMogIt.KNOWN_BOE,
-    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM,
-    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL_BOE] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE,
 }
@@ -190,10 +186,6 @@ local knownTexts = {
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE] = true,
     [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER] = true,
     [CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE] = true,
-    [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL] = true,
-    [CanIMogIt.KNOWN_BUT_TOO_LOW_LEVEL_BOE] = true,
-    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL] = true,
-    [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BUT_TOO_LOW_LEVEL_BOE] = true,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = true,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE] = true,
 }
@@ -762,21 +754,6 @@ function CanIMogIt:GetItemExpansion(itemID)
 end
 
 
-function CanIMogIt:GetItemMinTransmogLevel(itemID)
-    -- Returns the minimum level required to transmog the item.
-    -- This uses the expansion ID of the item to figure it out.
-    -- Expansions before Shadowlands are all opened at level 10
-    -- as of 9.0. Shadowlands is opened at level 48.
-    local expansion = CanIMogIt:GetItemExpansion(itemID)
-    if expansion == nil or expansion == 0 then return end
-    if expansion < CanIMogIt.Expansions.SHADOWLANDS then
-        return CanIMogIt.MIN_TRANSMOG_LEVEL
-    else
-        return CanIMogIt.MIN_TRANSMOG_LEVEL_SHADOWLANDS
-    end
-end
-
-
 function CanIMogIt:GetItemClassName(itemLink)
     return select(2, C_Item.GetItemClassInfo(C_Item.GetItemInfoInstant(itemLink)))
 end
@@ -874,21 +851,11 @@ end
 
 function CanIMogIt:IsValidAppearanceForCharacter(itemLink)
     -- Can the character transmog this appearance right now?
-    if not CanIMogIt:CharacterIsHighEnoughLevelForTransmog(itemLink) then
-        return false
-    end
     if CanIMogIt:IsAppearanceUsable(itemLink) then
         return true
     else
         return false
     end
-end
-
-
-function CanIMogIt:CharacterIsHighEnoughLevelForTransmog(itemLink)
-    local minLevel = CanIMogIt:GetItemMinTransmogLevel(itemLink)
-    if minLevel == nil then return true end
-    return UnitLevel("player") > minLevel
 end
 
 
