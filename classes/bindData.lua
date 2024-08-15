@@ -14,7 +14,7 @@ function CanIMogIt.BindData:new(itemLink, bag, slot, tooltipData)
     if not itemLink then return nil end
     local this = setmetatable({}, CanIMogIt.BindData)
     this.itemLink = itemLink
-    this.key = CanIMogIt.BindData.CalculateKey(itemLink, bag, slot)
+    this.key = CanIMogIt.BindData.CalculateKey(itemLink, bag, slot, tooltipData)
     this.bag = bag
     this.slot = slot
     this.tooltipData = tooltipData
@@ -25,10 +25,22 @@ function CanIMogIt.BindData:new(itemLink, bag, slot, tooltipData)
 end
 
 
-function CanIMogIt.BindData.CalculateKey(itemLink, bag, slot)
+function CanIMogIt.BindData.CalculateKey(itemLink, bag, slot, tooltipData)
     if not itemLink then return nil end
     if bag and slot then
         return "bag-slot:" .. bag .. "-" .. slot
+    elseif tooltipData then
+        local tooltipString = ""
+        for i, line in pairs(tooltipData.lines) do
+            if i > 10 then break end
+            if line.leftText then
+                tooltipString = tooltipString .. line.leftText
+            end
+            if line.rightText then
+                tooltipString = tooltipString .. line.rightText
+            end
+        end
+        return "tooltip:" .. tooltipString
     else
         return CanIMogIt:CalculateKey(itemLink)
     end
