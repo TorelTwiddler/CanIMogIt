@@ -152,8 +152,14 @@ local function printDebug(tooltip, itemLink, tooltipData)
         end
     end
 
-    addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink, bag, slot)))
-    addDoubleLine(tooltip, "IsItemWarbound:", tostring(CanIMogIt:IsItemWarbound(itemLink, bag, slot)))
+    addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink)))
+    addDoubleLine(tooltip, "IsItemWarbound:", tostring(CanIMogIt:IsItemWarbound(itemLink)))
+    local bindData = CanIMogIt.BindData:new(itemLink)
+    if bindData ~= nil then
+        addDoubleLine(tooltip, "BindType:", tostring(bindData.type))
+    else
+        addDoubleLine(tooltip, "BindType:", 'nil')
+    end
     addDoubleLine(tooltip, "IsValidAppearanceForCharacter:", tostring(CanIMogIt:IsValidAppearanceForCharacter(itemLink)))
 
     local classesRequired = CIMIScanTooltip:GetClassesRequired(itemLink)
@@ -165,8 +171,15 @@ local function printDebug(tooltip, itemLink, tooltipData)
 
     addLine(tooltip, '--------')
 
-    local calculatedTooltipText = CanIMogIt:CalculateTooltipText(itemLink, nil, nil, tooltipData)
+    local calculatedTooltipText, unmodified = CanIMogIt:CalculateTooltipText(itemLink, nil, nil, tooltipData)
     if calculatedTooltipText ~= nil then
+        -- Iterate over the constants in CanIMogIt and find the matching one
+        for key, value in pairs(CanIMogIt) do
+            if type(value) == "string" and value == unmodified then
+                addDoubleLine(tooltip, "Matching Constant:", key)
+                break
+            end
+        end
         addDoubleLine(tooltip, "Tooltip:", tostring(calculatedTooltipText))
     else
         addDoubleLine(tooltip, "Tooltip:", 'nil')

@@ -36,16 +36,16 @@ end
 
 
 function CanIMogIt.BindData:CalculateType()
-    local soulbound = CIMIScanTooltip:IsItemSoulbound(self.itemLink, self.bag, self.slot, self.tooltipData)
-    if soulbound == nil then return nil end
-    if soulbound then
-        return CanIMogIt.BindTypes.Soulbound
-    end
-
     local warbound = CIMIScanTooltip:IsItemWarbound(self.itemLink, self.bag, self.slot, self.tooltipData)
     if warbound == nil then return nil end
     if warbound then
         return CanIMogIt.BindTypes.Warbound
+    end
+
+    local soulbound = CIMIScanTooltip:IsItemSoulbound(self.itemLink, self.bag, self.slot, self.tooltipData)
+    if soulbound == nil then return nil end
+    if soulbound then
+        return CanIMogIt.BindTypes.Soulbound
     end
 
     return CanIMogIt.BindTypes.BoE

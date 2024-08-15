@@ -41,3 +41,4 @@ pets.lua
 ensembles.lua
 Overlay\_overlays.xml
 Plugins\_plugins.xml
+tests.lua
