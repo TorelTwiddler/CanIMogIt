@@ -137,8 +137,12 @@ function CanIMogIt.AppearanceData:CalculateBindStateText(bindData)
         text = CanIMogIt.UNKNOWN
         unmodifiedText = CanIMogIt.UNKNOWN
     elseif self.status == CanIMogIt.UNKNOWABLE_BY_CHARACTER then
-        -- Warbound shouldn't be possible in this state.
-        if isItemSoulbound then
+        if isItemWarbound then
+            -- Pink Star
+            text = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND
+                    .. CanIMogIt.BLIZZARD_RED .. CanIMogIt:GetReason(self.itemLink)
+            unmodifiedText = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND
+        elseif isItemSoulbound then
             -- Green Dash
             text = CanIMogIt.UNKNOWABLE_SOULBOUND
                     .. CanIMogIt.BLIZZARD_RED .. CanIMogIt:GetReason(self.itemLink)

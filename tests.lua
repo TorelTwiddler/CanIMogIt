@@ -34,18 +34,18 @@ local testsAdele = {
     },
     ["Cosmetic"] = {
         ["itemID"] = 22206,
-        ["expected"] = CanIMogIt.KNOWN,
+        ["expected"] = CanIMogIt.KNOWN_WARBOUND,
     },
     ["Not Learned"] = {
         ["itemID"] = 55325,
         ["expected"] = CanIMogIt.UNKNOWN,
     },
     ["Grey Item Not Learned"] = {
-        ["itemID"] = 121341,
+        ["itemID"] = 1820,
         ["expected"] = CanIMogIt.UNKNOWN,
     },
     ["Cannot learn: Classes: Name"] = {
-        ["itemID"] = 19148,
+        ["itemID"] = 98903,
         ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER,
     },
     ["Learned from a Cosmetic source"] = {
@@ -66,11 +66,11 @@ local testsAdele = {
     },
     ["BoE: Learned for a different class"] = {
         ["itemID"] = 121224,
-        ["expected"] = CanIMogIt.KNOWN_BOE,
+        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE,
     },
     ["BoE: Learned for a different item and class"] = {
         ["itemID"] = 15229,
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE,
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE,
     },
     ["BoE: Not Learned"] = {
         ["itemID"] = 2276,
@@ -82,10 +82,10 @@ local testsAdele = {
     },
     ["BoP: Learned for a different class and item"] = {
         ["itemID"] = 11924,
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM,
+        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER,
     },
     ["BoP: Cannot Learn"] = {
-        ["itemID"] = 59177,
+        ["itemID"] = 152145,
         ["expected"] = CanIMogIt.UNKNOWABLE_SOULBOUND,
     },
     ["BoP: Not Transmogable"] = {
@@ -102,15 +102,15 @@ local testsAdele = {
     },
     ["WRB: Learned for a different class"] = {
         ["itemID"] = 141000,
-        ["expected"] = CanIMogIt.KNOWN_WARBOUND,
+        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND,
     },
     ["WRB: Learned for a different class and item"] = {
         ["itemID"] = 69764,
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND,
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND,
     },
     ["WRB: Cannot learn"] = {
         ["itemID"] = 128459,
-        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND,
+        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND,
     },
 }
 
@@ -142,6 +142,10 @@ local testsBriarlynn = {
         ["itemID"] = 69764,
         ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND,
     },
+    ["Cannot Learn: other faction, Frostwolf Leggings"] = {
+        ["itemID"] = 128459,
+        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND,
+    }
 }
 
 local tests = {
