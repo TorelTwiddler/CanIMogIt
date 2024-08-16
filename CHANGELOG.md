@@ -1,3 +1,15 @@
+11.0.0v2.3 - 2024/08/15
+
+Known issue: Sorting a large and full Warbank with CIMI enabled will cause you to lag.  We're working on a solution.  It happened even before adding the overlay to the Warbank.
+
+* [#75](https://gitlab.com/toreltwiddler/CanIMogIt/issues/75) & [#357](https://gitlab.com/toreltwiddler/CanIMogIt/issues/357) Properly match cosmetic items.
+* [#136](https://gitlab.com/toreltwiddler/CanIMogIt/issues/136) Refactor logic and fix multiple long-standing bugs.
+* [#335](https://gitlab.com/toreltwiddler/CanIMogIt/issues/335) Add overlay to Warbank.
+* [#339](https://gitlab.com/toreltwiddler/CanIMogIt/issues/339) Fix Warbound for other faction.
+* [#355](https://gitlab.com/toreltwiddler/CanIMogIt/issues/355) Remove level restriction code.
+
+*****
+
 11.0.0v2.2 - 2024/08/03
 
 * [#342](https://gitlab.com/toreltwiddler/CanIMogIt/issues/342) Improve tooltip hook code so it shows up everywhere again.
