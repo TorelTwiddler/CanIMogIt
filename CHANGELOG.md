@@ -1,3 +1,12 @@
+11.0.2v2.4 - 2024/08/18
+
+Known issue: Sorting a large and full Warbank with CIMI enabled will cause you to lag.  We're working on a solution.  It happened even before adding the overlay to the Warbank.
+
+* [#365](https://gitlab.com/toreltwiddler/CanIMogIt/issues/365) Fix Warbound items not following not-transmogable rules.
+* [#344](https://gitlab.com/toreltwiddler/CanIMogIt/issues/344) Fix ArkInventory addon loading error.
+
+*****
+
 11.0.2v2.3 - 2024/08/15
 
 Known issue: Sorting a large and full Warbank with CIMI enabled will cause you to lag.  We're working on a solution.  It happened even before adding the overlay to the Warbank.
