@@ -267,3 +267,55 @@ function CanIMogIt.Tests:ResetOptions()
     end
     currentOptions = {}
 end
+
+
+function CanIMogIt.Tests:EnableSkipTimer()
+    CanIMogIt:Print("Skip Timer enabled")
+
+    -- Function to round a number to a specified number of decimal places
+    local function roundToDecimalPlaces(number, decimalPlaces)
+        local multiplier = 10^decimalPlaces
+        return math.floor(number * multiplier + 0.5) / multiplier
+    end
+
+    -- Create a frame to handle the OnUpdate event
+    CanIMogIt.Tests.frame = CreateFrame("Frame")
+
+    -- Variable to store the time of the last frame
+    local lastTime = GetTime()
+
+    -- Threshold for large frame time (in seconds)
+    local threshold = 0.05  -- Example: 50 milliseconds
+
+    -- OnUpdate event handler
+    CanIMogIt.Tests.frame:SetScript("OnUpdate", function(self, elapsed)
+        -- Get the current time
+        local currentTime = GetTime()
+
+        -- Calculate the time difference between frames
+        local deltaTime = currentTime - lastTime
+
+        -- Check if the time difference exceeds the threshold
+        if deltaTime > threshold then
+            local roundedDeltaTime = roundToDecimalPlaces(deltaTime, 3)
+            print("Large frame time detected: " .. roundedDeltaTime .. " seconds")
+        end
+
+        -- Update the last time
+        lastTime = currentTime
+    end)
+end
+
+function CanIMogIt.Tests:DisableSkipTimer()
+    CanIMogIt:Print("Skip Timer disabled")
+    CanIMogIt.Tests.frame:SetScript("OnUpdate", nil)
+    CanIMogIt.Tests.frame = nil
+end
+
+function CanIMogIt.Tests:ToggleSkipTimer()
+    if CanIMogIt.Tests.frame then
+        CanIMogIt.Tests:DisableSkipTimer()
+    else
+        CanIMogIt.Tests:EnableSkipTimer()
+    end
+end
