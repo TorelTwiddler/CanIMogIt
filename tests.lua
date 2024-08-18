@@ -145,7 +145,15 @@ local testsBriarlynn = {
     ["Cannot Learn: other faction, Frostwolf Leggings"] = {
         ["itemID"] = 128459,
         ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND,
-    }
+    },
+    ["Warbound items hide with Transmogable Only on"] = {
+        ["itemID"] = 220304,
+        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND,
+        ["textExpected"] = "",
+        ["options"] = {
+            ["showTransmoggableOnly"] = true,
+        },
+    },
 }
 
 local tests = {
@@ -198,7 +206,21 @@ function CanIMogIt.Tests:RunTest(testName, test, verbose)
         print("Item not found")
         return false
     end
-    local text, unmodifiedText = CanIMogIt:GetTooltipText(itemLink)
+
+    -- Set the options for the test
+    if test.options ~= nil then
+        CanIMogIt.Tests:SetOptions(test.options)
+    end
+
+    local status, text, unmodifiedText = pcall(CanIMogIt.GetTooltipText, CanIMogIt, itemLink)
+    CanIMogIt.Tests:ResetOptions()
+    if not status then
+        print(CanIMogIt.BLIZZARD_RED .. "Test failed: " .. testName)
+        print(itemLink, test.itemID)
+        print("Error getting tooltip text")
+        return false
+    end
+
     if unmodifiedText == nil then
         print(CanIMogIt.BLIZZARD_RED .. "Test failed: " .. testName)
         print(itemLink, test.itemID)
@@ -213,10 +235,35 @@ function CanIMogIt.Tests:RunTest(testName, test, verbose)
         print("Got: " .. unmodifiedText)
         return false
     end
+
+    if test.textExpected ~= nil and text ~= test.textExpected then
+        print(CanIMogIt.BLIZZARD_RED .. "Test failed: " .. testName)
+        print(itemLink, test.itemID)
+        print("Text Expected: " .. test.textExpected)
+        print("Text Got: " .. text)
+        return false
+    end
     if verbose then
         print(CanIMogIt.BLIZZARD_GREEN .. "Test succeeded: " .. testName)
         print(itemLink, test.itemID)
         print("Expected/Got: " .. test.expected)
     end
     return true
+end
+
+
+local currentOptions = {}
+
+function CanIMogIt.Tests:SetOptions(options)
+    for key, value in pairs(options) do
+        currentOptions[key] = CanIMogItOptions[key]
+        CanIMogItOptions[key] = value
+    end
+end
+
+function CanIMogIt.Tests:ResetOptions()
+    for key, value in pairs(currentOptions) do
+        CanIMogItOptions[key] = value
+    end
+    currentOptions = {}
 end
