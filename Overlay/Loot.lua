@@ -73,6 +73,7 @@ local PLAYER_NAME = UnitName("player")
 local function ChatMessageLootEvent(event, message, _, _, _, target)
     -- Get the item link from the CHAT_MSG_LOOT event.
     if event ~= "CHAT_MSG_LOOT" then return end
+    if not target then return end
     local player_name = strsplit("-", target)
     if player_name ~= PLAYER_NAME then
         return

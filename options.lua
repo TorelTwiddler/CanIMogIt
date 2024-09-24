@@ -178,7 +178,7 @@ local lastOverlayEventCheck = 0
 local overlayEventCheckThreshold = .01 -- once per frame at 100 fps
 local futureOverlayPrepared = false
 
-local function futureOverlay(event)
+local function futureOverlay(event, ...)
     -- Updates the overlay in ~THE FUTURE~. If the overlay events had multiple
     -- requests in the same frame, then this gets called.
     futureOverlayPrepared = false
@@ -229,6 +229,7 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     -- Prevent the ItemOverlayEvents handler from running more than is needed.
     -- If more than one occur in the same frame, we update the first time, then
     -- prepare a future update in a couple frames.
+    local more = ...
     local currentTime = GetTime()
     if currentTime - lastOverlayEventCheck > overlayEventCheckThreshold then
         lastOverlayEventCheck = currentTime
@@ -237,7 +238,7 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
         -- If we haven't already, plan to update the overlay in the future.
         if not futureOverlayPrepared then
             futureOverlayPrepared = true
-            C_Timer.After(.02, function () futureOverlay(event) end)
+            C_Timer.After(.02, function () futureOverlay(event, more) end)
         end
     end
 end)
