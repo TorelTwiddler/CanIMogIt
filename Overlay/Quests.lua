@@ -109,7 +109,7 @@ local function HookOverlayQuest(event)
 end
 
 if CanIMogIt.isRetail then
-    CanIMogIt.frame:AddEventFunction(HookOverlayQuest)
+    CanIMogIt.frame:AddOverlayEventFunction(HookOverlayQuest)
 end
 
 

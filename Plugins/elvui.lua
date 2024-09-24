@@ -66,7 +66,7 @@ if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
 
     end
 
-    CanIMogIt.frame:AddEventFunction(CIMI_ElvUIAddFrame)
+    CanIMogIt.frame:AddOverlayEventFunction(CIMI_ElvUIAddFrame)
 
 
     ------------------------

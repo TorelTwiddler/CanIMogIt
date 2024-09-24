@@ -47,7 +47,7 @@ if C_AddOns.IsAddOnLoaded("AdiBags") then
             end
         end
     end
-    CanIMogIt.frame:AddEventFunction(CIMI_AdiBagsAddFrame)
+    CanIMogIt.frame:AddOverlayEventFunction(CIMI_AdiBagsAddFrame)
 
 
     ------------------------

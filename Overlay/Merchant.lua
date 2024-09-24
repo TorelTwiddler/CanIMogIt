@@ -67,7 +67,7 @@ local function HookOverlayMerchant(event)
     end
 end
 
-CanIMogIt.frame:AddEventFunction(HookOverlayMerchant)
+CanIMogIt.frame:AddOverlayEventFunction(HookOverlayMerchant)
 
 
 ------------------------

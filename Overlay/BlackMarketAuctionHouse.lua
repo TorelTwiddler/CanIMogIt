@@ -69,7 +69,7 @@ local function OnBlackMarketShow(event, ...)
     -- Need slight delay because buttons don't exist immediately on first open.
     C_Timer.After(.5, AddToBlackMarketFrames)
 end
-CanIMogIt.frame:AddEventFunction(OnBlackMarketShow)
+CanIMogIt.frame:AddOverlayEventFunction(OnBlackMarketShow)
 
 
 local function OnBlackMarketUpdate(event, ...)
@@ -80,7 +80,7 @@ local function OnBlackMarketUpdate(event, ...)
     -- Refresh overlay of buttons created OnBlackMarketShow function.
     UpdateBlackMarketButtons()
 end
-CanIMogIt.frame:AddEventFunction(OnBlackMarketUpdate)
+CanIMogIt.frame:AddOverlayEventFunction(OnBlackMarketUpdate)
 CanIMogIt:RegisterMessage("OptionUpdate", function () OnBlackMarketUpdate("BLACK_MARKET_ITEM_UPDATE") end)
 
 

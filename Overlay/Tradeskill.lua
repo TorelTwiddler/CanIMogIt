@@ -62,6 +62,6 @@ local function TradeSkillEvents(event, addonName)
     end
 end
 
-CanIMogIt.frame:AddEventFunction(TradeSkillEvents)
+CanIMogIt.frame:AddOverlayEventFunction(TradeSkillEvents)
 
 CanIMogIt:RegisterMessage("OptionUpdate", TradeSkillEvents)

@@ -44,7 +44,7 @@ if C_AddOns.IsAddOnLoaded("cargBags_Nivaya") then
 
     end
 
-    CanIMogIt.frame:AddEventFunction(CIMI_CargBagsNivayaAddFrame)
+    CanIMogIt.frame:AddOverlayEventFunction(CIMI_CargBagsNivayaAddFrame)
 
 
     ------------------------

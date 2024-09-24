@@ -73,7 +73,7 @@ local function HookOverlayMail(event)
     end
 end
 
-CanIMogIt.frame:AddEventFunction(HookOverlayMail)
+CanIMogIt.frame:AddOverlayEventFunction(HookOverlayMail)
 
 
 ------------------------

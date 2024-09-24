@@ -70,7 +70,7 @@ local function OnEncounterJournalLoaded(event, addonName, ...)
 end
 
 if CanIMogIt.isRetail then
-    CanIMogIt.frame:AddEventFunction(OnEncounterJournalLoaded)
+    CanIMogIt.frame:AddOverlayEventFunction(OnEncounterJournalLoaded)
 end
 
 

@@ -108,7 +108,7 @@ local function HookOverlayAuctionHouse(event)
     itemList:HookScript("OnUpdate", AuctionHouseFrame_CIMIOnValueChanged)
 end
 
-CanIMogIt.frame:AddEventFunction(HookOverlayAuctionHouse)
+CanIMogIt.frame:AddOverlayEventFunction(HookOverlayAuctionHouse)
 
 ------------------------
 -- Event functions    --
@@ -119,6 +119,6 @@ local function AuctionHouseUpdateEvents(event, ...)
     C_Timer.After(.1, AuctionHouseFrame_CIMIOnValueChanged)
 end
 
-CanIMogIt.frame:AddEventFunction(AuctionHouseUpdateEvents)
+CanIMogIt.frame:AddOverlayEventFunction(AuctionHouseUpdateEvents)
 
 CanIMogIt:RegisterMessage("OptionUpdate", AuctionHouseUpdateEvents)

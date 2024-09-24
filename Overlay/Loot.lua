@@ -43,7 +43,7 @@ local function HookOverlayLoot(event)
     end
 end
 
-CanIMogIt.frame:AddEventFunction(HookOverlayLoot)
+CanIMogIt.frame:AddOverlayEventFunction(HookOverlayLoot)
 
 
 ------------------------
@@ -101,6 +101,6 @@ local function ChatMessageLootEvent(event, message, _, _, _, target)
 
 end
 
-CanIMogIt.frame:AddEventFunction(ChatMessageLootEvent)
+CanIMogIt.frame:AddOverlayEventFunction(ChatMessageLootEvent)
 
 CanIMogIt:RegisterMessage("OptionUpdate", ChatMessageLootEvent)
