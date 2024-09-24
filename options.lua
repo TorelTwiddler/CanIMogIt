@@ -155,6 +155,8 @@ local EVENTS = {
     "NEW_TOY_ADDED",
     "NEW_MOUNT_ADDED",
     "ITEM_LOCK_CHANGED",
+    "LOADING_SCREEN_ENABLED",
+    "LOADING_SCREEN_DISABLED",
 }
 
 if CanIMogIt.isRetail then
@@ -197,6 +199,9 @@ function CanIMogIt.frame:AddEventFunction(func)
 end
 
 
+local loadingScreenEnabled = true
+
+
 CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
     --[[
         To add functions you want to run with CIMI's "OnEvent", do:
@@ -206,6 +211,15 @@ CanIMogIt.frame:HookScript("OnEvent", function(self, event, ...)
         end
         CanIMogIt.frame:AddEventFunction(MyOnEventFunc)
         ]]
+    -- Only run the event functions if the loading screen is disabled.
+    if event == "LOADING_SCREEN_ENABLED" then
+        loadingScreenEnabled = true
+    elseif event == "LOADING_SCREEN_DISABLED" then
+        loadingScreenEnabled = false
+    end
+    if loadingScreenEnabled then
+        return
+    end
 
     for i, func in ipairs(CanIMogIt.frame.eventFunctions) do
         func(event, ...)
