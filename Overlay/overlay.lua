@@ -127,38 +127,18 @@ local function HookItemOverlay(event)
     if event ~= "PLAYER_LOGIN" then return end
 end
 
-CanIMogIt.frame:AddEventFunction(HookItemOverlay)
+CanIMogIt.frame:AddSmartEvent("HookItemOverlay", HookItemOverlay, {"PLAYER_LOGIN"})
 
 ------------------------
 -- Event functions    --
 ------------------------
 
-CIMIEvents = {
-    ["UNIT_INVENTORY_CHANGED"] = true,
-    ["PLAYER_SPECIALIZATION_CHANGED"] = true,
-    ["BAG_UPDATE"] = true,
-    ["BAG_CONTAINER_UPDATE"] = true,
-    ["BAG_NEW_ITEMS_UPDATED"] = true,
-    ["QUEST_ACCEPTED"] = true,
-    ["BAG_SLOT_FLAGS_UPDATED"] = true,
-    ["BANK_BAG_SLOT_FLAGS_UPDATED"] = true,
-    ["PLAYERBANKSLOTS_CHANGED"] = true,
-    ["BANKFRAME_OPENED"] = true,
-    ["START_LOOT_ROLL"] = true,
-    ["MERCHANT_SHOW"] = true,
-    ["VOID_STORAGE_CONTENTS_UPDATE"] = true,
-    ["GUILDBANKBAGSLOTS_CHANGED"] = true,
-    ["PLAYERREAGENTBANKSLOTS_CHANGED"] = true,
-    ["CHAT_MSG_LOOT"] = true,
-    ["LOADING_SCREEN_ENABLED"] = true,
-    ["LOADING_SCREEN_DISABLED"] = true,
-}
-
 
 CanIMogIt.frame.itemOverlayEventFunctions = {}
 
 function CanIMogIt.frame:ItemOverlayEvents(event, ...)
-    if not CIMIEvents[event] then return end
+    -- if the event is not in the list of events, then return
+    if not CanIMogIt.Events[event] then return end
     for i, func in ipairs(CanIMogIt.frame.itemOverlayEventFunctions) do
         func(event, ...)
     end

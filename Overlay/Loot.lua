@@ -43,7 +43,7 @@ local function HookOverlayLoot(event)
     end
 end
 
-CanIMogIt.frame:AddOverlayEventFunction(HookOverlayLoot)
+CanIMogIt.frame:AddSmartEvent("HookOverlayLoot", HookOverlayLoot, {"PLAYER_LOGIN"})
 
 
 ------------------------
@@ -60,7 +60,8 @@ local function LootOverlayEvents(event, ...)
     end
 end
 
-CanIMogIt.frame:AddOverlayEventFunction(LootOverlayEvents)
+-- FIXME: I don't know what this is trying to do...
+-- CanIMogIt.frame:AddOverlayEventFunction(LootOverlayEvents)
 
 -- From ls: Toasts
 local LOOT_ITEM_PATTERN = LOOT_ITEM_SELF:gsub("%%s", "(.+)")
@@ -102,6 +103,7 @@ local function ChatMessageLootEvent(event, message, _, _, _, target)
 
 end
 
-CanIMogIt.frame:AddOverlayEventFunction(ChatMessageLootEvent)
+-- FIXME
+-- CanIMogIt.frame:AddOverlayEventFunction(ChatMessageLootEvent)
 
 CanIMogIt:RegisterMessage("OptionUpdate", ChatMessageLootEvent)

@@ -28,7 +28,7 @@ end
 ------------------------
 
 
-function MerchantFrame_CIMIOnClick()
+function CIMI_UpdateMerchantFrame()
     for i=1,MERCHANT_ITEMS_PER_PAGE do
         local frame = _G["MerchantItem"..i.."ItemButton"]
         if frame then
@@ -57,27 +57,22 @@ local function HookOverlayMerchant(event)
     -- Add hook for clicking on the next or previous buttons in the
     -- merchant frames (since there is no event).
     if _G["MerchantNextPageButton"] then
-        _G["MerchantNextPageButton"]:HookScript("OnClick", MerchantFrame_CIMIOnClick)
+        _G["MerchantNextPageButton"]:HookScript("OnClick", CIMI_UpdateMerchantFrame)
     end
     if _G["MerchantPrevPageButton"] then
-        _G["MerchantPrevPageButton"]:HookScript("OnClick", MerchantFrame_CIMIOnClick)
+        _G["MerchantPrevPageButton"]:HookScript("OnClick", CIMI_UpdateMerchantFrame)
     end
     if _G["MerchantFrame"] then
-        _G["MerchantFrame"]:HookScript("OnMouseWheel", MerchantFrame_CIMIOnClick)
+        _G["MerchantFrame"]:HookScript("OnMouseWheel", CIMI_UpdateMerchantFrame)
     end
 end
 
-CanIMogIt.frame:AddOverlayEventFunction(HookOverlayMerchant)
-
+CanIMogIt.frame:AddSmartEvent("HookOverlayMerchant", HookOverlayMerchant, {"PLAYER_LOGIN"})
+CanIMogIt.frame:AddSmartEvent("HookOverlayMerchant", CIMI_UpdateMerchantFrame, {"MERCHANT_SHOW"})
 
 ------------------------
 -- Event functions    --
 ------------------------
 
-local function MerchantOverlayEvents(event, ...)
-    C_Timer.After(.1, function () MerchantFrame_CIMIOnClick() end)
-end
-
-CanIMogIt.frame:AddOverlayEventFunction(MerchantOverlayEvents)
-
-CanIMogIt:RegisterMessage("OptionUpdate", MerchantFrame_CIMIOnClick)
+CanIMogIt:RegisterMessage("OptionUpdate", CIMI_UpdateMerchantFrame)
+CanIMogIt:RegisterMessage("ResetCache", CIMI_UpdateMerchantFrame)

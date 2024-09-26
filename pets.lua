@@ -48,4 +48,4 @@ local function OnPetUpdate(event)
     if event ~= "PET_JOURNAL_LIST_UPDATE" then return end
     CanIMogIt:ResetCache()
 end
-CanIMogIt.frame:AddEventFunction(OnPetUpdate)
+CanIMogIt.frame:AddSmartEvent("OnPetUpdate", OnPetUpdate, {"PET_JOURNAL_LIST_UPDATE"})

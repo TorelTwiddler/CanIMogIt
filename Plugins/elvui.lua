@@ -26,7 +26,7 @@ if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
 
 
     function CIMI_ElvUIAddFrame(event, addonName)
-        if event ~= "PLAYER_LOGIN" and event ~= "BANKFRAME_OPENED" and not CIMIEvents[event] then return end
+        if event ~= "PLAYER_LOGIN" and event ~= "BANKFRAME_OPENED" and not CanIMogIt.Events[event] then return end
         -- Add to frames
         -- Bags
         for i=0,NUM_CONTAINER_FRAMES do
@@ -66,7 +66,8 @@ if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
 
     end
 
-    CanIMogIt.frame:AddOverlayEventFunction(CIMI_ElvUIAddFrame)
+    -- TODO
+    CanIMogIt.frame:AddEventFunction(CIMI_ElvUIAddFrame)
 
 
     ------------------------
@@ -108,8 +109,8 @@ if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
 
     function CIMI_ElvUIEvents(event)
         -- Update based on wow events
-        if not CIMIEvents[event] then return end
+        if not CanIMogIt.Events[event] then return end
         CIMI_ElvUIUpdate()
     end
-    CanIMogIt.frame:AddOverlayEventFunction(CIMI_ElvUIEvents)
+    CanIMogIt.frame:AddEventFunction(CIMI_ElvUIEvents)
 end

@@ -32,7 +32,7 @@ if C_AddOns.IsAddOnLoaded("AdiBags") then
 
 
     function CIMI_AdiBagsAddFrame(event, addonName)
-        if event ~= "PLAYER_LOGIN" and event ~= "BANKFRAME_OPENED" and not CIMIEvents[event] then return end
+        if event ~= "PLAYER_LOGIN" and event ~= "BANKFRAME_OPENED" and not CanIMogIt.Events[event] then return end
         -- Add to frames
         for i=1,600 do
             local frame = _G["AdiBagsItemButton"..i]
@@ -47,7 +47,7 @@ if C_AddOns.IsAddOnLoaded("AdiBags") then
             end
         end
     end
-    CanIMogIt.frame:AddOverlayEventFunction(CIMI_AdiBagsAddFrame)
+    CanIMogIt.frame:AddSmartEvent("CIMI_AdiBagsAddFrame", CIMI_AdiBagsAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
 
 
     ------------------------
@@ -56,7 +56,7 @@ if C_AddOns.IsAddOnLoaded("AdiBags") then
 
 
     function CIMI_AdiBagsEvents(self, event, ...)
-        if not CIMIEvents[event] then return end
+        if not CanIMogIt.Events[event] then return end
         -- Update event
         for i=1,600 do
             local frame = _G["AdiBagsItemButton"..i]

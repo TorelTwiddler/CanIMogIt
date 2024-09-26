@@ -44,7 +44,7 @@ if C_AddOns.IsAddOnLoaded("cargBags_Nivaya") then
 
     end
 
-    CanIMogIt.frame:AddOverlayEventFunction(CIMI_CargBagsNivayaAddFrame)
+    CanIMogIt.frame:AddEventFunction(CIMI_CargBagsNivayaAddFrame)
 
 
     ------------------------
@@ -68,8 +68,8 @@ if C_AddOns.IsAddOnLoaded("cargBags_Nivaya") then
 
     function CIMI_CargBagsNivayaEvents(event)
         -- Update based on wow events
-        if not CIMIEvents[event] then return end
+        if not CanIMogIt.Events[event] then return end
         CIMI_CargBagsNivayaUpdate()
     end
-    CanIMogIt.frame:AddOverlayEventFunction(CIMI_CargBagsNivayaEvents)
+    CanIMogIt.frame:AddEventFunction(CIMI_CargBagsNivayaEvents)
 end

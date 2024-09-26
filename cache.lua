@@ -124,7 +124,7 @@ local function OnClearCacheEvent(event)
     end
 end
 
-CanIMogIt.frame:AddEventFunction(OnClearCacheEvent)
+CanIMogIt.frame:AddSmartEvent("OnClearCacheEvent", OnClearCacheEvent, {"TRANSMOG_COLLECTION_UPDATED"})
 
 local function OnClearBindCacheEvent(event, bag, slot)
     if event == "ITEM_LOCK_CHANGED" then
@@ -132,6 +132,6 @@ local function OnClearBindCacheEvent(event, bag, slot)
     end
 end
 
-CanIMogIt.frame:AddEventFunction(OnClearBindCacheEvent)
+CanIMogIt.frame:AddSmartEvent("OnClearBindCacheEvent", OnClearBindCacheEvent, {"ITEM_LOCK_CHANGED"})
 
 CanIMogIt.cache:Clear()

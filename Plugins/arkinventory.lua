@@ -82,7 +82,7 @@ local function AddArkInventoryHooks()
 
     function CIMI_ArkInventoryEvents(self, event)
         -- Update based on wow events
-        if not CIMIEvents[event] then return end
+        if not CanIMogIt.Events[event] then return end
         CIMI_ArkInventoryUpdate()
     end
     hooksecurefunc(CanIMogIt.frame, "ItemOverlayEvents", CIMI_ArkInventoryEvents)

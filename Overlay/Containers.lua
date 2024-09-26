@@ -223,8 +223,7 @@ local function OnContainerFramesEvent(event)
 end
 
 
-CanIMogIt.frame:AddOverlayEventFunction(OnContainerFramesEvent)
-CanIMogIt.frame:AddOverlayEventFunction(OnContainerFramesEvent)
+CanIMogIt.frame:AddSmartEvent("ContainerFramesEvent", OnContainerFramesEvent, containerFrameEvents)
 CanIMogIt:RegisterMessage("OptionUpdate", UpdateContainerFrames)
 
 
@@ -252,7 +251,7 @@ local function OnGuildBankLoaded(event, addonName, ...)
     end
 end
 
-CanIMogIt.frame:AddOverlayEventFunction(OnGuildBankLoaded)
+CanIMogIt.frame:AddSmartEvent("OnGuildBankLoaded", OnGuildBankLoaded, {"ADDON_LOADED"})
 
 local function OnGuildBankUpdate(event, ...)
     if event == "GUILDBANKBAGSLOTS_CHANGED" then
@@ -260,5 +259,5 @@ local function OnGuildBankUpdate(event, ...)
     end
 end
 
-CanIMogIt.frame:AddOverlayEventFunction(OnGuildBankUpdate)
+CanIMogIt.frame:AddSmartEvent("OnGuildBankUpdate", OnGuildBankUpdate, {"GUILDBANKBAGSLOTS_CHANGED"})
 CanIMogIt:RegisterMessage("OptionUpdate", UpdateGuildBank)
