@@ -185,6 +185,15 @@ local ifNotBusyLimit = .008
 local ifNotBusyEvents = {}
 local ifNotBusyKeys = {}
 
+local loadingScreenEnabled = true
+-- These events should be run during the loading screen, if it's enabled.
+local loadingScreenEvents = {
+    ["PLAYER_LOGIN"] = true,
+    ["ADDON_LOADED"] = true,
+}
+
+
+
 local function makeKey(name, ...)
     -- Get the name of the function somehow??
     local key = name
@@ -234,7 +243,7 @@ end
 --- blocking operations.
 local function RunIfNotBusyEvents()
 
-    if #ifNotBusyKeys == 0 then
+    if #ifNotBusyKeys == 0 or loadingScreenEnabled then
         return
     end
     local startTime = GetTimePreciseSec()
@@ -291,13 +300,6 @@ local function RunSmartEvent(event, ...)
     end
 end
 
--- These events should be run during the loading screen, if it's enabled.
-local loadingScreenEvents = {
-    ["PLAYER_LOGIN"] = true,
-    ["ADDON_LOADED"] = true,
-}
-
-local loadingScreenEnabled = true
 
 local function SmartEventHook(self, event, ...)
     if event == "LOADING_SCREEN_ENABLED" then
