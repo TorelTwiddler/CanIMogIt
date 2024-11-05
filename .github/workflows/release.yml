@@ -19,8 +19,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: Package and release - Retail
+        if: ${{ !startsWith(github.ref, 'refs/tags/cata-') }}
         uses: BigWigsMods/packager@v2
       - name: Package and release - Cata
+        if: ${{ startsWith(github.ref, 'refs/tags/cata-') }}
         uses: BigWigsMods/packager@v2
         with:
           args: -g cata

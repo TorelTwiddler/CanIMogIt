@@ -1,5 +1,4 @@
-## Interface: 100207
-## Interface-Cata: 40400
+## Interface: 40401
 ## Title: Can I Mog It?
 ## IconTexture: Interface\Addons\CanIMogIt\Icons\KNOWN
 ## Author: TorelTwiddler, Ami Yuy

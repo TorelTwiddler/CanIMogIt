@@ -116,9 +116,11 @@ CanIMogItOptions_DisplayData = {
 }
 
 
-CanIMogIt.frame = CreateFrame("Frame", "CanIMogItOptionsFrame", UIParent);
+CanIMogIt.frame = CreateFrame("Frame", "CanIMogItOptionsFrame", InterfaceOptionsFramePanelContainer);
 CanIMogIt.frame.name = "Can I Mog It?";
-InterfaceOptions_AddCategory(CanIMogIt.frame);
+local category = Settings.RegisterCanvasLayoutCategory(CanIMogIt.frame, CanIMogIt.frame.name)
+CanIMogIt.settingsCategory = category
+Settings.RegisterAddOnCategory(category)
 
 
 local EVENTS = {
