@@ -1,4 +1,4 @@
-## Interface: 110000,110002
+## Interface: 110005
 ## Title: Can I Mog It?
 ## IconTexture: Interface\Addons\CanIMogIt\Icons\KNOWN
 ## Author: TorelTwiddler, Ami Yuy
