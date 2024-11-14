@@ -44,7 +44,7 @@ if C_AddOns.IsAddOnLoaded("cargBags_Nivaya") then
 
     end
 
-    CanIMogIt.frame:AddEventFunction(CIMI_CargBagsNivayaAddFrame)
+    CanIMogIt.frame:AddSmartEvent("CIMI_CargBagsNivayaAddFrame", CIMI_CargBagsNivayaAddFrame, CanIMogIt.Events)
 
 
     ------------------------
@@ -71,5 +71,5 @@ if C_AddOns.IsAddOnLoaded("cargBags_Nivaya") then
         if not CanIMogIt.Events[event] then return end
         CIMI_CargBagsNivayaUpdate()
     end
-    CanIMogIt.frame:AddEventFunction(CIMI_CargBagsNivayaEvents)
+    CanIMogIt.frame:AddSmartEvent("CIMI_CargBagsNivayaUpdate", CIMI_CargBagsNivayaUpdate, CanIMogIt.Events)
 end
