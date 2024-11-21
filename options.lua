@@ -220,13 +220,30 @@ end
 local function RunIfNotBusy(name, func, ...)
     -- Sets the function to run the next time we aren't busy.
     local args = {...}
-    -- only add it to the dict if it's not already in the there.
     local key = makeKey(name, ...)
     if ifNotBusyEvents[key] then
+        ifNotBusyEvents[key].count = ifNotBusyEvents[key].count + 1
         return
     end
-    ifNotBusyEvents[key] = {func, args}
+    ifNotBusyEvents[key] = {func = func, args = args, count = 1}
     table.insert(ifNotBusyKeys, key)
+end
+
+local function processEvent(key)
+    local eventData = ifNotBusyEvents[key]
+    if eventData.count > 1 then
+        eventData.count = eventData.count - 1
+    else
+        table.remove(ifNotBusyKeys, 1)
+        ifNotBusyEvents[key] = nil
+    end
+    local func, args = eventData.func, eventData.args
+    func(unpack(args))
+end
+
+local function shouldBreakLoop(startTime)
+    local currentTime = GetTimePreciseSec()
+    return currentTime - startTime > ifNotBusyLimit
 end
 
 --- Processes and executes functions that were scheduled to run when the system is not busy.
@@ -242,24 +259,29 @@ end
 --- The execution loop will break if the time taken exceeds `ifNotBusyLimit` to prevent long
 --- blocking operations.
 local function RunIfNotBusyEvents()
-
     if #ifNotBusyKeys == 0 or loadingScreenEnabled then
         return
     end
     local startTime = GetTimePreciseSec()
+    local processedKeys = {}
+    local processedCount = 0
     while #ifNotBusyKeys > 0 do
         local key = ifNotBusyKeys[1]
-        local currentTime = GetTimePreciseSec()
-        if currentTime - startTime > ifNotBusyLimit then
+        if shouldBreakLoop(startTime) then
             break
         end
-        local eventData = ifNotBusyEvents[key]
-        table.remove(ifNotBusyKeys, 1)
-        ifNotBusyEvents[key] = nil
-        local func, args = eventData[1], eventData[2]
-        func(unpack(args))
+        if processedKeys[key] then
+            table.insert(ifNotBusyKeys, table.remove(ifNotBusyKeys, 1))
+            if processedCount >= #ifNotBusyKeys then
+                -- Prevent infinite loop if we can't process any more keys.
+                break
+            end
+        else
+            processEvent(key)
+            processedKeys[key] = true
+            processedCount = processedCount + 1
+        end
     end
-    RunIfNotBusyEvents()
 end
 
 
