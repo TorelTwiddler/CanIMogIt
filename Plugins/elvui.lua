@@ -1,12 +1,11 @@
 -- Adds overlays to the UI Package ElvUI: https://www.tukui.org
 
-if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
+if C_AddOns.IsAddOnLoaded("ElvUI") then
 
 
     ----------------------------
     -- UpdateIcon functions   --
     ----------------------------
-
 
     function ElvUI_CIMIUpdateIcon(self)
         if not self or not self:GetParent() then return end
@@ -19,13 +18,11 @@ if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
         CIMI_SetIcon(self, ElvUI_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
     end
 
-
     ----------------------------
     -- Begin adding to frames --
     ----------------------------
 
-
-    function CIMI_ElvUIAddFrame(event, addonName)
+    function CIMI_ElvUIAddFrame(event)
         if event ~= "PLAYER_LOGIN" and event ~= "BANKFRAME_OPENED" and not CanIMogIt.Events[event] then return end
         -- Add to frames
         -- Bags
@@ -68,13 +65,11 @@ if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
 
     CanIMogIt.frame:AddSmartEvent(CIMI_ElvUIAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
 
-
     ------------------------
     -- Event functions    --
     ------------------------
 
-
-    function CIMI_ElvUIUpdate(self, event, ...)
+    function CIMI_ElvUIUpdate()
         -- Update event
         -- Bags
         for i=0,NUM_CONTAINER_FRAMES do
@@ -105,11 +100,10 @@ if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
         end
     end
 
-
     function CIMI_ElvUIEvents(event)
         -- Update based on wow events
         if not CanIMogIt.Events[event] then return end
         CIMI_ElvUIUpdate()
     end
-    CanIMogIt.frame:AddSmartEvent(CIMI_ElvUIEvents, CanIMogIt.Events)
+    CanIMogIt.frame:AddSmartEvent(CIMI_ElvUIEvents, CanIMogIt.EventsList)
 end

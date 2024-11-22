@@ -173,6 +173,7 @@ for i, event in pairs(EVENTS) do
 end
 
 CanIMogIt.Events = {}
+CanIMogIt.EventsList = EVENTS
 
 for i, event in pairs(EVENTS) do
     CanIMogIt.Events[event] = true
