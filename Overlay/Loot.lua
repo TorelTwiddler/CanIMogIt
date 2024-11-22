@@ -43,7 +43,7 @@ local function HookOverlayLoot(event)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent("HookOverlayLoot", HookOverlayLoot, {"PLAYER_LOGIN"})
+CanIMogIt.frame:AddSmartEvent(HookOverlayLoot, {"PLAYER_LOGIN"})
 
 
 ------------------------

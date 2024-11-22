@@ -127,7 +127,7 @@ local function HookItemOverlay(event)
     if event ~= "PLAYER_LOGIN" then return end
 end
 
-CanIMogIt.frame:AddSmartEvent("HookItemOverlay", HookItemOverlay, {"PLAYER_LOGIN"})
+CanIMogIt.frame:AddSmartEvent(HookItemOverlay, {"PLAYER_LOGIN"})
 
 ------------------------
 -- Event functions    --

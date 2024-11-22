@@ -47,7 +47,7 @@ if C_AddOns.IsAddOnLoaded("AdiBags") then
             end
         end
     end
-    CanIMogIt.frame:AddSmartEvent("CIMI_AdiBagsAddFrame", CIMI_AdiBagsAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
+    CanIMogIt.frame:AddSmartEvent(CIMI_AdiBagsAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
 
 
     ------------------------

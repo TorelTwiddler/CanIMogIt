@@ -66,7 +66,7 @@ if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
 
     end
 
-    CanIMogIt.frame:AddSmartEvent("CIMI_ElvUIAddFrame", CIMI_ElvUIAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
+    CanIMogIt.frame:AddSmartEvent(CIMI_ElvUIAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
 
 
     ------------------------
@@ -111,5 +111,5 @@ if C_AddOns.IsAddOnLoaded("ElvUI") and CanIMogIt.isRetail then
         if not CanIMogIt.Events[event] then return end
         CIMI_ElvUIUpdate()
     end
-    CanIMogIt.frame:AddSmartEvent("CIMI_ElvUIEvents", CIMI_ElvUIEvents, CanIMogIt.Events)
+    CanIMogIt.frame:AddSmartEvent(CIMI_ElvUIEvents, CanIMogIt.Events)
 end

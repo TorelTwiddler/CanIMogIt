@@ -108,7 +108,7 @@ local function HookOverlayQuest(event)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent("HookOverlayQuest", HookOverlayQuest, {"PLAYER_LOGIN"})
+CanIMogIt.frame:AddSmartEvent(HookOverlayQuest, {"PLAYER_LOGIN"})
 
 
 ------------------------

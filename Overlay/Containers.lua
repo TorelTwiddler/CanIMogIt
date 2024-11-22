@@ -22,25 +22,14 @@ function DebugPrintFullName(frame)
     return name
 end
 
-local GetBagAndSlot = CanIMogIt.RetailWrapper(
-    function (frame)
-        -- Retail
-        local bag, slot
-        if frame:GetParent():GetParent() then
-            slot, bag = frame:GetParent():GetSlotAndBagID()
-        end
-        return bag, slot
-    end,
-    function (frame)
-        -- Classic
-        local bag, slot
-        if frame:GetParent():GetParent() then
-            bag = frame:GetParent():GetParent():GetID()
-            slot = frame:GetParent():GetID()
-        end
-        return bag, slot
+local function GetBagAndSlot(frame)
+    local bag, slot
+    if frame:GetParent():GetParent() then
+        slot, bag = frame:GetParent():GetSlotAndBagID()
     end
-)
+    return bag, slot
+end
+
 
 function ContainerFrame_CIMIUpdateIcon(cimiFrame)
     if not cimiFrame or not cimiFrame:GetParent() or not cimiFrame:GetParent():GetParent() then return end
@@ -223,7 +212,7 @@ local function OnContainerFramesEvent(event)
 end
 
 
-CanIMogIt.frame:AddSmartEvent("ContainerFramesEvent", OnContainerFramesEvent, containerFrameEvents)
+CanIMogIt.frame:AddSmartEvent(OnContainerFramesEvent, containerFrameEvents)
 CanIMogIt:RegisterMessage("OptionUpdate", UpdateContainerFrames)
 
 
@@ -251,7 +240,7 @@ local function OnGuildBankLoaded(event, addonName, ...)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent("OnGuildBankLoaded", OnGuildBankLoaded, {"ADDON_LOADED"})
+CanIMogIt.frame:AddSmartEvent(OnGuildBankLoaded, {"ADDON_LOADED"})
 
 local function OnGuildBankUpdate(event, ...)
     if event == "GUILDBANKBAGSLOTS_CHANGED" then
@@ -259,5 +248,5 @@ local function OnGuildBankUpdate(event, ...)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent("OnGuildBankUpdate", OnGuildBankUpdate, {"GUILDBANKBAGSLOTS_CHANGED"})
+CanIMogIt.frame:AddSmartEvent(OnGuildBankUpdate, {"GUILDBANKBAGSLOTS_CHANGED"})
 CanIMogIt:RegisterMessage("OptionUpdate", UpdateGuildBank)

@@ -73,7 +73,7 @@ local function HookOverlayMail(event)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent("HookOverlayMail", HookOverlayMail, {"PLAYER_LOGIN"})
+CanIMogIt.frame:AddSmartEvent(HookOverlayMail, {"PLAYER_LOGIN"})
 
 
 ------------------------

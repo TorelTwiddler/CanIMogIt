@@ -33,4 +33,4 @@ local function GetAppearancesEvent(event, ...)
         CanIMogIt:GetSets()
     end
 end
-CanIMogIt.frame:AddSmartEvent("GetAppearancesEvent", GetAppearancesEvent, {"PLAYER_LOGIN"})
+CanIMogIt.frame:AddSmartEvent(GetAppearancesEvent, {"PLAYER_LOGIN"})
