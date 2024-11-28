@@ -26,42 +26,27 @@ end
 ------------------------
 
 
-----------------------------
--- Begin adding to frames --
-----------------------------
-
-
 local function HookOverlayLoot(event)
-    if event ~= "PLAYER_LOGIN" then return end
-
     -- Add hook for the loot frames.
     for i=1,CanIMogIt.NUM_GROUP_LOOT_FRAMES do
         local frame = _G["GroupLootFrame"..i].IconFrame
         if frame then
-            CIMI_AddToFrame(frame, LootFrame_CIMIUpdateIcon)
+            local cimiFrame = frame.CanIMogItOverlay
+            if not cimiFrame then
+                cimiFrame = CIMI_AddToFrame(frame, LootFrame_CIMIUpdateIcon)
+            end
+            LootFrame_CIMIUpdateIcon(cimiFrame)
         end
     end
 end
 
-CanIMogIt.frame:AddSmartEvent(HookOverlayLoot, {"PLAYER_LOGIN"})
+CanIMogIt.frame:AddSmartEvent(HookOverlayLoot, {"PLAYER_LOGIN", "START_LOOT_ROLL"})
 
 
 ------------------------
 -- Event functions    --
 ------------------------
 
-
-local function LootOverlayEvents(event, ...)
-    for i=1,CanIMogIt.NUM_GROUP_LOOT_FRAMES do
-        local frame = _G["GroupLootFrame"..i].IconFrame
-        if frame then
-            LootFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
-        end
-    end
-end
-
--- FIXME: I don't know what this is trying to do...
--- CanIMogIt.frame:AddOverlayEventFunction(LootOverlayEvents)
 
 -- From ls: Toasts
 local LOOT_ITEM_PATTERN = LOOT_ITEM_SELF:gsub("%%s", "(.+)")
