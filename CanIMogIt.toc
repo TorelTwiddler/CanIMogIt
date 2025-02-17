@@ -39,6 +39,7 @@ mounts.lua
 toys.lua
 pets.lua
 ensembles.lua
+catalyze.lua
 Overlay\_overlays.xml
 Plugins\_plugins.xml
 tests.lua
