@@ -1079,17 +1079,17 @@ function CanIMogIt:TextIsUnknown(unmodifiedText)
 end
 
 
-function CanIMogIt:PreLogicOptionsContinue(isItemMount, isItemToy, isItemPet,
-        isItemEquippable)
+function CanIMogIt:PreLogicOptionsContinue(itemData)
     -- Apply the options. Returns false if it should stop the logic.
-    local mountCheck = CanIMogItOptions["showMountItems"] and isItemMount
-    local toyCheck = CanIMogItOptions["showToyItems"] and isItemToy
-    local petCheck = CanIMogItOptions["showPetItems"] and isItemPet
+    local mountCheck = CanIMogItOptions["showMountItems"] and itemData.isItemMount
+    local toyCheck = CanIMogItOptions["showToyItems"] and itemData.isItemToy
+    local petCheck = CanIMogItOptions["showPetItems"] and itemData.isItemPet
+    local ensembleCheck = CanIMogItOptions["showEnsembleItems"] and itemData.isItemEnsemble
 
     -- If showEquippableOnly is checked, only show equippable items.
-    if CanIMogItOptions["showEquippableOnly"] and not isItemEquippable then
-        -- Unless it's a mount, toy, or pet, and their respective option is enabled.
-        if not (mountCheck or toyCheck or petCheck) then
+    if CanIMogItOptions["showEquippableOnly"] and not itemData.isItemEquippable then
+        -- Unless it's a mount, toy, pet, etc, and their respective option is enabled.
+        if not (mountCheck or toyCheck or petCheck or ensembleCheck) then
             return false
         end
     end
@@ -1203,9 +1203,7 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
     local bindData = CanIMogIt:GetBindData(itemLink, bag, slot, tooltipData)
     if bindData == nil then return end
 
-    if not CanIMogIt:PreLogicOptionsContinue(
-            itemData.isItemMount, itemData.isItemToy, itemData.isItemPet,
-            itemData.isItemEquippable) then
+    if not CanIMogIt:PreLogicOptionsContinue(itemData) then
         return "", ""
     end
 

@@ -36,7 +36,7 @@ end
 
 
 -- OptionsVersion: Keep this as an integer, so comparison is easy.
-CanIMogIt_OptionsVersion = "24"
+CanIMogIt_OptionsVersion = "25"
 
 
 CanIMogItOptions_Defaults = {
@@ -57,6 +57,7 @@ CanIMogItOptions_Defaults = {
         ["showPetItems"] = true,
         ["showMountItems"] = true,
         ["showCatalizableItems"] = true,
+        ["showEnsembleItems"] = true,
     },
 }
 
@@ -117,6 +118,10 @@ CanIMogItOptions_DisplayData = {
     ["showCatalizableItems"] = {
         ["displayName"] = L["Show Catalizable Items"],
         ["description"] = L["Show extra tooltip for items that can be catalyzed."]
+    },
+    ["showEnsembleItems"] = {
+        ["displayName"] = L["Show Enseble Items"],
+        ["description"] = L["Show tooltips and overlays on Ensemble Items (otherwise, shows as not transmoggable)."]
     },
 }
 
@@ -530,6 +535,7 @@ local function createOptionsMenu()
     CanIMogIt.frame.showPetItems = newCheckbox(CanIMogIt.frame, "showPetItems")
     CanIMogIt.frame.showMountItems = newCheckbox(CanIMogIt.frame, "showMountItems")
     CanIMogIt.frame.showCatalizableItems = newCheckbox(CanIMogIt.frame, "showCatalizableItems")
+    CanIMogIt.frame.showEnsembleItems = newCheckbox(CanIMogIt.frame, "showEnsembleItems")
 
     -- position the checkboxes
     CanIMogIt.frame.debug:SetPoint("TOPLEFT", 16, -16)
@@ -546,6 +552,7 @@ local function createOptionsMenu()
     CanIMogIt.frame.showPetItems:SetPoint("TOPLEFT", CanIMogIt.frame.showToyItems, "BOTTOMLEFT")
     CanIMogIt.frame.showMountItems:SetPoint("TOPLEFT", CanIMogIt.frame.showPetItems, "BOTTOMLEFT")
     CanIMogIt.frame.showCatalizableItems:SetPoint("TOPLEFT", CanIMogIt.frame.showMountItems, "BOTTOMLEFT")
+    CanIMogIt.frame.showEnsembleItems:SetPoint("TOPLEFT", CanIMogIt.frame.showCatalizableItems, "BOTTOMLEFT")
 
     changesSavedText()
 end
@@ -618,6 +625,8 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.showMountItems:Click()
     elseif input == 'catalizableitems' then
         CanIMogIt.frame.showCatalizableItems:Click()
+    elseif input == 'ensembleitems' then
+        CanIMogIt.frame.showEnsembleItems:Click()
     elseif input == 'refresh' then
         self:ResetCache()
     elseif input == 'help' then

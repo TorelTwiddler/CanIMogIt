@@ -58,6 +58,10 @@ end
 
 function CanIMogIt:CalculateEnsembleText(itemLink)
     -- Displays the standard KNOWN or UNKNOWN, then include the ratio of known to total.
+    if not CanIMogItOptions["showEnsembleItems"] then
+        return CanIMogIt.NOT_TRANSMOGABLE, CanIMogIt.NOT_TRANSMOGABLE
+    end
+
     local knownAppearances, totalAppearances, knownSources, totalSources = CanIMogIt:EnsembleItemsKnown(itemLink)
     local ratio = knownAppearances .. "/" .. totalAppearances
     if CanIMogItOptions["showVerboseText"] then
