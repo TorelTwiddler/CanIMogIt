@@ -120,7 +120,7 @@ CanIMogItOptions_DisplayData = {
         ["description"] = L["Show extra tooltip for items that can be catalyzed."]
     },
     ["showEnsembleItems"] = {
-        ["displayName"] = L["Show Enseble Items"],
+        ["displayName"] = L["Show Ensemble Items"],
         ["description"] = L["Show tooltips and overlays on Ensemble Items (otherwise, shows as not transmoggable)."]
     },
 }
