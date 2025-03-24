@@ -3,6 +3,17 @@
 ## IconTexture: Interface\Addons\CanIMogIt\Icons\KNOWN
 ## Author: TorelTwiddler, Ami Yuy
 ## Version: @project-version@
+## Category-enUS: Collections
+## Category-deDE: Kriegsmeutesammlungen
+## Category-esES: Colecciones de banda guerrera
+## Category-esMX: Colecciones de tropa
+## Category-frFR: Collections du bataillon
+## Category-itIT: Collezioni della Brigata
+## Category-koKR: 전투부대 수집품
+## Category-ptBR: Coleções do Bando de Guerra
+## Category-ruRU: Коллекции отряда
+## Category-zhCN: 战团藏品
+## Category-zhTW: 戰隊收藏
 ## Notes: Adds tooltips to items showing if you have learned a transmog appearance.
 ## Notes-deDE: @localization(locale="deDE", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
 ## Notes-esES: @localization(locale="esES", key="Adds tooltips to items showing if you have learned a transmog appearance.")@
