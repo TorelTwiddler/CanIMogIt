@@ -38,12 +38,14 @@ function ContainerFrame_CIMIUpdateIcon(cimiFrame)
         cimiFrame:SetScript("OnUpdate", nil)
         return
     end
-    local bag, slot = GetBagAndSlot(cimiFrame)
-    local itemLink = C_Container.GetContainerItemLink(bag, slot)
-    -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
-    -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
-    if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
-    CIMI_SetIcon(cimiFrame, ContainerFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
+    C_Timer.After(0, function()
+        local bag, slot = GetBagAndSlot(cimiFrame)
+        local itemLink = C_Container.GetContainerItemLink(bag, slot)
+        -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
+        -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
+        if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
+        CIMI_SetIcon(cimiFrame, ContainerFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
+    end)
 end
 
 
