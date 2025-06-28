@@ -576,7 +576,25 @@ function CanIMogIt.frame.Loaded()
         CanIMogItOptions = CanIMogItOptions_temp;
     end
     createOptionsMenu()
+    CanIMogIt.MarkAsLoaded()
 end
+
+-- Fail-safe to ensure Loaded() gets called even if event handling is disrupted
+-- This helps when multiple addons are competing for the same events
+local loadedFlag = false
+
+-- Add a function to track whether the addon has been loaded
+function CanIMogIt.MarkAsLoaded()
+    loadedFlag = true
+end
+
+-- Create a fail-safe timer to check if Loaded() has been called
+C_Timer.After(2, function()
+    if not loadedFlag then
+        CanIMogIt.frame.Loaded()
+        CanIMogIt.MarkAsLoaded()
+    end
+end)
 
 CanIMogIt:RegisterChatCommand("cimi", "SlashCommands")
 CanIMogIt:RegisterChatCommand("canimogit", "SlashCommands")

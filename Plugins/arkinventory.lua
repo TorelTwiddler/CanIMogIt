@@ -89,20 +89,34 @@ local function AddArkInventoryHooks()
 end
 
 
-local _, _, _, loadable, _ = C_AddOns.GetAddOnInfo("ArkInventory")
+-- Use a safer approach that doesn't mess with the main OnEvent handler
+local function CheckAndLoadArkInventory()
+    -- Check if ArkInventory is available
+    local _, _, _, loadable, _ = C_AddOns.GetAddOnInfo("ArkInventory")
+    if not loadable then return end
 
-if loadable then
-
+    -- If already loaded, add hooks immediately
     local _, loaded = C_AddOns.IsAddOnLoaded("ArkInventory")
     if loaded then
         AddArkInventoryHooks()
-    else
-        CanIMogIt.frame:RegisterEvent("ADDON_LOADED")
-        CanIMogIt.frame:SetScript("OnEvent", function(self, event, loadedAddon)
-            if event == "ADDON_LOADED" and loadedAddon == "ArkInventory" then
-                CanIMogIt.frame:UnregisterEvent("ADDON_LOADED")
-                AddArkInventoryHooks()
-            end
-        end)
+        return
     end
+
+    -- Otherwise register for ADDON_LOADED event through proper channels
+    local function ArkInventoryLoader(event, addonName)
+        if event ~= "ADDON_LOADED" or addonName ~= "ArkInventory" then return end
+        print("ArkInventory loaded through event:", addonName)
+
+        -- Remove our listener to avoid memory leaks
+        CanIMogIt:UnregisterEvent("ADDON_LOADED", ArkInventoryLoader)
+
+        -- Add hooks
+        AddArkInventoryHooks()
+    end
+
+    -- Register using CanIMogIt's own event system
+    CanIMogIt:RegisterEvent("ADDON_LOADED", ArkInventoryLoader)
 end
+
+-- Start the check process
+CheckAndLoadArkInventory()
