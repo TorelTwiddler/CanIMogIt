@@ -59,18 +59,42 @@ end
 
 local encounterJournalLoaded = false
 
-local function OnEncounterJournalLoaded(event, addonName, ...)
-    if event ~= "ADDON_LOADED" then return end
-    if addonName ~= "Blizzard_EncounterJournal" then return end
+-- Function to set up the hooks when the EncounterJournal is loaded
+local function SetupEncounterJournalHooks()
+    -- Don't set up twice
+    if encounterJournalLoaded then return end
     encounterJournalLoaded = true
-    -- FIXME
-    -- hooksecurefunc("EncounterJournal_SetLootButton", EncounterJournalFrame_CIMISetLootButton)
+
     local encounterJournalLootFrame = _G["EncounterJournalEncounterFrameInfo"].LootContainer
     encounterJournalLootFrame:HookScript("OnUpdate", EncounterJournalFrame_CIMIOnValueChanged)
 end
 
+-- Main handler for when the addon is loaded
+local function OnEncounterJournalLoaded(event, addonName, ...)
+    if event ~= "ADDON_LOADED" then return end
+    if addonName ~= "Blizzard_EncounterJournal" then return end
+    SetupEncounterJournalHooks()
+end
+
 if CanIMogIt.isRetail then
     CanIMogIt.frame:AddSmartEvent(OnEncounterJournalLoaded, {"ADDON_LOADED"})
+
+    -- Fail-safe: Check if the EncounterJournal is already loaded
+    -- This helps when addon loading order is changed by other addons
+    C_Timer.After(1, function()
+        local _, loaded = C_AddOns.IsAddOnLoaded("Blizzard_EncounterJournal")
+        if loaded and not encounterJournalLoaded then
+            SetupEncounterJournalHooks()
+        end
+    end)
+
+    -- Additional fail-safe: Check again after a longer delay
+    C_Timer.After(5, function()
+        local _, loaded = C_AddOns.IsAddOnLoaded("Blizzard_EncounterJournal")
+        if loaded and not encounterJournalLoaded then
+            SetupEncounterJournalHooks()
+        end
+    end)
 end
 
 
@@ -80,6 +104,13 @@ end
 
 
 local function EncounterJournalOverlayEvents(event, ...)
+    -- First try setting up if not yet done - for cases where event order changed
+    local _, loaded = C_AddOns.IsAddOnLoaded("Blizzard_EncounterJournal")
+    if loaded and not encounterJournalLoaded then
+        SetupEncounterJournalHooks()
+    end
+
+    -- Now update icons if loaded
     if encounterJournalLoaded then
         EncounterJournalFrame_CIMIOnValueChanged()
     end
@@ -87,6 +118,8 @@ end
 
 if CanIMogIt.isRetail then
     CanIMogIt.frame:AddSmartEvent(EncounterJournalOverlayEvents, {"PLAYER_LOGIN"})
+
+
 
     CanIMogIt:RegisterMessage("OptionUpdate", EncounterJournalOverlayEvents)
 end
