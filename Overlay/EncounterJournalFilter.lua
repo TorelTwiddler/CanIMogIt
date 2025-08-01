@@ -33,15 +33,29 @@ end
 local function FilterLootItems(dataProvider)
     local newDataProvider = CreateDataProvider()
     newDataProvider.CIMI_Filtered = true
+    local lastHeaderData = nil
     dataProvider:ForEach(function(elementData)
         if elementData.itemInfo then
             if ShouldShowLootItem(elementData.itemInfo) then
                 newDataProvider:Insert(elementData)
+                if lastHeaderData then
+                    lastHeaderData.CIMI_Filtered_Count = (lastHeaderData.CIMI_Filtered_Count or 0) + 1
+                end
             end
-        else
-            -- keep headers, unknown and unprocessed
+        elseif elementData.header then
+            lastHeaderData = elementData
+            lastHeaderData.CIMI_Filtered_Count = 0
             newDataProvider:Insert(elementData)
+        else
+            -- keep unknown and unprocessed
+            newDataProvider:Insert(elementData)
+            if lastHeaderData then
+                lastHeaderData.CIMI_Filtered_Count = (lastHeaderData.CIMI_Filtered_Count or 0) + 1
+            end
         end
+    end)
+    newDataProvider:RemoveByPredicate(function (elementData)
+        return elementData.header and elementData.CIMI_Filtered_Count == 0
     end)
     return newDataProvider
 end
