@@ -1,6 +1,6 @@
 -- Add a filter based on CIMI to Encounter Journal loot items
 
-local CIMIFilterList = { 'EJFilter_All', 'EJFilter_Learnable', 'EJFilter_Unkonwn' }
+local CIMIFilterList = { 'EJFilter_All', 'EJFilter_Learnable', 'EJFilter_Unknown' }
 local CIMIFilterMap = {
     EJFilter_All = {},
     EJFilter_Learnable = {
@@ -12,7 +12,7 @@ local CIMIFilterMap = {
         [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE] = true,
         [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND] = true,
     },
-    EJFilter_Unkonwn = {
+    EJFilter_Unknown = {
         [CanIMogIt.UNKNOWN] = true,
     }
 }
