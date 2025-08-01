@@ -67,6 +67,8 @@ local function SetupEncounterJournalHooks()
 
     local encounterJournalLootFrame = _G["EncounterJournalEncounterFrameInfo"].LootContainer
     encounterJournalLootFrame:HookScript("OnUpdate", EncounterJournalFrame_CIMIOnValueChanged)
+
+    SetupEncounterJournalFilter(encounterJournalLootFrame)
 end
 
 -- Main handler for when the addon is loaded
