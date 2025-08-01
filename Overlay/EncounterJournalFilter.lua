@@ -135,7 +135,7 @@ function SetupEncounterJournalFilter(encounterJournalLootFrame)
 
     local CIMIFilter = CreateFrame("DropdownButton", "EncounterJournalCIMIFilter", encounterJournalLootFrame, "WowStyle1DropdownTemplate")
     encounterJournalLootFrame.CIMIFilter = CIMIFilter
-    CIMIFilter:SetWidth(90)
+    CIMIFilter:SetWidth(105)
     CIMIFilter:SetPoint("RIGHT", encounterJournalLootFrame.filter, "LEFT", -10, 0)
     CIMIFilter:SetupMenu(function(dropdown, rootDescription)
         local L = CanIMogIt.L
