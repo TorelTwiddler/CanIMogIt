@@ -1,56 +1,36 @@
 -- Overlay for Adventure Guide loot.
 
-
-----------------------------
--- UpdateIcon functions   --
-----------------------------
-
-
-function EncounterJournalFrame_CIMIUpdateIcon(self)
-    if not self then return end
-    if not CIMI_CheckOverlayIconEnabled() then
-        self.CIMIIconTexture:SetShown(false)
-        self:SetScript("OnUpdate", nil)
-        return
-    end
-
-    local itemLink = self:GetParent().link
-    CIMI_SetIcon(self, EncounterJournalFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
-end
-
-
-local function EncounterJournalFrame_CIMISetLootButton(self)
-    -- Sets the icon overlay for the Encounter Journal dungeon and raid tabs.
-    local overlay = self.CanIMogItOverlay
-    if not overlay then return end
-    if not CIMI_CheckOverlayIconEnabled(overlay) then
-        overlay.CIMIIconTexture:SetShown(false)
-        overlay:SetScript("OnUpdate", nil)
-        return
-    end
-    local itemLink = self.link
-    CIMI_SetIcon(overlay, EncounterJournalFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
-end
-
-
 ------------------------
 -- Function hooks     --
 ------------------------
 
+-- this may be called twice, not ready at first, and ready to show later triggered by EJ_LOOT_DATA_RECIEVED
+local function EncounterJournalItemMixin_Init_Hook(lootItemFrame)
+    local itemLink = lootItemFrame.link
+    if not itemLink then return end
 
-function EncounterJournalFrame_CIMIOnValueChanged(_, elapsed)
-    if not CanIMogIt.FrameShouldUpdate("EncounterJournal", elapsed or 1) then return end
-    local encounterJournalScrollFrame = _G["EncounterJournalEncounterFrameInfo"].LootContainer.ScrollBox
-    local lootItemFrames = encounterJournalScrollFrame:GetFrames()
+    CIMI_AddToFrame(lootItemFrame, nil, "EncounterJournal"..lootItemFrame.index, "TOPRIGHT")
+    local overlay = lootItemFrame.CanIMogItOverlay
+    if not CIMI_CheckOverlayIconEnabled(overlay) then
+        overlay.CIMIIconTexture:SetShown(false)
+        return
+    end
+    CIMI_SetIcon(lootItemFrame.CanIMogItOverlay, nil, CanIMogIt:GetTooltipText(itemLink))
+end
+
+local function EncounterJournalEncounterFrameInfo_Hook_Exists(encounterJournalLootFrame)
+    local lootItemFrames = encounterJournalLootFrame.ScrollBox:GetFrames()
     for i = 1, #lootItemFrames do
         local frame = lootItemFrames[i]
         if frame then
-            CIMI_AddToFrame(frame, EncounterJournalFrame_CIMIUpdateIcon, "EncounterJournal"..i, "TOPRIGHT")
-            EncounterJournalFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
+            if not frame.EncounterJournalItemMixin_Init_Hooked then
+                hooksecurefunc(frame, "Init", EncounterJournalItemMixin_Init_Hook)
+                frame.EncounterJournalItemMixin_Init_Hooked = true
+                EncounterJournalItemMixin_Init_Hook(frame)
+            end
         end
     end
 end
-
 
 ----------------------------
 -- Begin adding to frames --
@@ -66,7 +46,12 @@ local function SetupEncounterJournalHooks()
     encounterJournalLoaded = true
 
     local encounterJournalLootFrame = _G["EncounterJournalEncounterFrameInfo"].LootContainer
-    encounterJournalLootFrame:HookScript("OnUpdate", EncounterJournalFrame_CIMIOnValueChanged)
+
+    -- hook lootItemMixin for lootItemFrames created later
+    hooksecurefunc(EncounterJournalItemMixin, "Init", EncounterJournalItemMixin_Init_Hook)
+    EncounterJournalItemMixin.EncounterJournalItemMixin_Init_Hooked = true
+    -- there are ItemFrame created before we hook them
+    EncounterJournalEncounterFrameInfo_Hook_Exists(encounterJournalLootFrame)
 end
 
 -- Main handler for when the addon is loaded
