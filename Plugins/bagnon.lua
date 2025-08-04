@@ -1,6 +1,7 @@
 -- Adds overlays to Bagnon https://mods.curse.com/addons/wow/bagnon
 
-if C_AddOns.IsAddOnLoaded("Bagnon") then
+if C_AddOns.IsAddOnLoaded("Bagnon") or C_AddOns.IsAddOnLoaded("Bagnonium") then
+    local BagAddon = Bagnon or Bagnonium
 
     -- Needs a slightly modified version of ContainerFrameItemButton_CIMIUpdateIcon(),
     -- to support cached Bagnon bags (e.g. bank when not at bank or other characters).
@@ -41,7 +42,7 @@ if C_AddOns.IsAddOnLoaded("Bagnon") then
         BagnonItemButton_CIMIUpdateIcon(self.CanIMogItOverlay)
     end
 
-    hooksecurefunc(Bagnon.Item, "Update", CIMI_BagnonUpdate)
-    CanIMogIt:RegisterMessage("ResetCache", function () Bagnon.Frames:Update() end)
+    hooksecurefunc(BagAddon.Item, "Update", CIMI_BagnonUpdate)
+    CanIMogIt:RegisterMessage("ResetCache", function () BagAddon.Frames:Update() end)
 
 end
