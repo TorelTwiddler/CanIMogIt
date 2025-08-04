@@ -20,7 +20,7 @@ if C_AddOns.IsAddOnLoaded("Bagnon") then
         -- If the itemLink isn't available, then try with the bag/slot as backup (fixes battle pets).
         local itemLink = self:GetParent():GetItem()
         if not itemLink then
-            -- This may be void storage or guild bank
+            -- This may be guild bank
             itemLink = self:GetParent():GetInfo().link
         end
         local cached = self:GetParent().info.cached

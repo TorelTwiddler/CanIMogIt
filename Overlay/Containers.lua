@@ -1,4 +1,4 @@
--- Overlay for player bags, bank, void storage, and guild banks.
+-- Overlay for player bags, bank, and guild banks.
 
 
 ----------------------------
@@ -80,35 +80,9 @@ function GuildBankFrame_CIMIUpdateIcon(self)
 end
 
 
-function VoidStorageFrame_CIMIUpdateIcon(self)
-    if not self then return end
-    if not CIMI_CheckOverlayIconEnabled() then
-        self.CIMIIconTexture:SetShown(false)
-        self:SetScript("OnUpdate", nil)
-        return
-    end
-
-    local page = _G["VoidStorageFrame"].page
-    local buttonSlot = self:GetParent().slot
-    local voidSlot = buttonSlot + (CanIMogIt.NUM_VOID_STORAGE_FRAMES * (page - 1))
-    local itemLink = GetVoidItemHyperlinkString(voidSlot)
-    CIMI_SetIcon(self, VoidStorageFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
-end
-
-
 ------------------------
 -- Function hooks     --
 ------------------------
-
-
-function VoidStorageFrame_CIMIOnClick()
-    for i=1,CanIMogIt.NUM_VOID_STORAGE_FRAMES do
-        local frame = _G["VoidStorageStorageButton"..i]
-        if frame then
-            VoidStorageFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
-        end
-    end
-end
 
 
 ----------------------------
