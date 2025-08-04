@@ -58,6 +58,7 @@ CanIMogItOptions_Defaults = {
         ["showMountItems"] = true,
         ["showCatalizableItems"] = true,
         ["showEnsembleItems"] = true,
+        ["showIllusionItems"] = true,
     },
 }
 
@@ -122,6 +123,10 @@ CanIMogItOptions_DisplayData = {
     ["showEnsembleItems"] = {
         ["displayName"] = L["Show Ensemble Items"],
         ["description"] = L["Show tooltips and overlays on Ensemble Items (otherwise, shows as not transmoggable)."]
+    },
+    ["showIllusionItems"] = {
+        ["displayName"] = L["Show Illusion Items"],
+        ["description"] = L["Show tooltips and overlays on Illusion Items (otherwise, shows as not transmoggable)."]
     },
 }
 
@@ -534,6 +539,7 @@ local function createOptionsMenu()
     CanIMogIt.frame.showMountItems = newCheckbox(CanIMogIt.frame, "showMountItems")
     CanIMogIt.frame.showCatalizableItems = newCheckbox(CanIMogIt.frame, "showCatalizableItems")
     CanIMogIt.frame.showEnsembleItems = newCheckbox(CanIMogIt.frame, "showEnsembleItems")
+    CanIMogIt.frame.showIllusionItems = newCheckbox(CanIMogIt.frame, "showIllusionItems")
 
     -- position the checkboxes
     CanIMogIt.frame.debug:SetPoint("TOPLEFT", 16, -16)
@@ -551,6 +557,7 @@ local function createOptionsMenu()
     CanIMogIt.frame.showMountItems:SetPoint("TOPLEFT", CanIMogIt.frame.showPetItems, "BOTTOMLEFT")
     CanIMogIt.frame.showCatalizableItems:SetPoint("TOPLEFT", CanIMogIt.frame.showMountItems, "BOTTOMLEFT")
     CanIMogIt.frame.showEnsembleItems:SetPoint("TOPLEFT", CanIMogIt.frame.showCatalizableItems, "BOTTOMLEFT")
+    CanIMogIt.frame.showIllusionItems:SetPoint("TOPLEFT", CanIMogIt.frame.showEnsembleItems, "BOTTOMLEFT")
 
     changesSavedText()
 end
@@ -603,17 +610,20 @@ Can I Mog It? help:
     Usage: /cimi <command>
     e.g. /cimi help
 
-    help            Displays this help message.
-    debug           Toggles the debug tooltip.
-    verbose         Toggles verbose mode on tooltip.
-    overlay         Toggles the icon overlay.
-    refresh         Refreshes the overlay, forcing a redraw.
-    equiponly       Toggles showing overlay on non-equipable items.
-    transmogonly    Toggles showing overlay on non-transmogable items.
-    unknownonly     Toggles showing overlay on known items.
-    toyitems        Toggles showing overlay on toy items.
-    petitems        Toggles showing overlay on pet items.
-    mountitems      Toggles showing overlay on mount items.
+    help              Displays this help message.
+    debug             Toggles the debug tooltip.
+    verbose           Toggles verbose mode on tooltip.
+    overlay           Toggles the icon overlay.
+    refresh           Refreshes the overlay, forcing a redraw.
+    equiponly         Toggles showing overlay on non-equipable items.
+    transmogonly      Toggles showing overlay on non-transmogable items.
+    unknownonly       Toggles showing overlay on known items.
+    toyitems          Toggles showing overlay on toy items.
+    petitems          Toggles showing overlay on pet items.
+    mountitems        Toggles showing overlay on mount items.
+    catalizableitems  Toggles showing overlay on catalizable items.
+    ensembleitems     Toggles showing overlay on ensemble items.
+    illusionitems     Toggles showing overlay on illusion items.
     ]])
 end
 
@@ -643,6 +653,8 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.showCatalizableItems:Click()
     elseif input == 'ensembleitems' then
         CanIMogIt.frame.showEnsembleItems:Click()
+    elseif input == 'illusionitems' then
+        CanIMogIt.frame.showIllusionItems:Click()
     elseif input == 'refresh' then
         self:ResetCache()
     elseif input == 'help' then

@@ -50,6 +50,7 @@ mounts.lua
 toys.lua
 pets.lua
 ensembles.lua
+illusions.lua
 catalyze.lua
 Overlay\_overlays.xml
 Plugins\_plugins.xml

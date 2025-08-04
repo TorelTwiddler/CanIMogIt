@@ -9,17 +9,19 @@ CanIMogIt.ItemTypes = {
     Toy = "Toy",
     Pet = "Pet",
     Ensemble = "Ensemble",
+    Illusion = "Illusion",
     Other = "Other"
 }
 
 
-function CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy, isItemPet, isItemEnsemble, isItemEquippable)
+function CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy, isItemPet, isItemEnsemble, isItemIllusion, isItemEquippable)
     if itemLink == nil
         or isTransmogable == nil
         or isItemMount == nil
         or isItemToy == nil
         or isItemPet == nil
         or isItemEnsemble == nil
+        or isItemIllusion == nil
         or isItemEquippable == nil then
         return nil
     end
@@ -31,6 +33,7 @@ function CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy
     this.isItemToy = isItemToy
     this.isItemPet = isItemPet
     this.isItemEnsemble = isItemEnsemble
+    this.isItemIllusion = isItemIllusion
     this.isItemEquippable = isItemEquippable
     this.type = this:CalculateType()
     return this
@@ -49,9 +52,11 @@ function CanIMogIt.ItemData.FromItemLink(itemLink)
     if isItemPet == nil then return end
     local isItemEnsemble = CanIMogIt:IsItemEnsemble(itemLink)
     if isItemEnsemble == nil then return end
+    local isItemIllusion = CanIMogIt:IsItemIllusion(itemLink)
+    if isItemIllusion == nil then return end
     local isItemEquippable = CanIMogIt:IsEquippable(itemLink)
     if isItemEquippable == nil then return end
-    return CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy, isItemPet, isItemEnsemble, isItemEquippable)
+    return CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy, isItemPet, isItemEnsemble, isItemIllusion, isItemEquippable)
 end
 
 
@@ -66,6 +71,8 @@ function CanIMogIt.ItemData:CalculateType()
         return CanIMogIt.ItemTypes.Pet
     elseif self.isItemEnsemble then
         return CanIMogIt.ItemTypes.Ensemble
+    elseif self.isItemIllusion then
+        return CanIMogIt.ItemTypes.Illusion
     else
         return CanIMogIt.ItemTypes.Other
     end
