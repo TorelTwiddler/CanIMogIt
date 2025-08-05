@@ -172,7 +172,6 @@ if CanIMogIt.isRetail then
     table.insert(EVENTS, "AUCTION_HOUSE_SHOW")
     table.insert(EVENTS, "AUCTION_HOUSE_BROWSE_RESULTS_UPDATED")
     table.insert(EVENTS, "AUCTION_HOUSE_NEW_RESULTS_RECEIVED")
-    table.insert(EVENTS, "PLAYERREAGENTBANKSLOTS_CHANGED")
     table.insert(EVENTS, "PET_JOURNAL_LIST_UPDATE")
 end
 

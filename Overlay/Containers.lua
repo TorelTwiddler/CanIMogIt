@@ -153,8 +153,8 @@ hooksecurefunc("OpenAllBags", UpdateContainerFrames)
 hooksecurefunc("CloseAllBags", UpdateContainerFrames)
 hooksecurefunc("ToggleAllBags", UpdateContainerFrames)
 
-local accountBankPanel = _G["AccountBankPanel"]
-hooksecurefunc(accountBankPanel, "RefreshBankPanel", function () C_Timer.After(.1, UpdateContainerFrames) end)
+-- local accountBankPanel = _G["AccountBankPanel"]
+-- hooksecurefunc(accountBankPanel, "RefreshBankPanel", function () C_Timer.After(.1, UpdateContainerFrames) end)
 
 local containerFrameEvents = {
     "BAG_UPDATE",
