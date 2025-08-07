@@ -1,62 +1,127 @@
 local L = CanIMogIt.L
 
--- all 52 items are from https://www.wowhead.com/items/consumables/name:illusion
--- all 88 illusions are from https://wago.tools/db2/TransmogIllusion
--- illusion names are from https://wago.tools/db2/SpellItemEnchantment
-local ItemToIllusion = {
-    [118572] = {5394}, -- Flames of Ragnaros
-    [120286] = {5396}, -- Glorious Tyranny
-    [120287] = {5397}, -- Primal Victory
-    [128649] = {5448}, -- Winter's Grasp
-    [138796] = {3225}, -- Executioner
-    [138797] = {2673}, -- Mongoose
-    [138798] = {5865}, -- Sunfire
-    [138799] = {5866}, -- Soulfrost
-    [138800] = {3869}, -- Blade Ward
-    [138801] = {5392}, -- Blood Draining
-    [138802] = {4097}, -- Power Torrent
-    [138803] = {4066}, -- Mending
-    [138804] = {4445}, -- Colossus
-    [138805] = {4442}, -- Jade Spirit
-    [138806] = {5335}, -- Mark of Shadowmoon
-    [138807] = {5331}, -- Mark of the Shattered Hand
-    [138808] = {5384}, -- Mark of Bleeding Hollow
-    [138809] = {5336}, -- Mark of Blackrock
-    [138827] = {5876}, -- Nightmare
-    [138828] = {5877}, -- Chronos
-    [138832] = {5871}, -- Earthliving
-    [138833] = {5872}, -- Flametongue
-    [138834] = {5873}, -- Frostbrand
-    [138835] = {5874}, -- Rockbiter
-    [138836] = {5875}, -- Windfury
-    [138838] = {3273}, -- Deathfrost
-    [138954] = {5364}, -- Poisoned
-    [138955] = {5869}, -- Rune of Razorice
-    [147778] = {5924}, -- Demonic Tyranny
-    [174932] = {6174}, -- Void Edge
-    [182204] = {6258}, -- Sinwrath
-    [183134] = {6264}, -- Hunt's Favor
-    [183189] = {6261}, -- Undying Spirit
-    [183462] = {6262}, -- Unbreakable Resolve
-    [184164] = {6263}, -- Wild Soul
-    [184351] = {6256}, -- Devoted Spirit
-    [184352] = {6257}, -- Transcendent Soul
-    [200470] = {6672}, -- Primal Mastery
-    [200883] = {6675}, -- Primal Air
-    [200905] = {6676}, -- Primal Earth
-    [200906] = {6677}, -- Primal Fire
-    [200907] = {6678}, -- Primal Frost
-    [220765] = {7322}, -- Sha Corruption
-    [250776] = {8246}, -- Sha Corruption
-    [138787] = {803,1899,5863}, -- Tome of Illusions: Azeroth
-    [138789] = {5390,2674,5864}, -- Tome of Illusions: Outland
-    [138790] = {5391,1894,5388}, -- Tome of Illusions: Northrend
-    [138791] = {4098,4084,5867}, -- Tome of Illusions: Cataclysm
-    [138792] = {4067,4099,4074}, -- Tome of Illusions: Elemental Lords
-    [138793] = {4441,4443,5868}, -- Tome of Illusions: Pandaria
-    [138794] = {4446,4444}, -- Tome of Illusions: Secrets of the Shado-Pan
-    [138795] = {5330,5334}, -- Tome of Illusions: Draenor
+-- 55 items from https://www.wowhead.com/items/consumables/name:illusion
+-- 88 illusions from https://wago.tools/db2/TransmogIllusion
+-- Illusion names are from https://wago.tools/db2/SpellItemEnchantment
+-- Add missing ones from https://warcraft-secrets.com/guides/hidden-weapon-illusions
+-- There are 7 basic illusions without illusion books.
+-- 12 PvP illusions without illusion books.
+-- 69 illusions matched from all 55 items by name or description.
+local Illusions = {
+    {IllusionID=5360,Source=""}, -- Hide Weapon Enchant
+    {IllusionID=1898,Source=""}, -- Lifestealing
+    {IllusionID=5387,Source=""}, -- Agility
+    {IllusionID=5389,Source=""}, -- Striking
+    {IllusionID=5393,Source=""}, -- Crusader
+    {IllusionID=5861,Source=""}, -- Beastslayer
+    {IllusionID=5862,Source=""}, -- Titanguard
+
+    {IllusionID=5394,ItemID=118572,Source=""}, -- Flames of Ragnaros
+    {IllusionID=5448,ItemID=128649,Source="Holiday"}, -- Winter's Grasp
+    {IllusionID=3225,ItemID=138796,Source="Vendor: Reputation - The Consortium"}, -- Executioner
+    {IllusionID=2673,ItemID=138797,Source="Boss Drop: Moroes in Karazhan"}, -- Mongoose
+    {IllusionID=5865,ItemID=138798,Source="Boss Drop: Shade of Aran in Karazhan"}, -- Sunfire
+    {IllusionID=5866,ItemID=138799,Source="Boss Drop: Terestian Illhoof in Karazhan"}, -- Soulfrost
+    {IllusionID=3869,ItemID=138800,Source="Boss Drop: Hodir, Mimiron, Freya, Thorim in Ulduar (25 Player)"}, -- Blade Ward
+    {IllusionID=5392,ItemID=138801,Source="Boss Drop: Yogg-Saron in Ulduar (25 Player)"}, -- Blood Draining
+    {IllusionID=4097,ItemID=138802,Source="Boss Drop: Nefarian in Blackwing Descent"}, -- Power Torrent
+    {IllusionID=4066,ItemID=138803,Source="Vendor: Reputation - Guardians of Hyjal"}, -- Mending
+    {IllusionID=4445,ItemID=138804,Source="Boss Drop: Will of the Emperor in Mogu'shan Vaults"}, -- Colossus
+    {IllusionID=4442,ItemID=138805,Source="Boss Drop: Sha of Fear in Terrace of Endless Spring"}, -- Jade Spirit
+    {IllusionID=5335,ItemID=138806,Source="Boss Drop: Ner'zhul in Shadowmoon Burial Grounds"}, -- Mark of Shadowmoon
+    {IllusionID=5331,ItemID=138807,Source="Boss Drop: Kargath in Highmaul"}, -- Mark of the Shattered Hand
+    {IllusionID=5384,ItemID=138808,Source="Boss Drop: Kilrogg in Hellfire Citadel"}, -- Mark of Bleeding Hollow
+    {IllusionID=5336,ItemID=138809,Source="Boss Drop: Blackhand in Blackrock Foundry"}, -- Mark of Blackrock
+    {IllusionID=5876,ItemID=138827,Source="Boss Drop: Xavius in The Emerald Nightmare"}, -- Nightmare
+    {IllusionID=5877,ItemID=138828,Source="Boss Drop: Chronomatic Anomaly in The Nighthold"}, -- Chronos
+    {IllusionID=3273,ItemID=138838,Source="Boss Drop: Ahune in The Slave Pens"}, -- Deathfrost
+    {IllusionID=6174,ItemID=174932,Source="Drop: Valeera's Corrupted Chest - Horrific Vision of Stormwind"}, -- Void Edge
+    {IllusionID=6672,ItemID=200470,Source="Profession: Enchanting - Illusion: Primal Mastery"}, -- Primal Mastery
+    {IllusionID=6675,ItemID=200883,Source="Profession: Enchanting - Illusion: Primal Air"}, -- Primal Air
+    {IllusionID=6676,ItemID=200905,Source="Profession: Enchanting - Illusion: Primal Earth"}, -- Primal Earth
+    {IllusionID=6677,ItemID=200906,Source="Profession: Enchanting - Illusion: Primal Fire"}, -- Primal Fire
+    {IllusionID=6678,ItemID=200907,Source="Profession: Enchanting - Illusion: Primal Frost"}, -- Primal Frost
+    {IllusionID=7322,ItemID=220765,Source="Pandaria Remix"}, -- Sha Corruption
+    {IllusionID=8246,ItemID=250776,Source=""}, -- Sha Corruption
+
+    -- Shaman
+    {IllusionID=5871,ItemID=138832,Source="Boss Drop: Valithria Dreamwalker in Icecrown Citadel (25 Player)"}, -- Earthliving
+    {IllusionID=5872,ItemID=138833,Source="Boss Drop: Ragnaros in Molten Core"}, -- Flametongue
+    {IllusionID=5873,ItemID=138834,Source="Boss Drop: Hydross the Unstable in Serpentshrine Cavern"}, -- Frostbrand
+    {IllusionID=5874,ItemID=138835,Source="Boss Drop: Tectus in Highmaul"}, -- Rockbiter
+    {IllusionID=5875,ItemID=138836,Source="Boss Drop: Al'Akir in Throne of the Four Winds"}, -- Windfury
+
+    -- Rogue
+    {IllusionID=5364,ItemID=138954,Source="Vendor: Griftah"}, -- Poisoned
+
+    -- Death Knight
+    {IllusionID=5869,ItemID=138955,Source="Boss Drop: The Lich King in Icecrown Citadel"}, -- Rune of Razorice
+
+    {IllusionID=1899,ItemID=138787,Source="Profession: Enchanting - Tome of Illusions: Azeroth"}, -- Unholy Weapon
+    {IllusionID=803,ItemID=138787,Source="Profession: Enchanting - Tome of Illusions: Azeroth"}, -- Fiery Weapon
+    {IllusionID=5863,ItemID=138787,Source="Profession: Enchanting - Tome of Illusions: Azeroth"}, -- Coldlight
+    {IllusionID=2674,ItemID=138789,Source="Profession: Enchanting - Tome of Illusions: Outland"}, -- Spellsurge
+    {IllusionID=5390,ItemID=138789,Source="Profession: Enchanting - Tome of Illusions: Outland"}, -- Battlemaster
+    {IllusionID=5864,ItemID=138789,Source="Profession: Enchanting - Tome of Illusions: Outland"}, -- Netherflame
+    {IllusionID=1894,ItemID=138790,Source="Profession: Enchanting - Tome of Illusions: Northrend"}, -- Icy Chill
+    {IllusionID=5391,ItemID=138790,Source="Profession: Enchanting - Tome of Illusions: Northrend"}, -- Berserking
+    {IllusionID=5388,ItemID=138790,Source="Profession: Enchanting - Tome of Illusions: Northrend"}, -- Greater Spellpower
+    {IllusionID=4098,ItemID=138791,Source="Profession: Enchanting - Tome of Illusions: Cataclysm"}, -- Windwalk
+    {IllusionID=4084,ItemID=138791,Source="Profession: Enchanting - Tome of Illusions: Cataclysm"}, -- Heartsong
+    {IllusionID=5867,ItemID=138791,Source="Profession: Enchanting - Tome of Illusions: Cataclysm"}, -- Light of the Earth-Warder
+    {IllusionID=4074,ItemID=138792,Source="Profession: Enchanting - Tome of Illusions: Elemental Lords"}, -- Elemental Slayer
+    {IllusionID=4099,ItemID=138792,Source="Profession: Enchanting - Tome of Illusions: Elemental Lords"}, -- Landslide
+    {IllusionID=4067,ItemID=138792,Source="Profession: Enchanting - Tome of Illusions: Elemental Lords"}, -- Avalanche
+    {IllusionID=4441,ItemID=138793,Source="Profession: Enchanting - Tome of Illusions: Pandaria"}, -- Windsong
+    {IllusionID=4443,ItemID=138793,Source="Profession: Enchanting - Tome of Illusions: Pandaria"}, -- Elemental Force
+    {IllusionID=5868,ItemID=138793,Source="Profession: Enchanting - Tome of Illusions: Pandaria"}, -- Breath of Yu'lon
+    {IllusionID=4444,ItemID=138794,Source="Profession: Enchanting - Tome of Illusions: Shado-Pan Arts"}, -- Dancing Steel
+    {IllusionID=4446,ItemID=138794,Source="Profession: Enchanting - Tome of Illusions: Shado-Pan Arts"}, -- River's Song
+    {IllusionID=5330,ItemID=138795,Source="Profession: Enchanting - Tome of Illusions: Draenor"}, -- Mark of the Thunderlord
+    {IllusionID=5334,ItemID=138795,Source="Profession: Enchanting - Tome of Illusions: Draenor"}, -- Mark of the Frostwolf
+
+    -- Shadowlands Covenant Renown
+    {IllusionID=6257,ItemID=184352,Source="You must be a member of the Kyrian Covenant or have reached Renown 80 with the Kyrian."}, -- Transcendent Soul
+    {IllusionID=6262,ItemID=183462,Source="You must be a member of the Necrolord Covenant or have reached Renown 80 with the Necrolords."}, -- Unbreakable Resolve
+    {IllusionID=6263,ItemID=184164,Source="You must be a member of the Night Fae Covenant or have reached Renown 80 with the Night Fae."}, -- Wild Soul
+    {IllusionID=6258,ItemID=182204,Source="You must be a member of the Venthyr Covenant or have reached Renown 80 with the Venthyr."}, -- Sinwrath
+
+    -- Shadowlands Reputation
+    {IllusionID=6256,ItemID=184351,Source="Requires Exalted with the Ascended."}, -- Devoted Spirit
+    {IllusionID=6261,ItemID=183189,Source="Requires Exalted with the Undying Army."}, -- Undying Spirit
+    {IllusionID=6264,ItemID=183134,Source="Requires Exalted with the Wild Hunt."}, -- Hunt's Favor
+    {IllusionID=6259,ItemID=182207,Source="Requires Exalted with the Court of Harvesters."}, -- Sinsedge
+
+    {IllusionID=6162,ItemID=172177,Source="Shadowlands Epic Edition"}, -- Wraithchill
+    {IllusionID=6158,ItemID=171363,Source="Recruit-A-Friend"}, -- Stinging Sands
+
+    -- PvP Seasons
+    {IllusionID=5396,ItemID=120286,Source="Obtained by achieving 2400 PvP Rating during Warlords of Draenor PvP Seasons 1, 2 or 3"}, -- Glorious Tyranny
+    {IllusionID=5397,ItemID=120287,Source="Obtained by achieving 2400 PvP Rating during Warlords of Draenor PvP Seasons 1, 2 or 3"}, -- Primal Victory
+    {IllusionID=5924,ItemID=147778,Source="Obtained by achieving 2400 PvP Rating during Legion PvP Season 3, 4, 5, 6 or 7"}, -- Demonic Tyranny
+    {IllusionID=6096,Source="Obtained by achieving 2100 PvP Rating during Battle for Azeroth PvP Season 1, 2, 3 and 4"}, -- Dreadflame
+    {IllusionID=6266,Source="Obtained by achieving 2100 PvP Rating during Shadowlands PvP Season 1"}, -- Sinful Flame
+    {IllusionID=6344,Source="Obtained by achieving 2100 PvP Rating during Shadowlands PvP Season 2"}, -- Unchained Fury
+    {IllusionID=6351,Source="Obtained by achieving 2100 PvP Rating during Shadowlands PvP Season 3"}, -- Cosmic Flow
+    {IllusionID=6378,Source="Obtained by achieving 2100 PvP Rating during Shadowlands PvP Season 4"}, -- Eternal Flux
+    {IllusionID=6786,Source="Obtained by achieving 2100 PvP Rating during Dragonflight Season 1"}, -- Primal Storm
+    {IllusionID=6836,Source="Obtained by achieving 2100 PvP Rating during Dragonflight Season 2"}, -- Shadow Flame
+    {IllusionID=7032,Source="Obtained by achieving 2100 PvP Rating during Dragonflight Season 3"}, -- Verdant Crush
+    {IllusionID=7100,Source="Obtained by achieving 2100 PvP Rating during Dragonflight Season 4"}, -- Bronze Infinite
+    {IllusionID=7521,Source="Obtained by achieving 1950 PvP Rating during The War Within Season 1"}, -- Holy Fire
+    {IllusionID=7640,Source="Obtained by achieving 1950 PvP Rating during The War Within Season 2"}, -- Jackpot
+    {IllusionID=7641,Source="Obtained by achieving 1950 PvP Rating during The War Within Season 3"}, -- Arcane
 }
+
+local ItemToIllusion = {}
+for _,v in ipairs(Illusions) do
+    if v.ItemID then
+        if not ItemToIllusion[v.ItemID] then
+            ItemToIllusion[v.ItemID] = {}
+        end
+        table.insert(ItemToIllusion[v.ItemID], v.IllusionID)
+    end
+end
 
 function CanIMogIt:IsItemIllusion(itemLink)
     local itemID = CanIMogIt:GetItemID(itemLink)
