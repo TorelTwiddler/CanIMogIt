@@ -113,8 +113,10 @@ local Illusions = {
     {IllusionID=7641,Source="Obtained by achieving 1950 PvP Rating during The War Within Season 3"}, -- Arcane
 }
 
+local IllusionsMap = {}
 local ItemToIllusion = {}
-for _,v in ipairs(Illusions) do
+for _, v in ipairs(Illusions) do
+    IllusionsMap[v.IllusionID] = v
     if v.ItemID then
         if not ItemToIllusion[v.ItemID] then
             ItemToIllusion[v.ItemID] = {}
@@ -122,6 +124,9 @@ for _,v in ipairs(Illusions) do
         table.insert(ItemToIllusion[v.ItemID], v.IllusionID)
     end
 end
+
+CanIMogIt.Illusions = Illusions
+CanIMogIt.IllusionsMap = IllusionsMap
 
 function CanIMogIt:IsItemIllusion(itemLink)
     local itemID = CanIMogIt:GetItemID(itemLink)

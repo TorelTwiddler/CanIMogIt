@@ -12,4 +12,5 @@
     <Script file="Quests.lua"/>
     <Script file="Sets.lua"/>
     <Script file="Tradeskill.lua"/>
+    <Script file="BlizzardCollections.lua"/>
 </Ui>
