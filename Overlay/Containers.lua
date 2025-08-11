@@ -1,4 +1,4 @@
--- Overlay for player bags, bank, void storage, and guild banks.
+-- Overlay for player bags, bank, and guild banks.
 
 
 ----------------------------
@@ -41,9 +41,6 @@ function ContainerFrame_CIMIUpdateIcon(cimiFrame)
     C_Timer.After(0, function()
         local bag, slot = GetBagAndSlot(cimiFrame)
         local itemLink = C_Container.GetContainerItemLink(bag, slot)
-        -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
-        -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
-        if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
         CIMI_SetIcon(cimiFrame, ContainerFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
     end)
 end
@@ -83,35 +80,9 @@ function GuildBankFrame_CIMIUpdateIcon(self)
 end
 
 
-function VoidStorageFrame_CIMIUpdateIcon(self)
-    if not self then return end
-    if not CIMI_CheckOverlayIconEnabled() then
-        self.CIMIIconTexture:SetShown(false)
-        self:SetScript("OnUpdate", nil)
-        return
-    end
-
-    local page = _G["VoidStorageFrame"].page
-    local buttonSlot = self:GetParent().slot
-    local voidSlot = buttonSlot + (CanIMogIt.NUM_VOID_STORAGE_FRAMES * (page - 1))
-    local itemLink = GetVoidItemHyperlinkString(voidSlot)
-    CIMI_SetIcon(self, VoidStorageFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
-end
-
-
 ------------------------
 -- Function hooks     --
 ------------------------
-
-
-function VoidStorageFrame_CIMIOnClick()
-    for i=1,CanIMogIt.NUM_VOID_STORAGE_FRAMES do
-        local frame = _G["VoidStorageStorageButton"..i]
-        if frame then
-            VoidStorageFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
-        end
-    end
-end
 
 
 ----------------------------
@@ -160,18 +131,6 @@ local function UpdateContainerFrames()
         end
     end
 
-    -- Bank frame
-    for i=1,NUM_BANKGENERIC_SLOTS do
-        local frame = _G["BankFrameItem"..i]
-        if frame then
-            cimiFrame = frame.CanIMogItOverlay
-            if not cimiFrame then
-                cimiFrame = AddToContainerFrame(frame)
-            end
-            ContainerFrame_CIMIUpdateIcon(cimiFrame)
-        end
-    end
-
     -- Warbank frame
     for i=1,CanIMogIt.NUM_WARBANK_ITEMS do
         local accountBankPanel = _G["AccountBankPanel"]
@@ -194,8 +153,8 @@ hooksecurefunc("OpenAllBags", UpdateContainerFrames)
 hooksecurefunc("CloseAllBags", UpdateContainerFrames)
 hooksecurefunc("ToggleAllBags", UpdateContainerFrames)
 
-local accountBankPanel = _G["AccountBankPanel"]
-hooksecurefunc(accountBankPanel, "RefreshBankPanel", function () C_Timer.After(.1, UpdateContainerFrames) end)
+-- local accountBankPanel = _G["AccountBankPanel"]
+-- hooksecurefunc(accountBankPanel, "RefreshBankPanel", function () C_Timer.After(.1, UpdateContainerFrames) end)
 
 local containerFrameEvents = {
     "BAG_UPDATE",

@@ -19,9 +19,6 @@ if C_AddOns.IsAddOnLoaded("AdiBags") then
             return
         end
         local bag, slot = self:GetParent().bag, self:GetParent().slot
-        -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
-        -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
-        if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
         CIMI_SetIcon(self, AdiBagsItemButton_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
     end
 
@@ -36,12 +33,6 @@ if C_AddOns.IsAddOnLoaded("AdiBags") then
         -- Add to frames
         for i=1,600 do
             local frame = _G["AdiBagsItemButton"..i]
-            if frame then
-                C_Timer.After(.5, function() CIMI_AddToFrame(frame, AdiBagsItemButton_CIMIUpdateIcon) end)
-            end
-        end
-        for i=1,28 do
-            local frame = _G["AdiBagsBankItemButton"..i]
             if frame then
                 C_Timer.After(.5, function() CIMI_AddToFrame(frame, AdiBagsItemButton_CIMIUpdateIcon) end)
             end

@@ -151,6 +151,14 @@ local function printDebug(tooltip, itemLink, tooltipData)
             addDoubleLine(tooltip, "EnsembleItemsKnown:", known .. "/" .. total)
         end
     end
+    local isIllusionItem = CanIMogIt:IsItemIllusion(itemLink)
+    if isIllusionItem ~= nil then
+        addDoubleLine(tooltip, "IsIllusionItem:", tostring(isIllusionItem))
+        if isIllusionItem then
+            local known, total = CanIMogIt:IllusionItemsKnown(itemLink)
+            addDoubleLine(tooltip, "IllusionItemsKnown:", known .. "/" .. total)
+        end
+    end
 
     addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink)))
     addDoubleLine(tooltip, "IsItemWarbound:", tostring(CanIMogIt:IsItemWarbound(itemLink)))

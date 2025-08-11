@@ -218,7 +218,6 @@ CanIMogIt.NUM_BLACKMARKET_BUTTONS = 12  -- No Blizzard constant
 -- Bag Items = MAX_CONTAINER_ITEMS  -- Blizzard removed this variable in 9.0 for some reason
 CanIMogIt.MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS or 36
 -- Bank = NUM_BANKGENERIC_SLOTS
-CanIMogIt.NUM_VOID_STORAGE_FRAMES = 80 -- Blizzard functions are locals
 
 CanIMogIt.NUM_WARBANK_ITEMS = 112
 
