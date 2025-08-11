@@ -37,24 +37,6 @@ if C_AddOns.IsAddOnLoaded("ElvUI") then
 
         local function AddToBankFrames()
             -- This is a separate function, so that we can add a delay before these are added.
-            -- Main Bank
-            for i=1,28 do
-                for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
-                    local frame = _G["ElvUI_BankContainerFrameBag-"..i.."Slot"..j]
-                    if frame then
-                        CIMI_AddToFrame(frame, ElvUI_CIMIUpdateIcon)
-                    end
-                end
-            end
-            -- Bank Bags
-            for i=1,NUM_CONTAINER_FRAMES do
-                for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
-                    local frame = _G["ElvUI_BankContainerFrameBag"..i.."Slot"..j]
-                    if frame then
-                        CIMI_AddToFrame(frame, ElvUI_CIMIUpdateIcon)
-                    end
-                end
-            end
         end
 
         -- The ElvUI bank frames don't exist when the BANKFRAME_OPENED event occurs,
@@ -75,24 +57,6 @@ if C_AddOns.IsAddOnLoaded("ElvUI") then
         for i=0,NUM_CONTAINER_FRAMES do
             for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
                 local frame = _G["ElvUI_ContainerFrameBag"..i.."Slot"..j]
-                if frame then
-                    ElvUI_CIMIUpdateIcon(frame.CanIMogItOverlay)
-                end
-            end
-        end
-        -- Main Bank
-        for i=1,28 do
-            for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
-                local frame = _G["ElvUI_BankContainerFrameBag-"..i.."Slot"..j]
-                if frame then
-                    ElvUI_CIMIUpdateIcon(frame.CanIMogItOverlay)
-                end
-            end
-        end
-        -- Bank Bags
-        for i=1,NUM_CONTAINER_FRAMES do
-            for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
-                local frame = _G["ElvUI_BankContainerFrameBag"..i.."Slot"..j]
                 if frame then
                     ElvUI_CIMIUpdateIcon(frame.CanIMogItOverlay)
                 end

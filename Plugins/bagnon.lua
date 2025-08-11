@@ -14,16 +14,13 @@ if C_AddOns.IsAddOnLoaded("Bagnon") then
         end
 
         local bag, slot = self:GetParent():GetParent():GetID(), self:GetParent():GetID()
-        -- need to catch 0, 0 and 100, 0 here because the bank frame doesn't
-        -- load everything immediately, so the OnUpdate needs to run until those frames are opened.
-        if (bag == 0 and slot == 0) or (bag == 100 and slot == 0) then return end
 
         -- For cached Bagnon bags, GetContainerItemLink(bag, slot) would not work in CanIMogIt:GetTooltipText(nil, bag, slot).
         -- Therefore provide GetTooltipText() with itemLink when available.
         -- If the itemLink isn't available, then try with the bag/slot as backup (fixes battle pets).
         local itemLink = self:GetParent():GetItem()
         if not itemLink then
-            -- This may be void storage or guild bank
+            -- This may be guild bank
             itemLink = self:GetParent():GetInfo().link
         end
         local cached = self:GetParent().info.cached

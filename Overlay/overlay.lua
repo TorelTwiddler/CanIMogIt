@@ -96,6 +96,7 @@ end
 
 
 function CIMIOnUpdateFuncMaker(func)
+    if func == nil then return nil end
     function CIMIOnUpdate(self, elapsed)
         -- Attempts to update the icon again after the delay has elapsed.
         self.timeSinceCIMIIconCheck = self.timeSinceCIMIIconCheck + elapsed
