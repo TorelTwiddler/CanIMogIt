@@ -1,4 +1,4 @@
-## Interface: 110200
+## Interface: 50501
 ## Title: Can I Mog It?
 ## IconTexture: Interface\Addons\CanIMogIt\Icons\KNOWN
 ## Author: TorelTwiddler, Ami Yuy
@@ -50,7 +50,7 @@ mounts.lua
 toys.lua
 pets.lua
 ensembles.lua
-catalyze.lua
+#catalyze.lua
 Overlay\_overlays.xml
 Plugins\_plugins.xml
 tests.lua
