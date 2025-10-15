@@ -19,7 +19,7 @@ end
 -----------------------------
 
 
-local function printDebug(tooltip, itemLink, tooltipData)
+local function printDebug(tooltip, itemLink, bag, slot)
     -- Add debug statements to the tooltip, to make it easier to understand
     -- what may be going wrong.
 
@@ -152,7 +152,7 @@ local function printDebug(tooltip, itemLink, tooltipData)
         end
     end
 
-    addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink)))
+    addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink, bag, slot)))
     addDoubleLine(tooltip, "IsItemWarbound:", tostring(CanIMogIt:IsItemWarbound(itemLink)))
     local bindData = CanIMogIt.BindData:new(itemLink)
     if bindData ~= nil then
@@ -171,7 +171,7 @@ local function printDebug(tooltip, itemLink, tooltipData)
 
     addLine(tooltip, '--------')
 
-    local calculatedTooltipText, unmodified = CanIMogIt:CalculateTooltipText(itemLink, nil, nil, tooltipData)
+    local calculatedTooltipText, unmodified = CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     if calculatedTooltipText ~= nil then
         -- Iterate over the constants in CanIMogIt and find the matching one
         for key, value in pairs(CanIMogIt) do
@@ -196,7 +196,7 @@ end
 
 local itemLinks = {}
 
-local function addToTooltip(tooltip, itemLink, tooltipData)
+local function addToTooltip(tooltip, itemLink, bag, slot)
     -- Does the calculations for determining what text to
     -- display on the tooltip.
     if tooltip.CIMI_tooltipWritten then return end
@@ -206,7 +206,7 @@ local function addToTooltip(tooltip, itemLink, tooltipData)
     end
 
     if CanIMogItOptions["debug"] then
-        printDebug(tooltip, itemLink, tooltipData)
+        printDebug(tooltip, itemLink, bag, slot)
         tooltip.CIMI_tooltipWritten = true
     end
 
@@ -219,7 +219,7 @@ local function addToTooltip(tooltip, itemLink, tooltipData)
     end
 
     local text;
-    text = CanIMogIt:GetTooltipText(itemLink, nil, nil, tooltipData)
+    text = CanIMogIt:GetTooltipText(itemLink, bag, slot)
     if text and text ~= "" then
         addDoubleLine(tooltip, " ", text)
         tooltip.CIMI_tooltipWritten = true
@@ -272,16 +272,13 @@ ItemRefShoppingTooltip2:HookScript("OnTooltipCleared", TooltipCleared)
 ShoppingTooltip1:HookScript("OnTooltipCleared", TooltipCleared)
 ShoppingTooltip2:HookScript("OnTooltipCleared", TooltipCleared)
 
-if CanIMogIt.isRetail then
-    GameTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", TooltipCleared)
-end
 
 -- Regular hook for any tooltip invoking item info.
 --[[ local function CanIMogIt_AttachItemTooltip(tooltip)
     if tooltip.GetItem == nil then return end
     local link = select(2, tooltip:GetItem())
     if link then
-        addToTooltip(tooltip, link, tooltipData)
+        addToTooltip(tooltip, link)
         VVDebugPrint(tooltip, "OnTooltipSetItem")
     end
 end

@@ -859,13 +859,13 @@ function CanIMogIt:IsValidAppearanceForCharacter(itemLink)
 end
 
 
-function CanIMogIt:IsItemSoulbound(itemLink, bag, slot, tooltipData)
-    return CIMIScanTooltip:IsItemSoulbound(itemLink, bag, slot, tooltipData)
+function CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
+    return CIMIScanTooltip:IsItemSoulbound(itemLink, bag, slot)
 end
 
 
-function CanIMogIt:IsItemWarbound(itemLink, bag, slot, tooltipData)
-    return CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot, tooltipData)
+function CanIMogIt:IsItemWarbound(itemLink, bag, slot)
+    return CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot)
 end
 
 
@@ -1156,7 +1156,7 @@ function CanIMogIt:GetItemData(itemLink)
 end
 
 
-function CanIMogIt:GetBindData(itemLink, bag, slot, tooltipData)
+function CanIMogIt:GetBindData(itemLink, bag, slot)
     -- Returns the bind data for the item. Uses the cache if available.
     local bindData
 
@@ -1165,7 +1165,7 @@ function CanIMogIt:GetBindData(itemLink, bag, slot, tooltipData)
         return bindData
     end
 
-    bindData = CanIMogIt.BindData:new(itemLink, bag, slot, tooltipData)
+    bindData = CanIMogIt.BindData:new(itemLink, bag, slot)
     if bindData == nil then return end
 
     CanIMogIt.cache:SetBindDataValue(bindData)
@@ -1186,7 +1186,7 @@ function CanIMogIt:CalculateKey(itemLink)
 end
 
 
-function CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
+function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
     --[[
         Calculate the tooltip text.
         Use GetTooltipText whenever possible!
@@ -1200,7 +1200,7 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
 
     local itemData = CanIMogIt:GetItemData(itemLink)
     if itemData == nil then return end
-    local bindData = CanIMogIt:GetBindData(itemLink, bag, slot, tooltipData)
+    local bindData = CanIMogIt:GetBindData(itemLink, bag, slot)
     if bindData == nil then return end
 
     if not CanIMogIt:PreLogicOptionsContinue(itemData) then
@@ -1247,15 +1247,12 @@ end
 local foundAnItemFromBags = false
 
 
-function CanIMogIt:GetTooltipText(itemLink, bag, slot, tooltipData)
+function CanIMogIt:GetTooltipText(itemLink, bag, slot)
     --[[
         Gets the text to display on the tooltip from the itemLink.
 
         If bag and slot are given, this will use the itemLink from
         bag and slot instead.
-
-        If tooltipData is given, it will be used to get TooltipScanner info,
-        instead of calculating it.
 
         Returns two things:
             the text to display.
@@ -1283,7 +1280,7 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot, tooltipData)
     local text = ""
     local unmodifiedText = ""
 
-    text, unmodifiedText = CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
+    text, unmodifiedText = CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
 
     text = CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
 
