@@ -276,9 +276,8 @@ if CanIMogIt.isRetail then
     GameTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", TooltipCleared)
 end
 
-
-local function CanIMogIt_AttachItemTooltip(tooltip, tooltipData)
-    -- Hook for normal tooltips.
+-- Regular hook for any tooltip invoking item info.
+--[[ local function CanIMogIt_AttachItemTooltip(tooltip)
     if tooltip.GetItem == nil then return end
     local link = select(2, tooltip:GetItem())
     if link then
@@ -286,6 +285,124 @@ local function CanIMogIt_AttachItemTooltip(tooltip, tooltipData)
         VVDebugPrint(tooltip, "OnTooltipSetItem")
     end
 end
+GameTooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip); ]]
 
+-- Bags
+hooksecurefunc(GameTooltip, "SetBagItem",
+    function(tooltip, bag, slot)
+        addToTooltip(tooltip, C_Container.GetContainerItemLink(bag, slot), bag, slot)
+        VVDebugPrint(tooltip, "SetBagItem")
+    end
+)
 
-TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, CanIMogIt_AttachItemTooltip)
+-- Inventory (not sure what the difference is between this and bags)
+hooksecurefunc(GameTooltip, "SetInventoryItem",
+    function(tooltip, unit, slot)
+        addToTooltip(tooltip, GetInventoryItemLink(unit, slot))
+        VVDebugPrint(tooltip, "SetInventoryItem")
+    end
+)
+
+-- Vendor
+hooksecurefunc(GameTooltip, "SetMerchantItem",
+    function(tooltip, index)
+        addToTooltip(tooltip, GetMerchantItemLink(index))
+        VVDebugPrint(tooltip, "SetMerchantItem")
+    end
+)
+
+-- Vendor Buyback
+hooksecurefunc(GameTooltip, "SetBuybackItem",
+    function(tooltip, index)
+        addToTooltip(tooltip, GetBuybackItemLink(index))
+        VVDebugPrint(tooltip, "SetBuybackItem")
+    end
+)
+
+-- Trade window (Player side)
+hooksecurefunc(GameTooltip, "SetTradePlayerItem",
+    function(tooltip, index)
+        addToTooltip(tooltip, GetTradePlayerItemLink(index))
+        VVDebugPrint(tooltip, "SetTradePlayerItem")
+    end
+)
+
+-- Trade window (Target side)
+hooksecurefunc(GameTooltip, "SetTradeTargetItem",
+    function(tooltip, index)
+        addToTooltip(tooltip, GetTradeTargetItemLink(index))
+        VVDebugPrint(tooltip, "SetTradeTargetItem")
+    end
+)
+
+-- Mail (Inbox)
+hooksecurefunc(GameTooltip, "SetInboxItem",
+    function(tooltip, mailIndex, attachmentIndex)
+        addToTooltip(tooltip, GetInboxItemLink(mailIndex, attachmentIndex or 1))
+        VVDebugPrint(tooltip, "SetInboxItem")
+    end
+)
+
+-- Mail (Sending)
+hooksecurefunc(GameTooltip, "SetSendMailItem",
+    function(tooltip, index)
+        local name = GetSendMailItem(index)
+        local _, link = GetItemInfo(name)
+        addToTooltip(tooltip, link)
+        VVDebugPrint(tooltip, "SetSendMailItem")
+    end
+)
+
+-- Auction
+hooksecurefunc(GameTooltip, "SetAuctionItem",
+    function(tooltip, type, index)
+        VVDebugPrint(tooltip, "SetAuctionItem")
+        addToTooltip(tooltip, GetAuctionItemLink(type, index))
+    end
+)
+
+-- Quest Log
+hooksecurefunc(GameTooltip, "SetQuestLogItem",
+    function(tooltip, type, index)
+        addToTooltip(tooltip, GetQuestLogItemLink(type, index))
+        VVDebugPrint(tooltip, "SetQuestLogItem")
+    end
+)
+
+-- Heirlooms
+hooksecurefunc(GameTooltip, "SetHeirloomByItemID",
+    function(tooltip, id)
+        local _, link = GetItemInfo(id);
+        addToTooltip(tooltip, link)
+        VVDebugPrint(tooltip, "SetHeirloomByItemID")
+    end
+)
+
+-- Item ID hook, used by Dungeon Journal
+hooksecurefunc(GameTooltip, "SetItemByID",
+    function(tooltip, itemID)
+        local _, link = GetItemInfo(itemID)
+        addToTooltip(tooltip, link)
+        VVDebugPrint(tooltip, "SetItemByID")
+    end
+)
+
+-- Item key hook, used by Auction House Bucket tooltip
+hooksecurefunc(GameTooltip, "SetItemKey",
+    function(tooltip, itemID, itemLevel, itemSuffix)
+        local _, link = GetItemInfo(itemID)
+        addToTooltip(tooltip, link)
+        VVDebugPrint(tooltip, "SetItemKey")
+    end
+)
+
+-- Hyperlinks
+local function OnSetHyperlink(tooltip, link)
+    local type, id = string.match(link, ".*(item):(%d+).*")
+    if not type or not id then return end
+    if type == "item" then
+        addToTooltip(tooltip, link)
+        VVDebugPrint(tooltip, "SetHyperlink")
+    end
+end
+hooksecurefunc(GameTooltip, "SetHyperlink", OnSetHyperlink)
