@@ -17,22 +17,16 @@ function CIMI_UpdateTradeSkillIcons(_, elapsed)
         return
     end
 
-    local tradeSkillFrame = _G["ProfessionsFrame"].CraftingPage.RecipeList.ScrollBox
-    local buttons = tradeSkillFrame:GetFrames()
-
-    for i, button in ipairs(buttons) do
-        local recipeInfo = button:GetElementData().data.recipeInfo or nil
-        if recipeInfo then
-            local recipeID = recipeInfo.recipeID
-            local text = button.Label:GetText() or ""
-            local itemLink = C_TradeSkillUI.GetRecipeItemLink(recipeID)
-            if itemLink ~= nil then
-                local icon = CanIMogIt:GetIconText(itemLink)
-                if icon ~= nil and not string_starts(text, icon) then
-                    text = icon .. text
-                    button.Label:SetText(text)
-                    button.Label:SetWidth(button.Label:GetWidth(text) + 20)
-                end
+    -- Add icon to all visible trade skill recipes
+    for i=1, TRADE_SKILLS_DISPLAYED do
+        local button = _G["TradeSkillSkill"..i]
+        local itemLink = GetTradeSkillItemLink(button:GetID())
+        if itemLink ~= nil then
+            local text = button.text:GetText() or ""
+            local icon = CanIMogIt:GetIconText(itemLink)
+            if icon ~= nil and not string_starts(text, icon) then
+                text = icon .. text
+                button.text:SetText(text)
             end
         end
     end
@@ -55,9 +49,9 @@ end
 
 
 local function TradeSkillEvents(event, addonName)
-    if event == "TRADE_SKILL_SHOW" or event == "ADDON_LOADED" and addonName == "Blizzard_Professions" then
-        if _G["ProfessionsFrame"] == nil then return end
-        local tradeSkillFrame = _G["ProfessionsFrame"].CraftingPage.RecipeList
+    if event == "TRADE_SKILL_SHOW" or event == "ADDON_LOADED" and addonName == "Blizzard_TradeSkillUI" then
+        if _G["TradeSkillFrame"] == nil then return end
+        local tradeSkillFrame = _G["TradeSkillFrame"]
         tradeSkillFrame:HookScript("OnUpdate", CIMI_UpdateTradeSkillIcons)
     end
 end
