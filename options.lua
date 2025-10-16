@@ -382,7 +382,7 @@ local function newRadioGrid(parent, variableName)
     frame.texture = CreateFrame("Frame", frameName .. "_Texture", frame)
     frame.texture:SetSize(58, 58)
     local texture = frame.texture:CreateTexture("CIMITextureFrame", "BACKGROUND")
-    texture:SetTexture("Interface/ICONS/INV_Sword_1H_AllianceToy_A_01.blp")
+    texture:SetTexture("Interface/ICONS/inv_sword_27.blp")
     texture:SetAllPoints()
     texture:SetVertexColor(0.5, 0.5, 0.5)
 
