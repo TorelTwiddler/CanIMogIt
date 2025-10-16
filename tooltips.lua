@@ -311,6 +311,22 @@ hooksecurefunc(GameTooltip, "SetBuybackItem",
     end
 )
 
+-- Crafting UI
+hooksecurefunc(GameTooltip, "SetTradeSkillItem",
+    function(tooltip, index, reagentIndex)
+        local link
+        if reagentIndex ~= nil then
+            -- Crafting reagents
+            link = GetTradeSkillReagentItemLink(index, reagentIndex)
+        else
+            -- Crafted items
+            link = GetTradeSkillItemLink(index)
+        end
+        addToTooltip(tooltip, link)
+        VVDebugPrint(tooltip, "SetTradeSkillItem")
+    end
+)
+
 -- Trade window (Player side)
 hooksecurefunc(GameTooltip, "SetTradePlayerItem",
     function(tooltip, index)
