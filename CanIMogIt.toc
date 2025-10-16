@@ -30,7 +30,7 @@
 ## X-Curse-Project-ID: 100617
 ## X-WoWI-ID: 24015
 ## X-Wago-ID: Qb6mg9GP
-## SavedVariables: CanIMogItOptions, CanIMogItDatabase
+## SavedVariables: CanIMogItOptions
 ## OptionalDeps: AdiBags, ArkInventory, ElvUI, LiteBag, Bagnon, cargBags_Nivaya, Auctionator
 embeds.xml
 core.lua
