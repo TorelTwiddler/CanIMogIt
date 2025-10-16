@@ -47,8 +47,8 @@ local function printDebug(tooltip, itemLink, bag, slot)
             addLine(tooltip, '--------')
             return
         end
-        -- Keystones don't have an itemID...
-        addLine(tooltip, 'No ItemID found. Is this a Keystone or Battle Pet?')
+        -- Battle pets don't have an itemID...
+        addLine(tooltip, 'No ItemID found. Is this a Battle Pet?')
         addLine(tooltip, '--------')
         return
     end
