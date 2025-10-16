@@ -65,18 +65,16 @@ end
 ------------------------
 
 
-if CanIMogIt.isRetail then
-    CanIMogIt.frame:HookScript("OnEvent", function (self, event, addonName)
-        if event == "ADDON_LOADED" and addonName == "Blizzard_Collections" then
-            -- When the scrollbar moves, update the display.
-            _G["WardrobeCollectionFrame"].SetsCollectionFrame.ListContainer:HookScript("OnUpdate", WardrobeCollectionFrame_CIMIOnValueChanged)
-            _G["WardrobeCollectionFrameTab2"]:HookScript("OnClick", WardrobeCollectionFrame_CIMIOnValueChanged)
+CanIMogIt.frame:HookScript("OnEvent", function (self, event, addonName)
+    if event == "ADDON_LOADED" and addonName == "Blizzard_Collections" then
+        -- When the scrollbar moves, update the display.
+        _G["WardrobeCollectionFrame"].SetsCollectionFrame.ListContainer:HookScript("OnUpdate", WardrobeCollectionFrame_CIMIOnValueChanged)
+        _G["WardrobeCollectionFrameTab2"]:HookScript("OnClick", WardrobeCollectionFrame_CIMIOnValueChanged)
 
-            CanIMogIt:RegisterMessage("OptionUpdate", function () C_Timer.After(.25, WardrobeCollectionFrame_CIMIOnValueChanged) end)
-        end
-        if event == "TRANSMOG_SEARCH_UPDATED" then
-            -- Must add a delay, as the frame updates after this is called.
-            C_Timer.After(.25, WardrobeCollectionFrame_CIMIOnValueChanged)
-        end
-    end)
-end
+        CanIMogIt:RegisterMessage("OptionUpdate", function () C_Timer.After(.25, WardrobeCollectionFrame_CIMIOnValueChanged) end)
+    end
+    if event == "TRANSMOG_SEARCH_UPDATED" then
+        -- Must add a delay, as the frame updates after this is called.
+        C_Timer.After(.25, WardrobeCollectionFrame_CIMIOnValueChanged)
+    end
+end)
