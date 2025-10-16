@@ -18,6 +18,7 @@ function CIMI_UpdateTradeSkillIcons(_, elapsed)
     end
 
     -- Add icon to all visible trade skill recipes
+    -- (Using constant TRADE_SKILLS_DISPLAYED here - other addons can expand crafting UI which also modifies this value)
     for i=1, TRADE_SKILLS_DISPLAYED do
         local button = _G["TradeSkillSkill"..i]
         local itemLink = GetTradeSkillItemLink(button:GetID())
