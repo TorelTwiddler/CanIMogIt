@@ -105,64 +105,20 @@ end
 
 
 local function UpdateContainerFrames()
-    if CanIMogIt.isRetail then
-        -- TODO: Need to call this when USE_COMBINED_BAGS_CHANGED is fired.
-        -- USE_COMBINED_BAGS_CHANGED
-        local cimiFrame
-
-        -- Combined bags frame
-        local combinedBags = _G["ContainerFrameCombinedBags"]
-        for i, frame in ipairs(combinedBags.Items) do
-            cimiFrame = frame.CanIMogItOverlay
-            if not cimiFrame then
-                cimiFrame = AddToContainerFrame(frame)
-            end
-            ContainerFrame_CIMIUpdateIcon(cimiFrame)
-        end
-
-        -- Separate bags frame
-        local frameContainer = _G["ContainerFrameContainer"]
-        for i, bag in ipairs(frameContainer.ContainerFrames) do
-            for j, frame in ipairs(bag.Items) do
-                cimiFrame = frame.CanIMogItOverlay
-                if not cimiFrame then
-                    cimiFrame = AddToContainerFrame(frame)
-                end
-                ContainerFrame_CIMIUpdateIcon(cimiFrame)
-            end
-        end
-
-        -- Warbank frame
-        for i=1,CanIMogIt.NUM_WARBANK_ITEMS do
-            local accountBankPanel = _G["AccountBankPanel"]
-            if accountBankPanel == nil then
-                return
-            end
-            local frame = accountBankPanel:FindItemButtonByContainerSlotID(i)
+    for i=1,NUM_CONTAINER_FRAMES do
+        for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
+            local frame = _G["ContainerFrame"..i.."Item"..j]
             if frame then
-                cimiFrame = frame.CanIMogItOverlay
-                if not cimiFrame then
-                    cimiFrame = AddToContainerFrame(frame)
-                end
-                WarbankFrame_CIMIUpdateIcon(cimiFrame)
+                ContainerFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
             end
         end
-    else
-        for i=1,NUM_CONTAINER_FRAMES do
-            for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
-                local frame = _G["ContainerFrame"..i.."Item"..j]
-                if frame then
-                    ContainerFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
-                end
-            end
-        end
+    end
 
-        -- main bank frame
-        for i=1,NUM_BANKGENERIC_SLOTS do
-            local frame = _G["BankFrameItem"..i]
-            if frame then
-                C_Timer.After(0, function() ContainerFrame_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
-            end
+    -- main bank frame
+    for i=1,NUM_BANKGENERIC_SLOTS do
+        local frame = _G["BankFrameItem"..i]
+        if frame then
+            C_Timer.After(0, function() ContainerFrame_CIMIUpdateIcon(frame.CanIMogItOverlay) end)
         end
     end
 end
