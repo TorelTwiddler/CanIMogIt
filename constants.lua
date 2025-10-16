@@ -221,8 +221,6 @@ CanIMogIt.NUM_BLACKMARKET_BUTTONS = 12  -- No Blizzard constant
 CanIMogIt.MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS or 36
 -- Bank = NUM_BANKGENERIC_SLOTS
 
-CanIMogIt.NUM_WARBANK_ITEMS = 112
-
 ---- Expansions ----
 CanIMogIt.Expansions = {}
 CanIMogIt.Expansions.BC = 1
