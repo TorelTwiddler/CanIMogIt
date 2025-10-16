@@ -45,7 +45,7 @@ function EncounterJournalFrame_CIMIOnValueChanged(_, elapsed)
     for i = 1, #lootItemFrames do
         local frame = lootItemFrames[i]
         if frame then
-            CIMI_AddToFrame(frame, EncounterJournalFrame_CIMIUpdateIcon, "EncounterJournal"..i, "TOPRIGHT")
+            CIMI_AddToFrame(frame, EncounterJournalFrame_CIMIUpdateIcon, "EncounterJournal"..i, "ENCOUNTER_JOURNAL")
             EncounterJournalFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
         end
     end
@@ -76,26 +76,24 @@ local function OnEncounterJournalLoaded(event, addonName, ...)
     SetupEncounterJournalHooks()
 end
 
-if CanIMogIt.isRetail then
-    CanIMogIt.frame:AddSmartEvent(OnEncounterJournalLoaded, {"ADDON_LOADED"})
+CanIMogIt.frame:AddSmartEvent(OnEncounterJournalLoaded, {"ADDON_LOADED"})
 
-    -- Fail-safe: Check if the EncounterJournal is already loaded
-    -- This helps when addon loading order is changed by other addons
-    C_Timer.After(1, function()
-        local _, loaded = C_AddOns.IsAddOnLoaded("Blizzard_EncounterJournal")
-        if loaded and not encounterJournalLoaded then
-            SetupEncounterJournalHooks()
-        end
-    end)
+-- Fail-safe: Check if the EncounterJournal is already loaded
+-- This helps when addon loading order is changed by other addons
+C_Timer.After(1, function()
+    local _, loaded = C_AddOns.IsAddOnLoaded("Blizzard_EncounterJournal")
+    if loaded and not encounterJournalLoaded then
+        SetupEncounterJournalHooks()
+    end
+end)
 
-    -- Additional fail-safe: Check again after a longer delay
-    C_Timer.After(5, function()
-        local _, loaded = C_AddOns.IsAddOnLoaded("Blizzard_EncounterJournal")
-        if loaded and not encounterJournalLoaded then
-            SetupEncounterJournalHooks()
-        end
-    end)
-end
+-- Additional fail-safe: Check again after a longer delay
+C_Timer.After(5, function()
+    local _, loaded = C_AddOns.IsAddOnLoaded("Blizzard_EncounterJournal")
+    if loaded and not encounterJournalLoaded then
+        SetupEncounterJournalHooks()
+    end
+end)
 
 
 ------------------------
