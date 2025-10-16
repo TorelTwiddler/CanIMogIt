@@ -56,8 +56,6 @@ CanIMogItOptions_Defaults = {
         ["showToyItems"] = true,
         ["showPetItems"] = true,
         ["showMountItems"] = true,
-        ["showCatalizableItems"] = true,
-        ["showEnsembleItems"] = true,
     },
 }
 
@@ -114,14 +112,6 @@ CanIMogItOptions_DisplayData = {
     ["showMountItems"] = {
         ["displayName"] = L["Show Mount Items"],
         ["description"] = L["Show tooltips and overlays on mounts (otherwise, shows as not transmoggable)."]
-    },
-    ["showCatalizableItems"] = {
-        ["displayName"] = L["Show Catalizable Items"],
-        ["description"] = L["Show extra tooltip for items that can be catalyzed."]
-    },
-    ["showEnsembleItems"] = {
-        ["displayName"] = L["Show Ensemble Items"],
-        ["description"] = L["Show tooltips and overlays on Ensemble Items (otherwise, shows as not transmoggable)."]
     },
 }
 
@@ -530,8 +520,6 @@ local function createOptionsMenu()
     CanIMogIt.frame.showToyItems = newCheckbox(CanIMogIt.frame, "showToyItems")
     CanIMogIt.frame.showPetItems = newCheckbox(CanIMogIt.frame, "showPetItems")
     CanIMogIt.frame.showMountItems = newCheckbox(CanIMogIt.frame, "showMountItems")
-    CanIMogIt.frame.showCatalizableItems = newCheckbox(CanIMogIt.frame, "showCatalizableItems")
-    CanIMogIt.frame.showEnsembleItems = newCheckbox(CanIMogIt.frame, "showEnsembleItems")
 
     -- position the checkboxes
     CanIMogIt.frame.debug:SetPoint("TOPLEFT", 16, -16)
@@ -547,8 +535,6 @@ local function createOptionsMenu()
     CanIMogIt.frame.showToyItems:SetPoint("TOPLEFT", CanIMogIt.frame.iconLocation, "BOTTOMLEFT")
     CanIMogIt.frame.showPetItems:SetPoint("TOPLEFT", CanIMogIt.frame.showToyItems, "BOTTOMLEFT")
     CanIMogIt.frame.showMountItems:SetPoint("TOPLEFT", CanIMogIt.frame.showPetItems, "BOTTOMLEFT")
-    CanIMogIt.frame.showCatalizableItems:SetPoint("TOPLEFT", CanIMogIt.frame.showMountItems, "BOTTOMLEFT")
-    CanIMogIt.frame.showEnsembleItems:SetPoint("TOPLEFT", CanIMogIt.frame.showCatalizableItems, "BOTTOMLEFT")
 
     changesSavedText()
 end
@@ -637,10 +623,6 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.showPetItems:Click()
     elseif input == 'mountitems' then
         CanIMogIt.frame.showMountItems:Click()
-    elseif input == 'catalizableitems' then
-        CanIMogIt.frame.showCatalizableItems:Click()
-    elseif input == 'ensembleitems' then
-        CanIMogIt.frame.showEnsembleItems:Click()
     elseif input == 'refresh' then
         self:ResetCache()
     elseif input == 'help' then
