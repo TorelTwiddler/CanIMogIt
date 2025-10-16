@@ -202,7 +202,7 @@ CanIMogIt.ICON_LOCATIONS = {
     ["LEFT"] = {"LEFT", 2, 0},
     ["BOTTOM"] = {"BOTTOM", 0, 2},
     ["TOP"] = {"TOP", 0, -2},
-    ["AUCTION_HOUSE"] = {"LEFT", 137, 0}
+    ["AUCTION_HOUSE"] = {"LEFT", 160, 0}
 }
 
 --------------------------------------------
