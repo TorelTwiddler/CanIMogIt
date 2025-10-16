@@ -287,6 +287,14 @@ hooksecurefunc(GameTooltip, "SetInventoryItem",
     end
 )
 
+-- Guild Bank
+hooksecurefunc(GameTooltip, "SetGuildBankItem",
+    function(tooltip, tab, slot)
+        addToTooltip(tooltip, GetGuildBankItemLink(tab, slot))
+        VVDebugPrint(tooltip, "SetGuildBankitem")
+    end
+)
+
 -- Vendor
 hooksecurefunc(GameTooltip, "SetMerchantItem",
     function(tooltip, index)
