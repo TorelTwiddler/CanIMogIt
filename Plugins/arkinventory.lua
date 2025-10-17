@@ -1,4 +1,4 @@
--- Adds overlays to items in the addon ArkInventory: https://mods.curse.com/addons/wow/ark-inventory
+-- Adds overlays to items in the addon ArkInventory: https://www.curseforge.com/wow/addons/ark-inventory
 
 local function AddArkInventoryHooks()
     local ArkInventory = _G["ArkInventory"]

@@ -1,4 +1,4 @@
--- Adds overlays to items in the addon AdiBags: https://mods.curse.com/addons/wow/adibags
+-- Adds overlays to items in the addon AdiBags: https://www.curseforge.com/wow/addons/adibags
 
 -- AdiBags is deprecated and no longer maintained.
 -- No further updates will be made to this file.

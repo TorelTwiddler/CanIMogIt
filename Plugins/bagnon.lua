@@ -1,4 +1,4 @@
--- Adds overlays to Bagnon https://mods.curse.com/addons/wow/bagnon
+-- Adds overlays to Bagnon https://www.curseforge.com/wow/addons/bagnon
 
 if C_AddOns.IsAddOnLoaded("Bagnon") then
 

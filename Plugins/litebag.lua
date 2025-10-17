@@ -1,4 +1,4 @@
--- Adds overlays to LiteBag https://mods.curse.com/addons/wow/litebag
+-- Adds overlays to LiteBag https://www.curseforge.com/wow/addons/litebag
 
 if C_AddOns.IsAddOnLoaded("LiteBag") then
 
