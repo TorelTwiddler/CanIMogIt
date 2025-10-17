@@ -706,7 +706,7 @@ end
 
 
 function CanIMogIt:GetItemClassName(itemLink)
-    return select(2, C_Item.GetItemClassInfo(C_Item.GetItemInfoInstant(itemLink)))
+    return C_Item.GetItemClassInfo(select(6, C_Item.GetItemInfoInstant(itemLink)))
 end
 
 
@@ -982,7 +982,7 @@ function CanIMogIt:CharacterCanLearnTransmog(itemLink)
     if sourceID == nil then return end
 
     if CanIMogIt:IsItemArmor(itemLink) then
-        if CanIMogIt:IsArmorCosmetic(itemLink) or CanIMogIt:IsArmorAppropriateForPlayer(itemLink) then
+        if CanIMogIt:IsArmorAppropriateForPlayer(itemLink) then
             return true
         end
 
