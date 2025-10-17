@@ -515,9 +515,12 @@ function CanIMogIt:CalculateSetsText(itemLink)
     elseif set.description then
         secondLineText = CanIMogIt.BLIZZARD_GREEN .. set.description .. " "
     end
-    -- TODO: replace CanIMogIt.WHITE with setNameColor, add otherClass
-    -- e.g.: setNameColor .. otherClass .. set.name
-    return CanIMogIt.WHITE .. set.name, secondLineText .. ratioText
+
+    if otherClass == "" then
+        return setNameColor .. set.name, secondLineText .. ratioText
+    else 
+        return setNameColor .. otherClass .. set.name, secondLineText .. ratioText
+    end
 end
 
 
