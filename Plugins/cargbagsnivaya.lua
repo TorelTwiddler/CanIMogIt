@@ -1,5 +1,6 @@
 -- Adds overlays to items in the addon cargBags Nivaya: https://www.curseforge.com/wow/addons/cargbags-nivaya-mop-update
 
+-- This doesn't seem to be up-to-date for Mists of Pandaria at all, there's still a keyring etc??
 if C_AddOns.IsAddOnLoaded("cargBags_Nivaya") then
 
 
