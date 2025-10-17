@@ -4,23 +4,7 @@
 ----------------------------
 -- UpdateIcon functions   --
 ----------------------------
-function DebugPrintFullName(frame)
-    -- If the frame has a parent, call DebugPrintFullName on the parent.
-    local name = ""
-    if frame:GetParent() then
-        name = DebugPrintFullName(frame:GetParent())
-    end
-    -- If the frame has a name or ID, print it.
-    name = name .. "."
-    if frame.GetName and frame:GetName() then
-        name = name .. frame:GetName()
-    elseif frame.GetID and frame:GetID() then
-        name = name .. frame:GetID()
-    else
-        name = name .. "Unknown"
-    end
-    return name
-end
+
 
 local function GetBagAndSlot(frame)
     local bag, slot
@@ -43,20 +27,6 @@ function ContainerFrame_CIMIUpdateIcon(cimiFrame)
         local bag, slot = GetBagAndSlot(cimiFrame)
         CIMI_SetIcon(cimiFrame, ContainerFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
     end)
-end
-
-
-function WarbankFrame_CIMIUpdateIcon(self)
-    if not self then return end
-    if not CIMI_CheckOverlayIconEnabled() then
-        self.CIMIIconTexture:SetShown(false)
-        self:SetScript("OnUpdate", nil)
-        return
-    end
-
-    local bag, slot = self:GetParent().bankTabID, self:GetParent().containerSlotID
-    local itemLink = C_Container.GetContainerItemLink(bag, slot)
-    CIMI_SetIcon(self, WarbankFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
 end
 
 
@@ -150,9 +120,6 @@ hooksecurefunc("ToggleBag", UpdateContainerFrames)
 hooksecurefunc("OpenAllBags", UpdateContainerFrames)
 hooksecurefunc("CloseAllBags", UpdateContainerFrames)
 hooksecurefunc("ToggleAllBags", UpdateContainerFrames)
-
--- local accountBankPanel = _G["AccountBankPanel"]
--- hooksecurefunc(accountBankPanel, "RefreshBankPanel", function () C_Timer.After(.1, UpdateContainerFrames) end)
 
 local containerFrameEvents = {
     "BAG_UPDATE",
