@@ -311,6 +311,25 @@ hooksecurefunc(GameTooltip, "SetBuybackItem",
     end
 )
 
+-- Loot window
+hooksecurefunc(GameTooltip, "SetLootItem",
+    function(tooltip, slot)
+        if LootSlotHasItem(slot) then
+            local link = GetLootSlotLink(slot)
+            addToTooltip(tooltip, link)
+            VVDebugPrint(tooltip, "SetLootItem")
+        end
+    end
+)
+
+-- Loot roll window
+hooksecurefunc(GameTooltip, "SetLootRollItem",
+    function(tooltip, slot)
+        addToTooltip(tooltip, GetLootRollItemLink(slot))
+        VVDebugPrint(tooltip, "SetLootRollItem")
+    end
+)
+
 -- Crafting UI
 hooksecurefunc(GameTooltip, "SetTradeSkillItem",
     function(tooltip, index, reagentIndex)
@@ -395,7 +414,7 @@ hooksecurefunc(GameTooltip, "SetItemByID",
     end
 )
 
--- Item key hook, used by Auction House Bucket tooltip
+-- Item key hook, used by Auction House Item Bucket tooltip
 hooksecurefunc(GameTooltip, "SetItemKey",
     function(tooltip, itemID, itemLevel, itemSuffix)
         local _, link = GetItemInfo(itemID)
