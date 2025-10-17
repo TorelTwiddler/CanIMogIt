@@ -205,7 +205,7 @@ local function addToTooltip(tooltip, itemLink, bag, slot)
         return
     end
 
-    local text;
+    local text
     text = CanIMogIt:GetTooltipText(itemLink, bag, slot)
     if text and text ~= "" then
         addDoubleLine(tooltip, " ", text)
@@ -269,7 +269,7 @@ ShoppingTooltip2:HookScript("OnTooltipCleared", TooltipCleared)
         VVDebugPrint(tooltip, "OnTooltipSetItem")
     end
 end
-GameTooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip); ]]
+GameTooltip:HookScript("OnTooltipSetItem", CanIMogIt_AttachItemTooltip) ]]
 
 -- Bags
 hooksecurefunc(GameTooltip, "SetBagItem",
@@ -380,7 +380,7 @@ hooksecurefunc(GameTooltip, "SetQuestLogItem",
 -- Heirlooms
 hooksecurefunc(GameTooltip, "SetHeirloomByItemID",
     function(tooltip, id)
-        local _, link = GetItemInfo(id);
+        local _, link = GetItemInfo(id)
         addToTooltip(tooltip, link)
         VVDebugPrint(tooltip, "SetHeirloomByItemID")
     end

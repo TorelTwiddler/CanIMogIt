@@ -42,17 +42,17 @@ function CIMI_SetIcon(frame, updateIconFunc, text, unmodifiedText)
     if text == nil then
         -- nil means not all data was available to get the text. Try again later.
         frame.CIMIIconTexture:SetShown(false)
-        frame:SetScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc));
+        frame:SetScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc))
     elseif text == "" then
         -- An empty string means that the text shouldn't be displayed.
         frame.CIMIIconTexture:SetShown(false)
-        frame:SetScript("OnUpdate", nil);
+        frame:SetScript("OnUpdate", nil)
     else
         -- Show an icon!
         frame.CIMIIconTexture:SetShown(true)
         local icon = CanIMogIt.tooltipOverlayIcons[unmodifiedText]
         frame.CIMIIconTexture:SetTexture(icon, false)
-        frame:SetScript("OnUpdate", nil);
+        frame:SetScript("OnUpdate", nil)
     end
     frame.shown = frame.CIMIIconTexture:IsShown()
 end

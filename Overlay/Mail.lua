@@ -16,7 +16,7 @@ function MailFrame_CIMIUpdateIcon(self)
 
     local frameID = self:GetParent():GetID()
 
-    local messageIndex;
+    local messageIndex
     for i=1,CanIMogIt.NUM_MAIL_INBOX_ITEMS do
         local mailFrame = _G["MailItem"..i.."Button"]
         if mailFrame:IsShown() and mailFrame:GetChecked() then

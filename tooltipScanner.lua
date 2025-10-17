@@ -31,11 +31,12 @@ local _G = _G
 local L = CanIMogIt.L
 
 -- Tooltip setup
-CIMIScanTooltip = CreateFrame( "GameTooltip", "CIMIScanTooltip");
-CIMIScanTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" );
+CIMIScanTooltip = CreateFrame( "GameTooltip", "CIMIScanTooltip")
+CIMIScanTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" )
 CIMIScanTooltip:AddFontStrings(
     CIMIScanTooltip:CreateFontString( "$parentTextLeft1", nil, "GameTooltipText" ),
-    CIMIScanTooltip:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" ) );
+    CIMIScanTooltip:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" )
+)
 
 local function GetRedText(text)
     if text and text:GetText() then
@@ -102,7 +103,7 @@ end
 function CIMIScanTooltip:ScanTooltipBreak(func, itemLink, bag, slot)
     -- Scans the tooltip, breaking when an item is found.
     self:CIMI_SetItem(itemLink, bag, slot)
-    local result;
+    local result
     local tooltipName = self:GetName()
     for i = 1, self:NumLines() do
         result = func(_G[tooltipName..'TextLeft'..i]) or func(_G[tooltipName..'TextRight'..i])

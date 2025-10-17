@@ -523,7 +523,7 @@ end
 
 function CanIMogIt:GetSetsText(itemLink)
     -- Gets the cached text regarding the sets info for the given item.
-    local line1, line2;
+    local line1, line2
     if CanIMogIt.cache:GetSetsInfoTextValue(itemLink) then
         line1, line2 = unpack(CanIMogIt.cache:GetSetsInfoTextValue(itemLink))
         return line1, line2
@@ -638,7 +638,7 @@ end
 function CanIMogIt:GetSetsVariantText(setID)
     -- Gets the cached text regarding the sets info for the given item.
     if not setID then return end
-    local line1;
+    local line1
     if CanIMogIt.cache:GetSetsSumRatioTextValue(setID) then
         line1 = CanIMogIt.cache:GetSetsSumRatioTextValue(setID)
         return line1
@@ -1002,7 +1002,7 @@ function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
     local appearanceID, sourceID = CanIMogIt:GetAppearanceID(itemLink)
     if sourceID == nil then return end
 
-    local hasTransmog;
+    local hasTransmog
     hasTransmog = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID)
 
     return hasTransmog
@@ -1187,7 +1187,7 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         return exception_text, exception_text
     end
 
-    local text, unmodifiedText;
+    local text, unmodifiedText
 
     local itemData = CanIMogIt:GetItemData(itemLink)
     if itemData == nil then return end

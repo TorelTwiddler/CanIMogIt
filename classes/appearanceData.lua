@@ -75,7 +75,7 @@ end
 function CanIMogIt.AppearanceData:CalculateBindStateText(bindData)
     local isItemWarbound = bindData.type == CanIMogIt.BindTypes.Warbound
     local isItemSoulbound = bindData.type == CanIMogIt.BindTypes.Soulbound
-    local text, unmodifiedText;
+    local text, unmodifiedText
     if self.status == CanIMogIt.KNOWN then
         if isItemWarbound then
             -- Pink Check

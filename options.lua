@@ -116,8 +116,8 @@ CanIMogItOptions_DisplayData = {
 }
 
 
-CanIMogIt.frame = CreateFrame("Frame", "CanIMogItOptionsFrame", InterfaceOptionsFramePanelContainer);
-CanIMogIt.frame.name = "Can I Mog It?";
+CanIMogIt.frame = CreateFrame("Frame", "CanIMogItOptionsFrame", InterfaceOptionsFramePanelContainer)
+CanIMogIt.frame.name = "Can I Mog It?"
 local category = Settings.RegisterCanvasLayoutCategory(CanIMogIt.frame, CanIMogIt.frame.name)
 CanIMogIt.settingsCategory = category
 Settings.RegisterAddOnCategory(category)
@@ -165,7 +165,7 @@ table.insert(EVENTS, "AUCTION_HOUSE_NEW_RESULTS_RECEIVED")
 
 
 for i, event in pairs(EVENTS) do
-    CanIMogIt.frame:RegisterEvent(event);
+    CanIMogIt.frame:RegisterEvent(event)
 end
 
 CanIMogIt.Events = {}
@@ -548,14 +548,14 @@ function CanIMogIt.frame.Loaded()
     end
     -- Set missing options from the defaults if the version is out of date.
     if (CanIMogItOptions["version"] < CanIMogIt_OptionsVersion) then
-        local CanIMogItOptions_temp = CanIMogItOptions_Defaults.options;
+        local CanIMogItOptions_temp = CanIMogItOptions_Defaults.options
         for k,v in pairs(CanIMogItOptions) do
             if (CanIMogItOptions_Defaults.options[k]) then
-                CanIMogItOptions_temp[k] = v;
+                CanIMogItOptions_temp[k] = v
             end
         end
-        CanIMogItOptions_temp["version"] = CanIMogIt_OptionsVersion;
-        CanIMogItOptions = CanIMogItOptions_temp;
+        CanIMogItOptions_temp["version"] = CanIMogIt_OptionsVersion
+        CanIMogItOptions = CanIMogItOptions_temp
     end
     createOptionsMenu()
     CanIMogIt.MarkAsLoaded()
