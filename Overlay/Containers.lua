@@ -25,7 +25,8 @@ end
 local function GetBagAndSlot(frame)
     local bag, slot
     if frame:GetParent():GetParent() then
-        slot, bag = frame:GetParent():GetSlotAndBagID()
+        bag = frame:GetParent():GetParent():GetID()
+        slot = frame:GetParent():GetID()
     end
     return bag, slot
 end
@@ -40,8 +41,7 @@ function ContainerFrame_CIMIUpdateIcon(cimiFrame)
     end
     C_Timer.After(0, function()
         local bag, slot = GetBagAndSlot(cimiFrame)
-        local itemLink = C_Container.GetContainerItemLink(bag, slot)
-        CIMI_SetIcon(cimiFrame, ContainerFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
+        CIMI_SetIcon(cimiFrame, ContainerFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
     end)
 end
 
@@ -88,6 +88,29 @@ end
 ----------------------------
 -- Begin adding to frames --
 ----------------------------
+
+local function HookOverlayContainers(event)
+    if event ~= "PLAYER_LOGIN" then return end
+
+    -- Add hook for each bag item.
+    for i=1,NUM_CONTAINER_FRAMES do
+        for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
+            local frame = _G["ContainerFrame"..i.."Item"..j]
+            if frame then
+                CIMI_AddToFrame(frame, ContainerFrame_CIMIUpdateIcon)
+            end
+        end
+    end
+
+    -- Add hook for the main bank frame.
+    for i=1,NUM_BANKGENERIC_SLOTS do
+        local frame = _G["BankFrameItem"..i]
+        if frame then
+            CIMI_AddToFrame(frame, ContainerFrame_CIMIUpdateIcon)
+        end
+    end
+end
+CanIMogIt.frame:AddSmartEvent(HookOverlayContainers, {"PLAYER_LOGIN"})
 
 local function GetNameOrID(frame)
     if frame.GetName and frame:GetName() then
