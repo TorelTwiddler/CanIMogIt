@@ -775,7 +775,7 @@ function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
     if slotName == nil then return end
     local isArmorCosmetic = CanIMogIt:IsArmorCosmetic(itemLink)
     if isArmorCosmetic == nil then return end
-    if armorTypeSlots[slotName] and isArmorCosmetic == false then
+    if isArmorCosmetic == false and armorTypeSlots[slotName] then
         return playerArmorTypeID == CanIMogIt:GetItemSubClassName(itemLink)
     else
         return true
@@ -961,13 +961,50 @@ function CanIMogIt:PlayerKnowsTransmogFromItem(itemLink)
 end
 
 
-function CanIMogIt:CharacterCanLearnTransmog(itemLink)
-    -- Returns whether the player can learn the item or not.
-    local sourceID = CanIMogIt:GetSourceID(itemLink)
-    if sourceID == nil then return end
-    if select(2, C_TransmogCollection.PlayerCanCollectSource(sourceID)) then
+local function IsHeirloomRedText(redText, itemLink)
+    local itemID = CanIMogIt:GetItemID(itemLink)
+    if redText == _G["ITEM_SPELL_KNOWN"] and C_Heirloom.IsItemHeirloom(itemID) then
         return true
     end
+end
+
+
+local function IsLevelRequirementRedText(redText)
+    if string.match(redText, _G["ITEM_MIN_LEVEL"]) then
+        return true
+    end
+end
+
+
+function CanIMogIt:CharacterCanLearnTransmog(itemLink)
+    -- Returns whether the current character can learn the item or not.
+    local sourceID = CanIMogIt:GetSourceID(itemLink)
+    if sourceID == nil then return end
+
+    if CanIMogIt:IsItemArmor(itemLink) then
+        if CanIMogIt:IsArmorCosmetic(itemLink) or CanIMogIt:IsArmorAppropriateForPlayer(itemLink) then
+            return true
+        end
+
+        return false
+    end
+
+    local redText = CIMIScanTooltip:GetRedText(itemLink)
+    if redText == "" or redText == nil then
+        return true
+    elseif IsHeirloomRedText(redText, itemLink) then
+        -- Special case for heirloom items. They always have red text if it was learned.
+        return true
+    elseif IsLevelRequirementRedText(redText) then
+        -- We ignore the level, since it will be equippable eventually.
+        return true
+    end
+
+    -- This SHOULD work, but this API returns true for basically EVERYTHING since the start of Mists (stuck on Retail logic?)
+    --[[ if select(2, C_TransmogCollection.PlayerCanCollectSource(sourceID)) then
+        return true
+    end ]]
+
     return false
 end
 
