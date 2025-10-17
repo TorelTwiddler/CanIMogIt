@@ -92,7 +92,7 @@ local KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =           L["Learned for a differe
 local KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE =       L["Learned for a different class and item."]
 local UNKNOWABLE_SOULBOUND =                            L["Cannot learn: Soulbound"] .. " " -- subClass
 local UNKNOWABLE_BY_CHARACTER =                         L["Cannot learn:"] .. " " -- subClass
-local UNKNOWABLE_BY_CHARACTER_WARBOUND =                             L["Cannot learn:"] .. " " -- subClass
+local UNKNOWABLE_BY_CHARACTER_WARBOUND =                L["Cannot learn:"] .. " " -- subClass
 local CAN_BE_LEARNED_BY =                               L["Can be learned by:"] -- list of classes
 local UNKNOWN =                                         L["Not learned."]
 local PARTIAL =                                         UNKNOWN
@@ -118,12 +118,12 @@ CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND =  CanIMogIt.KNOWN_BUT_
 -- CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =        CanIMogIt.QUESTIONABLE_ICON .. CanIMogIt.YELLOW .. CANNOT_DETERMINE
 CanIMogIt.UNKNOWABLE_SOULBOUND =                            CanIMogIt.UNKNOWABLE_SOULBOUND_ICON .. CanIMogIt.BLUE_GREEN .. UNKNOWABLE_SOULBOUND
 CanIMogIt.UNKNOWABLE_BY_CHARACTER =                         CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON .. CanIMogIt.YELLOW .. UNKNOWABLE_BY_CHARACTER
-CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND =                             CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND_ICON .. CanIMogIt.PINK .. UNKNOWABLE_BY_CHARACTER_WARBOUND
+CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND =                CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND_ICON .. CanIMogIt.PINK .. UNKNOWABLE_BY_CHARACTER_WARBOUND
 CanIMogIt.UNKNOWN =                                         CanIMogIt.UNKNOWN_ICON .. CanIMogIt.RED_ORANGE .. UNKNOWN
 CanIMogIt.PARTIAL =                                         CanIMogIt.PARTIAL_ICON .. CanIMogIt.RED_ORANGE .. PARTIAL
 CanIMogIt.NOT_TRANSMOGABLE =                                CanIMogIt.NOT_TRANSMOGABLE_ICON .. CanIMogIt.GRAY .. NOT_TRANSMOGABLE
 CanIMogIt.NOT_TRANSMOGABLE_BOE =                            CanIMogIt.NOT_TRANSMOGABLE_BOE_ICON .. CanIMogIt.YELLOW .. NOT_TRANSMOGABLE
-CanIMogIt.NOT_TRANSMOGABLE_WARBOUND =                            CanIMogIt.NOT_TRANSMOGABLE_WARBOUND_ICON .. CanIMogIt.PINK .. NOT_TRANSMOGABLE
+CanIMogIt.NOT_TRANSMOGABLE_WARBOUND =                       CanIMogIt.NOT_TRANSMOGABLE_WARBOUND_ICON .. CanIMogIt.PINK .. NOT_TRANSMOGABLE
 CanIMogIt.CANNOT_DETERMINE =                                CanIMogIt.QUESTIONABLE_ICON
 
 

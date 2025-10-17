@@ -160,10 +160,6 @@ local APPEARANCES_ITEMS_TAB = 1
 local APPEARANCES_SETS_TAB = 2
 
 
--- Get the name for Cosmetic. Uses http://www.wowhead.com/item=130064/deadeye-monocle.
-local COSMETIC_NAME = select(3, C_Item.GetItemInfoInstant(130064))
-
-
 -------------------------
 -- Text related tables --
 -------------------------
@@ -202,8 +198,8 @@ local unknownTexts = {
 -----------------------------
 
 -- This is a list of exceptions with a key of their itemID and a value of what their result should be.
-
-local exceptionItems = {
+-- NOTE: not useful yet for Classic
+--[[ local exceptionItems = {
     [HEAD] = {
         -- [134110] = CanIMogIt.KNOWN, -- Hidden Helm
         [133320] = CanIMogIt.NOT_TRANSMOGABLE, -- Illidari Blindfold (Alliance)
@@ -258,7 +254,7 @@ local exceptionItems = {
     [TABARD] = {
         -- [142504] = CanIMogIt.KNOWN, -- Hidden Tabard
     },
-}
+} ]]
 
 
 -----------------------------
@@ -266,33 +262,6 @@ local exceptionItems = {
 -----------------------------
 
 CanIMogIt.Utils = {}
-
-
-function CanIMogIt.Utils.pairsByKeys (t, f)
-    -- returns a sorted iterator for a table.
-    -- https://www.lua.org/pil/19.3.html
-    -- Why is it not a built in function? ¯\_(ツ)_/¯
-    local a = {}
-    for n in pairs(t) do table.insert(a, n) end
-        table.sort(a, f)
-        local i = 0      -- iterator variable
-        local iter = function ()   -- iterator function
-        i = i + 1
-        if a[i] == nil then return nil
-            else return a[i], t[a[i]]
-        end
-    end
-    return iter
-end
-
-
-function CanIMogIt.Utils.copyTable (t)
-    -- shallow-copy a table
-    if type(t) ~= "table" then return t end
-    local target = {}
-    for k, v in pairs(t) do target[k] = v end
-    return target
-end
 
 
 function CanIMogIt.Utils.spairs(t, order)
@@ -347,26 +316,6 @@ function CanIMogIt.Utils.strsplit(delimiter, text)
 end
 
 
-function CanIMogIt.Utils.tablelength(T)
-    -- Count the number of keys in a table, because tables don't bother
-    -- counting themselves if it's filled with key-value pairs...
-    -- ¯\_(ツ)_/¯
-    local count = 0
-    for _ in pairs(T) do count = count + 1 end
-    return count
-end
-
-
-function CanIMogIt.Utils.GetKeys(T)
-    --- Get an array of the keys from a table.
-    local result = {}
-    for key, _ in pairs(T) do
-        table.insert(result, key)
-    end
-    return result
-end
-
-
 -----------------------------
 -- CanIMogIt Core methods  --
 -----------------------------
@@ -405,7 +354,7 @@ function CanIMogIt:GetSets()
 end
 
 
-function CanIMogIt.GetRatio(setID)
+function CanIMogIt:GetRatio(setID)
     -- Gets the count of known and total sources for the given setID.
     local have = 0
     local total = 0
@@ -419,7 +368,7 @@ function CanIMogIt.GetRatio(setID)
 end
 
 
-function CanIMogIt.GetRatioTextColor(have, total)
+function CanIMogIt:GetRatioTextColor(have, total)
     if have == total then
         return CanIMogIt.BLUE
     elseif have > 0 then
@@ -430,11 +379,11 @@ function CanIMogIt.GetRatioTextColor(have, total)
 end
 
 
-function CanIMogIt.GetRatioText(setID)
+function CanIMogIt:GetRatioText(setID)
     -- Gets the ratio text (and color) of known/total for the given setID.
-    local have, total = CanIMogIt.GetRatio(setID)
+    local have, total = CanIMogIt:GetRatio(setID)
 
-    local ratioText = CanIMogIt.GetRatioTextColor(have, total)
+    local ratioText = CanIMogIt:GetRatioTextColor(have, total)
     ratioText = ratioText .. "(" .. have .. "/" .. total .. ")"
     return ratioText
 end
@@ -484,7 +433,7 @@ function CanIMogIt:CalculateSetsText(itemLink)
 
     local set = C_TransmogSets.GetSetInfo(setID)
 
-    local ratioText = CanIMogIt.GetRatioText(setID)
+    local ratioText = CanIMogIt:GetRatioText(setID)
 
     -- Build the classSetIDs table, if it hasn't been built yet.
     if classSetIDs == nil then
@@ -568,8 +517,8 @@ function CanIMogIt.GetVariantSetsTexts(variantSets)
     local variantSetsTexts = {}
 
     for i, variantSet in CanIMogIt.Utils.spairs(variantSets, CanIMogIt.SortSets) do
-        local variantHave, variantTotal = CanIMogIt.GetRatio(variantSet.setID)
-        local color = CanIMogIt.GetRatioTextColor(variantHave, variantTotal)
+        local variantHave, variantTotal = CanIMogIt:GetRatio(variantSet.setID)
+        local color = CanIMogIt:GetRatioTextColor(variantHave, variantTotal)
         variantSetsTexts[#variantSetsTexts+1] = color .. variantHave .. "/" .. variantTotal
     end
 
@@ -875,10 +824,10 @@ function CanIMogIt:GetExceptionText(itemLink)
     local itemID = CanIMogIt:GetItemID(itemLink)
     local slotName = CanIMogIt:GetItemSlotName(itemLink)
     if slotName == nil then return end
-    local slotExceptions = exceptionItems[slotName]
-    if slotExceptions then
-        return slotExceptions[itemID]
-    end
+    -- local slotExceptions = exceptionItems[slotName]
+    -- if slotExceptions then
+    --     return slotExceptions[itemID]
+    -- end
 end
 
 
