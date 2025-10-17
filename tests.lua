@@ -156,10 +156,111 @@ local testsBriarlynn = {
     },
 }
 
+local testsWouter = {
+    ["Learned"] = {
+        ["itemID"] = 87124, -- Tunic of the Thousandfold Blades (Heroic)
+        ["expected"] = CanIMogIt.KNOWN,
+    },
+    ["Shirt"] = {
+        ["itemID"] = 89191, -- Artisan Initiate's Shirt
+        ["expected"] = CanIMogIt.KNOWN,
+    },
+    ["Tabard"] = {
+        ["itemID"] = 23192, -- Tabard of the Scarlet Crusade
+        ["expected"] = CanIMogIt.KNOWN,
+    },
+    --[[ ["Cosmetic"] = {
+        ["itemID"] = 22206, -- Bouquet of Red Roses
+        ["expected"] = CanIMogIt.KNOWN_WARBOUND,
+    }, ]]
+    ["Not Learned"] = {
+        ["itemID"] = 104640, -- Kor'kron Elite Skullmask (Heroic)
+        ["expected"] = CanIMogIt.UNKNOWN,
+    },
+    ["Cannot learn: Classes: Name"] = {
+        ["itemID"] = 98903, -- Crafted Malevolent Gladiator's Linked Spaulders
+        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER,
+    },
+    --[[ ["Learned from a Cosmetic source"] = {
+        ["itemID"] = 6612,
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE,
+    }, ]]
+    --[[ ["All sources not showing up in sources tooltip"] = {
+        ["itemID"] = 116913,
+        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
+    }, ]]
+    --[[ ["Exception items (Cannot be learned, nil sourceID & appearanceID)"] = {
+        ["itemID"] = 119556,
+        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
+    }, ]]
+    ["BoE: Not Transmogable: Grey Item"] = {
+        ["itemID"] = 1820,  -- Wooden Maul
+        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE_BOE,
+    },
+    ["BoE: Learned from another item"] = {
+        ["itemID"] = 18743,  -- Gracious Cape
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE,
+    },
+    ["BoE: Learned for a different class"] = {
+        ["itemID"] = 15268,  -- Twin-Bladed Axe
+        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE,
+    },
+    ["BoE: Learned for a different item and class"] = {
+        ["itemID"] = 9491,  -- Hotshot's Pilot GLoves
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE,
+    },
+    ["BoE: Not Learned"] = {
+        ["itemID"] = 9422,  -- Shadowforge Bushmaster
+        ["expected"] = CanIMogIt.UNKNOWN,
+    },
+    ["BoP: Not Transmogable: Grey Item"] = {
+        ["itemID"] = 34685,  -- Vestments of Summer
+        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
+    },
+    ["BoP: Learned for a different class"] = {
+        ["itemID"] = 13346, -- Robes of the Exalted
+        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER,
+    },
+    ["BoP: Learned for a different class and item"] = {
+        ["itemID"] = 11924, -- Robes of the Royal Crown
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER,
+    },
+    ["BoP: Cannot Learn"] = {
+        ["itemID"] = 104657,    -- Cowl of Smoking Dreams (Heroic)
+        ["expected"] = CanIMogIt.UNKNOWABLE_SOULBOUND,
+    },
+    ["BoP: Not Transmogable"] = {
+        ["itemID"] = 88710, -- Nat's Hat
+        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
+    },
+    ["Account: Learned"] = {
+        ["itemID"] = 64460, -- Nifflevar Bearded Axe
+        ["expected"] = CanIMogIt.KNOWN_WARBOUND,
+    },
+    ["Account: Learned from another item"] = {
+        ["itemID"] = 93858, -- Brawler's Bladed Claws
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND,
+    },
+    ["Account: Learned for a different class"] = {
+        ["itemID"] = 86196, -- Ancient Jinyu Staff
+        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND,
+    },
+    ["Account: Learned for a different class and item"] = {
+        ["itemID"] = 64377, -- Zin'rokh, Destroyer of Worlds
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND,
+    },
+    -- TODO: find an item which suits this case
+    --[[ ["Account: Cannot learn"] = {
+        ["itemID"] = 64904, -- Ring of the Boy Emperor
+        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND,
+    }, ]]
+}
+
 local tests = {
     ["Adele"] = testsAdele,
     ["Kamadyn"] = testsKamadyn,
     ["Briarlynn"] = testsBriarlynn,
+    ["Wouter"] = testsWouter,
 }
 
 
