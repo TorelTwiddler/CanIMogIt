@@ -42,7 +42,7 @@ local function GetRedText(text)
     if text and text:GetText() then
         local r,g,b = text:GetTextColor()
         -- Color values from RED_FONT_COLOR (see FrameXML/FontStyles.xml)
-        if math.floor(r*256) == 255 and math.floor(g*256) == 32 and math.floor(b*256) == 32 then
+        if math.floor(r*256) == 256 and math.floor(g*256) == 32 and math.floor(b*256) == 32 then
             return text:GetText()
         end
     end
