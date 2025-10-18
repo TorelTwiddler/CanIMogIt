@@ -193,7 +193,7 @@ local testsWouter = {
         ["itemID"] = 119556,
         ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
     }, ]]
-    ["BoE: Not Transmogable: Grey Item"] = {
+    ["BoE - Grey item: Cannot be learned"] = {
         ["itemID"] = 1820,  -- Wooden Maul
         ["expected"] = CanIMogIt.NOT_TRANSMOGABLE_BOE,
     },
@@ -205,7 +205,7 @@ local testsWouter = {
         ["itemID"] = 15268,  -- Twin-Bladed Axe
         ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE,
     },
-    ["BoE: Learned for a different item and class"] = {
+    ["BoE: Learned for a different class and item"] = {
         ["itemID"] = 9491,  -- Hotshot's Pilot GLoves
         ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE,
     },
@@ -213,7 +213,7 @@ local testsWouter = {
         ["itemID"] = 9422,  -- Shadowforge Bushmaster
         ["expected"] = CanIMogIt.UNKNOWN,
     },
-    ["BoP: Not Transmogable: Grey Item"] = {
+    ["BoP - Grey Item: Cannot be learned"] = {
         ["itemID"] = 34685,  -- Vestments of Summer
         ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
     },
@@ -254,6 +254,14 @@ local testsWouter = {
         ["itemID"] = 64904, -- Ring of the Boy Emperor
         ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND,
     }, ]]
+    ["Edge Case - Shields - BoP: Cannot learn"] = {
+        ["itemID"] = 104560,  -- Bulwark of the Fallen General (Heroic)
+        ["expected"] = CanIMogIt.UNKNOWABLE_SOULBOUND,
+    },
+    ["Edge Case - Shields - BoE: Cannot Learn"] = {
+        ["itemID"] = 22198,  -- Jagged Obsidian Shield
+        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER,
+    },
 }
 
 local tests = {
