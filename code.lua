@@ -768,17 +768,28 @@ function CanIMogIt:IsArmorCosmetic(itemLink)
     return CanIMogIt:IsArmorSubClassID(COSMETIC, itemLink)
 end
 
+-- Bandaid fix for MoP to filter shields for classes that can't wear them
+local shieldClasses = {
+    1,  -- Warrior
+    2,  -- Paladin
+    7,  -- Shaman
+}
 
+local playerClassID = select(3, UnitClass("player"));
 function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
     local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
     local slotName = CanIMogIt:GetItemSlotName(itemLink)
     if slotName == nil then return end
+
     local isArmorCosmetic = CanIMogIt:IsArmorCosmetic(itemLink)
     if isArmorCosmetic == nil then return end
     if isArmorCosmetic == false and armorTypeSlots[slotName] then
         return playerArmorTypeID == CanIMogIt:GetItemSubClassName(itemLink)
     else
-        return true
+        if slotName == SHIELD and shieldClasses[playerClassID] then
+            return true
+        end
+        return false
     end
 end
 
