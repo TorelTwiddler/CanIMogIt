@@ -4,32 +4,6 @@ local L = CanIMogIt.L
 
 
 --------------------------------------------
--- Database scan speed values             --
---------------------------------------------
-
-
--- Instant - Only the best of connections, or you WILL crash with Error #134
--- CanIMogIt.throttleTime = 0.25
--- CanIMogIt.bufferMax = 10000
-
--- Near Instant - May cause your game to crash with Error #134
--- CanIMogIt.throttleTime = 0.25
--- CanIMogIt.bufferMax = 200
-
--- Fast - Less likely to cause lag or crash
--- CanIMogIt.throttleTime = 0.1
--- CanIMogIt.bufferMax = 50
-
--- Medium - Most likely safe
-CanIMogIt.throttleTime = 0.1
-CanIMogIt.bufferMax = 25
-
--- Slow - Will take a long time, but be 100% safe. Use if you have a poor connection.
--- CanIMogIt.throttleTime = 0.5
--- CanIMogIt.bufferMax = 5
-
-
---------------------------------------------
 -- Tooltip icon, color and text constants --
 --------------------------------------------
 
@@ -58,8 +32,6 @@ CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND_ICON = "|TInterface\\Addons\\CanI
 CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND_ICON_OVERLAY = "Interface\\Addons\\CanIMogIt\\Icons\\UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND_OVERLAY"
 CanIMogIt.UNKNOWN_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\UNKNOWN:0|t "
 CanIMogIt.UNKNOWN_ICON_OVERLAY = "Interface\\Addons\\CanIMogIt\\Icons\\UNKNOWN_OVERLAY"
-CanIMogIt.PARTIAL_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\PARTIAL:0|t "
-CanIMogIt.PARTIAL_ICON_OVERLAY = "Interface\\Addons\\CanIMogIt\\Icons\\PARTIAL_OVERLAY"
 CanIMogIt.NOT_TRANSMOGABLE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE:0|t "
 CanIMogIt.NOT_TRANSMOGABLE_ICON_OVERLAY = "Interface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE_OVERLAY"
 CanIMogIt.NOT_TRANSMOGABLE_BOE_ICON = "|TInterface\\Addons\\CanIMogIt\\Icons\\NOT_TRANSMOGABLE_BOE:0|t "
@@ -93,9 +65,7 @@ local KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE =       L["Learned for a differe
 local UNKNOWABLE_SOULBOUND =                            L["Cannot learn: Soulbound"] .. " " -- subClass
 local UNKNOWABLE_BY_CHARACTER =                         L["Cannot learn:"] .. " " -- subClass
 local UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND =            L["Cannot learn:"] .. " " -- subClass
-local CAN_BE_LEARNED_BY =                               L["Can be learned by:"] -- list of classes
 local UNKNOWN =                                         L["Not learned."]
-local PARTIAL =                                         UNKNOWN
 local NOT_TRANSMOGABLE =                                L["Cannot be learned."]
 local NOT_TRANSMOGABLE_BOE =                            L["Cannot be learned."]
 local NOT_TRANSMOGABLE_ACCOUNTBOUND =                   L["Cannot be learned."]
@@ -115,12 +85,10 @@ CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_ACCOUNTBOUND =             CanIMogIt.KNOWN_
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =               CanIMogIt.KNOWN_BUT_SOULBOUND_ICON .. CanIMogIt.BLUE_GREEN .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE =           CanIMogIt.KNOWN_BUT_BOE_ICON .. CanIMogIt.YELLOW .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_ACCOUNTBOUND =  CanIMogIt.KNOWN_BUT_ACCOUNTBOUND_ICON .. CanIMogIt.PINK .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
--- CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =            CanIMogIt.QUESTIONABLE_ICON .. CanIMogIt.YELLOW .. CANNOT_DETERMINE
 CanIMogIt.UNKNOWABLE_SOULBOUND =                                CanIMogIt.UNKNOWABLE_SOULBOUND_ICON .. CanIMogIt.BLUE_GREEN .. UNKNOWABLE_SOULBOUND
 CanIMogIt.UNKNOWABLE_BY_CHARACTER =                             CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON .. CanIMogIt.YELLOW .. UNKNOWABLE_BY_CHARACTER
 CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND =                CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND_ICON .. CanIMogIt.PINK .. UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND
 CanIMogIt.UNKNOWN =                                             CanIMogIt.UNKNOWN_ICON .. CanIMogIt.RED_ORANGE .. UNKNOWN
-CanIMogIt.PARTIAL =                                             CanIMogIt.PARTIAL_ICON .. CanIMogIt.RED_ORANGE .. PARTIAL
 CanIMogIt.NOT_TRANSMOGABLE =                                    CanIMogIt.NOT_TRANSMOGABLE_ICON .. CanIMogIt.GRAY .. NOT_TRANSMOGABLE
 CanIMogIt.NOT_TRANSMOGABLE_BOE =                                CanIMogIt.NOT_TRANSMOGABLE_BOE_ICON .. CanIMogIt.YELLOW .. NOT_TRANSMOGABLE
 CanIMogIt.NOT_TRANSMOGABLE_ACCOUNTBOUND =                       CanIMogIt.NOT_TRANSMOGABLE_ACCOUNTBOUND_ICON .. CanIMogIt.PINK .. NOT_TRANSMOGABLE
@@ -140,13 +108,10 @@ CanIMogIt.tooltipIcons = {
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.KNOWN_BUT_SOULBOUND_ICON,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE] = CanIMogIt.KNOWN_BUT_BOE_ICON,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_ACCOUNTBOUND] = CanIMogIt.KNOWN_BUT_ACCOUNTBOUND_ICON,
-    -- [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.QUESTIONABLE_ICON,
     [CanIMogIt.UNKNOWABLE_SOULBOUND] = CanIMogIt.UNKNOWABLE_SOULBOUND_ICON,
     [CanIMogIt.UNKNOWABLE_BY_CHARACTER] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON,
     [CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND_ICON,
-    -- [CanIMogIt.CAN_BE_LEARNED_BY] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON,
     [CanIMogIt.UNKNOWN] = CanIMogIt.UNKNOWN_ICON,
-    [CanIMogIt.PARTIAL] = CanIMogIt.PARTIAL_ICON,
     [CanIMogIt.NOT_TRANSMOGABLE] = CanIMogIt.NOT_TRANSMOGABLE_ICON,
     [CanIMogIt.NOT_TRANSMOGABLE_BOE] = CanIMogIt.NOT_TRANSMOGABLE_BOE_ICON,
     [CanIMogIt.NOT_TRANSMOGABLE_ACCOUNTBOUND] = CanIMogIt.NOT_TRANSMOGABLE_ACCOUNTBOUND_ICON,
@@ -168,24 +133,15 @@ CanIMogIt.tooltipOverlayIcons = {
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.KNOWN_BUT_SOULBOUND_ICON_OVERLAY,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE] = CanIMogIt.KNOWN_BUT_BOE_ICON_OVERLAY,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_ACCOUNTBOUND] = CanIMogIt.KNOWN_BUT_ACCOUNTBOUND_ICON_OVERLAY,
-    -- [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.QUESTIONABLE_ICON_OVERLAY,
     [CanIMogIt.UNKNOWABLE_SOULBOUND] = CanIMogIt.UNKNOWABLE_SOULBOUND_ICON_OVERLAY,
     [CanIMogIt.UNKNOWABLE_BY_CHARACTER] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON_OVERLAY,
     [CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND_ICON_OVERLAY,
-    -- [CanIMogIt.CAN_BE_LEARNED_BY] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON_OVERLAY,
     [CanIMogIt.UNKNOWN] = CanIMogIt.UNKNOWN_ICON_OVERLAY,
-    [CanIMogIt.PARTIAL] = CanIMogIt.PARTIAL_ICON_OVERLAY,
     [CanIMogIt.NOT_TRANSMOGABLE] = CanIMogIt.NOT_TRANSMOGABLE_ICON_OVERLAY,
     [CanIMogIt.NOT_TRANSMOGABLE_BOE] = CanIMogIt.NOT_TRANSMOGABLE_BOE_ICON_OVERLAY,
     [CanIMogIt.NOT_TRANSMOGABLE_ACCOUNTBOUND] = CanIMogIt.NOT_TRANSMOGABLE_ACCOUNTBOUND_ICON_OVERLAY,
     [CanIMogIt.CANNOT_DETERMINE] = CanIMogIt.QUESTIONABLE_ICON_OVERLAY,
 }
-
-
--- Other text
-
-CanIMogIt.DATABASE_START_UPDATE_TEXT = L["Updating appearances database."]
-CanIMogIt.DATABASE_DONE_UPDATE_TEXT = L["Items updated: "] -- followed by a number
 
 
 --------------------------------------------
@@ -227,19 +183,18 @@ CanIMogIt.Expansions.BC = 1
 CanIMogIt.Expansions.WRATH = 2
 CanIMogIt.Expansions.CATA = 3
 CanIMogIt.Expansions.MISTS = 4
-CanIMogIt.Expansions.WOD = 5
+--[[ CanIMogIt.Expansions.WOD = 5
 CanIMogIt.Expansions.LEGION = 6
 CanIMogIt.Expansions.BFA = 7
-CanIMogIt.Expansions.SHADOWLANDS = 8
+CanIMogIt.Expansions.SHADOWLANDS = 8 ]]
 
 ---- Others ----
-CanIMogIt.NUM_ENCOUNTER_JOURNAL_ENCOUNTER_LOOT_FRAMES = 10 -- Blizzard functions are locals
 CanIMogIt.NUM_MAIL_INBOX_ITEMS = 7
 -- Mail Attachments = ATTACHMENTS_MAX_RECEIVE
 -- Merchant Items = MERCHANT_ITEMS_PER_PAGE
 -- Trade Skill = no constants
 -- Loot Roll = NUM_GROUP_LOOT_FRAMES -- Blizzard removed in patch 10.1.5, using our own constant
-CanIMogIt.NUM_GROUP_LOOT_FRAMES = 4
+CanIMogIt.NUM_GROUP_LOOT_FRAMES = NUM_GROUP_LOOT_FRAMES or 4
 
 -- Built-in colors
 CanIMogIt.BLIZZARD_RED = "|cffff1919"
