@@ -21,7 +21,7 @@ if C_AddOns.IsAddOnLoaded("Bagnon") then
         local itemLink = self:GetParent():GetItem()
         if not itemLink then
             -- This may be guild bank
-            itemLink = self:GetParent():GetInfo().link
+            itemLink = self:GetParent():GetInfo().hyperlink
         end
         local cached = self:GetParent().info.cached
         -- Need to prevent guild bank items from using bag/slot from Bagnon,
