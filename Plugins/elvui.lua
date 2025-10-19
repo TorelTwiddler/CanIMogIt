@@ -14,19 +14,21 @@ if C_AddOns.IsAddOnLoaded("ElvUI") then
             self:SetScript("OnUpdate", nil)
             return
         end
-        local slot, bag = self:GetParent():GetSlotAndBagID()
+        local bag, slot = self:GetParent().BagID, self:GetParent().SlotID
         CIMI_SetIcon(self, ElvUI_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
     end
 
     ----------------------------
     -- Begin adding to frames --
     ----------------------------
-
+     
     function CIMI_ElvUIAddFrame(event)
         if event ~= "PLAYER_LOGIN" and event ~= "BANKFRAME_OPENED" and not CanIMogIt.Events[event] then return end
         -- Add to frames
+        -- For some reason bag container frames start at -1 and bank frames start at 0
+
         -- Bags
-        for i=0,NUM_CONTAINER_FRAMES do
+        for i=-1,NUM_CONTAINER_FRAMES do
             for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
                 local frame = _G["ElvUI_ContainerFrameBag"..i.."Slot"..j]
                 if frame then
@@ -37,12 +39,19 @@ if C_AddOns.IsAddOnLoaded("ElvUI") then
 
         local function AddToBankFrames()
             -- This is a separate function, so that we can add a delay before these are added.
+            for i=0,NUM_CONTAINER_FRAMES do
+                for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
+                    local frame = _G["ElvUI_BankContainerFrameBag"..i.."Slot"..j]
+                    if frame then
+                        CIMI_AddToFrame(frame, ElvUI_CIMIUpdateIcon)
+                    end
+                end
+            end
         end
 
         -- The ElvUI bank frames don't exist when the BANKFRAME_OPENED event occurs,
         -- so need to wait a moment first.
         C_Timer.After(.5, function() AddToBankFrames() end)
-
     end
 
     CanIMogIt.frame:AddSmartEvent(CIMI_ElvUIAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
@@ -54,9 +63,18 @@ if C_AddOns.IsAddOnLoaded("ElvUI") then
     function CIMI_ElvUIUpdate()
         -- Update event
         -- Bags
-        for i=0,NUM_CONTAINER_FRAMES do
+        for i=-1,NUM_CONTAINER_FRAMES do
             for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
                 local frame = _G["ElvUI_ContainerFrameBag"..i.."Slot"..j]
+                if frame then
+                    ElvUI_CIMIUpdateIcon(frame.CanIMogItOverlay)
+                end
+            end
+        end
+        -- Bank
+        for i=0,NUM_CONTAINER_FRAMES do
+            for j=1,CanIMogIt.MAX_CONTAINER_ITEMS do
+                local frame = _G["ElvUI_BankContainerFrameBag"..i.."Slot"..j]
                 if frame then
                     ElvUI_CIMIUpdateIcon(frame.CanIMogItOverlay)
                 end
