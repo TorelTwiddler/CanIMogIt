@@ -1,7 +1,7 @@
 ## Interface: 50501
 ## Title: Can I Mog It?
 ## IconTexture: Interface\Addons\CanIMogIt\Icons\KNOWN
-## Author: TorelTwiddler, Ami Yuy
+## Author: TorelTwiddler, Ami Yuy, Wouter
 ## Version: @project-version@
 ## Category-enUS: Collections
 ## Category-deDE: Kriegsmeutesammlungen
