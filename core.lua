@@ -22,22 +22,6 @@ CanIMogIt.L = CanIMogIt.L or setmetatable({}, {
 })
 
 
-function CanIMogIt:RegisterLocale(locale, tbl)
-    if not tbl then return end
-    if locale == "enUS" or locale == GetLocale() then
-        for k,v in pairs(tbl) do
-            if v == true then
-                self.L[k] = k
-            elseif type(v) == "string" then
-                self.L[k] = v
-            else
-                self.L[k] = k
-            end
-        end
-    end
-end
-
-
 -- Overwrite Ace3's messaging system, since it doesn't work
 -- (or at least I can't figure out how it works).
 CanIMogIt.messageFunctions = {}

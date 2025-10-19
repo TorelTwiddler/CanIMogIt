@@ -5,38 +5,8 @@
 local _G = _G
 local L = CanIMogIt.L
 
-local CREATE_DATABASE_TEXT = L["Can I Mog It? Important Message: Please log into all of your characters to compile complete transmog appearance data."]
-
-StaticPopupDialogs["CANIMOGIT_NEW_DATABASE"] = {
-    text = CREATE_DATABASE_TEXT,
-    button1 = L["Okay, I'll go log onto all of my toons!"],
-    timeout = 0,
-    whileDead = true,
-    hideOnEscape = true,
-    preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
-}
-
-
-local DATABASE_MIGRATION = "Can I Mog It?" .. "\n\n" .. L["We need to update our database. This may freeze the game for a few seconds."]
-
-
-function CanIMogIt.CreateMigrationPopup(dialogName, onAcceptFunc)
-    StaticPopupDialogs[dialogName] = {
-        text = DATABASE_MIGRATION,
-        button1 = L["Okay"],
-        button2 = L["Ask me later"],
-        OnAccept = onAcceptFunc,
-        timeout = 0,
-        whileDead = true,
-        hideOnEscape = true,
-        preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
-    }
-    StaticPopup_Show(dialogName)
-end
-
-
 -- OptionsVersion: Keep this as an integer, so comparison is easy.
-CanIMogIt_OptionsVersion = "25"
+CanIMogIt_OptionsVersion = "50501"
 
 
 CanIMogItOptions_Defaults = {
@@ -51,7 +21,6 @@ CanIMogItOptions_Defaults = {
         ["showItemIconOverlay"] = true,
         ["showVerboseText"] = false,
         ["showSourceLocationTooltip"] = false,
-        ["printDatabaseScan"] = true,
         ["iconLocation"] = "TOPRIGHT",
         ["showToyItems"] = true,
         ["showPetItems"] = true,
@@ -92,10 +61,6 @@ CanIMogItOptions_DisplayData = {
     ["showSourceLocationTooltip"] = {
         ["displayName"] = L["Show Source Location Tooltip"],
         ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop). This only works on items your current class can learn."] .. "\n\n" .. L["Please note that this may not always be correct as Blizzard's information is incomplete."]
-    },
-    ["printDatabaseScan"] = {
-        ["displayName"] = L["Database Scanning chat messages"],
-        ["description"] = L["Shows chat messages on login about the database scan."]
     },
     ["iconLocation"] = {
         ["displayName"] = L["Location: "],
@@ -156,13 +121,11 @@ local EVENTS = {
     "ITEM_LOCK_CHANGED",
     "LOADING_SCREEN_ENABLED",
     "LOADING_SCREEN_DISABLED",
+    "AUCTION_HOUSE_SHOW",
+    "AUCTION_HOUSE_BROWSE_RESULTS_UPDATED",
+    "AUCTION_HOUSE_NEW_RESULTS_RECEIVED",
+    "PET_JOURNAL_LIST_UPDATE"
 }
-
-table.insert(EVENTS, "AUCTION_HOUSE_SHOW")
-table.insert(EVENTS, "AUCTION_HOUSE_BROWSE_RESULTS_UPDATED")
-table.insert(EVENTS, "AUCTION_HOUSE_NEW_RESULTS_RECEIVED")
-table.insert(EVENTS, "PET_JOURNAL_LIST_UPDATE")
-
 
 for i, event in pairs(EVENTS) do
     CanIMogIt.frame:RegisterEvent(event)
@@ -216,9 +179,6 @@ end
 
 
 CanIMogIt.frame:SetScript("OnUpdate", RunIfNotBusyEvents)
-
-
-CanIMogIt.frame.eventFunctions = {}
 
 
 -- a dictionary of event names to a list of functions to run.
@@ -354,8 +314,6 @@ local function newCheckbox(parent, variableName, onClickFunction)
     local displayData = CanIMogItOptions_DisplayData[variableName]
     local checkbox = CreateFrame("CheckButton", "CanIMogItCheckbox" .. variableName,
             parent, "InterfaceOptionsCheckButtonTemplate")
-
-    -- checkbox.value = CanIMogItOptions[variableName]
 
     checkbox.GetValue = function (self)
         return CanIMogItOptions[variableName]
@@ -507,7 +465,7 @@ end
 
 local function createOptionsMenu()
     -- define the checkboxes
-    CanIMogIt.frame.debug =  newCheckbox(CanIMogIt.frame, "debug", debugCheckboxOnClick)
+    CanIMogIt.frame.debug = newCheckbox(CanIMogIt.frame, "debug", debugCheckboxOnClick)
     CanIMogIt.frame.showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
     CanIMogIt.frame.showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
     CanIMogIt.frame.showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
@@ -515,7 +473,6 @@ local function createOptionsMenu()
     CanIMogIt.frame.showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
     CanIMogIt.frame.showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
     CanIMogIt.frame.showSourceLocationTooltip = newCheckbox(CanIMogIt.frame, "showSourceLocationTooltip")
-    CanIMogIt.frame.printDatabaseScan = newCheckbox(CanIMogIt.frame, "printDatabaseScan")
     CanIMogIt.frame.iconLocation = newRadioGrid(CanIMogIt.frame, "iconLocation")
     CanIMogIt.frame.showToyItems = newCheckbox(CanIMogIt.frame, "showToyItems")
     CanIMogIt.frame.showPetItems = newCheckbox(CanIMogIt.frame, "showPetItems")
@@ -530,8 +487,6 @@ local function createOptionsMenu()
     CanIMogIt.frame.showItemIconOverlay:SetPoint("TOPLEFT", CanIMogIt.frame.showSetInfo, "BOTTOMLEFT")
     CanIMogIt.frame.showVerboseText:SetPoint("TOPLEFT", CanIMogIt.frame.showItemIconOverlay, "BOTTOMLEFT")
     CanIMogIt.frame.showSourceLocationTooltip:SetPoint("TOPLEFT", CanIMogIt.frame.showVerboseText, "BOTTOMLEFT")
-    CanIMogIt.frame.printDatabaseScan:SetPoint("TOPLEFT", CanIMogIt.frame.showSourceLocationTooltip, "BOTTOMLEFT")
-    CanIMogIt.frame.iconLocation:SetPoint("TOPLEFT", CanIMogIt.frame.printDatabaseScan, "BOTTOMLEFT")
     CanIMogIt.frame.showToyItems:SetPoint("TOPLEFT", CanIMogIt.frame.iconLocation, "BOTTOMLEFT")
     CanIMogIt.frame.showPetItems:SetPoint("TOPLEFT", CanIMogIt.frame.showToyItems, "BOTTOMLEFT")
     CanIMogIt.frame.showMountItems:SetPoint("TOPLEFT", CanIMogIt.frame.showPetItems, "BOTTOMLEFT")

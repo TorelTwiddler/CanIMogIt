@@ -72,13 +72,6 @@ local function IsItemAccountbound(text)
     return false
 end
 
--- local function GetRequiredText(text)
---     -- Returns {Profession = level} if the text has a profession in it,
---     if text and text:GetText() then
---         return partOf(text:GetText(), ITEM_REQ_SKILL)
---     end
--- end
-
 local function GetClassesText(text)
     -- Returns the text of classes required by this item, or nil if None
     if text and text:GetText() then
@@ -145,12 +138,6 @@ function CIMIScanTooltip:GetRedText(itemLink)
     end
     return string.sub(table.concat(red_texts, " "), 1, 80)
 end
-
--- function CIMIScanTooltip:GetProfessionInfo(itemLink)
---     -- Returns all of the red text as space seperated string.
---     local result = self:ScanTooltipBreak(GetProfessionText, itemLink)
---     return
--- end
 
 function CIMIScanTooltip:GetClassesRequired(itemLink)
     -- Returns a table of classes required for the item.
