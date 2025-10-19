@@ -6,7 +6,7 @@ local _G = _G
 local L = CanIMogIt.L
 
 -- OptionsVersion: Keep this as an integer, so comparison is easy.
-CanIMogIt_OptionsVersion = "50501"
+CanIMogIt_OptionsVersion = "26"
 
 
 CanIMogItOptions_Defaults = {
@@ -487,6 +487,7 @@ local function createOptionsMenu()
     CanIMogIt.frame.showItemIconOverlay:SetPoint("TOPLEFT", CanIMogIt.frame.showSetInfo, "BOTTOMLEFT")
     CanIMogIt.frame.showVerboseText:SetPoint("TOPLEFT", CanIMogIt.frame.showItemIconOverlay, "BOTTOMLEFT")
     CanIMogIt.frame.showSourceLocationTooltip:SetPoint("TOPLEFT", CanIMogIt.frame.showVerboseText, "BOTTOMLEFT")
+    CanIMogIt.frame.iconLocation:SetPoint("TOPLEFT", CanIMogIt.frame.showSourceLocationTooltip, "BOTTOMLEFT")
     CanIMogIt.frame.showToyItems:SetPoint("TOPLEFT", CanIMogIt.frame.iconLocation, "BOTTOMLEFT")
     CanIMogIt.frame.showPetItems:SetPoint("TOPLEFT", CanIMogIt.frame.showToyItems, "BOTTOMLEFT")
     CanIMogIt.frame.showMountItems:SetPoint("TOPLEFT", CanIMogIt.frame.showPetItems, "BOTTOMLEFT")
