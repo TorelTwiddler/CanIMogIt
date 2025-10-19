@@ -44,7 +44,8 @@ function CanIMogIt.ItemData.FromItemLink(itemLink)
     if isItemToy == nil then return end
     local isItemPet = CanIMogIt:IsItemPet(itemLink)
     if isItemPet == nil then return end
-    local isItemEquippable = CanIMogIt:IsEquippable(itemLink)
+    -- Pets are never equippable
+    local isItemEquippable = not isItemPet and CanIMogIt:IsEquippable(itemLink) or false
     if isItemEquippable == nil then return end
     return CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy, isItemPet, isItemEquippable)
 end

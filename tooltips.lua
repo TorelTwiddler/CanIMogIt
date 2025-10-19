@@ -40,7 +40,7 @@ local function printDebug(tooltip, itemLink, bag, slot)
     local itemID = CanIMogIt:GetItemID(itemLink)
     if not itemID then
         if string.find(itemLink, "battlepet:") then
-            local _, _, petSpeciesID = string.find(itemLink, "battlepet:(%d+):")
+            local _, _, petSpeciesID = string.find(itemLink, "battlepet:(%d+)")
             addDoubleLine(tooltip, "BattlePet Species ID:", tostring(petSpeciesID))
             local collected, total = C_PetJournal.GetNumCollectedInfo(tonumber(petSpeciesID) or 0)
             addDoubleLine(tooltip, "Number Collected:", collected .. "/" .. total)
