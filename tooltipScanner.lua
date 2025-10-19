@@ -178,8 +178,8 @@ function CIMIScanTooltip:IsItemBindOnEquip(itemLink, bag, slot)
     end
 end
 
-function CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot)
-    -- Returns whether the item is warbound or not. (or account bound, in Classic's case)
+function CIMIScanTooltip:IsItemAccountbound(itemLink, bag, slot)
+    -- Returns whether the item is account bound or not.
     if bag and slot then
         return self:ScanTooltipBreak(IsItemAccountbound, nil, bag, slot)
     else

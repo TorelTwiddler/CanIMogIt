@@ -819,8 +819,8 @@ function CanIMogIt:IsItemSoulbound(itemLink, bag, slot)
 end
 
 
-function CanIMogIt:IsItemWarbound(itemLink, bag, slot)
-    return CIMIScanTooltip:IsItemWarbound(itemLink, bag, slot)
+function CanIMogIt:IsItemAccountbound(itemLink, bag, slot)
+    return CIMIScanTooltip:IsItemAccountbound(itemLink, bag, slot)
 end
 
 
@@ -1100,7 +1100,7 @@ function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
     if CanIMogItOptions["showTransmoggableOnly"]
             and (unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE
             or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_BOE
-            or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_WARBOUND) then
+            or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_ACCOUNTBOUND) then
         -- If we don't want to show the tooltip if it's not transmoggable
         return "", ""
     end
@@ -1214,10 +1214,10 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot)
         text, unmodifiedText = CanIMogIt:CalculatePetText(itemLink)
     else  -- itemData.type == CanIMogIt.ItemTypes.Other
         -- This item is never transmogable.
-        if bindData.type == CanIMogIt.BindTypes.Warbound then
+        if bindData.type == CanIMogIt.BindTypes.Accountbound then
             -- Pink Circle-Slash
-            text = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND
-            unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND
+            text = CanIMogIt.NOT_TRANSMOGABLE_ACCOUNTBOUND
+            unmodifiedText = CanIMogIt.NOT_TRANSMOGABLE_ACCOUNTBOUND
         elseif bindData.type == CanIMogIt.BindTypes.Soulbound then
             -- Gray Circle-Slash
             text = CanIMogIt.NOT_TRANSMOGABLE

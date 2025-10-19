@@ -5,7 +5,7 @@ CanIMogIt.BindData.__index = CanIMogIt.BindData
 
 CanIMogIt.BindTypes = {
     Soulbound = "Soulbound",
-    Warbound = "Warbound",
+    Accountbound = "Accountbound",
     BoE = "BoE"
 }
 
@@ -35,10 +35,10 @@ end
 
 
 function CanIMogIt.BindData:CalculateType()
-    local warbound = CIMIScanTooltip:IsItemWarbound(self.itemLink, self.bag, self.slot)
-    if warbound == nil then return nil end
-    if warbound then
-        return CanIMogIt.BindTypes.Warbound
+    local accountbound = CIMIScanTooltip:IsItemAccountbound(self.itemLink, self.bag, self.slot)
+    if accountbound == nil then return nil end
+    if accountbound then
+        return CanIMogIt.BindTypes.Accountbound
     end
 
     local soulbound = CIMIScanTooltip:IsItemSoulbound(self.itemLink, self.bag, self.slot)

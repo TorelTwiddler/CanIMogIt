@@ -140,7 +140,7 @@ local function printDebug(tooltip, itemLink, bag, slot)
     end
 
     addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink, bag, slot)))
-    addDoubleLine(tooltip, "IsItemWarbound:", tostring(CanIMogIt:IsItemWarbound(itemLink)))
+    addDoubleLine(tooltip, "IsItemAccountbound:", tostring(CanIMogIt:IsItemAccountbound(itemLink)))
     local bindData = CanIMogIt.BindData:new(itemLink)
     if bindData ~= nil then
         addDoubleLine(tooltip, "BindType:", tostring(bindData.type))

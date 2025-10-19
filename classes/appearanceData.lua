@@ -65,7 +65,7 @@ function CanIMogIt.AppearanceData:CalculateKnownStatus()
             -- can learn this appearance.
             status = CanIMogIt.UNKNOWN
         else
-            -- Warbound shouldn't be possible in this state.
+            -- Accountbound shouldn't be possible in this state.
             status = CanIMogIt.UNKNOWABLE_BY_CHARACTER
         end
     end
@@ -73,14 +73,14 @@ function CanIMogIt.AppearanceData:CalculateKnownStatus()
 end
 
 function CanIMogIt.AppearanceData:CalculateBindStateText(bindData)
-    local isItemWarbound = bindData.type == CanIMogIt.BindTypes.Warbound
+    local isItemAccountbound = bindData.type == CanIMogIt.BindTypes.Accountbound
     local isItemSoulbound = bindData.type == CanIMogIt.BindTypes.Soulbound
     local text, unmodifiedText
     if self.status == CanIMogIt.KNOWN then
-        if isItemWarbound then
+        if isItemAccountbound then
             -- Pink Check
-            text = CanIMogIt.KNOWN_WARBOUND
-            unmodifiedText = CanIMogIt.KNOWN_WARBOUND
+            text = CanIMogIt.KNOWN_ACCOUNTBOUND
+            unmodifiedText = CanIMogIt.KNOWN_ACCOUNTBOUND
         elseif isItemSoulbound then
             -- Blue Check
             text = CanIMogIt.KNOWN
@@ -91,10 +91,10 @@ function CanIMogIt.AppearanceData:CalculateBindStateText(bindData)
             unmodifiedText = CanIMogIt.KNOWN_BOE
         end
     elseif self.status == CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER then
-        if isItemWarbound then
+        if isItemAccountbound then
             -- Pink Check
-            text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND
-            unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND
+            text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_ACCOUNTBOUND
+            unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_ACCOUNTBOUND
         elseif isItemSoulbound then
             -- Green Check
             text = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER
@@ -105,10 +105,10 @@ function CanIMogIt.AppearanceData:CalculateBindStateText(bindData)
             unmodifiedText = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE
         end
     elseif self.status == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM then
-        if isItemWarbound then
+        if isItemAccountbound then
             -- Pink Circle Check
-            text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND
-            unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND
+            text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_ACCOUNTBOUND
+            unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_ACCOUNTBOUND
         elseif isItemSoulbound then
             -- Blue Circle Check
             text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
@@ -119,10 +119,10 @@ function CanIMogIt.AppearanceData:CalculateBindStateText(bindData)
             unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
         end
     elseif self.status == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER then
-        if isItemWarbound then
+        if isItemAccountbound then
             -- Pink Circle Check
-            text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND
-            unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND
+            text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_ACCOUNTBOUND
+            unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_ACCOUNTBOUND
         elseif isItemSoulbound then
             -- Green Circle Check
             text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
@@ -137,11 +137,11 @@ function CanIMogIt.AppearanceData:CalculateBindStateText(bindData)
         text = CanIMogIt.UNKNOWN
         unmodifiedText = CanIMogIt.UNKNOWN
     elseif self.status == CanIMogIt.UNKNOWABLE_BY_CHARACTER then
-        if isItemWarbound then
+        if isItemAccountbound then
             -- Pink Star
-            text = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND
+            text = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND
                     .. CanIMogIt.BLIZZARD_RED .. CanIMogIt:GetReason(self.itemLink)
-            unmodifiedText = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND
+            unmodifiedText = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND
         elseif isItemSoulbound then
             -- Green Dash
             text = CanIMogIt.UNKNOWABLE_SOULBOUND
