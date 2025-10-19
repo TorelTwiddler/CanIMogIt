@@ -11,150 +11,13 @@ the bind state in these tests.
 
 To use:
 
-/script CanIMogIt.Tests:RunTests("Adele")
+/script CanIMogIt.Tests:RunTests("Wouter")
 
 or for verbose:
-/script CanIMogIt.Tests:RunTests("Adele", true)
+/script CanIMogIt.Tests:RunTests("Wouter", true)
 ]]
 
 CanIMogIt.Tests = {}
-
-local testsAdele = {
-    ["Learned"] = {
-        ["itemID"] = 35514,
-        ["expected"] = CanIMogIt.KNOWN,
-    },
-    ["Shirt"] = {
-        ["itemID"] = 52019,
-        ["expected"] = CanIMogIt.KNOWN,
-    },
-    ["Tabard"] = {
-        ["itemID"] = 22999,
-        ["expected"] = CanIMogIt.KNOWN,
-    },
-    ["Cosmetic"] = {
-        ["itemID"] = 22206,
-        ["expected"] = CanIMogIt.KNOWN_WARBOUND,
-    },
-    ["Not Learned"] = {
-        ["itemID"] = 55325,
-        ["expected"] = CanIMogIt.UNKNOWN,
-    },
-    ["Grey Item Not Learned"] = {
-        ["itemID"] = 1820,
-        ["expected"] = CanIMogIt.UNKNOWN,
-    },
-    ["Cannot learn: Classes: Name"] = {
-        ["itemID"] = 98903,
-        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER,
-    },
-    ["Learned from a Cosmetic source"] = {
-        ["itemID"] = 6612,
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE,
-    },
-    ["All sources not showing up in sources tooltip"] = {
-        ["itemID"] = 116913,
-        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
-    },
-    ["Exception items (Cannot be learned, nil sourceID & appearanceID)"] = {
-        ["itemID"] = 119556,
-        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
-    },
-    ["BoE: Learned from another item"] = {
-        ["itemID"] = 25255,
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE,
-    },
-    ["BoE: Learned for a different class"] = {
-        ["itemID"] = 121224,
-        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_BOE,
-    },
-    ["BoE: Learned for a different item and class"] = {
-        ["itemID"] = 15229,
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE,
-    },
-    ["BoE: Not Learned"] = {
-        ["itemID"] = 2276,
-        ["expected"] = CanIMogIt.UNKNOWN,
-    },
-    ["BoP: Learned for a different class"] = {
-        ["itemID"] = 13346,
-        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER,
-    },
-    ["BoP: Learned for a different class and item"] = {
-        ["itemID"] = 11924,
-        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER,
-    },
-    ["BoP: Cannot Learn"] = {
-        ["itemID"] = 152145,
-        ["expected"] = CanIMogIt.UNKNOWABLE_SOULBOUND,
-    },
-    ["BoP: Not Transmogable"] = {
-        ["itemID"] = 116913,
-        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
-    },
-    ["WRB: Learned"] = {
-        ["itemID"] = 118365,
-        ["expected"] = CanIMogIt.KNOWN_WARBOUND,
-    },
-    ["WRB: Learned from another item"] = {
-        ["itemID"] = 64644,
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND,
-    },
-    ["WRB: Learned for a different class"] = {
-        ["itemID"] = 141000,
-        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND,
-    },
-    ["WRB: Learned for a different class and item"] = {
-        ["itemID"] = 69764,
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND,
-    },
-    ["WRB: Cannot learn"] = {
-        ["itemID"] = 128459,
-        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND,
-    },
-}
-
-local testsKamadyn = {
-    ["Learned"] = {
-        ["itemID"] = 204961,
-        ["expected"] = CanIMogIt.KNOWN,
-    },
-    ["Learned Warbound item"] = {
-        ["itemID"] = 219234,
-        ["expected"] = CanIMogIt.KNOWN,
-    },
-    ["Cannot be learned"] = {
-        ["itemID"] = 191352,
-        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE_BOE,
-    }
-}
-
-local testsBriarlynn = {
-    ["Cosmetic source Sage's Boots"] = {
-        ["itemID"] = 6612,
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE,
-    },
-    ["Cosmetic source Warm Blue Woolen Socks"] = {
-        ["itemID"] = 116451,
-        ["expected"] = CanIMogIt.KNOWN,
-    },
-    ["Warband item green instead of pink"] = {
-        ["itemID"] = 69764,
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND,
-    },
-    ["Cannot Learn: other faction, Frostwolf Leggings"] = {
-        ["itemID"] = 128459,
-        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND,
-    },
-    ["Warbound items hide with Transmogable Only on"] = {
-        ["itemID"] = 220304,
-        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND,
-        ["textExpected"] = "",
-        ["options"] = {
-            ["showTransmoggableOnly"] = true,
-        },
-    },
-}
 
 local testsWouter = {
     ["Learned"] = {
@@ -171,7 +34,7 @@ local testsWouter = {
     },
     --[[ ["Cosmetic"] = {
         ["itemID"] = 22206, -- Bouquet of Red Roses
-        ["expected"] = CanIMogIt.KNOWN_WARBOUND,
+        ["expected"] = CanIMogIt.KNOWN_ACCOUNTBOUND,
     }, ]]
     ["Not Learned"] = {
         ["itemID"] = 104640, -- Kor'kron Elite Skullmask (Heroic)
@@ -235,24 +98,24 @@ local testsWouter = {
     },
     ["Account: Learned"] = {
         ["itemID"] = 64460, -- Nifflevar Bearded Axe
-        ["expected"] = CanIMogIt.KNOWN_WARBOUND,
+        ["expected"] = CanIMogIt.KNOWN_ACCOUNTBOUND,
     },
     ["Account: Learned from another item"] = {
         ["itemID"] = 93858, -- Brawler's Bladed Claws
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND,
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_ACCOUNTBOUND,
     },
     ["Account: Learned for a different class"] = {
         ["itemID"] = 86196, -- Ancient Jinyu Staff
-        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND,
+        ["expected"] = CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_ACCOUNTBOUND,
     },
     ["Account: Learned for a different class and item"] = {
         ["itemID"] = 64377, -- Zin'rokh, Destroyer of Worlds
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND,
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_ACCOUNTBOUND,
     },
     -- TODO: find an item which suits this case
     --[[ ["Account: Cannot learn"] = {
         ["itemID"] = 64904, -- Ring of the Boy Emperor
-        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND,
+        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND,
     }, ]]
     ["Edge Case - Shields - BoP: Cannot learn"] = {
         ["itemID"] = 104560,  -- Bulwark of the Fallen General (Heroic)
@@ -265,9 +128,6 @@ local testsWouter = {
 }
 
 local tests = {
-    ["Adele"] = testsAdele,
-    ["Kamadyn"] = testsKamadyn,
-    ["Briarlynn"] = testsBriarlynn,
     ["Wouter"] = testsWouter,
 }
 
