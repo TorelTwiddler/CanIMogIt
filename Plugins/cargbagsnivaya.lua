@@ -16,7 +16,7 @@ if C_AddOns.IsAddOnLoaded("cargBags_Nivaya") then
             self:SetScript("OnUpdate", nil)
             return
         end
-        local bag, slot = self:GetParent().bagID, self:GetParent().slotID
+        local slot, bag = self:GetParent():GetSlotAndBagID()
         CIMI_SetIcon(self, CargBagsNivaya_CIMIUpdateIcon, CanIMogIt:GetTooltipText(nil, bag, slot))
     end
 
