@@ -6,7 +6,8 @@ CanIMogIt.BindData.__index = CanIMogIt.BindData
 CanIMogIt.BindTypes = {
     Soulbound = "Soulbound",
     Warbound = "Warbound",
-    BoE = "BoE"
+    BoE = "BoE",
+    Consumable = "Consumable",  -- Pets
 }
 
 
@@ -48,6 +49,11 @@ end
 
 
 function CanIMogIt.BindData:CalculateType()
+    -- Pets don't return a value on checks below, so we need to check early
+    if CanIMogIt:IsItemPet(self.itemLink) then
+        return CanIMogIt.BindTypes.Consumable
+    end
+
     local warbound = CIMIScanTooltip:IsItemWarbound(self.itemLink, self.bag, self.slot, self.tooltipData)
     if warbound == nil then return nil end
     if warbound then

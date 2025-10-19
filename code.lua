@@ -770,11 +770,6 @@ function CanIMogIt:GetItemSlotName(itemLink)
 end
 
 
-function CanIMogIt:IsItemBattlepet(itemLink)
-    return string.match(itemLink, ".*(battlepet):.*") == "battlepet"
-end
-
-
 function CanIMogIt:IsItemKeystone(itemLink)
     return string.match(itemLink, ".*(keystone):.*") == "keystone"
 end
@@ -785,7 +780,7 @@ function CanIMogIt:IsReadyForCalculations(itemLink)
     -- or if it's a battlepet.
     if C_Item.GetItemInfo(itemLink)
         or CanIMogIt:IsItemKeystone(itemLink)
-        or CanIMogIt:IsItemBattlepet(itemLink) then
+        or CanIMogIt:IsItemPet(itemLink) then
         return true
     end
     return false
@@ -1050,7 +1045,7 @@ function CanIMogIt:IsTransmogable(itemLink)
 
     local itemID, _, _, slotName = C_Item.GetItemInfoInstant(itemLink)
 
-    if CanIMogIt:IsItemBattlepet(itemLink) or CanIMogIt:IsItemKeystone(itemLink) then
+    if CanIMogIt:IsItemPet(itemLink) or CanIMogIt:IsItemKeystone(itemLink) then
         -- Item is never transmogable if it's a battlepet or keystone.
         -- We can't wear battlepets on our heads yet!
         return false
@@ -1184,6 +1179,10 @@ end
 
 
 function CanIMogIt:CalculateKey(itemLink)
+    if CanIMogIt:IsItemPet(itemLink) then
+        return "itemlink:" .. itemLink
+    end
+
     local sourceID = CanIMogIt:GetSourceID(itemLink)
     local itemID = CanIMogIt:GetItemID(itemLink)
     if sourceID then
