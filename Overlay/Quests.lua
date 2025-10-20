@@ -2,6 +2,8 @@
 -- Note that the Blizzard functions are "Quest" vs "QuestLog"
 
 
+local questInfoRewardsFrame = _G["QuestInfoRewardsFrame"]
+
 local function GetItemLinkForQuests(rewardType, id)
     -- Gets the item link for the currently selected quest.
     -- rewardType is either "choice" or "reward"
@@ -17,7 +19,6 @@ end
 
 local function GetRewardButtons()
     -- Gets the reward buttons that the CIMI frame is attached to.
-    -- Works for both the map quest details and the standalone quest details.
     local questInfoFrame = _G["QuestInfoFrame"]
     if questInfoFrame and questInfoFrame.rewardsFrame then
         return questInfoFrame.rewardsFrame.RewardButtons
@@ -44,7 +45,6 @@ local function QuestFrameUpdateIcon(self)
         return
     end
     local itemLink = GetItemLinkForQuests(self.rewardType, self.id)
-    self.itemLink = itemLink
     if itemLink == nil then
         CIMI_SetIcon(self, QuestFrameUpdateIcon, nil)
     else
@@ -69,20 +69,18 @@ local function AddIndexInfoToCIMIFrame(cimiFrame, rewardButton)
     cimiFrame.id = rewardButton:GetID()
     cimiFrame.rewardType = rewardButton.type
     cimiFrame.objectType = rewardButton.objectType
-    return index
 end
 
 
 local function AddAndUpdateQuestFrames()
     -- Add to the Quest Frame, and update if added.
-    -- Use MapQuestInfoRewardsFrameQuestInfoItem#, which has questID on it <-- map log details frame
     -- Use QuestInfoRewardsFrameQuestInfoItem#, which has questID on it <-- old stand alone details frame
     -- Right-click on objectives quest for old stand alone frame
     local rewardButtons = GetRewardButtons()
     if rewardButtons then
         for _, rewardButton in ipairs(rewardButtons) do
             if rewardButton then
-                local cimiFrame = CIMI_AddToFrame(rewardButton, QuestFrameUpdateIcon, nil, "TOPRIGHT")
+                CIMI_AddToFrame(rewardButton, QuestFrameUpdateIcon, nil, "TOPRIGHT")
                 if rewardButton.CanIMogItOverlay then
                     AddIndexInfoToCIMIFrame(rewardButton.CanIMogItOverlay, rewardButton)
                     QuestFrameUpdateIcon(rewardButton.CanIMogItOverlay)
@@ -96,15 +94,20 @@ end
 local function HookOverlayQuest(event)
     if event ~= "PLAYER_LOGIN" then return end
 
-    -- Add hook for clicking on the Continue button in the
-    -- quest frame (since there is no event).
-    if _G["QuestInfoRewardsFrame"] then
-        _G["QuestInfoRewardsFrame"]:HookScript("OnShow",
-            function () AddAndUpdateQuestFrames() end)
+    -- Hook for opening the Quest Log and clicking on the Continue button in quest frame
+    if questInfoRewardsFrame then
+        questInfoRewardsFrame:HookScript("OnShow", function () AddAndUpdateQuestFrames() end)
     end
-    if _G["MapQuestInfoRewardsFrame"] then
-        _G["MapQuestInfoRewardsFrame"]:HookScript("OnShow",
-            function () AddAndUpdateQuestFrames() end)
+
+    -- Hook for when quest is clicked in the Quest Log
+    if (_G["QuestLogListScrollFrame"]) then
+        local children = {_G["QuestLogListScrollFrame"].ScrollChild:GetChildren()}
+        for i, button in ipairs(children) do
+            button:HookScript("OnClick", function(self)
+                if self.isHeader then return end -- Ignore header buttons
+                AddAndUpdateQuestFrames()
+            end)
+        end
     end
 end
 
@@ -115,7 +118,17 @@ CanIMogIt.frame:AddSmartEvent(HookOverlayQuest, {"PLAYER_LOGIN"})
 -- Event functions    --
 ------------------------
 
-local function QuestOverlayEvents(event, ...)
+-- Triggers when clicking a quest in the Quest Tracker
+local function HookQuestLogUpdate(event)
+    if event ~= "QUEST_LOG_UPDATE" then return end
+    if not questInfoRewardsFrame:IsVisible() then return end -- Don't update if we can't see the frame
+    AddAndUpdateQuestFrames()
+end
+CanIMogIt.frame:AddSmartEvent(HookQuestLogUpdate, {"QUEST_LOG_UPDATE"})
+
+
+-- Fires when any CIMI option is updated
+local function OptionUpdateListener(event, ...)
     local rewardButtons = GetRewardButtons()
     if rewardButtons then
         for _, rewardButton in ipairs(rewardButtons) do
@@ -125,8 +138,4 @@ local function QuestOverlayEvents(event, ...)
         end
     end
 end
-
--- CanIMogIt.frame:AddOverlayEventFunction(QuestOverlayEvents)
--- hooksecurefunc("QuestLogPopupDetailFrame_Update", QuestOverlayEvents)
-
--- CanIMogIt:RegisterMessage("OptionUpdate", QuestOverlayEvents)
+CanIMogIt:RegisterMessage("OptionUpdate", OptionUpdateListener)
