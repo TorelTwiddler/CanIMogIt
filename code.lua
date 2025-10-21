@@ -780,7 +780,9 @@ function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
     if isArmorCosmetic == false and armorTypeSlots[slotName] then
         return playerArmorTypeID == CanIMogIt:GetItemSubClassName(itemLink)
     else
-        if slotName == SHIELD and shieldClasses[playerClassID] then
+        if slotName == HOLDABLE then
+            return true
+        elseif slotName == SHIELD and shieldClasses[playerClassID] then
             return true
         end
         return false
