@@ -39,11 +39,14 @@ local function QuestFrameUpdateIcon(self)
         return
     end
 
-    if not self.rewardType
-       or not self.id
-       or self.objectType ~= "item" then
+    if not self:IsVisible() then
+        -- Don't do anything if frame isn't visible
         return
+    elseif self.objectType ~= "item" then
+        -- Remove icon if frame is not holding an item
+        CIMI_SetIcon(self, QuestFrameUpdateIcon, nil)
     end
+
     local itemLink = GetItemLinkForQuests(self.rewardType, self.id)
     if itemLink == nil then
         CIMI_SetIcon(self, QuestFrameUpdateIcon, nil)
