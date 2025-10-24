@@ -109,8 +109,8 @@ function CanIMogIt.AppearanceData:CalculateBindStateText(bindData)
             -- Pink Circle Check
             text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_ACCOUNTBOUND
             unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_ACCOUNTBOUND
-        elseif isItemSoulbound then
-            -- Blue Circle Check
+        elseif isItemSoulbound or self.isValidAppearanceForCharacter and self.characterCanLearnTransmog then
+            -- Blue Circle Check, also when appearance is valid AND character can learn it (to differentiate between transmogable and non-transmoggable BoEs)
             text = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
             unmodifiedText = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
         else -- BoE
