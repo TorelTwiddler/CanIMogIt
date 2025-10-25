@@ -195,6 +195,10 @@ CanIMogIt.NUM_MAIL_INBOX_ITEMS = 7
 -- Trade Skill = no constants
 -- Loot Roll = NUM_GROUP_LOOT_FRAMES -- Blizzard removed in patch 10.1.5, using our own constant
 CanIMogIt.NUM_GROUP_LOOT_FRAMES = NUM_GROUP_LOOT_FRAMES or 4
+-- Bank container that everyone gets by default
+CanIMogIt.GENERIC_BANK_CONTAINER = -1
+-- Amount of slots in the default
+CanIMogIt.GENERIC_BANK_SLOTS = NUM_BANKGENERIC_SLOTS or 28
 
 -- Built-in colors
 CanIMogIt.BLIZZARD_RED = "|cffff1919"

@@ -279,9 +279,25 @@ hooksecurefunc(GameTooltip, "SetBagItem",
     end
 )
 
--- Inventory (not sure what the difference is between this and bags)
+local firstBankSlot = BankButtonIDToInvSlotID(1)
+local function IsGenericBankSlot(slot)
+    return slot >= firstBankSlot and slot < firstBankSlot + CanIMogIt.GENERIC_BANK_SLOTS
+end
+
+-- Inventory, see https://warcraft.wiki.gg/wiki/InventorySlotID
 hooksecurefunc(GameTooltip, "SetInventoryItem",
     function(tooltip, unit, slot)
+        -- Process generic bank slots differently so we can actually get bind information
+        if IsGenericBankSlot(slot) then
+            -- Get the right bag and slot values
+            local bag = CanIMogIt.GENERIC_BANK_CONTAINER
+            slot = slot - (firstBankSlot - 1)
+
+            addToTooltip(tooltip, C_Container.GetContainerItemLink(bag, slot), bag, slot)
+            VVDebugPrint(tooltip, "SetInventoryItem - Generic Bank")
+            return
+        end
+
         addToTooltip(tooltip, GetInventoryItemLink(unit, slot))
         VVDebugPrint(tooltip, "SetInventoryItem")
     end
