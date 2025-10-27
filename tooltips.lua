@@ -18,15 +18,15 @@ end
 -- Debug functions         --
 -----------------------------
 
-
+local addonVersion = C_AddOns.GetAddOnMetadata("CanIMogIt", "Version")
+local playerClass = select(2, UnitClass("player"))
 local function printDebug(tooltip, itemLink, bag, slot)
     -- Add debug statements to the tooltip, to make it easier to understand
     -- what may be going wrong.
 
     addLine(tooltip, '--------')
 
-    addDoubleLine(tooltip, "Addon Version:", C_AddOns.GetAddOnMetadata("CanIMogIt", "Version"))
-    local playerClass = select(2, UnitClass("player"))
+    addDoubleLine(tooltip, "Addon Version:", addonVersion)
     local playerLevel = UnitLevel("player")
     local playerSpec = C_SpecializationInfo.GetSpecialization()
     local playerSpecName = playerSpec and select(2, C_SpecializationInfo.GetSpecializationInfo(playerSpec)) or "None"

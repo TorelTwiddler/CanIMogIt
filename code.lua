@@ -38,7 +38,6 @@ CanIMogIt.DressUpModel:SetUnit('player')
 -- 25 Bows
 -- 26 Guns
 -- 27 Crossbows
--- 28 Warglaives
 
 
 local HEAD = "INVTYPE_HEAD"
@@ -103,9 +102,7 @@ local COSMETIC = 5
 
 local classArmorTypeMap = {
     ["DEATHKNIGHT"] = PLATE,
-    ["DEMONHUNTER"] = LEATHER,
     ["DRUID"] = LEATHER,
-    ["EVOKER"] = MAIL,
     ["HUNTER"] = MAIL,
     ["MAGE"] = CLOTH,
     ["MONK"] = LEATHER,
@@ -314,6 +311,20 @@ function CanIMogIt.Utils.strsplit(delimiter, text)
     end
     return list
 end
+
+
+-----------------------------
+-- Cached game variables   --
+-----------------------------
+
+local ARMOR_ITEM_CLASS_NAME = C_Item.GetItemClassInfo(4)
+
+-- Fetch player armor type ahead of time to avoid unnecessary repeat calls
+local function GetPlayerArmorTypeName()
+    local playerArmorTypeID = classArmorTypeMap[select(2, UnitClass("player"))]
+    return select(1, C_Item.GetItemSubClassInfo(4, playerArmorTypeID))
+end
+local PLAYER_ARMOR_TYPE = GetPlayerArmorTypeName()
 
 
 -----------------------------
@@ -684,12 +695,6 @@ function CanIMogIt:GetSourceLocationText(itemLink)
 end
 
 
-function CanIMogIt:GetPlayerArmorTypeName()
-    local playerArmorTypeID = classArmorTypeMap[select(2, UnitClass("player"))]
-    return select(1, C_Item.GetItemSubClassInfo(4, playerArmorTypeID))
-end
-
-
 function CanIMogIt:GetItemID(itemLink)
     return tonumber(itemLink:match("item:(%d+)"))
 end
@@ -731,7 +736,7 @@ function CanIMogIt:IsItemArmor(itemLink)
         return false
     end
 
-    return C_Item.GetItemClassInfo(4) == itemClass
+    return itemClass == ARMOR_ITEM_CLASS_NAME
 end
 
 
@@ -768,9 +773,8 @@ function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
     local isArmorCosmetic = CanIMogIt:IsArmorCosmetic(itemLink)
     if isArmorCosmetic == nil then return end
     
-    local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
     if isArmorCosmetic == false then
-        return playerArmorTypeID == CanIMogIt:GetItemSubClassName(itemLink)
+        return CanIMogIt:GetItemSubClassName(itemLink) == PLAYER_ARMOR_TYPE
     else
         return true
     end
