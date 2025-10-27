@@ -705,11 +705,6 @@ function CanIMogIt:GetItemExpansion(itemID)
 end
 
 
-function CanIMogIt:GetItemClassName(itemLink)
-    return C_Item.GetItemClassInfo(select(6, C_Item.GetItemInfoInstant(itemLink)))
-end
-
-
 function CanIMogIt:GetItemSubClassName(itemLink)
     return select(3, C_Item.GetItemInfoInstant(itemLink))
 end
@@ -728,10 +723,14 @@ function CanIMogIt:IsReadyForCalculations(itemLink)
     return false
 end
 
-
 function CanIMogIt:IsItemArmor(itemLink)
-    local itemClass = CanIMogIt:GetItemClassName(itemLink)
+    local itemClass, _, slotName = select(2, C_Item.GetItemInfoInstant(itemLink))
     if itemClass == nil then return end
+
+    if not armorTypeSlots[slotName] then
+        return false
+    end
+
     return C_Item.GetItemClassInfo(4) == itemClass
 end
 
@@ -762,30 +761,18 @@ function CanIMogIt:IsArmorCosmetic(itemLink)
     return CanIMogIt:IsArmorSubClassID(COSMETIC, itemLink)
 end
 
--- Bandaid fix for MoP to filter shields for classes that can't wear them
-local shieldClasses = {
-    1,  -- Warrior
-    2,  -- Paladin
-    7,  -- Shaman
-}
-
-local playerClassID = select(3, UnitClass("player"));
 function CanIMogIt:IsArmorAppropriateForPlayer(itemLink)
-    local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
     local slotName = CanIMogIt:GetItemSlotName(itemLink)
     if slotName == nil then return end
-
+    
     local isArmorCosmetic = CanIMogIt:IsArmorCosmetic(itemLink)
     if isArmorCosmetic == nil then return end
-    if isArmorCosmetic == false and armorTypeSlots[slotName] then
+    
+    local playerArmorTypeID = CanIMogIt:GetPlayerArmorTypeName()
+    if isArmorCosmetic == false then
         return playerArmorTypeID == CanIMogIt:GetItemSubClassName(itemLink)
     else
-        if slotName == HOLDABLE then
-            return true
-        elseif slotName == SHIELD and shieldClasses[playerClassID] then
-            return true
-        end
-        return false
+        return true
     end
 end
 
