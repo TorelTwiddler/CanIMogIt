@@ -19,6 +19,13 @@ or for verbose:
 
 CanIMogIt.Tests = {}
 
+local testsButtboinker = {
+    -- Edge case not testable on Wouter (collected all the heirlooms I can learn there)
+    ["Account: Learned from another item"] = {
+        ["itemID"] = 64377, -- Zin'rokh, Destroyer of Worlds
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_ACCOUNTBOUND,
+    },
+}
 local testsWouter = {
     ["Learned"] = {
         ["itemID"] = 87124, -- Tunic of the Thousandfold Blades (Heroic)
@@ -40,10 +47,6 @@ local testsWouter = {
         ["itemID"] = 104640, -- Kor'kron Elite Skullmask (Heroic)
         ["expected"] = CanIMogIt.UNKNOWN,
     },
-    ["Cannot learn: Classes: Name"] = {
-        ["itemID"] = 98903, -- Crafted Malevolent Gladiator's Linked Spaulders
-        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER,
-    },
     --[[ ["Learned from a Cosmetic source"] = {
         ["itemID"] = 6612,
         ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE,
@@ -62,7 +65,11 @@ local testsWouter = {
     },
     ["BoE: Learned from another item"] = {
         ["itemID"] = 18743,  -- Gracious Cape
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE,
+        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM,
+    },
+    ["BoE: Cannot learn"] = {
+        ["itemID"] = 9429,  -- Miner's Hat of the Deep
+        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER,
     },
     ["BoE: Learned for a different class"] = {
         ["itemID"] = 15268,  -- Twin-Bladed Axe
@@ -75,10 +82,6 @@ local testsWouter = {
     ["BoE: Not Learned"] = {
         ["itemID"] = 9422,  -- Shadowforge Bushmaster
         ["expected"] = CanIMogIt.UNKNOWN,
-    },
-    ["BoP - Grey Item: Cannot be learned"] = {
-        ["itemID"] = 34685,  -- Vestments of Summer
-        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
     },
     ["BoP: Learned for a different class"] = {
         ["itemID"] = 13346, -- Robes of the Exalted
@@ -96,13 +99,13 @@ local testsWouter = {
         ["itemID"] = 88710, -- Nat's Hat
         ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
     },
+    ["BoP: Grey Item - Cannot be learned"] = {
+        ["itemID"] = 34685,  -- Vestments of Summer
+        ["expected"] = CanIMogIt.NOT_TRANSMOGABLE,
+    },
     ["Account: Learned"] = {
         ["itemID"] = 64460, -- Nifflevar Bearded Axe
         ["expected"] = CanIMogIt.KNOWN_ACCOUNTBOUND,
-    },
-    ["Account: Learned from another item"] = {
-        ["itemID"] = 93858, -- Brawler's Bladed Claws
-        ["expected"] = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_ACCOUNTBOUND,
     },
     ["Account: Learned for a different class"] = {
         ["itemID"] = 86196, -- Ancient Jinyu Staff
@@ -117,6 +120,14 @@ local testsWouter = {
         ["itemID"] = 64904, -- Ring of the Boy Emperor
         ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ACCOUNTBOUND,
     }, ]]
+    ["Edge Case - Cloaks - BoP: Not Learned"] = {
+        ["itemID"] = 104530,  -- Poisonmist Nightcloak (Heroic)
+        ["expected"] = CanIMogIt.UNKNOWN,
+    },
+    ["Edge Case - Off-Hand - BoP: Not Learned"] = {
+        ["itemID"] = 104609,  -- Festering Primordial Globule (Heroic)
+        ["expected"] = CanIMogIt.UNKNOWN,
+    },
     ["Edge Case - Shields - BoP: Cannot learn"] = {
         ["itemID"] = 104560,  -- Bulwark of the Fallen General (Heroic)
         ["expected"] = CanIMogIt.UNKNOWABLE_SOULBOUND,
@@ -128,6 +139,7 @@ local testsWouter = {
 }
 
 local tests = {
+    ["Butt"] = testsButtboinker,
     ["Wouter"] = testsWouter,
 }
 
