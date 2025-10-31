@@ -1,10 +1,13 @@
 -- Overlay for vendors.
 
 
+-- Cached merchant item button frames
+local buttons = {}
+
+
 ----------------------------
 -- UpdateIcon functions   --
 ----------------------------
-
 
 function MerchantFrame_CIMIUpdateIcon(self)
     if not self then return end
@@ -22,6 +25,17 @@ function MerchantFrame_CIMIUpdateIcon(self)
     end
 end
 
+function MerchantFrame_CIMIUpdateBuybackIcon(self)
+    if not self then return end
+    if not CIMI_CheckOverlayIconEnabled() then
+        self.CIMIIconTexture:SetShown(false)
+        self:SetScript("OnUpdate", nil)
+        return
+    end
+
+    CIMI_SetIcon(self, MerchantFrame_CIMIUpdateBuybackIcon, nil)
+end
+
 
 ------------------------
 -- Function hooks     --
@@ -29,11 +43,14 @@ end
 
 
 function CIMI_UpdateMerchantFrame()
-    for i=1,MERCHANT_ITEMS_PER_PAGE do
-        local frame = _G["MerchantItem"..i.."ItemButton"]
-        if frame then
-            MerchantFrame_CIMIUpdateIcon(frame.CanIMogItOverlay)
-        end
+    for _, button in ipairs(buttons) do
+        MerchantFrame_CIMIUpdateIcon(button.CanIMogItOverlay)
+    end
+end
+
+function CIMI_UpdateBuybackFrame()
+    for _, button in ipairs(buttons) do
+        MerchantFrame_CIMIUpdateBuybackIcon(button.CanIMogItOverlay)
     end
 end
 
@@ -46,11 +63,14 @@ end
 local function HookOverlayMerchant(event)
     if event ~= "PLAYER_LOGIN" then return end
 
-    -- Add hook for the Merchant frames.
-    for i=1,MERCHANT_ITEMS_PER_PAGE do
-        local frame = _G["MerchantItem"..i.."ItemButton"]
-        if frame then
-            CIMI_AddToFrame(frame, MerchantFrame_CIMIUpdateIcon)
+    -- Add hook for the button frames and cache those buttons locally
+    if not next(buttons) then
+        for i=1,MERCHANT_ITEMS_PER_PAGE do
+            local frame = _G["MerchantItem"..i.."ItemButton"]
+            if frame then
+                buttons[i] = frame
+                CIMI_AddToFrame(frame, MerchantFrame_CIMIUpdateIcon)
+            end
         end
     end
 
@@ -64,6 +84,14 @@ local function HookOverlayMerchant(event)
     end
     if _G["MerchantFrame"] then
         _G["MerchantFrame"]:HookScript("OnMouseWheel", CIMI_UpdateMerchantFrame)
+    end
+    
+    -- Add hook for clicking on the Merchant/Buyback tabs
+    if _G["MerchantFrameTab1"] then
+        _G["MerchantFrameTab1"]:HookScript("OnClick", CIMI_UpdateMerchantFrame)
+    end
+    if _G["MerchantFrameTab2"] then
+        _G["MerchantFrameTab2"]:HookScript("OnClick", CIMI_UpdateBuybackFrame)
     end
 end
 
