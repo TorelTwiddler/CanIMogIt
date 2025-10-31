@@ -976,14 +976,11 @@ end
 
 function CanIMogIt:CharacterCanLearnTransmog(itemLink)
     -- Returns whether the current character can learn the item or not.
+
     local sourceID = CanIMogIt:GetSourceID(itemLink)
     if sourceID == nil then return end
 
-    if CanIMogIt:IsItemArmor(itemLink) then
-        if CanIMogIt:IsArmorAppropriateForPlayer(itemLink) then
-            return true
-        end
-
+    if CanIMogIt:IsItemArmor(itemLink) and not CanIMogIt:IsArmorAppropriateForPlayer(itemLink) then
         return false
     end
 

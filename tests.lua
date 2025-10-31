@@ -136,6 +136,10 @@ local testsWouter = {
         ["itemID"] = 22198,  -- Jagged Obsidian Shield
         ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER,
     },
+    ["Edge Case - Wrong Class - BoP: Cannot Learn"] = {
+        ["itemID"] = 70343,  -- Ruthless Gladiator's Belt of Meditation (Monk, Druid only)
+        ["expected"] = CanIMogIt.UNKNOWABLE_SOULBOUND,
+    },
 }
 
 local tests = {
