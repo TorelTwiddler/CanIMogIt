@@ -20,22 +20,15 @@ local function string_starts(String,Start)
 end
 
 
-local function RemoveTradeSkillIcons()
+local function HideTradeSkillIcons()
     for i, button in ipairs(buttons) do
-        local itemLink = GetTradeSkillItemLink(button:GetID())
-        if itemLink ~= nil then
-            local text = button.text:GetText() or ""
-            local icon = CanIMogIt:GetIconText(itemLink)
-            if icon ~= nil and string_starts(text, icon) then
-                button.text:SetText(string.gsub(text, icon, ""))
-            end
-        end
+        button.CanIMogItOverlay.CIMIIconTexture:SetShown(false)
     end
 end
 
 function CIMI_UpdateTradeSkillIcons(self)
     if not CIMI_CheckOverlayIconEnabled() then
-        if self == "OptionUpdate" then RemoveTradeSkillIcons() end
+        if self == "OptionUpdate" then HideTradeSkillIcons() end
         return
     end
 
@@ -70,7 +63,7 @@ local function TradeSkillEvents(event, addonName)
             for i=1, TRADE_SKILLS_DISPLAYED do
                 local button = _G["TradeSkillSkill"..i]
                 CIMI_AddToFrame(button, nil, "TradeSkill"..i, "TRADESKILL")
-                AuctionHouseFrame_CIMIUpdateIcon(button.CanIMogItOverlay)
+                CIMI_UpdateTradeSkillIcons(button.CanIMogItOverlay)
                 buttons[i] = button
             end
         end

@@ -42,7 +42,7 @@ function CIMI_SetIcon(frame, updateIconFunc, text, unmodifiedText)
     if text == nil then
         -- nil means not all data was available to get the text. Try again later.
         frame.CIMIIconTexture:SetShown(false)
-        frame:SetScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc))
+        frame:SetScript("OnUpdate", updateIconFunc and CIMIOnUpdateFuncMaker(updateIconFunc) or nil)
     elseif text == "" then
         -- An empty string means that the text shouldn't be displayed.
         frame.CIMIIconTexture:SetShown(false)
