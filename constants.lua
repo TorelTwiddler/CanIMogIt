@@ -159,6 +159,7 @@ CanIMogIt.ICON_LOCATIONS = {
     ["BOTTOM"] = {"BOTTOM", 0, 2},
     ["TOP"] = {"TOP", 0, -2},
     ["AUCTION_HOUSE"] = {"LEFT", 160, 0},
+    ["TRADESKILL"] = {"LEFT", 4, 0},
     -- Using TOPRIGHT in Classic doesn't work as well because the journal entries are wider
     ["ENCOUNTER_JOURNAL"] = {"TOPRIGHT", -30, -2},
 }

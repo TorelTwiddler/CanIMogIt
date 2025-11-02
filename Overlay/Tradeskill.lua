@@ -42,13 +42,10 @@ function CIMI_UpdateTradeSkillIcons(self)
     -- Add icon to all visible trade skill recipes
     for i, button in ipairs(buttons) do
         local itemLink = GetTradeSkillItemLink(button:GetID())
-        if itemLink ~= nil then
-            local text = button.text:GetText() or ""
-            local icon = CanIMogIt:GetIconText(itemLink)
-            if icon ~= nil and not string_starts(text, icon) then
-                text = icon .. text
-                button.text:SetText(text)
-            end
+        if itemLink == nil then
+            CIMI_SetIcon(button.CanIMogItOverlay, nil, nil, nil)
+        else
+            CIMI_SetIcon(button.CanIMogItOverlay, nil, CanIMogIt:GetTooltipText(itemLink))
         end
     end
 end
@@ -71,9 +68,13 @@ local function TradeSkillEvents(event, addonName)
         if not next(buttons) then 
             -- Using constant TRADE_SKILLS_DISPLAYED as max value - other addons can expand crafting UI which also modifies this value
             for i=1, TRADE_SKILLS_DISPLAYED do
-                buttons[i] = _G["TradeSkillSkill"..i]
+                local button = _G["TradeSkillSkill"..i]
+                CIMI_AddToFrame(button, nil, "TradeSkill"..i, "TRADESKILL")
+                AuctionHouseFrame_CIMIUpdateIcon(button.CanIMogItOverlay)
+                buttons[i] = button
             end
         end
+        
 
         -- Hook update on button click
         for i, button in ipairs(buttons) do
