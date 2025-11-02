@@ -79,7 +79,6 @@ if C_AddOns.IsAddOnLoaded("Auctionator") then
         end
         for i, button in pairs(buttons) do
             if button then
-                button.CIMI_index = i
                 CIMI_AddToFrame(button, AuctionatorFrame_CIMIUpdateIcon, "AuctionatorShoppingList"..i, "AUCTIONATOR")
                 AuctionatorFrame_CIMIUpdateIcon(button.CanIMogItOverlay)
             end

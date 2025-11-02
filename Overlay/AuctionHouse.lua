@@ -84,7 +84,6 @@ function AuctionHouseFrame_CIMIOnValueChanged(_, elapsed)
 
     for i, button in pairs(buttons) do
         local frame = button
-        frame.CIMI_index = i
         if frame then
             CIMI_AddToFrame(frame, AuctionHouseFrame_CIMIUpdateIcon, "AuctionHouse"..i, "AUCTION_HOUSE")
             AuctionHouseFrame_CIMIUpdateIcon(button.CanIMogItOverlay)
