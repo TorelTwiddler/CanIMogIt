@@ -21,4 +21,4 @@ jobs:
       - name: Package and release - Mists of Pandaria
         uses: BigWigsMods/packager@v2
         with:
-          args: -g mists
+          args: -g mists -w 0
