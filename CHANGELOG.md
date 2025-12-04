@@ -1,3 +1,15 @@
+5.5.2-1 - 2025/12/04
+
+We have a release for Mists of Pandaria Classic! This release is based on the latest Retail version, which has slightly different icons than what you might be used to (BoA items are pink and there are some icon differences for BoP items).
+* [#389](https://gitlab.com/toreltwiddler/CanIMogIt/-/issues/389) Fixed general implementation for Mists of Pandaria Classic and fixed broken integrations
+    * Enabled Auction House window additions
+        * [#386](https://gitlab.com/toreltwiddler/CanIMogIt/-/issues/386) Support battle pet cages on the Auction House
+    * Enabled Tradeskill window augmentations
+    * Enabled Item Sets window overlay
+    * Enabled Dungeon Journal overlay
+
+*****
+
 11.0.5v2.5 - 2024/11/10
 
 * [#356](https://gitlab.com/toreltwiddler/CanIMogIt/issues/356) Fix Warbound items not following not-transmogable rules.
