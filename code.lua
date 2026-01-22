@@ -845,7 +845,7 @@ function CanIMogIt:IsAppearanceUsable(itemLink)
     if not sourceID then return end
     local appearanceInfo = C_TransmogCollection.GetAppearanceInfoBySource(sourceID)
     if not appearanceInfo then return end
-    return appearanceInfo.appearanceIsUsable
+    return appearanceInfo.isAnySourceValidForPlayer
 end
 
 

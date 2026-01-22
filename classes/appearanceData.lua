@@ -60,7 +60,7 @@ function CanIMogIt.AppearanceData:CalculateKnownStatus()
             status = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
         end
     else
-        if self.characterCanLearnTransmog then
+        if self.isValidAppearanceForCharacter then
             -- The player does not know the appearance and the character
             -- can learn this appearance.
             status = CanIMogIt.UNKNOWN
