@@ -682,7 +682,7 @@ end
 function CanIMogIt:GetSourceLocationText(itemLink)
     -- Returns string of the all the types of sources which can provide an item with this appearance.
 
-    cached_value = CanIMogIt.cache:GetItemSourcesValue(itemLink)
+    local cached_value = CanIMogIt.cache:GetItemSourcesValue(itemLink)
     if cached_value then
         return cached_value
     end
@@ -861,7 +861,7 @@ local function RetailOldGetSourceID(itemLink)
             -- up the DressUpModel functions, so _they_ don't even know what they do anymore.
             -- The `appearanceID` field from `DressUpModel:GetItemTransmogInfo` is actually its
             -- source ID, not it's appearance ID.
-            sourceID = transmogInfo.appearanceID
+            local sourceID = transmogInfo.appearanceID
             if not CanIMogIt:IsSourceIDFromItemLink(sourceID, itemLink) then
                 -- This likely means that the game hasn't finished loading things
                 -- yet, so let's wait until we get good data before caching it.
