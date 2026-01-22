@@ -1,3 +1,9 @@
+12.0.0v2.8 - 2026/01/22
+
+* [#399](https://gitlab.com/toreltwiddler/CanIMogIt/issues/399) Fix compatibility with Midnight pre-patch.
+
+*****
+
 11.0.5v2.5 - 2024/11/10
 
 * [#356](https://gitlab.com/toreltwiddler/CanIMogIt/issues/356) Fix Warbound items not following not-transmogable rules.
