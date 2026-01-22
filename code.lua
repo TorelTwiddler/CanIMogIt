@@ -745,7 +745,7 @@ end
 
 
 function CanIMogIt:GetItemLinkFromSourceID(sourceID)
-    return select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+    return C_TransmogCollection.GetAppearanceSourceInfo(sourceID).itemLink
 end
 
 
@@ -969,7 +969,7 @@ end
 function CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
     -- Gets the appearanceID from the sourceID.
     if sourceID ~= nil then
-        local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+        local appearanceID = C_TransmogCollection.GetAppearanceSourceInfo(sourceID).itemAppearanceID
         return appearanceID
     end
 end
