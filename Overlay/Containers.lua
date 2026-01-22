@@ -46,7 +46,8 @@ function ContainerFrame_CIMIUpdateIcon(cimiFrame)
 end
 
 
-function WarbankFrame_CIMIUpdateIcon(self)
+function BankFrame_CIMIUpdateIcon(self)
+    -- Works for both Bank and Warbank frames.
     if not self then return end
     if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
@@ -56,7 +57,7 @@ function WarbankFrame_CIMIUpdateIcon(self)
 
     local bag, slot = self:GetParent().bankTabID, self:GetParent().containerSlotID
     local itemLink = C_Container.GetContainerItemLink(bag, slot)
-    CIMI_SetIcon(self, WarbankFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
+    CIMI_SetIcon(self, BankFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
 end
 
 
@@ -131,27 +132,31 @@ local function UpdateContainerFrames()
         end
     end
 
-    -- Warbank frame
-    for i=1,CanIMogIt.NUM_WARBANK_ITEMS do
-        local accountBankPanel = _G["AccountBankPanel"]
-        if accountBankPanel == nil then
+    -- Bank and Warbank frames (they are the same frames)
+    for i=1,CanIMogIt.NUM_BANK_ITEMS do
+        local bankFramePanel = _G["BankFrame"].BankPanel
+        if bankFramePanel == nil then
             return
         end
-        local frame = accountBankPanel:FindItemButtonByContainerSlotID(i)
+        local frame = bankFramePanel:FindItemButtonByContainerSlotID(i)
         if frame then
             cimiFrame = frame.CanIMogItOverlay
             if not cimiFrame then
                 cimiFrame = AddToContainerFrame(frame)
             end
-            WarbankFrame_CIMIUpdateIcon(cimiFrame)
+            BankFrame_CIMIUpdateIcon(cimiFrame)
         end
     end
+
 end
 
 hooksecurefunc("ToggleBag", UpdateContainerFrames)
 hooksecurefunc("OpenAllBags", UpdateContainerFrames)
 hooksecurefunc("CloseAllBags", UpdateContainerFrames)
 hooksecurefunc("ToggleAllBags", UpdateContainerFrames)
+
+-- Works for both Bank and Warbank tabs.
+hooksecurefunc(_G["BankFrame"].BankPanel, "SelectTab", UpdateContainerFrames)
 
 -- local accountBankPanel = _G["AccountBankPanel"]
 -- hooksecurefunc(accountBankPanel, "RefreshBankPanel", function () C_Timer.After(.1, UpdateContainerFrames) end)
