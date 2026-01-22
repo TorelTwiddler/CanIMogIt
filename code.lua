@@ -1038,7 +1038,7 @@ end
 
 
 function CanIMogIt:IsTransmogable(itemLink)
-    -- Returns whether the item is transmoggable or not.
+    -- Returns whether the item is transmogable or not.
 
     local is_misc_subclass = CanIMogIt:IsArmorSubClassID(MISC, itemLink)
     if is_misc_subclass and miscArmorExceptions[CanIMogIt:GetItemSlotName(itemLink)] == nil then
@@ -1048,21 +1048,28 @@ function CanIMogIt:IsTransmogable(itemLink)
     local itemID, _, _, slotName = C_Item.GetItemInfoInstant(itemLink)
 
     if CanIMogIt:IsItemBattlepet(itemLink) or CanIMogIt:IsItemKeystone(itemLink) then
-        -- Item is never transmoggable if it's a battlepet or keystone.
+        -- Item is never transmogable if it's a battlepet or keystone.
         -- We can't wear battlepets on our heads yet!
         return false
     end
 
-    -- See if the game considers it transmoggable
-    local transmoggable = select(3, C_Transmog.CanTransmogItem(itemID))
-    if transmoggable == false then
+    -- See if item has itemModifiedAppearanceID
+    local itemModifiedAppearanceID = select(2, C_TransmogCollection.GetItemInfo(itemID))
+    if itemModifiedAppearanceID == nil then
         return false
     end
 
-    -- See if the item is in a valid transmoggable slot
+    -- See if item has valid transmog link
+    local appearanceInfo = C_TransmogCollection.GetAppearanceSourceInfo(itemModifiedAppearanceID)
+    if appearanceInfo.transmoglink == nil then
+        return false
+    end
+
+    -- See if the item is in a valid transmogable slot
     if inventorySlotsMap[slotName] == nil then
         return false
     end
+
     return true
 end
 
@@ -1110,7 +1117,7 @@ function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
             and (unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE
             or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_BOE
             or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_WARBOUND) then
-        -- If we don't want to show the tooltip if it's not transmoggable
+        -- If we don't want to show the tooltip if it's not transmogable
         return "", ""
     end
 
