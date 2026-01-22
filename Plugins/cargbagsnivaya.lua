@@ -10,7 +10,7 @@ if C_AddOns.IsAddOnLoaded("cargBags_Nivaya") then
 
     function CargBagsNivaya_CIMIUpdateIcon(self)
         if not self or not self:GetParent() then return end
-        if not CIMI_CheckOverlayIconEnabled(self) then
+        if not CIMI_CheckOverlayIconEnabled() then
             self.CIMIIconTexture:SetShown(false)
             self:SetScript("OnUpdate", nil)
             return

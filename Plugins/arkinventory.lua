@@ -14,7 +14,7 @@ local function AddArkInventoryHooks()
         if not self or not self:GetParent() then return end
         local frame = self:GetParent()
         if not frame.ARK_Data then return end
-        if not CIMI_CheckOverlayIconEnabled(self) then
+        if not CIMI_CheckOverlayIconEnabled() then
             self.CIMIIconTexture:SetShown(false)
             self:SetScript("OnUpdate", nil)
             return
