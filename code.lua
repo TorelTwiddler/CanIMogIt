@@ -745,7 +745,8 @@ end
 
 
 function CanIMogIt:GetItemLinkFromSourceID(sourceID)
-    return C_TransmogCollection.GetAppearanceSourceInfo(sourceID).itemLink
+    local appearanceInfo = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
+    if appearanceInfo then return appearanceInfo.itemLink else return nil end
 end
 
 
@@ -948,7 +949,9 @@ end
 
 function CanIMogIt:IsSourceIDFromItemLink(sourceID, itemLink)
     -- Returns whether the source ID given matches the itemLink.
-    local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+    local sourceInfo = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
+    if not sourceInfo then return false end
+    local sourceItemLink = sourceInfo.itemLink
     if not sourceItemLink then return false end
     return CanIMogIt:DoItemIDsMatch(sourceItemLink, itemLink)
 end
@@ -969,8 +972,8 @@ end
 function CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
     -- Gets the appearanceID from the sourceID.
     if sourceID ~= nil then
-        local appearanceID = C_TransmogCollection.GetAppearanceSourceInfo(sourceID).itemAppearanceID
-        return appearanceID
+        local appearanceInfo = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
+        return appearanceInfo.itemAppearanceID
     end
 end
 
