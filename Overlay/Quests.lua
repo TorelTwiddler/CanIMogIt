@@ -108,7 +108,7 @@ local function HookOverlayQuest(event)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent(HookOverlayQuest, {"PLAYER_LOGIN"})
+CanIMogIt.eventFrame:AddSmartEvent(HookOverlayQuest, {"PLAYER_LOGIN"})
 
 
 ------------------------
@@ -126,7 +126,7 @@ local function QuestOverlayEvents(event, ...)
     end
 end
 
--- CanIMogIt.frame:AddOverlayEventFunction(QuestOverlayEvents)
+-- CanIMogIt.eventFrame:AddOverlayEventFunction(QuestOverlayEvents)
 -- hooksecurefunc("QuestLogPopupDetailFrame_Update", QuestOverlayEvents)
 
 -- CanIMogIt:RegisterMessage("OptionUpdate", QuestOverlayEvents)

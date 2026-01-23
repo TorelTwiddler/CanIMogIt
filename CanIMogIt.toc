@@ -40,6 +40,7 @@ classes\appearanceData.lua
 classes\bindData.lua
 classes\itemData.lua
 options.lua
+events.lua
 cache.lua
 requirements.lua
 code.lua

@@ -66,7 +66,7 @@ end
 
 
 if CanIMogIt.isRetail then
-    CanIMogIt.frame:HookScript("OnEvent", function (self, event, addonName)
+    CanIMogIt.eventFrame:HookScript("OnEvent", function (self, event, addonName)
         if event == "ADDON_LOADED" and addonName == "Blizzard_Collections" then
             -- When the scrollbar moves, update the display.
             _G["WardrobeCollectionFrame"].SetsCollectionFrame.ListContainer:HookScript("OnUpdate", WardrobeCollectionFrame_CIMIOnValueChanged)

@@ -67,8 +67,8 @@ local function HookOverlayMerchant(event)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent(HookOverlayMerchant, {"PLAYER_LOGIN"})
-CanIMogIt.frame:AddSmartEvent(CIMI_UpdateMerchantFrame, {"MERCHANT_SHOW"})
+CanIMogIt.eventFrame:AddSmartEvent(HookOverlayMerchant, {"PLAYER_LOGIN"})
+CanIMogIt.eventFrame:AddSmartEvent(CIMI_UpdateMerchantFrame, {"MERCHANT_SHOW"})
 
 ------------------------
 -- Event functions    --
