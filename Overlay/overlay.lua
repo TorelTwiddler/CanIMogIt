@@ -86,7 +86,7 @@ function CIMI_AddToFrame(parentFrame, updateIconFunc, frameSuffix, overrideIconL
         frame.CIMIIconTexture = frame:CreateTexture("CIMITextureFrame", "OVERLAY")
         frame.CIMIIconTexture:SetWidth(ICON_SIZE)
         frame.CIMIIconTexture:SetHeight(ICON_SIZE)
-        local iconLocation = overrideIconLocation or CanIMogItOptions["iconLocation"]
+        local iconLocation = overrideIconLocation or (CanIMogItOptions and CanIMogItOptions["iconLocation"]) or "TOPLEFT"
         frame.CIMIIconTexture:SetPoint(unpack(CanIMogIt.ICON_LOCATIONS[iconLocation]))
         frame.timeSinceCIMIIconCheck = 0
         frame:SetScript("OnUpdate", CIMIOnUpdateFuncMaker(updateIconFunc))
