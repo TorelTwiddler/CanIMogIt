@@ -58,6 +58,7 @@ CanIMogItOptions_Defaults = {
         ["showMountItems"] = true,
         ["showCatalizableItems"] = true,
         ["showEnsembleItems"] = true,
+        ["markUnlearnableIfUnusable"] = false,
     },
 }
 
@@ -122,6 +123,10 @@ CanIMogItOptions_DisplayData = {
     ["showEnsembleItems"] = {
         ["displayName"] = L["Show Ensemble Items"],
         ["description"] = L["Show tooltips and overlays on Ensemble Items (otherwise, shows as not transmoggable)."]
+    },
+    ["markUnlearnableIfUnusable"] = {
+        ["displayName"] = L["Mark unlearnable if unusable"],
+        ["description"] = L["If enabled, items that cannot be equipped/used by your character will be marked as unlearnable, even if they could technically be learned."]
     },
 }
 
@@ -513,7 +518,85 @@ local function newRadioGrid(parent, variableName)
     -- sample:SetText("example.")
     -- sample:SetPoint("TOPLEFT", frame, "BOTTOMLEFT")
 
+    -- Store radio buttons and variable name for refresh
+    frame.allRadios = allRadios
+    frame.variableName = variableName
+
     return frame
+end
+
+
+local function refreshOptionsUI()
+    -- Refresh all checkboxes
+    if CanIMogIt.frame.debug then
+        CanIMogIt.frame.debug:SetChecked(CanIMogIt.frame.debug:GetValue())
+    end
+    if CanIMogIt.frame.showEquippableOnly then
+        CanIMogIt.frame.showEquippableOnly:SetChecked(CanIMogIt.frame.showEquippableOnly:GetValue())
+    end
+    if CanIMogIt.frame.markUnlearnableIfUnusable then
+        CanIMogIt.frame.markUnlearnableIfUnusable:SetChecked(CanIMogIt.frame.markUnlearnableIfUnusable:GetValue())
+    end
+    if CanIMogIt.frame.showTransmoggableOnly then
+        CanIMogIt.frame.showTransmoggableOnly:SetChecked(CanIMogIt.frame.showTransmoggableOnly:GetValue())
+    end
+    if CanIMogIt.frame.showUnknownOnly then
+        CanIMogIt.frame.showUnknownOnly:SetChecked(CanIMogIt.frame.showUnknownOnly:GetValue())
+    end
+    if CanIMogIt.frame.showSetInfo then
+        CanIMogIt.frame.showSetInfo:SetChecked(CanIMogIt.frame.showSetInfo:GetValue())
+    end
+    if CanIMogIt.frame.showItemIconOverlay then
+        CanIMogIt.frame.showItemIconOverlay:SetChecked(CanIMogIt.frame.showItemIconOverlay:GetValue())
+    end
+    if CanIMogIt.frame.showVerboseText then
+        CanIMogIt.frame.showVerboseText:SetChecked(CanIMogIt.frame.showVerboseText:GetValue())
+    end
+    if CanIMogIt.frame.showSourceLocationTooltip then
+        CanIMogIt.frame.showSourceLocationTooltip:SetChecked(CanIMogIt.frame.showSourceLocationTooltip:GetValue())
+    end
+    if CanIMogIt.frame.printDatabaseScan then
+        CanIMogIt.frame.printDatabaseScan:SetChecked(CanIMogIt.frame.printDatabaseScan:GetValue())
+    end
+    if CanIMogIt.frame.showToyItems then
+        CanIMogIt.frame.showToyItems:SetChecked(CanIMogIt.frame.showToyItems:GetValue())
+    end
+    if CanIMogIt.frame.showPetItems then
+        CanIMogIt.frame.showPetItems:SetChecked(CanIMogIt.frame.showPetItems:GetValue())
+    end
+    if CanIMogIt.frame.showMountItems then
+        CanIMogIt.frame.showMountItems:SetChecked(CanIMogIt.frame.showMountItems:GetValue())
+    end
+    if CanIMogIt.frame.showCatalizableItems then
+        CanIMogIt.frame.showCatalizableItems:SetChecked(CanIMogIt.frame.showCatalizableItems:GetValue())
+    end
+    if CanIMogIt.frame.showEnsembleItems then
+        CanIMogIt.frame.showEnsembleItems:SetChecked(CanIMogIt.frame.showEnsembleItems:GetValue())
+    end
+
+    -- Refresh radio buttons
+    if CanIMogIt.frame.iconLocation and CanIMogIt.frame.iconLocation.allRadios and CanIMogIt.frame.iconLocation.variableName then
+        local radioFrame = CanIMogIt.frame.iconLocation
+        local currentValue = CanIMogItOptions[radioFrame.variableName]
+        local locationMap = {
+            ["TopLeft"] = "TOPLEFT",
+            ["Top"] = "TOP",
+            ["TopRight"] = "TOPRIGHT",
+            ["Left"] = "LEFT",
+            ["Center"] = "CENTER",
+            ["Right"] = "RIGHT",
+            ["BottomLeft"] = "BOTTOMLEFT",
+            ["Bottom"] = "BOTTOM",
+            ["BottomRight"] = "BOTTOMRIGHT"
+        }
+        for _, radio in ipairs(radioFrame.allRadios) do
+            local radioName = radio:GetName()
+            local location = string.match(radioName, "_(%w+)$")
+            if location and locationMap[location] then
+                radio:SetChecked(currentValue == locationMap[location])
+            end
+        end
+    end
 end
 
 
@@ -521,6 +604,7 @@ local function createOptionsMenu()
     -- define the checkboxes
     CanIMogIt.frame.debug =  newCheckbox(CanIMogIt.frame, "debug", debugCheckboxOnClick)
     CanIMogIt.frame.showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
+    CanIMogIt.frame.markUnlearnableIfUnusable = newCheckbox(CanIMogIt.frame, "markUnlearnableIfUnusable")
     CanIMogIt.frame.showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
     CanIMogIt.frame.showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
     CanIMogIt.frame.showSetInfo = newCheckbox(CanIMogIt.frame, "showSetInfo")
@@ -538,7 +622,8 @@ local function createOptionsMenu()
     -- position the checkboxes
     CanIMogIt.frame.debug:SetPoint("TOPLEFT", 16, -16)
     CanIMogIt.frame.showEquippableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.debug, "BOTTOMLEFT")
-    CanIMogIt.frame.showTransmoggableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showEquippableOnly, "BOTTOMLEFT")
+    CanIMogIt.frame.markUnlearnableIfUnusable:SetPoint("TOPLEFT", CanIMogIt.frame.showEquippableOnly, "BOTTOMLEFT")
+    CanIMogIt.frame.showTransmoggableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.markUnlearnableIfUnusable, "BOTTOMLEFT")
     CanIMogIt.frame.showUnknownOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showTransmoggableOnly, "BOTTOMLEFT")
     CanIMogIt.frame.showSetInfo:SetPoint("TOPLEFT", CanIMogIt.frame.showUnknownOnly, "BOTTOMLEFT")
     CanIMogIt.frame.showItemIconOverlay:SetPoint("TOPLEFT", CanIMogIt.frame.showSetInfo, "BOTTOMLEFT")
@@ -553,6 +638,9 @@ local function createOptionsMenu()
     CanIMogIt.frame.showEnsembleItems:SetPoint("TOPLEFT", CanIMogIt.frame.showCatalizableItems, "BOTTOMLEFT")
 
     changesSavedText()
+    
+    -- Refresh UI when frame is shown
+    CanIMogIt.frame:SetScript("OnShow", refreshOptionsUI)
 end
 
 

@@ -60,12 +60,19 @@ function CanIMogIt.AppearanceData:CalculateKnownStatus()
             status = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
         end
     else
-        if self.isValidAppearanceForCharacter then
+        if self.characterCanLearnTransmog then
             -- The player does not know the appearance and the character
             -- can learn this appearance.
-            status = CanIMogIt.UNKNOWN
+            -- Check if option is enabled to mark as unlearnable if unusable
+            if CanIMogItOptions and CanIMogItOptions["markUnlearnableIfUnusable"] and not self.isValidAppearanceForCharacter then
+                -- Option enabled: mark as unlearnable if character can't use it
+                status = CanIMogIt.UNKNOWABLE_BY_CHARACTER
+            else
+                -- Default: mark as unknown (learnable) even if can't equip/use it
+                status = CanIMogIt.UNKNOWN
+            end
         else
-            -- Warbound shouldn't be possible in this state.
+            -- The character cannot learn this appearance.
             status = CanIMogIt.UNKNOWABLE_BY_CHARACTER
         end
     end
