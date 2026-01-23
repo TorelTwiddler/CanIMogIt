@@ -83,8 +83,8 @@ local function TradeSkillEvents(event, addonName)
         end)
     end
 end
-CanIMogIt.frame:AddSmartEvent(TradeSkillEvents, {"TRADE_SKILL_SHOW", "ADDON_LOADED"})
-CanIMogIt.frame:AddSmartEvent(CIMI_UpdateTradeSkillIcons, {"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "TRADE_SKILL_FILTER_UPDATE"})
+CanIMogIt.eventFrame:AddSmartEvent(TradeSkillEvents, {"TRADE_SKILL_SHOW", "ADDON_LOADED"})
+CanIMogIt.eventFrame:AddSmartEvent(CIMI_UpdateTradeSkillIcons, {"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "TRADE_SKILL_FILTER_UPDATE"})
 
 
 CanIMogIt:RegisterMessage("OptionUpdate", CIMI_UpdateTradeSkillIcons)

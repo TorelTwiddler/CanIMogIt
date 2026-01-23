@@ -114,7 +114,7 @@ local function HookOverlayQuest(event)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent(HookOverlayQuest, {"PLAYER_LOGIN"})
+CanIMogIt.eventFrame:AddSmartEvent(HookOverlayQuest, {"PLAYER_LOGIN"})
 
 
 ------------------------
@@ -127,7 +127,7 @@ local function HookQuestLogUpdate(event)
     if not questInfoRewardsFrame:IsVisible() then return end -- Don't update if we can't see the frame
     AddAndUpdateQuestFrames()
 end
-CanIMogIt.frame:AddSmartEvent(HookQuestLogUpdate, {"QUEST_LOG_UPDATE"})
+CanIMogIt.eventFrame:AddSmartEvent(HookQuestLogUpdate, {"QUEST_LOG_UPDATE"})
 
 
 -- Fires when any CIMI option is updated

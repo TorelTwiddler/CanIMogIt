@@ -31,7 +31,7 @@ end
 
 
 function ContainerFrameItemButton_CIMIToggleBag(...)
-    CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
+    CanIMogIt.eventFrame:ItemOverlayEvents("BAG_UPDATE")
 end
 
 
@@ -80,7 +80,7 @@ local function HookOverlayContainers(event)
         end
     end
 end
-CanIMogIt.frame:AddSmartEvent(HookOverlayContainers, {"PLAYER_LOGIN"})
+CanIMogIt.eventFrame:AddSmartEvent(HookOverlayContainers, {"PLAYER_LOGIN"})
 
 local function GetNameOrID(frame)
     if frame.GetName and frame:GetName() then
@@ -138,7 +138,7 @@ local function OnContainerFramesEvent(event)
 end
 
 
-CanIMogIt.frame:AddSmartEvent(OnContainerFramesEvent, containerFrameEvents)
+CanIMogIt.eventFrame:AddSmartEvent(OnContainerFramesEvent, containerFrameEvents)
 CanIMogIt:RegisterMessage("OptionUpdate", UpdateContainerFrames)
 
 
@@ -166,7 +166,7 @@ local function OnGuildBankLoaded(event, addonName, ...)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent(OnGuildBankLoaded, {"ADDON_LOADED"})
+CanIMogIt.eventFrame:AddSmartEvent(OnGuildBankLoaded, {"ADDON_LOADED"})
 
 local function OnGuildBankUpdate(event, ...)
     if event == "GUILDBANKBAGSLOTS_CHANGED" then
@@ -174,5 +174,5 @@ local function OnGuildBankUpdate(event, ...)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent(OnGuildBankUpdate, {"GUILDBANKBAGSLOTS_CHANGED"})
+CanIMogIt.eventFrame:AddSmartEvent(OnGuildBankUpdate, {"GUILDBANKBAGSLOTS_CHANGED"})
 CanIMogIt:RegisterMessage("OptionUpdate", UpdateGuildBank)

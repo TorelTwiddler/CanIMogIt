@@ -625,7 +625,7 @@ function CanIMogIt:ResetCache()
     CanIMogIt.cache:Clear()
     CanIMogIt:SendMessage("ResetCache")
     -- Fake a BAG_UPDATE event to updating the icons. TODO: Replace this with message
-    CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE")
+    CanIMogIt.eventFrame:ItemOverlayEvents("BAG_UPDATE")
 end
 
 

@@ -39,6 +39,7 @@ classes\appearanceData.lua
 classes\bindData.lua
 classes\itemData.lua
 options.lua
+events.lua
 cache.lua
 code.lua
 tooltips.lua

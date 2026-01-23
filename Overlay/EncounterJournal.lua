@@ -76,7 +76,7 @@ local function OnEncounterJournalLoaded(event, addonName, ...)
     SetupEncounterJournalHooks()
 end
 
-CanIMogIt.frame:AddSmartEvent(OnEncounterJournalLoaded, {"ADDON_LOADED"})
+CanIMogIt.eventFrame:AddSmartEvent(OnEncounterJournalLoaded, {"ADDON_LOADED"})
 
 -- Fail-safe: Check if the EncounterJournal is already loaded
 -- This helps when addon loading order is changed by other addons
@@ -115,9 +115,6 @@ local function EncounterJournalOverlayEvents(event, ...)
 end
 
 if CanIMogIt.isRetail then
-    CanIMogIt.frame:AddSmartEvent(EncounterJournalOverlayEvents, {"PLAYER_LOGIN"})
-
-
-
+    CanIMogIt.eventFrame:AddSmartEvent(EncounterJournalOverlayEvents, {"PLAYER_LOGIN"})
     CanIMogIt:RegisterMessage("OptionUpdate", EncounterJournalOverlayEvents)
 end

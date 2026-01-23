@@ -40,7 +40,7 @@ local function HookOverlayLoot(event)
     end
 end
 
-CanIMogIt.frame:AddSmartEvent(HookOverlayLoot, {"PLAYER_LOGIN", "START_LOOT_ROLL"})
+CanIMogIt.eventFrame:AddSmartEvent(HookOverlayLoot, {"PLAYER_LOGIN", "START_LOOT_ROLL"})
 
 
 ------------------------
@@ -89,6 +89,6 @@ local function ChatMessageLootEvent(event, message, _, _, _, target)
 end
 
 -- FIXME
--- CanIMogIt.frame:AddOverlayEventFunction(ChatMessageLootEvent)
+-- CanIMogIt.eventFrame:AddOverlayEventFunction(ChatMessageLootEvent)
 
 CanIMogIt:RegisterMessage("OptionUpdate", ChatMessageLootEvent)

@@ -17,7 +17,7 @@ local resetDelay = .3
 --         resetTime = theTime + resetDelay
 --     end
 -- end
--- CanIMogIt.frame:HookScript("OnUpdate", iconOverlayUpdateDelay)
+-- CanIMogIt.eventFrame:HookScript("OnUpdate", iconOverlayUpdateDelay)
 
 
 
@@ -132,26 +132,26 @@ local function HookItemOverlay(event)
     if event ~= "PLAYER_LOGIN" then return end
 end
 
-CanIMogIt.frame:AddSmartEvent(HookItemOverlay, {"PLAYER_LOGIN"})
+CanIMogIt.eventFrame:AddSmartEvent(HookItemOverlay, {"PLAYER_LOGIN"})
 
 ------------------------
 -- Event functions    --
 ------------------------
 
 
-CanIMogIt.frame.itemOverlayEventFunctions = {}
+CanIMogIt.eventFrame.itemOverlayEventFunctions = {}
 
-function CanIMogIt.frame:ItemOverlayEvents(event, ...)
+function CanIMogIt.eventFrame:ItemOverlayEvents(event, ...)
     -- if the event is not in the list of events, then return
     if not CanIMogIt.Events[event] then return end
-    for i, func in ipairs(CanIMogIt.frame.itemOverlayEventFunctions) do
+    for i, func in ipairs(CanIMogIt.eventFrame.itemOverlayEventFunctions) do
         func(event, ...)
     end
 end
 
-function CanIMogIt.frame:AddOverlayEventFunction(func)
+function CanIMogIt.eventFrame:AddOverlayEventFunction(func)
     -- Adds the func to the list of functions that are called for overlay events.
-    table.insert(CanIMogIt.frame.itemOverlayEventFunctions, func)
+    table.insert(CanIMogIt.eventFrame.itemOverlayEventFunctions, func)
 end
 
 

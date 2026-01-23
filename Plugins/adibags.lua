@@ -38,7 +38,7 @@ if C_AddOns.IsAddOnLoaded("AdiBags") then
             end
         end
     end
-    CanIMogIt.frame:AddSmartEvent(CIMI_AdiBagsAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
+    CanIMogIt.eventFrame:AddSmartEvent(CIMI_AdiBagsAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
 
 
     ------------------------
@@ -61,7 +61,7 @@ if C_AddOns.IsAddOnLoaded("AdiBags") then
 
     function AdiBags_UpdateAfter()
         C_Timer.After(.5, function() CIMI_AdiBagsAddFrame(nil, "PLAYER_LOGIN") end)
-        C_Timer.After(.5, function() CanIMogIt.frame:ItemOverlayEvents("BAG_UPDATE") end)
+        C_Timer.After(.5, function() CanIMogIt.eventFrame:ItemOverlayEvents("BAG_UPDATE") end)
     end
     LibStub('ABEvent-1.0').RegisterMessage("CanIMogIt", "AdiBags_BagOpened", AdiBags_UpdateAfter)
     LibStub('ABEvent-1.0').RegisterMessage("CanIMogIt", "AdiBags_ForceFullLayout", AdiBags_UpdateAfter)

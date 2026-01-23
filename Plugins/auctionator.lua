@@ -109,7 +109,7 @@ if C_AddOns.IsAddOnLoaded("Auctionator") then
         C_Timer.After(.1, function () HookOverlay() end)
     end
 
-    CanIMogIt.frame:AddSmartEvent(HookOverlayAuctionator, {"AUCTION_HOUSE_SHOW"})
+    CanIMogIt.eventFrame:AddSmartEvent(HookOverlayAuctionator, {"AUCTION_HOUSE_SHOW"})
 
     ------------------------
     -- Event functions    --
@@ -120,6 +120,6 @@ if C_AddOns.IsAddOnLoaded("Auctionator") then
         C_Timer.After(.1, AuctionatorFrame_CIMIOnValueChanged)
     end
 
-    CanIMogIt.frame:AddSmartEvent(AuctionatorUpdateEvents, {"AUCTION_HOUSE_BROWSE_RESULTS_UPDATED"})
+    CanIMogIt.eventFrame:AddSmartEvent(AuctionatorUpdateEvents, {"AUCTION_HOUSE_BROWSE_RESULTS_UPDATED"})
 
 end

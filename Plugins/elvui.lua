@@ -54,7 +54,7 @@ if C_AddOns.IsAddOnLoaded("ElvUI") then
         C_Timer.After(.5, function() AddToBankFrames() end)
     end
 
-    CanIMogIt.frame:AddSmartEvent(CIMI_ElvUIAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
+    CanIMogIt.eventFrame:AddSmartEvent(CIMI_ElvUIAddFrame, {"PLAYER_LOGIN", "BANKFRAME_OPENED"})
 
     ------------------------
     -- Event functions    --
@@ -87,5 +87,5 @@ if C_AddOns.IsAddOnLoaded("ElvUI") then
         if not CanIMogIt.Events[event] then return end
         CIMI_ElvUIUpdate()
     end
-    CanIMogIt.frame:AddSmartEvent(CIMI_ElvUIEvents, CanIMogIt.EventsList)
+    CanIMogIt.eventFrame:AddSmartEvent(CIMI_ElvUIEvents, CanIMogIt.EventsList)
 end

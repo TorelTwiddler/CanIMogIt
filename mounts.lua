@@ -37,4 +37,4 @@ local function OnMountAdded(event)
     if event ~= "NEW_MOUNT_ADDED" then return end
     CanIMogIt:ResetCache()
 end
-CanIMogIt.frame:AddSmartEvent(OnMountAdded, {"NEW_MOUNT_ADDED"})
+CanIMogIt.eventFrame:AddSmartEvent(OnMountAdded, {"NEW_MOUNT_ADDED"})
