@@ -51,7 +51,6 @@ CanIMogItOptions_Defaults = {
         ["showItemIconOverlay"] = true,
         ["showVerboseText"] = false,
         ["showSourceLocationTooltip"] = false,
-        ["printDatabaseScan"] = true,
         ["iconLocation"] = "TOPRIGHT",
         ["showToyItems"] = true,
         ["showPetItems"] = true,
@@ -94,10 +93,6 @@ CanIMogItOptions_DisplayData = {
     ["showSourceLocationTooltip"] = {
         ["displayName"] = L["Show Source Location Tooltip"],
         ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop). This only works on items your current class can learn."] .. "\n\n" .. L["Please note that this may not always be correct as Blizzard's information is incomplete."]
-    },
-    ["printDatabaseScan"] = {
-        ["displayName"] = L["Database Scanning chat messages"],
-        ["description"] = L["Shows chat messages on login about the database scan."]
     },
     ["iconLocation"] = {
         ["displayName"] = L["Location: "],
@@ -353,7 +348,6 @@ local function createOptionsMenu()
     CanIMogIt.frame.showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
     CanIMogIt.frame.showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
     CanIMogIt.frame.showSourceLocationTooltip = newCheckbox(CanIMogIt.frame, "showSourceLocationTooltip")
-    CanIMogIt.frame.printDatabaseScan = newCheckbox(CanIMogIt.frame, "printDatabaseScan")
     CanIMogIt.frame.iconLocation = newRadioGrid(CanIMogIt.frame, "iconLocation")
     CanIMogIt.frame.showToyItems = newCheckbox(CanIMogIt.frame, "showToyItems")
     CanIMogIt.frame.showPetItems = newCheckbox(CanIMogIt.frame, "showPetItems")
@@ -370,8 +364,7 @@ local function createOptionsMenu()
     CanIMogIt.frame.showItemIconOverlay:SetPoint("TOPLEFT", CanIMogIt.frame.showSetInfo, "BOTTOMLEFT")
     CanIMogIt.frame.showVerboseText:SetPoint("TOPLEFT", CanIMogIt.frame.showItemIconOverlay, "BOTTOMLEFT")
     CanIMogIt.frame.showSourceLocationTooltip:SetPoint("TOPLEFT", CanIMogIt.frame.showVerboseText, "BOTTOMLEFT")
-    CanIMogIt.frame.printDatabaseScan:SetPoint("TOPLEFT", CanIMogIt.frame.showSourceLocationTooltip, "BOTTOMLEFT")
-    CanIMogIt.frame.iconLocation:SetPoint("TOPLEFT", CanIMogIt.frame.printDatabaseScan, "BOTTOMLEFT")
+    CanIMogIt.frame.iconLocation:SetPoint("TOPLEFT", CanIMogIt.frame.showSourceLocationTooltip, "BOTTOMLEFT")
     CanIMogIt.frame.showToyItems:SetPoint("TOPLEFT", CanIMogIt.frame.iconLocation, "BOTTOMLEFT")
     CanIMogIt.frame.showPetItems:SetPoint("TOPLEFT", CanIMogIt.frame.showToyItems, "BOTTOMLEFT")
     CanIMogIt.frame.showMountItems:SetPoint("TOPLEFT", CanIMogIt.frame.showPetItems, "BOTTOMLEFT")
