@@ -38,6 +38,7 @@ function ContainerFrame_CIMIUpdateIcon(cimiFrame)
         cimiFrame:SetScript("OnUpdate", nil)
         return
     end
+
     C_Timer.After(0, function()
         local bag, slot = GetBagAndSlot(cimiFrame)
         local itemLink = C_Container.GetContainerItemLink(bag, slot)
@@ -58,11 +59,6 @@ function BankFrame_CIMIUpdateIcon(self)
     local bag, slot = self:GetParent().bankTabID, self:GetParent().containerSlotID
     local itemLink = C_Container.GetContainerItemLink(bag, slot)
     CIMI_SetIcon(self, BankFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
-end
-
-
-function ContainerFrameItemButton_CIMIToggleBag(...)
-    CanIMogIt.eventFrame:ItemOverlayEvents("BAG_UPDATE")
 end
 
 
@@ -158,8 +154,6 @@ hooksecurefunc("ToggleAllBags", UpdateContainerFrames)
 -- Works for both Bank and Warbank tabs.
 hooksecurefunc(_G["BankFrame"].BankPanel, "SelectTab", UpdateContainerFrames)
 
--- local accountBankPanel = _G["AccountBankPanel"]
--- hooksecurefunc(accountBankPanel, "RefreshBankPanel", function () C_Timer.After(.1, UpdateContainerFrames) end)
 
 local containerFrameEvents = {
     "BAG_UPDATE",
