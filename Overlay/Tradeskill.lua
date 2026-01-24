@@ -14,12 +14,6 @@ local scrollFrameOffset = 0
 ----------------------------
 
 
-local function string_starts(String,Start)
-    String = String or ""
-    return string.sub(String,1,string.len(Start))==Start
-end
-
-
 local function HideTradeSkillIcons()
     for i, button in ipairs(buttons) do
         button.CanIMogItOverlay.CIMIIconTexture:SetShown(false)
@@ -50,40 +44,38 @@ end
 
 
 local function TradeSkillEvents(event, addonName)
-    if event == "TRADE_SKILL_SHOW" or event == "ADDON_LOADED" and addonName == "Blizzard_TradeSkillUI" then
+    if event == "ADDON_LOADED" and addonName == "Blizzard_TradeSkillUI" then
         if _G["TradeSkillFrame"] == nil then return end
         if _G["TradeSkillListScrollFrame"] == nil then return end
 
         -- Cache scroll frame
-        if not scrollFrame then scrollFrame = _G["TradeSkillListScrollFrame"] end
+        if not scrollFrame then
+            scrollFrame = _G["TradeSkillListScrollFrame"]
+
+            -- Hook update when scroll frame offset has changed (i.e. player has scrolled up or down)
+            scrollFrame:HookScript("OnUpdate", function()
+                if (scrollFrameOffset ~= scrollFrame.offset) then
+                    scrollFrameOffset = scrollFrame.offset
+                    CIMI_UpdateTradeSkillIcons()
+                end
+            end)
+        end
 
         -- Cache buttons
-        if not next(buttons) then 
+        if not next(buttons) then
             -- Using constant TRADE_SKILLS_DISPLAYED as max value - other addons can expand crafting UI which also modifies this value
             for i=1, TRADE_SKILLS_DISPLAYED do
                 local button = _G["TradeSkillSkill"..i]
                 CIMI_AddToFrame(button, nil, "TradeSkill"..i, "TRADESKILL")
-                CIMI_UpdateTradeSkillIcons(button.CanIMogItOverlay)
+                -- Hook update on button click
+                button:HookScript("OnClick", CIMI_UpdateTradeSkillIcons)
+
                 buttons[i] = button
             end
         end
-        
-
-        -- Hook update on button click
-        for i, button in ipairs(buttons) do
-            button:HookScript("OnClick", CIMI_UpdateTradeSkillIcons)
-        end
-        
-        -- Hook update when scroll frame offset has changed (i.e. player has scrolled up or down)
-        scrollFrame:HookScript("OnUpdate", function()
-            if (scrollFrameOffset ~= scrollFrame.offset) then
-                scrollFrameOffset = scrollFrame.offset
-                CIMI_UpdateTradeSkillIcons()
-            end
-        end)
     end
 end
-CanIMogIt.eventFrame:AddSmartEvent(TradeSkillEvents, {"TRADE_SKILL_SHOW", "ADDON_LOADED"})
+CanIMogIt.eventFrame:AddSmartEvent(TradeSkillEvents, {"ADDON_LOADED"})
 CanIMogIt.eventFrame:AddSmartEvent(CIMI_UpdateTradeSkillIcons, {"TRADE_SKILL_SHOW", "TRADE_SKILL_UPDATE", "TRADE_SKILL_FILTER_UPDATE"})
 
 
