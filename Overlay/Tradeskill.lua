@@ -1,5 +1,6 @@
 -- Overlay for the crafting windows.
 
+local scrollFrame = nil
 
 ----------------------------
 -- UpdateIcon functions   --
@@ -17,10 +18,7 @@ function CIMI_UpdateTradeSkillIcons(_, elapsed)
         return
     end
 
-    local tradeSkillFrame = _G["ProfessionsFrame"].CraftingPage.RecipeList.ScrollBox
-    local buttons = tradeSkillFrame:GetFrames()
-
-    for i, button in ipairs(buttons) do
+    for _, button in ipairs(scrollFrame:GetFrames()) do
         local recipeInfo = button:GetElementData().data.recipeInfo or nil
         if recipeInfo then
             local recipeID = recipeInfo.recipeID
@@ -55,13 +53,18 @@ end
 
 
 local function TradeSkillEvents(event, addonName)
-    if event == "TRADE_SKILL_SHOW" or event == "ADDON_LOADED" and addonName == "Blizzard_Professions" then
+    if event == "ADDON_LOADED" and addonName == "Blizzard_Professions" then
         if _G["ProfessionsFrame"] == nil then return end
-        local tradeSkillFrame = _G["ProfessionsFrame"].CraftingPage.RecipeList
-        tradeSkillFrame:HookScript("OnUpdate", CIMI_UpdateTradeSkillIcons)
+
+        if not scrollFrame then
+            local recipeListFrame = _G["ProfessionsFrame"].CraftingPage.RecipeList
+            recipeListFrame:HookScript("OnUpdate", CIMI_UpdateTradeSkillIcons)
+
+            scrollFrame = recipeListFrame.ScrollBox
+        end
     end
 end
 
-CanIMogIt.eventFrame:AddSmartEvent(TradeSkillEvents, {"TRADE_SKILL_SHOW", "ADDON_LOADED"})
+CanIMogIt.eventFrame:AddSmartEvent(TradeSkillEvents, {"ADDON_LOADED"})
 
 CanIMogIt:RegisterMessage("OptionUpdate", TradeSkillEvents)
