@@ -29,7 +29,7 @@ end
 function CanIMogIt.BindData.CalculateKey(itemLink, bag, slot, tooltipData)
     if not itemLink then return nil end
     if bag and slot then
-        return "bag-slot:" .. bag .. "-" .. slot
+        return "bag-slot:" .. bag .. "-" .. slot .. "-" .. itemLink
     elseif tooltipData then
         local tooltipString = ""
         for i, line in pairs(tooltipData.lines) do
