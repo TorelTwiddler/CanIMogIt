@@ -1,6 +1,10 @@
 -- Overlay for player bags, bank, and guild banks.
 
 
+local containerFrameContainer = nil
+local combinedBagsContainerFrame = nil
+local bankFramePanel = nil
+
 local useCombinedBags = false
 
 
@@ -105,40 +109,35 @@ local function AddToContainerFrame(frame)
     return CIMI_AddToFrame(frame, ContainerFrame_CIMIUpdateIcon, suffix)
 end
 
-
-local function UpdateContainerFrames()
-    -- TODO: Need to call this when USE_COMBINED_BAGS_CHANGED is fired.
-    -- USE_COMBINED_BAGS_CHANGED
+local function UpdateCombinedBags()
     local cimiFrame
-
-    -- Combined bags frame
-    local combinedBags = _G["ContainerFrameCombinedBags"]
-    for i, frame in ipairs(combinedBags.Items) do
+    for _, frame in ipairs(combinedBagsContainerFrame.Items) do
         cimiFrame = frame.CanIMogItOverlay
         if not cimiFrame then
             cimiFrame = AddToContainerFrame(frame)
         end
         ContainerFrame_CIMIUpdateIcon(cimiFrame)
     end
+end
 
-    -- Separate bags frame
-    local frameContainer = _G["ContainerFrameContainer"]
-    for i, bag in ipairs(frameContainer.ContainerFrames) do
-        for j, frame in ipairs(bag.Items) do
-            cimiFrame = frame.CanIMogItOverlay
-            if not cimiFrame then
-                cimiFrame = AddToContainerFrame(frame)
+local function UpdateBags()
+    local cimiFrame
+    for _, bag in ipairs(containerFrameContainer.ContainerFrames) do
+        if bag:IsVisible() then
+            for _, frame in ipairs(bag.Items) do
+                cimiFrame = frame.CanIMogItOverlay
+                if not cimiFrame then
+                    cimiFrame = AddToContainerFrame(frame)
+                end
+                ContainerFrame_CIMIUpdateIcon(cimiFrame)
             end
-            ContainerFrame_CIMIUpdateIcon(cimiFrame)
         end
     end
+end
 
-    -- Bank and Warbank frames (they are the same frames)
-    for i=1,CanIMogIt.NUM_BANK_ITEMS do
-        local bankFramePanel = _G["BankFrame"].BankPanel
-        if bankFramePanel == nil then
-            return
-        end
+local function UpdateBank()
+    local cimiFrame
+    for i=1, CanIMogIt.NUM_BANK_ITEMS do
         local frame = bankFramePanel:FindItemButtonByContainerSlotID(i)
         if frame then
             cimiFrame = frame.CanIMogItOverlay
@@ -148,14 +147,28 @@ local function UpdateContainerFrames()
             BankFrame_CIMIUpdateIcon(cimiFrame)
         end
     end
+end
 
+local function UpdateContainerFrames(event, elapsed)
+    if useCombinedBags then
+        -- Combined bags frame
+        if combinedBagsContainerFrame == nil then combinedBagsContainerFrame = _G["ContainerFrameCombinedBags"] end
+        if combinedBagsContainerFrame:IsVisible() then UpdateCombinedBags() end
+    else
+        -- Separate bags frame
+        if containerFrameContainer == nil then containerFrameContainer = _G["ContainerFrameContainer"] end
+        if containerFrameContainer:IsVisible() then UpdateBags() end
+    end
+
+    -- Bank and Warbank frames (they are the same frames)
+    if bankFramePanel == nil then bankFramePanel = _G["BankFrame"].BankPanel end
+    if bankFramePanel:IsVisible() then UpdateBank() end
 end
 
 hooksecurefunc("ToggleBag", UpdateContainerFrames)
 hooksecurefunc("OpenAllBags", UpdateContainerFrames)
 hooksecurefunc("CloseAllBags", UpdateContainerFrames)
 hooksecurefunc("ToggleAllBags", UpdateContainerFrames)
-
 -- Works for both Bank and Warbank tabs.
 hooksecurefunc(_G["BankFrame"].BankPanel, "SelectTab", UpdateContainerFrames)
 
@@ -168,7 +181,7 @@ local containerFrameEvents = {
 }
 
 local function OnContainerFramesEvent(event)
-    for i, cEvent in ipairs(containerFrameEvents) do
+    for _, cEvent in ipairs(containerFrameEvents) do
         if event == cEvent then
             UpdateContainerFrames()
             return
