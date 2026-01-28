@@ -85,7 +85,7 @@ local function AddArkInventoryHooks()
         if not CanIMogIt.Events[event] then return end
         CIMI_ArkInventoryUpdate()
     end
-    hooksecurefunc(CanIMogIt.frame, "ItemOverlayEvents", CIMI_ArkInventoryEvents)
+    hooksecurefunc(CanIMogIt.eventFrame, "ItemOverlayEvents", CIMI_ArkInventoryEvents)
 end
 
 

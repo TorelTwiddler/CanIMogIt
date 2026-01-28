@@ -154,13 +154,6 @@ local function SmartEventHook(self, event, ...)
 end
 CanIMogIt.eventFrame:SetScript("OnEvent", SmartEventHook);
 
-function CanIMogIt.frame.AddonLoaded(event, addonName)
-    if event == "ADDON_LOADED" and addonName == "CanIMogIt" then
-        CanIMogIt.frame.Loaded()
-    end
-end
-CanIMogIt.eventFrame:AddSmartEvent(CanIMogIt.frame.AddonLoaded, {"ADDON_LOADED"})
-
 
 local transmogEvents = {
     ["TRANSMOG_COLLECTION_SOURCE_ADDED"] = true,
