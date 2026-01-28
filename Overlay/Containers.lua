@@ -30,11 +30,6 @@ function ContainerFrame_CIMIUpdateIcon(cimiFrame)
 end
 
 
-function ContainerFrameItemButton_CIMIToggleBag(...)
-    CanIMogIt.eventFrame:ItemOverlayEvents("BAG_UPDATE")
-end
-
-
 function GuildBankFrame_CIMIUpdateIcon(self)
     if not self then return end
     if not CIMI_CheckOverlayIconEnabled() then
@@ -81,20 +76,6 @@ local function HookOverlayContainers(event)
     end
 end
 CanIMogIt.eventFrame:AddSmartEvent(HookOverlayContainers, {"PLAYER_LOGIN"})
-
-local function GetNameOrID(frame)
-    if frame.GetName and frame:GetName() then
-        return frame:GetName()
-    elseif frame.GetID and frame:GetID() then
-        return frame:GetID()
-    end
-end
-
-
-local function AddToContainerFrame(frame)
-    local suffix = GetNameOrID(frame:GetParent()) .. "." .. GetNameOrID(frame)
-    return CIMI_AddToFrame(frame, ContainerFrame_CIMIUpdateIcon, suffix)
-end
 
 
 local function UpdateContainerFrames()
