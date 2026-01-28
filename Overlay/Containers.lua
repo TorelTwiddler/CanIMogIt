@@ -1,9 +1,14 @@
 -- Overlay for player bags, bank, and guild banks.
 
 
+local useCombinedBags = false
+
+
 ----------------------------
 -- UpdateIcon functions   --
 ----------------------------
+
+
 function DebugPrintFullName(frame)
     -- If the frame has a parent, call DebugPrintFullName on the parent.
     local name = ""
@@ -170,10 +175,25 @@ local function OnContainerFramesEvent(event)
         end
     end
 end
-
-
 CanIMogIt.eventFrame:AddSmartEvent(OnContainerFramesEvent, containerFrameEvents)
 CanIMogIt:RegisterMessage("OptionUpdate", UpdateContainerFrames)
+
+
+-- Register change of combined bags setting
+local function UseCombinedBagsChanged(event, value)
+    useCombinedBags = value
+end
+EventRegistry:RegisterFrameEventAndCallback("USE_COMBINED_BAGS_CHANGED", UseCombinedBagsChanged)
+
+
+-- Get initial combinedBags CVar value
+local function InitCombinedBagsValue(event, addonName)
+    if event == "ADDON_LOADED" and addonName == "CanIMogIt" then
+        local cvar = GetCVar("combinedBags")
+        useCombinedBags = cvar == "1" and true or false
+    end
+end
+CanIMogIt.eventFrame:AddSmartEvent(InitCombinedBagsValue, {"ADDON_LOADED"})
 
 
 -- Guild bank
