@@ -57,7 +57,7 @@ if C_AddOns.IsAddOnLoaded("AdiBags") then
             end
         end
     end
-    hooksecurefunc(CanIMogIt.frame, "ItemOverlayEvents", CIMI_AdiBagsEvents)
+    hooksecurefunc(CanIMogIt.eventFrame, "ItemOverlayEvents", CIMI_AdiBagsEvents)
 
     function AdiBags_UpdateAfter()
         C_Timer.After(.5, function() CIMI_AdiBagsAddFrame(nil, "PLAYER_LOGIN") end)
