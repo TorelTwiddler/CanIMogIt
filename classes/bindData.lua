@@ -28,7 +28,7 @@ end
 function CanIMogIt.BindData.CalculateKey(itemLink, bag, slot)
     if not itemLink then return nil end
     if bag and slot then
-        return "bag-slot:" .. bag .. "-" .. slot
+        return "bag-slot:" .. bag .. "-" .. slot .. "-" .. itemLink
     else
         return CanIMogIt:CalculateKey(itemLink)
     end
