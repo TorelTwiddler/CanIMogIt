@@ -105,7 +105,6 @@ local function CheckAndLoadArkInventory()
     -- Otherwise register for ADDON_LOADED event through proper channels
     local function ArkInventoryLoader(event, addonName)
         if event ~= "ADDON_LOADED" or addonName ~= "ArkInventory" then return end
-        print("ArkInventory loaded through event:", addonName)
 
         -- Remove our listener to avoid memory leaks
         CanIMogIt:UnregisterEvent("ADDON_LOADED", ArkInventoryLoader)

@@ -34,6 +34,4 @@ if C_AddOns.IsAddOnLoaded("BetterBags") then
         end
     end
     events:RegisterMessage('bags/OpenClose', onBagsOpenClose)
-
-    CanIMogIt:Print('BetterBags integration enabled.')
 end
