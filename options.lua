@@ -61,62 +61,126 @@ CanIMogItOptions_Defaults = {
 }
 
 
-CanIMogItOptions_DisplayData = {
-    ["debug"] = {
-        ["displayName"] = L["Debug Tooltip"],
-        ["description"] = L["Detailed information for debug purposes. Use this when sending bug reports."],
+local basic_options = {
+    {
+        type = "label",
+        text = L["Basic Options"],
+        size = 16,
     },
-    ["showEquippableOnly"] = {
-        ["displayName"] = L["Equippable Items Only"],
-        ["description"] = L["Only show on items that can be equipped."]
+    {
+        type = "checkbox",
+        label = L["Debug Tooltip"],
+        var = "debug",
+        description = L["Detailed information for debug purposes. Use this when sending bug reports."],
     },
-    ["showTransmoggableOnly"] = {
-        ["displayName"] = L["Transmoggable Items Only"],
-        ["description"] = L["Only show on items that can be transmoggrified."]
+    {
+        type = "checkbox",
+        label = L["Equippable Items Only"],
+        var = "showEquippableOnly",
+        description = L["Only show on items that can be equipped."],
     },
-    ["showUnknownOnly"] = {
-        ["displayName"] = L["Unknown Items Only"],
-        ["description"] = L["Only show on items that you haven't learned."]
+    {
+        type = "checkbox",
+        label = L["Transmoggable Items Only"],
+        var = "showTransmoggableOnly",
+        description = L["Only show on items that can be transmoggrified."],
     },
-    ["showSetInfo"] = {
-        ["displayName"] = L["Show Transmog Set Info"],
-        ["description"] = L["Show information on the tooltip about transmog sets."] .. "\n\n" .. L["Also shows a summary in the Appearance Sets UI of how many pieces of a transmog set you have collected."]
+    {
+        type = "checkbox",
+        label = L["Unknown Items Only"],
+        var = "showUnknownOnly",
+        description = L["Only show on items that you haven't learned."],
     },
-    ["showItemIconOverlay"] = {
-        ["displayName"] = L["Show Bag Icons"],
-        ["description"] = L["Shows the icon directly on the item in your bag."]
+    {
+        type = "checkbox",
+        label = L["Show Transmog Set Info"],
+        var = "showSetInfo",
+        description = L["Show information on the tooltip about transmog sets."] .. "\n\n" .. L["Also shows a summary in the Appearance Sets UI of how many pieces of a transmog set you have collected."],
     },
-    ["showVerboseText"] = {
-        ["displayName"] = L["Verbose Text"],
-        ["description"] = L["Shows a more detailed text for some of the tooltips."]
+    {
+        type = "checkbox",
+        label = L["Show Bag Icons"],
+        var = "showItemIconOverlay",
+        description = L["Shows the icon directly on the item in your bag."],
     },
-    ["showSourceLocationTooltip"] = {
-        ["displayName"] = L["Show Source Location Tooltip"],
-        ["description"] = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop). This only works on items your current class can learn."] .. "\n\n" .. L["Please note that this may not always be correct as Blizzard's information is incomplete."]
+    {
+        type = "checkbox",
+        label = L["Verbose Text"],
+        var = "showVerboseText",
+        description = L["Shows a more detailed text for some of the tooltips."],
     },
-    ["iconLocation"] = {
-        ["displayName"] = L["Location: "],
-        ["description"] = L["Move the icon to a different location on all frames."]
+    {
+        type = "checkbox",
+        label = L["Show Source Location Tooltip"],
+        var = "showSourceLocationTooltip",
+        description = L["Shows a tooltip with the source locations of an appearance (ie. Quest, Vendor, World Drop). This only works on items your current class can learn."] .. "\n\n" .. L["Please note that this may not always be correct as Blizzard's information is incomplete."],
     },
-    ["showToyItems"] = {
-        ["displayName"] = L["Show Toy Items"],
-        ["description"] = L["Show tooltips and overlays on toys (otherwise, shows as not transmoggable)."]
+    {
+        type = "radiogrid",
+        var = "iconLocation",
+        description = L["Move the icon to a different location on all frames."],
     },
-    ["showPetItems"] = {
-        ["displayName"] = L["Show Pet Items"],
-        ["description"] = L["Show tooltips and overlays on pets (otherwise, shows as not transmoggable)."]
+}
+
+local toggle_options = {
+    {
+        type = "label",
+        text = L["Toggle Options"],
+        size = 16,
     },
-    ["showMountItems"] = {
-        ["displayName"] = L["Show Mount Items"],
-        ["description"] = L["Show tooltips and overlays on mounts (otherwise, shows as not transmoggable)."]
+    {
+        type = "checkbox",
+        label = L["Show Toy Items"],
+        var = "showToyItems",
+        description = L["Show tooltips and overlays on toys (otherwise, shows as not transmoggable)."],
     },
-    ["showCatalizableItems"] = {
-        ["displayName"] = L["Show Catalizable Items"],
-        ["description"] = L["Show extra tooltip for items that can be catalyzed."]
+    {
+        type = "checkbox",
+        label = L["Show Pet Items"],
+        var = "showPetItems",
+        description = L["Show tooltips and overlays on pets (otherwise, shows as not transmoggable)."],
     },
-    ["showEnsembleItems"] = {
-        ["displayName"] = L["Show Ensemble Items"],
-        ["description"] = L["Show tooltips and overlays on Ensemble Items (otherwise, shows as not transmoggable)."]
+    {
+        type = "checkbox",
+        label = L["Show Mount Items"],
+        var = "showMountItems",
+        description = L["Show tooltips and overlays on mounts (otherwise, shows as not transmoggable)."],
+    },
+    {
+        type = "checkbox",
+        label = L["Show Catalizable Items"],
+        var = "showCatalizableItems",
+        description = L["Show extra tooltip for items that can be catalyzed."],
+    },
+    {
+        type = "checkbox",
+        label = L["Show Ensemble Items"],
+        var = "showEnsembleItems",
+        description = L["Show tooltips and overlays on Ensemble Items (otherwise, shows as not transmoggable)."],
+    },
+}
+
+local options_ui = {
+    type = "box",
+    direction = "horizontal",
+    fill = true,
+    children = {
+        {
+            type = "box",
+            direction = "vertical",
+            outline = true,
+            width = 325,
+            height = 580,
+            children = basic_options,
+        },
+        {
+            type = "box",
+            direction = "vertical",
+            outline = true,
+            width = 325,
+            height = 580,
+            children = toggle_options,
+        }
     },
 }
 
@@ -138,7 +202,7 @@ local function changesSavedText()
 
     text:SetAllPoints()
 
-    frame:SetPoint("BOTTOMRIGHT", -20, 10)
+    frame:SetPoint("BOTTOMRIGHT", -20, 0)
     frame:SetSize(200, 20)
     frame:SetShown(false)
     CanIMogIt.frame.changesSavedText = frame
@@ -160,100 +224,143 @@ local function showChangesSaved()
 end
 
 
-local function checkboxOnClick(self)
-    local checked = self:GetChecked()
-    PlaySound(PlaySoundKitID and "igMainMenuOptionCheckBoxOn" or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-    self:SetValue(checked)
-    showChangesSaved()
-    -- Reset the cache when an option changes.
-    CanIMogIt:ResetCache()
-
-    CanIMogIt:SendMessage("OptionUpdate")
-end
-
-
-local function debugCheckboxOnClick(self)
-    local checked = self:GetChecked()
-    PlaySound(PlaySoundKitID and "igMainMenuOptionCheckBoxOn" or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-    self:SetValue(checked)
-    showChangesSaved()
-    CanIMogIt:SendMessage("OptionUpdate")
-end
-
-
-local function newCheckbox(parent, variableName, onClickFunction)
-    -- Creates a new checkbox in the parent frame for the given variable name
-    onClickFunction = onClickFunction or checkboxOnClick
-    local displayData = CanIMogItOptions_DisplayData[variableName]
-    local checkbox = CreateFrame("CheckButton", "CanIMogItCheckbox" .. variableName,
+local function DrawCheckbox(parent, element)
+    local checkbox = CreateFrame("CheckButton", "CanIMogItCheckbox_" .. element.var,
             parent, "InterfaceOptionsCheckButtonTemplate")
 
-    -- checkbox.value = CanIMogItOptions[variableName]
-
-    checkbox.GetValue = function (self)
-        return CanIMogItOptions[variableName]
+    -- Get and set value functions
+    checkbox.GetValue = function(self)
+        return CanIMogItOptions[element.var]
     end
-    checkbox.SetValue = function (self, value) CanIMogItOptions[variableName] = value end
+    checkbox.SetValue = function(self, value)
+        CanIMogItOptions[element.var] = value
+    end
 
-    checkbox:SetScript("OnClick", onClickFunction)
+    -- Set up click handler
+    checkbox:SetScript("OnClick", function(self)
+        local checked = self:GetChecked()
+        PlaySound(PlaySoundKitID and "igMainMenuOptionCheckBoxOn" or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+        self:SetValue(checked)
+        showChangesSaved()
+        CanIMogIt:ResetCache()
+        CanIMogIt:SendMessage("OptionUpdate")
+    end)
+
     checkbox:SetChecked(checkbox:GetValue())
 
+    -- Set label and tooltip
     checkbox.label = _G[checkbox:GetName() .. "Text"]
-    checkbox.label:SetText(displayData["displayName"])
+    if checkbox.label then
+        checkbox.label:SetText(element.label or "")
+    end
 
-    checkbox.tooltipText = displayData["displayName"]
-    checkbox.tooltipRequirement = displayData["description"]
+    checkbox.tooltipText = element.label or ""
+    checkbox.tooltipRequirement = element.description or ""
+
+    -- Set up tooltip handlers for consistent behavior
+    checkbox:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText(self.tooltipText, 1, 1, 1)
+        if self.tooltipRequirement and self.tooltipRequirement ~= "" then
+            GameTooltip:AddLine(self.tooltipRequirement, 1, 1, 0, true)
+        end
+        GameTooltip:Show()
+    end)
+
+    checkbox:SetScript("OnLeave", function(self)
+        GameTooltip:Hide()
+    end)
+
+    -- Store reference for later positioning
+    element._frame = checkbox
+
+    -- Store frame reference on CanIMogIt.frame for slash command access
+    CanIMogIt.frame[element.var] = checkbox
+
     return checkbox
 end
 
 
-local function newRadioGrid(parent, variableName)
-    local displayData = CanIMogItOptions_DisplayData[variableName]
-    local frameName = "CanIMogItCheckGridFrame" .. variableName
-    local frame = CreateFrame("Frame", frameName, parent)
+local function DrawLabel(parent, element)
+    local label = parent:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    label:SetText(element.text or "")
+    label:SetJustifyH("LEFT")
 
-    frame.texture = CreateFrame("Frame", frameName .. "_Texture", frame)
-    frame.texture:SetSize(58, 58)
-    local texture = frame.texture:CreateTexture("CIMITextureFrame", "BACKGROUND")
+    if element.size then
+        -- Create appropriate font string based on size
+        local fontPath = "GameFontHighlight"
+        if element.size < 12 then
+            fontPath = "GameFontHighlightSmall"
+        elseif element.size > 14 then
+            fontPath = "GameFontHighlightLarge"
+        end
+        label:SetFontObject(fontPath)
+    end
+
+    label:SetSize(600, 20)
+
+    -- Set tooltip if description exists
+    if element.description then
+        label.tooltipText = element.text or ""
+        label.tooltipRequirement = element.description
+    end
+
+    -- Store reference for later positioning
+    element._frame = label
+
+    return label
+end
+
+
+local function DrawSlider(parent, element)
+    -- Mock implementation for now
+    print("DrawSlider not yet implemented for: " .. (element.label or "unnamed slider"))
+end
+
+local function DrawRadioGrid(parent, element)
+    local variableName = element.var
+    local frameName = "CanIMogItRadioGrid_" .. variableName
+    local frame = CreateFrame("Frame", frameName, parent)
+    frame:SetSize(600, 95)
+
+    -- Create texture preview
+    local textureFrame = CreateFrame("Frame", frameName .. "_Texture", frame)
+    textureFrame:SetSize(58, 58)
+    local texture = textureFrame:CreateTexture("CanIMogItRadioTexture", "BACKGROUND")
     texture:SetTexture("Interface/ICONS/INV_Sword_1H_AllianceToy_A_01.blp")
     texture:SetAllPoints()
     texture:SetVertexColor(0.5, 0.5, 0.5)
 
-    local reloadButton = CreateFrame("Button", frameName .. "_ReloadButton",
-            frame, "UIPanelButtonTemplate")
+    -- Create reload button
+    local reloadButton = CreateFrame("Button", frameName .. "_ReloadButton", frame, "UIPanelButtonTemplate")
     reloadButton:SetText(L["Reload to apply"])
     reloadButton:SetSize(120, 25)
     reloadButton:SetEnabled(false)
-    reloadButton:SetScript("OnClick", function () ReloadUI() end)
+    reloadButton:SetScript("OnClick", function() ReloadUI() end)
 
+    -- Create title
     local title = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
     title:SetText(L["Icon Location"])
 
+    -- Create description text
     local text = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
     text:SetText(L["Does not affect Quests or Adventure Journal."])
 
     local text2 = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
     text2:SetText(L["Default"] .. ": " .. L["Top Right"])
 
-    local radioTopLeft = CreateFrame("CheckButton", frameName .. "_TopLeft",
-            frame, "UIRadioButtonTemplate")
-    local radioTop = CreateFrame("CheckButton", frameName .. "_Top",
-            frame, "UIRadioButtonTemplate")
-    local radioTopRight = CreateFrame("CheckButton", frameName .. "_TopRight",
-            frame, "UIRadioButtonTemplate")
-    local radioLeft = CreateFrame("CheckButton", frameName .. "_Left",
-            frame, "UIRadioButtonTemplate")
-    local radioCenter = CreateFrame("CheckButton", frameName .. "_Center",
-            frame, "UIRadioButtonTemplate")
-    local radioRight = CreateFrame("CheckButton", frameName .. "_Right",
-            frame, "UIRadioButtonTemplate")
-    local radioBottomLeft = CreateFrame("CheckButton", frameName .. "_BottomLeft",
-            frame, "UIRadioButtonTemplate")
-    local radioBottom = CreateFrame("CheckButton", frameName .. "_Bottom",
-            frame, "UIRadioButtonTemplate")
-    local radioBottomRight = CreateFrame("CheckButton", frameName .. "_BottomRight",
-            frame, "UIRadioButtonTemplate")
+    -- Create 9 radio buttons for 3x3 grid
+    local radioTopLeft = CreateFrame("CheckButton", frameName .. "_TopLeft", frame, "UIRadioButtonTemplate")
+    local radioTop = CreateFrame("CheckButton", frameName .. "_Top", frame, "UIRadioButtonTemplate")
+    local radioTopRight = CreateFrame("CheckButton", frameName .. "_TopRight", frame, "UIRadioButtonTemplate")
+    local radioLeft = CreateFrame("CheckButton", frameName .. "_Left", frame, "UIRadioButtonTemplate")
+    local radioCenter = CreateFrame("CheckButton", frameName .. "_Center", frame, "UIRadioButtonTemplate")
+    local radioRight = CreateFrame("CheckButton", frameName .. "_Right", frame, "UIRadioButtonTemplate")
+    local radioBottomLeft = CreateFrame("CheckButton", frameName .. "_BottomLeft", frame, "UIRadioButtonTemplate")
+    local radioBottom = CreateFrame("CheckButton", frameName .. "_Bottom", frame, "UIRadioButtonTemplate")
+    local radioBottomRight = CreateFrame("CheckButton", frameName .. "_BottomRight", frame, "UIRadioButtonTemplate")
 
+    -- Set initial checked states
     radioTopLeft:SetChecked(CanIMogItOptions[variableName] == "TOPLEFT")
     radioTop:SetChecked(CanIMogItOptions[variableName] == "TOP")
     radioTopRight:SetChecked(CanIMogItOptions[variableName] == "TOPRIGHT")
@@ -265,39 +372,29 @@ local function newRadioGrid(parent, variableName)
     radioBottomRight:SetChecked(CanIMogItOptions[variableName] == "BOTTOMRIGHT")
 
     local allRadios = {
-        radioTopLeft,
-        radioTop,
-        radioTopRight,
-        radioLeft,
-        radioCenter,
-        radioRight,
-        radioBottomLeft,
-        radioBottom,
-        radioBottomRight
+        radioTopLeft, radioTop, radioTopRight,
+        radioLeft, radioCenter, radioRight,
+        radioBottomLeft, radioBottom, radioBottomRight
     }
 
-    local function createOnRadioClicked (location)
-        local function onRadioClicked (self, a, b, c)
-            local checked = self:GetChecked()
+    local function createOnRadioClicked(location)
+        local function onRadioClicked(self)
             PlaySound(PlaySoundKitID and "igMainMenuOptionCheckBoxOn" or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
             CanIMogItOptions[variableName] = location
 
-            local anyChecked = false
             for _, radio in ipairs(allRadios) do
                 if radio ~= self then
-                    anyChecked = radio:GetChecked() or anyChecked
                     radio:SetChecked(false)
                 end
             end
-            if not anyChecked then
-                self:SetChecked(true)
-            end
+            self:SetChecked(true)
             reloadButton:SetEnabled(true)
             showChangesSaved()
         end
         return onRadioClicked
     end
 
+    -- Set up click handlers
     radioTopLeft:SetScript("OnClick", createOnRadioClicked("TOPLEFT"))
     radioTop:SetScript("OnClick", createOnRadioClicked("TOP"))
     radioTopRight:SetScript("OnClick", createOnRadioClicked("TOPRIGHT"))
@@ -308,8 +405,8 @@ local function newRadioGrid(parent, variableName)
     radioBottom:SetScript("OnClick", createOnRadioClicked("BOTTOM"))
     radioBottomRight:SetScript("OnClick", createOnRadioClicked("BOTTOMRIGHT"))
 
+    -- Position elements
     title:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, -5)
-
     radioTopLeft:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -5)
     radioTop:SetPoint("TOPLEFT", radioTopLeft, "TOPRIGHT", 5, 0)
     radioTopRight:SetPoint("TOPLEFT", radioTop, "TOPRIGHT", 5, 0)
@@ -322,55 +419,119 @@ local function newRadioGrid(parent, variableName)
 
     text:SetPoint("TOPLEFT", radioTopRight, "TOPRIGHT", 14, -3)
     text2:SetPoint("TOPLEFT", text, "BOTTOMLEFT", 0, -3)
-
     reloadButton:SetPoint("TOPLEFT", text2, "BOTTOMLEFT", 4, -8)
+    textureFrame:SetPoint("TOPLEFT", radioTopLeft, "TOPLEFT")
 
-    frame.texture:SetPoint("TOPLEFT", radioTopLeft, "TOPLEFT")
+    -- Store reference for later positioning
+    element._frame = frame
 
-    frame:SetSize(600, 80)
-
-    -- Use this to show the bottom of the frame.
-    -- local sample = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-    -- sample:SetText("example.")
-    -- sample:SetPoint("TOPLEFT", frame, "BOTTOMLEFT")
+    -- Store frame reference on CanIMogIt.frame for slash command access
+    CanIMogIt.frame[element.var] = frame
 
     return frame
 end
 
+-- Forward declarations to resolve circular dependency
+local DrawElement, DrawBox
+
+function DrawBox(parent, element)
+    local box = CreateFrame("Frame", nil, parent)
+
+    -- If fill is enabled, stretch to fill parent; otherwise use specified size or default
+    if element.fill then
+        box:SetAllPoints(parent)
+    else
+        box:SetSize(element.width or 400, element.height or 400)
+        box:SetPoint("TOPLEFT", parent, "TOPLEFT", 0, 0)
+    end
+
+    -- Apply outline if specified
+    if element.outline then
+        -- Create border textures manually
+        local borderColor = {r = 0.5, g = 0.5, b = 0.5, a = 1}
+        local borderWidth = 1
+
+        -- Top border
+        local topBorder = box:CreateTexture(nil, "BACKGROUND")
+        topBorder:SetColorTexture(borderColor.r, borderColor.g, borderColor.b, borderColor.a)
+        topBorder:SetPoint("TOPLEFT", box, "TOPLEFT", 0, 0)
+        topBorder:SetPoint("TOPRIGHT", box, "TOPRIGHT", 0, 0)
+        topBorder:SetHeight(borderWidth)
+
+        -- Bottom border
+        local bottomBorder = box:CreateTexture(nil, "BACKGROUND")
+        bottomBorder:SetColorTexture(borderColor.r, borderColor.g, borderColor.b, borderColor.a)
+        bottomBorder:SetPoint("BOTTOMLEFT", box, "BOTTOMLEFT", 0, 0)
+        bottomBorder:SetPoint("BOTTOMRIGHT", box, "BOTTOMRIGHT", 0, 0)
+        bottomBorder:SetHeight(borderWidth)
+
+        -- Left border
+        local leftBorder = box:CreateTexture(nil, "BACKGROUND")
+        leftBorder:SetColorTexture(borderColor.r, borderColor.g, borderColor.b, borderColor.a)
+        leftBorder:SetPoint("TOPLEFT", box, "TOPLEFT", 0, 0)
+        leftBorder:SetPoint("BOTTOMLEFT", box, "BOTTOMLEFT", 0, 0)
+        leftBorder:SetWidth(borderWidth)
+
+        -- Right border
+        local rightBorder = box:CreateTexture(nil, "BACKGROUND")
+        rightBorder:SetColorTexture(borderColor.r, borderColor.g, borderColor.b, borderColor.a)
+        rightBorder:SetPoint("TOPRIGHT", box, "TOPRIGHT", 0, 0)
+        rightBorder:SetPoint("BOTTOMRIGHT", box, "BOTTOMRIGHT", 0, 0)
+        rightBorder:SetWidth(borderWidth)
+    end
+
+    local lastChild = nil
+    local direction = element.direction or "vertical"
+    local x, y = 0, 0
+    local spacing = 5
+    local buffer = element.outline and 5 or 0  -- Add 5px buffer if outline is enabled
+
+    for _, childElement in ipairs(element.children or {}) do
+        childElement._parent = box
+        childElement._previousSibling = lastChild
+
+        local childFrame = DrawElement(box, childElement)
+        if childFrame then
+            if direction == "horizontal" then
+                if lastChild and lastChild._frame then
+                    childFrame:SetPoint("TOPLEFT", lastChild._frame, "TOPRIGHT", spacing, 0)
+                else
+                    childFrame:SetPoint("TOPLEFT", box, "TOPLEFT", x + buffer, y - buffer)
+                end
+            else -- vertical (default)
+                if lastChild and lastChild._frame then
+                    childFrame:SetPoint("TOPLEFT", lastChild._frame, "BOTTOMLEFT", 0, -spacing)
+                else
+                    childFrame:SetPoint("TOPLEFT", box, "TOPLEFT", x + buffer, y - buffer)
+                end
+            end
+            childElement._frame = childFrame
+        end
+        lastChild = childElement
+    end
+
+    return box
+end
+
+
+function DrawElement(parent, element)
+    if element.type == "box" then
+        return DrawBox(parent, element)
+    elseif element.type == "checkbox" then
+        return DrawCheckbox(parent, element)
+    elseif element.type == "label" then
+        return DrawLabel(parent, element)
+    elseif element.type == "slider" then
+        return DrawSlider(parent, element)
+    elseif element.type == "radiogrid" then
+        return DrawRadioGrid(parent, element)
+    end
+end
+
 
 local function createOptionsMenu()
-    -- define the checkboxes
-    CanIMogIt.frame.debug =  newCheckbox(CanIMogIt.frame, "debug", debugCheckboxOnClick)
-    CanIMogIt.frame.showEquippableOnly = newCheckbox(CanIMogIt.frame, "showEquippableOnly")
-    CanIMogIt.frame.showTransmoggableOnly = newCheckbox(CanIMogIt.frame, "showTransmoggableOnly")
-    CanIMogIt.frame.showUnknownOnly = newCheckbox(CanIMogIt.frame, "showUnknownOnly")
-    CanIMogIt.frame.showSetInfo = newCheckbox(CanIMogIt.frame, "showSetInfo")
-    CanIMogIt.frame.showItemIconOverlay = newCheckbox(CanIMogIt.frame, "showItemIconOverlay")
-    CanIMogIt.frame.showVerboseText = newCheckbox(CanIMogIt.frame, "showVerboseText")
-    CanIMogIt.frame.showSourceLocationTooltip = newCheckbox(CanIMogIt.frame, "showSourceLocationTooltip")
-    CanIMogIt.frame.iconLocation = newRadioGrid(CanIMogIt.frame, "iconLocation")
-    CanIMogIt.frame.showToyItems = newCheckbox(CanIMogIt.frame, "showToyItems")
-    CanIMogIt.frame.showPetItems = newCheckbox(CanIMogIt.frame, "showPetItems")
-    CanIMogIt.frame.showMountItems = newCheckbox(CanIMogIt.frame, "showMountItems")
-    CanIMogIt.frame.showCatalizableItems = newCheckbox(CanIMogIt.frame, "showCatalizableItems")
-    CanIMogIt.frame.showEnsembleItems = newCheckbox(CanIMogIt.frame, "showEnsembleItems")
-
-    -- position the checkboxes
-    CanIMogIt.frame.debug:SetPoint("TOPLEFT", 16, -16)
-    CanIMogIt.frame.showEquippableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.debug, "BOTTOMLEFT")
-    CanIMogIt.frame.showTransmoggableOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showEquippableOnly, "BOTTOMLEFT")
-    CanIMogIt.frame.showUnknownOnly:SetPoint("TOPLEFT", CanIMogIt.frame.showTransmoggableOnly, "BOTTOMLEFT")
-    CanIMogIt.frame.showSetInfo:SetPoint("TOPLEFT", CanIMogIt.frame.showUnknownOnly, "BOTTOMLEFT")
-    CanIMogIt.frame.showItemIconOverlay:SetPoint("TOPLEFT", CanIMogIt.frame.showSetInfo, "BOTTOMLEFT")
-    CanIMogIt.frame.showVerboseText:SetPoint("TOPLEFT", CanIMogIt.frame.showItemIconOverlay, "BOTTOMLEFT")
-    CanIMogIt.frame.showSourceLocationTooltip:SetPoint("TOPLEFT", CanIMogIt.frame.showVerboseText, "BOTTOMLEFT")
-    CanIMogIt.frame.iconLocation:SetPoint("TOPLEFT", CanIMogIt.frame.showSourceLocationTooltip, "BOTTOMLEFT")
-    CanIMogIt.frame.showToyItems:SetPoint("TOPLEFT", CanIMogIt.frame.iconLocation, "BOTTOMLEFT")
-    CanIMogIt.frame.showPetItems:SetPoint("TOPLEFT", CanIMogIt.frame.showToyItems, "BOTTOMLEFT")
-    CanIMogIt.frame.showMountItems:SetPoint("TOPLEFT", CanIMogIt.frame.showPetItems, "BOTTOMLEFT")
-    CanIMogIt.frame.showCatalizableItems:SetPoint("TOPLEFT", CanIMogIt.frame.showMountItems, "BOTTOMLEFT")
-    CanIMogIt.frame.showEnsembleItems:SetPoint("TOPLEFT", CanIMogIt.frame.showCatalizableItems, "BOTTOMLEFT")
-
+    -- Use new declarative UI system
+    DrawElement(CanIMogIt.frame, options_ui)
     changesSavedText()
 end
 
