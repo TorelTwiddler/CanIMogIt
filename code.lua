@@ -1098,9 +1098,8 @@ function CanIMogIt:PreLogicOptionsContinue(itemData)
     local petCheck = CanIMogItOptions["showPetItems"] and itemData.isItemPet
     local ensembleCheck = CanIMogItOptions["showEnsembleItems"] and itemData.isItemEnsemble
 
-    -- If showEquippableOnly is checked, only show equippable items.
-    if CanIMogItOptions["showEquippableOnly"] and not itemData.isItemEquippable then
-        -- Unless it's a mount, toy, pet, etc, and their respective option is enabled.
+    -- If item is not equippable and the option is disabled and it's not a special item, hide it.
+    if not itemData.isItemEquippable and not CanIMogItOptions["showUnequippable"] then
         if not (mountCheck or toyCheck or petCheck or ensembleCheck) then
             return false
         end
@@ -1118,7 +1117,7 @@ function CanIMogIt:PostLogicOptionsText(text, unmodifiedText)
         return "", ""
     end
 
-    if CanIMogItOptions["showTransmoggableOnly"]
+    if not CanIMogItOptions["showNonTransmoggable"]
             and (unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE
             or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_BOE
             or unmodifiedText == CanIMogIt.NOT_TRANSMOGABLE_WARBOUND) then

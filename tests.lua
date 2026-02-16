@@ -151,7 +151,7 @@ local testsBriarlynn = {
         ["expected"] = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND,
         ["textExpected"] = "",
         ["options"] = {
-            ["showTransmoggableOnly"] = true,
+            ["showNonTransmoggable"] = true,
         },
     },
 }
