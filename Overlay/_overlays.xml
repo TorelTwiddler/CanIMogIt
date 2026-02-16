@@ -5,6 +5,7 @@
     <Script file="AuctionHouse.lua"/>
     <Script file="BlackMarketAuctionHouse.lua"/>
     <Script file="Containers.lua"/>
+    <Script file="EncounterJournalFilter.lua"/>
     <Script file="EncounterJournal.lua"/>
     <Script file="Loot.lua"/>
     <Script file="Mail.lua"/>
