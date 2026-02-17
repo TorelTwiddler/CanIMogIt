@@ -7,6 +7,7 @@
     <Script file="Containers.lua"/>
     <Script file="EncounterJournal.lua"/>
     <Script file="Loot.lua"/>
+    <Script file="LootRoll.lua"/>
     <Script file="Mail.lua"/>
     <Script file="Merchant.lua"/>
     <Script file="Quests.lua"/>
