@@ -60,14 +60,7 @@ function CanIMogIt.AppearanceData:CalculateKnownStatus()
             status = CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
         end
     else
-        if self.isValidAppearanceForCharacter then
-            -- The player does not know the appearance and the character
-            -- can learn this appearance.
-            status = CanIMogIt.UNKNOWN
-        else
-            -- Warbound shouldn't be possible in this state.
-            status = CanIMogIt.UNKNOWABLE_BY_CHARACTER
-        end
+        status = CanIMogIt.UNKNOWN
     end
     return status
 end
@@ -136,23 +129,6 @@ function CanIMogIt.AppearanceData:CalculateBindStateText(bindData)
         -- Orange X
         text = CanIMogIt.UNKNOWN
         unmodifiedText = CanIMogIt.UNKNOWN
-    elseif self.status == CanIMogIt.UNKNOWABLE_BY_CHARACTER then
-        if isItemWarbound then
-            -- Pink Star
-            text = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND
-                    .. CanIMogIt.BLIZZARD_RED .. CanIMogIt:GetReason(self.itemLink)
-            unmodifiedText = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND
-        elseif isItemSoulbound then
-            -- Green Dash
-            text = CanIMogIt.UNKNOWABLE_SOULBOUND
-                    .. CanIMogIt.BLIZZARD_RED .. CanIMogIt:GetReason(self.itemLink)
-            unmodifiedText = CanIMogIt.UNKNOWABLE_SOULBOUND
-        else
-            -- Yellow Star
-            text = CanIMogIt.UNKNOWABLE_BY_CHARACTER
-                    .. CanIMogIt.BLIZZARD_RED .. CanIMogIt:GetReason(self.itemLink)
-            unmodifiedText = CanIMogIt.UNKNOWABLE_BY_CHARACTER
-        end
     end
     return text, unmodifiedText
 end

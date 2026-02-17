@@ -46,7 +46,7 @@ local testsAdele = {
     },
     ["Cannot learn: Classes: Name"] = {
         ["itemID"] = 98903,
-        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER,
+        ["expected"] = CanIMogIt.UNKNOWN,
     },
     ["Learned from a Cosmetic source"] = {
         ["itemID"] = 6612,
@@ -110,7 +110,7 @@ local testsAdele = {
     },
     ["WRB: Cannot learn"] = {
         ["itemID"] = 128459,
-        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND,
+        ["expected"] = CanIMogIt.UNKNOWN,
     },
 }
 
@@ -136,7 +136,7 @@ local testsBriarlynn = {
     },
     ["Cosmetic source Warm Blue Woolen Socks"] = {
         ["itemID"] = 116451,
-        ["expected"] = CanIMogIt.KNOWN,
+        ["expected"] = CanIMogIt.KNOWN_WARBOUND,
     },
     ["Warband item green instead of pink"] = {
         ["itemID"] = 69764,
@@ -144,14 +144,14 @@ local testsBriarlynn = {
     },
     ["Cannot Learn: other faction, Frostwolf Leggings"] = {
         ["itemID"] = 128459,
-        ["expected"] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND,
+        ["expected"] = CanIMogIt.UNKNOWN,
     },
-    ["Warbound items hide with Transmogable Only on"] = {
-        ["itemID"] = 220304,
+    ["Warbound items hide with Show Non Transmoggable off"] = {
+        ["itemID"] = 220304, -- This item doesn't appear to be warbound anymore. Need a new item.
         ["expected"] = CanIMogIt.NOT_TRANSMOGABLE_WARBOUND,
         ["textExpected"] = "",
         ["options"] = {
-            ["showNonTransmoggable"] = true,
+            ["showNonTransmoggable"] = false,
         },
     },
 }

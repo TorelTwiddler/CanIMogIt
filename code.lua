@@ -199,8 +199,6 @@ local knownTexts = {
 -- List of all Unknown texts
 local unknownTexts = {
     [CanIMogIt.UNKNOWN] = true,
-    [CanIMogIt.UNKNOWABLE_BY_CHARACTER] = true,
-    [CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND] = true,
 }
 
 
