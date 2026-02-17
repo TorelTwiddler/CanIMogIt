@@ -1,24 +1,21 @@
--- Overlay for the loot roll frames.-- Common functions used for overlays.
-
+-- Overlay for loot frame.
 
 ----------------------------
 -- UpdateIcon functions   --
 ----------------------------
 
-
-function LootFrame_CIMIUpdateIcon(self)
+-- TODO: implement this
+--[[ function LootFrame_CIMIUpdateIcon(self)
     if not self then return end
-    -- Sets the icon overlay for the loot frame.
-    local lootID = self:GetParent():GetParent().rollID
-    if not CIMI_CheckOverlayIconEnabled() or lootID == nil then
+    if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
         self:SetScript("OnUpdate", nil)
         return
     end
 
-    local itemLink = GetLootRollItemLink(lootID)
+    local itemLink = GetLootSlotLink(self:GetParent().slot)
     CIMI_SetIcon(self, LootFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
-end
+end ]]
 
 
 ------------------------
@@ -26,21 +23,17 @@ end
 ------------------------
 
 
-local function HookOverlayLoot(event)
-    -- Add hook for the loot frames.
-    for i=1,CanIMogIt.NUM_GROUP_LOOT_FRAMES do
-        local frame = _G["GroupLootFrame"..i].IconFrame
-        if frame then
-            local cimiFrame = frame.CanIMogItOverlay
-            if not cimiFrame then
-                cimiFrame = CIMI_AddToFrame(frame, LootFrame_CIMIUpdateIcon)
-            end
-            LootFrame_CIMIUpdateIcon(cimiFrame)
+--[[ function UpdateLootButton(index)
+    local button = _G["LootButton" .. index]
+    if button and button:IsShown() then
+        local cimiFrame = button.CanIMogItOverlay
+        if not cimiFrame then
+            cimiFrame = CIMI_AddToFrame(button, LootFrame_CIMIUpdateIcon)
         end
+        LootFrame_CIMIUpdateIcon(cimiFrame)
     end
 end
-
-CanIMogIt.eventFrame:AddSmartEvent(HookOverlayLoot, {"PLAYER_LOGIN", "START_LOOT_ROLL"})
+hooksecurefunc("LootFrame_UpdateButton", UpdateLootButton) ]]
 
 
 ------------------------
@@ -85,10 +78,8 @@ local function ChatMessageLootEvent(event, message, _, _, _, target)
 
     -- Remove the cache for this item
     CanIMogIt.cache:RemoveItem(link)
-
 end
 
 -- FIXME
 -- CanIMogIt.eventFrame:AddOverlayEventFunction(ChatMessageLootEvent)
-
 CanIMogIt:RegisterMessage("OptionUpdate", ChatMessageLootEvent)
