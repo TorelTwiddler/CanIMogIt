@@ -4,8 +4,8 @@
 -- UpdateIcon functions   --
 ----------------------------
 
--- TODO: implement this
---[[ function LootFrame_CIMIUpdateIcon(self)
+
+function LootFrame_CIMIUpdateIcon(self)
     if not self then return end
     if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
@@ -13,9 +13,11 @@
         return
     end
 
-    local itemLink = GetLootSlotLink(self:GetParent().slot)
-    CIMI_SetIcon(self, LootFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
-end ]]
+    local itemLink = GetLootSlotLink(self:GetParent():GetParent():GetSlotIndex())
+    if itemLink then
+        CIMI_SetIcon(self, LootFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
+    end
+end
 
 
 ------------------------
@@ -23,17 +25,18 @@ end ]]
 ------------------------
 
 
---[[ function UpdateLootButton(index)
-    local button = _G["LootButton" .. index]
-    if button and button:IsShown() then
-        local cimiFrame = button.CanIMogItOverlay
-        if not cimiFrame then
-            cimiFrame = CIMI_AddToFrame(button, LootFrame_CIMIUpdateIcon)
+function UpdateLootButtons()
+    for _, frame in next, LootFrame.ScrollBox.view.frames do
+        if frame.Item then
+            local cimiFrame = frame.Item.CanIMogItOverlay
+            if not cimiFrame then
+                cimiFrame = CIMI_AddToFrame(frame.Item, LootFrame_CIMIUpdateIcon)
+            end
+            LootFrame_CIMIUpdateIcon(cimiFrame)
         end
-        LootFrame_CIMIUpdateIcon(cimiFrame)
     end
 end
-hooksecurefunc("LootFrame_UpdateButton", UpdateLootButton) ]]
+LootFrame:HookScript("OnShow", UpdateLootButtons)
 
 
 ------------------------
