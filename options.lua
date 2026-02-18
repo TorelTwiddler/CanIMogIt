@@ -36,7 +36,7 @@ end
 
 
 -- OptionsVersion: Keep this as an integer, so comparison is easy.
-CanIMogIt_OptionsVersion = "26"
+CanIMogIt_OptionsVersion = "27"
 
 
 CanIMogItOptions_Defaults = {
@@ -57,6 +57,7 @@ CanIMogItOptions_Defaults = {
         ["showMountItems"] = true,
         ["showCatalizableItems"] = true,
         ["showEnsembleItems"] = true,
+        ["showDecorItems"] = true,
     },
 }
 
@@ -157,6 +158,12 @@ local toggle_options = {
         label = L["Show Ensemble Items"],
         var = "showEnsembleItems",
         description = L["Show tooltips and overlays on Ensemble Items (otherwise, shows as not transmoggable)."],
+    },
+    {
+        type = "checkbox",
+        label = L["Show Decor Items"],
+        var = "showDecorItems",
+        description = L["Show tooltips and overlays on Decor Items (otherwise, shows as not transmoggable)."],
     },
 }
 
@@ -583,17 +590,20 @@ Can I Mog It? help:
     Usage: /cimi <command>
     e.g. /cimi help
 
-    help            Displays this help message.
-    debug           Toggles the debug tooltip.
-    verbose         Toggles verbose mode on tooltip.
-    overlay         Toggles the icon overlay.
-    refresh         Refreshes the overlay, forcing a redraw.
-    unequippable    Toggles showing overlay on unequippable items.
-    transmogonly    Toggles showing overlay on non-transmogable items.
-    unknownonly     Toggles showing overlay on known items.
-    toyitems        Toggles showing overlay on toy items.
-    petitems        Toggles showing overlay on pet items.
-    mountitems      Toggles showing overlay on mount items.
+    help                Displays this help message.
+    debug               Toggles the debug tooltip.
+    verbose             Toggles verbose mode on tooltip.
+    overlay             Toggles the icon overlay.
+    refresh             Refreshes the overlay, forcing a redraw.
+    unequippable        Toggles showing overlay on unequippable items.
+    transmogonly        Toggles showing overlay on non-transmogable items.
+    unknownonly         Toggles showing overlay on known items.
+    toyitems            Toggles showing overlay on toy items.
+    petitems            Toggles showing overlay on pet items.
+    mountitems          Toggles showing overlay on mount items.
+    catalizableitems    Toggles showing overlay for catalizable items.
+    ensembleitems       Toggles showing overlay for ensemble items.
+    decoritems          Toggles showing overlay for decor items.
     ]])
 end
 
@@ -623,6 +633,8 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.showCatalizableItems:Click()
     elseif input == 'ensembleitems' then
         CanIMogIt.frame.showEnsembleItems:Click()
+    elseif input == 'decoritems' then
+        CanIMogIt.frame.showDecorItems:Click()
     elseif input == 'refresh' then
         self:ResetCache()
     elseif input == 'help' then

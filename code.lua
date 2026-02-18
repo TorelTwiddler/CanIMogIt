@@ -1095,10 +1095,11 @@ function CanIMogIt:PreLogicOptionsContinue(itemData)
     local toyCheck = CanIMogItOptions["showToyItems"] and itemData.isItemToy
     local petCheck = CanIMogItOptions["showPetItems"] and itemData.isItemPet
     local ensembleCheck = CanIMogItOptions["showEnsembleItems"] and itemData.isItemEnsemble
+    local decorCheck = CanIMogItOptions["showDecorItems"] and itemData.isItemDecor
 
     -- If item is not equippable and the option is disabled and it's not a special item, hide it.
     if not itemData.isItemEquippable and not CanIMogItOptions["showUnequippable"] then
-        if not (mountCheck or toyCheck or petCheck or ensembleCheck) then
+        if not (mountCheck or toyCheck or petCheck or ensembleCheck or decorCheck) then
             return false
         end
     end
@@ -1237,6 +1238,9 @@ function CanIMogIt:CalculateTooltipText(itemLink, bag, slot, tooltipData)
     elseif itemData.type == CanIMogIt.ItemTypes.Ensemble then
         -- This item is an ensemble, so let's figure out if we know it!
         text, unmodifiedText = CanIMogIt:CalculateEnsembleText(itemLink)
+    elseif itemData.type == CanIMogIt.ItemTypes.Decor then
+        -- This item is a decor, so let's figure out if we know it!
+        text, unmodifiedText = CanIMogIt:CalculateDecorText(itemLink)
     else  -- itemData.type == CanIMogIt.ItemTypes.Other
         -- This item is never transmogable.
         if bindData.type == CanIMogIt.BindTypes.Warbound then
