@@ -130,18 +130,5 @@ function CanIMogIt.AppearanceData:CalculateBindStateText(bindData)
         text = CanIMogIt.UNKNOWN
         unmodifiedText = CanIMogIt.UNKNOWN
     end
-    if CanIMogItOptions["completionistMode"] then
-        -- In completionist mode, treat all known-but-not-from-this-item appearances as unknown.
-        if unmodifiedText == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM
-            or unmodifiedText == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_BOE
-            or unmodifiedText == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_WARBOUND
-            or unmodifiedText == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
-            or unmodifiedText == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE
-            or unmodifiedText == CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND then
-            text = CanIMogIt.UNKNOWN
-            unmodifiedText = CanIMogIt.UNKNOWN
-        end
-    end
-
     return text, unmodifiedText
 end

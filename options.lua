@@ -36,7 +36,7 @@ end
 
 
 -- OptionsVersion: Keep this as an integer, so comparison is easy.
-CanIMogIt_OptionsVersion = "28"
+CanIMogIt_OptionsVersion = "27"
 
 
 CanIMogItOptions_Defaults = {
@@ -44,7 +44,6 @@ CanIMogItOptions_Defaults = {
         ["version"] = CanIMogIt_OptionsVersion,
         ["debug"] = false,
         ["databaseDebug"] = false,
-        ["completionistMode"] = false,
         ["showUnequippable"] = false,
         ["showNonTransmoggable"] = false,
         ["showUnknownOnly"] = false,
@@ -74,16 +73,6 @@ local basic_options = {
         label = L["Debug Tooltip"],
         var = "debug",
         description = L["Detailed information for debug purposes. Use this when sending bug reports."],
-    },
-    {
-        type = "checkbox",
-        label = L["Completionist Mode"],
-        var = "completionistMode",
-        description = L["Treat all unknown sources as unknown appearances."] .. "\n\n"
-            .. CanIMogIt.KNOWN_BUT_ICON .. " -> " .. CanIMogIt.UNKNOWN_ICON
-            .. "\n" .. CanIMogIt.KNOWN_BUT_BOE_ICON .. " -> " .. CanIMogIt.UNKNOWN_ICON
-            .. "\n" .. CanIMogIt.KNOWN_BUT_WARBOUND_ICON .. " -> " .. CanIMogIt.UNKNOWN_ICON
-            .. "\n" .. CanIMogIt.KNOWN_BUT_SOULBOUND_ICON .. " -> " .. CanIMogIt.UNKNOWN_ICON,
     },
     {
         type = "checkbox",
@@ -604,7 +593,6 @@ Can I Mog It? help:
     help                Displays this help message.
     debug               Toggles the debug tooltip.
     verbose             Toggles verbose mode on tooltip.
-    completionistmode   Toggles completionist mode (treat known-from-another-item as unknown).
     overlay             Toggles the icon overlay.
     refresh             Refreshes the overlay, forcing a redraw.
     unequippable        Toggles showing overlay on unequippable items.
@@ -635,8 +623,6 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.showNonTransmoggable:Click()
     elseif input == 'unknownonly' then
         CanIMogIt.frame.showUnknownOnly:Click()
-    elseif input == 'completionistmode' then
-        CanIMogIt.frame.completionistMode:Click()
     elseif input == 'toyitems' then
         CanIMogIt.frame.showToyItems:Click()
     elseif input == 'petitems' then
