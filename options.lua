@@ -36,7 +36,7 @@ end
 
 
 -- OptionsVersion: Keep this as an integer, so comparison is easy.
-CanIMogIt_OptionsVersion = "27"
+CanIMogIt_OptionsVersion = "28"
 
 
 CanIMogItOptions_Defaults = {
@@ -44,8 +44,8 @@ CanIMogItOptions_Defaults = {
         ["version"] = CanIMogIt_OptionsVersion,
         ["debug"] = false,
         ["databaseDebug"] = false,
-        ["showUnequippable"] = false,
-        ["showNonTransmoggable"] = false,
+        ["showEquippableOnly"] = true,
+        ["showTransmoggableOnly"] = true,
         ["showUnknownOnly"] = false,
         ["showSetInfo"] = true,
         ["showItemIconOverlay"] = true,
@@ -76,15 +76,15 @@ local basic_options = {
     },
     {
         type = "checkbox",
-        label = L["Show on unequippable items"],
-        var = "showUnequippable",
-        description = L["Show on items that cannot be equipped. For example, hearthstones, quest items, etc."] .. "\n\n" .. L["Please note that if this is disabled, the overlay will still show on items that are not equippable but are toys, mounts, pets, etc, if their respective options are enabled."],
+        label = L["Equippable Items Only"],
+        var = "showEquippableOnly",
+        description = L["Only show on items that can be equipped."],
     },
     {
         type = "checkbox",
-        label = L["Show on Items that are not transmoggable"],
-        var = "showNonTransmoggable",
-        description = L["Show on items that are not transmoggable. For example, trinkets, rings, etc."] .. "\n\n" .. L["Please note that if this is disabled, the overlay will still show on items that are not transmoggable but are toys, mounts, pets, etc, if their respective options are enabled."],
+        label = L["Transmoggable Items Only"],
+        var = "showTransmoggableOnly",
+        description = L["Only show on items that can be transmoggrified."],
     },
     {
         type = "checkbox",
@@ -245,9 +245,9 @@ local function DrawCheckbox(parent, element)
 
     -- Set up click handler
     checkbox:SetScript("OnClick", function(self)
-        local new_value = not self:GetValue()
+        local checked = self:GetChecked()
         PlaySound(PlaySoundKitID and "igMainMenuOptionCheckBoxOn" or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-        self:SetValue(new_value)
+        self:SetValue(checked)
         showChangesSaved()
         CanIMogIt:ResetCache()
         CanIMogIt:SendMessage("OptionUpdate")
@@ -595,7 +595,7 @@ Can I Mog It? help:
     verbose             Toggles verbose mode on tooltip.
     overlay             Toggles the icon overlay.
     refresh             Refreshes the overlay, forcing a redraw.
-    unequippable        Toggles showing overlay on unequippable items.
+    equiponly           Toggles showing overlay on non-equipable items.
     transmogonly        Toggles showing overlay on non-transmogable items.
     unknownonly         Toggles showing overlay on known items.
     toyitems            Toggles showing overlay on toy items.
@@ -617,10 +617,10 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.showItemIconOverlay:Click()
     elseif input == 'verbose' then
         CanIMogIt.frame.showVerboseText:Click()
-    elseif input == 'unequippable' then
-        CanIMogIt.frame.showUnequippable:Click()
+    elseif input == 'equiponly' then
+        CanIMogIt.frame.showEquippableOnly:Click()
     elseif input == 'transmogonly' then
-        CanIMogIt.frame.showNonTransmoggable:Click()
+        CanIMogIt.frame.showTransmoggableOnly:Click()
     elseif input == 'unknownonly' then
         CanIMogIt.frame.showUnknownOnly:Click()
     elseif input == 'toyitems' then
