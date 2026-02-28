@@ -1043,12 +1043,11 @@ end
 function CanIMogIt:IsTransmogable(itemLink)
     -- Returns whether the item is transmogable or not.
 
+    -- Miscellaneous armor is not transmoggable
     local is_misc_subclass = CanIMogIt:IsArmorSubClassID(MISC, itemLink)
     if is_misc_subclass and miscArmorExceptions[CanIMogIt:GetItemSlotName(itemLink)] == nil then
         return false
     end
-
-    local itemID, _, _, slotName = C_Item.GetItemInfoInstant(itemLink)
 
     if CanIMogIt:IsItemPet(itemLink) or CanIMogIt:IsItemKeystone(itemLink) then
         -- Item is never transmogable if it's a battlepet or keystone.
@@ -1056,20 +1055,15 @@ function CanIMogIt:IsTransmogable(itemLink)
         return false
     end
 
-    -- See if item has itemModifiedAppearanceID
-    local itemModifiedAppearanceID = select(2, C_TransmogCollection.GetItemInfo(itemID))
-    if itemModifiedAppearanceID == nil then
-        return false
-    end
-
-    -- See if item has valid transmog link
-    local appearanceInfo = C_TransmogCollection.GetAppearanceSourceInfo(itemModifiedAppearanceID)
-    if appearanceInfo.transmoglink == nil then
-        return false
-    end
-
-    -- See if the item is in a valid transmogable slot
+    -- See if item is in a valid transmogable slot
+    local _, _, _, slotName = C_Item.GetItemInfoInstant(itemLink)
     if inventorySlotsMap[slotName] == nil then
+        return false
+    end
+
+    -- See if item has an appearance ID
+    local itemAppearanceID = CanIMogIt:GetAppearanceID(itemLink)
+    if itemAppearanceID == nil then
         return false
     end
 
