@@ -701,7 +701,8 @@ end
 
 
 function CanIMogIt:GetItemLinkFromSourceID(sourceID)
-    return select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+    local appearanceInfo = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
+    if appearanceInfo then return appearanceInfo.itemLink else return nil end
 end
 
 
@@ -890,7 +891,9 @@ end
 
 function CanIMogIt:IsSourceIDFromItemLink(sourceID, itemLink)
     -- Returns whether the source ID given matches the itemLink.
-    local sourceItemLink = select(6, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
+    local sourceInfo = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
+    if not sourceInfo then return false end
+    local sourceItemLink = sourceInfo.itemLink
     if not sourceItemLink then return false end
     return CanIMogIt:DoItemIDsMatch(sourceItemLink, itemLink)
 end
@@ -911,8 +914,8 @@ end
 function CanIMogIt:GetAppearanceIDFromSourceID(sourceID)
     -- Gets the appearanceID from the sourceID.
     if sourceID ~= nil then
-        local appearanceID = select(2, C_TransmogCollection.GetAppearanceSourceInfo(sourceID))
-        return appearanceID
+        local appearanceInfo = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
+        return appearanceInfo.itemAppearanceID
     end
 end
 
@@ -1021,24 +1024,24 @@ function CanIMogIt:IsTransmogable(itemLink)
         return false
     end
 
-    local itemID, _, _, slotName = C_Item.GetItemInfoInstant(itemLink)
-
     if CanIMogIt:IsItemPet(itemLink) then
         -- Item is never transmoggable if it's a battlepet.
         -- We can't wear battlepets on our heads yet!
         return false
     end
 
-    -- See if the game considers it transmoggable
-    local transmoggable = select(3, C_Transmog.CanTransmogItem(itemID))
-    if transmoggable == false then
-        return false
-    end
-
-    -- See if the item is in a valid transmoggable slot
+    -- See if item is in a valid transmogable slot
+    local _, _, _, slotName = C_Item.GetItemInfoInstant(itemLink)
     if inventorySlotsMap[slotName] == nil then
         return false
     end
+
+    -- See if item has an appearance ID
+    local itemAppearanceID = CanIMogIt:GetAppearanceID(itemLink)
+    if itemAppearanceID == nil then
+        return false
+    end
+
     return true
 end
 
