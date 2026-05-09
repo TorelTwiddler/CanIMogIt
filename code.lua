@@ -980,9 +980,6 @@ end
 function CanIMogIt:CharacterCanLearnTransmog(itemLink)
     -- Returns whether the current character can learn the item or not.
 
-    local sourceID = CanIMogIt:GetSourceID(itemLink)
-    if sourceID == nil then return end
-
     if CanIMogIt:IsItemArmor(itemLink) and not CanIMogIt:IsArmorAppropriateForPlayer(itemLink) then
         return false
     end
@@ -998,11 +995,6 @@ function CanIMogIt:CharacterCanLearnTransmog(itemLink)
         return true
     end
 
-    -- This SHOULD work, but this API returns true for basically EVERYTHING since the start of Mists (stuck on Retail logic?)
-    --[[ if select(2, C_TransmogCollection.PlayerCanCollectSource(sourceID)) then
-        return true
-    end ]]
-
     return false
 end
 
@@ -1015,9 +1007,19 @@ function CanIMogIt:GetReason(itemLink)
     return reason
 end
 
-
+-- NOTE: as of Mists PTR 5.5.4, T14 gear is unavailable in the transmog UI - it not showing up is a Blizzard issue, not a CIMI issue
 function CanIMogIt:IsTransmogable(itemLink)
     -- Returns whether the item is transmoggable or not.
+
+    local sourceID = CanIMogIt:GetSourceID(itemLink)
+    if sourceID == nil then
+        return false
+    end
+
+    -- As of Mists PTR 5.5.4, we're using this to properly flag Poor and Common items as non-transmoggable
+    if not select(2, C_TransmogCollection.PlayerCanCollectSource(sourceID)) then
+        return false
+    end
 
     local is_misc_subclass = CanIMogIt:IsArmorSubClassID(MISC, itemLink)
     if is_misc_subclass and miscArmorExceptions[CanIMogIt:GetItemSlotName(itemLink)] == nil then
