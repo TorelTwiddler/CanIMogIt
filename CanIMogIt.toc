@@ -1,4 +1,4 @@
-## Interface: 50503
+## Interface: 50504
 ## Title: Can I Mog It?
 ## IconTexture: Interface\Addons\CanIMogIt\Icons\KNOWN
 ## Author: RoseTwiddler/TorelTwiddler, Ami Yuy, gewoonnico
