@@ -103,7 +103,7 @@ hooksecurefunc("CloseAllBags", UpdateContainerFrames)
 hooksecurefunc("ToggleAllBags", UpdateContainerFrames)
 
 local containerFrameEvents = {
-    "BAG_UPDATE",
+    "BAG_UPDATE_DELAYED",
     "BANKFRAME_OPENED",
     "PLAYERBANKSLOTS_CHANGED",
     "TRANSMOG_COLLECTION_UPDATED",
