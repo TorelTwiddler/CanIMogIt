@@ -1,7 +1,7 @@
 -- TODO: add support for showing owned decor quantity (e.g. 2 in storage / 1 in house)
 
 function CanIMogIt:IsItemDecor(itemLink)
-    local catalogEntryInfo = C_HousingCatalog.GetCatalogEntryInfoByItem(itemLink, false)
+    local catalogEntryInfo = C_HousingCatalog.GetCatalogEntryInfoByItem(itemLink)
     if catalogEntryInfo and catalogEntryInfo.entryID and catalogEntryInfo.entryID.entryType == 1 then
         return true
     end
@@ -9,7 +9,7 @@ function CanIMogIt:IsItemDecor(itemLink)
 end
 
 function CanIMogIt:PlayerOwnsDecor(itemLink)
-    local catalogEntryInfo = C_HousingCatalog.GetCatalogEntryInfoByItem(itemLink, true)
+    local catalogEntryInfo = C_HousingCatalog.GetCatalogEntryInfoByItem(itemLink)
     if catalogEntryInfo and catalogEntryInfo.quantity > 0 or catalogEntryInfo.numPlaced > 0 then
         return true
     end
