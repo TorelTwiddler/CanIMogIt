@@ -20,12 +20,15 @@ if C_AddOns.IsAddOnLoaded("BetterBags") then
             cimiFrame:SetScript("OnUpdate", nil)
             return
         end
-        local slot, bag = item.data.slotid, item.data.bagid
+
+        if not item.currentData then return end
+        
+        local slot, bag = item.currentData.slotid, item.currentData.bagid
         CIMI_SetIcon(cimiFrame, function () end, CanIMogIt:GetTooltipText(nil, bag, slot))
     end
     events:RegisterMessage('item/Updated', onItemUpdate)
 
-    local function onBagsOpenClose()
+    local function onBagRendered()
         local bags = betterBags.Bags.Backpack
         if not bags.currentView then return end
         local itemList = bags.currentView.itemsByBagAndSlot
@@ -33,5 +36,5 @@ if C_AddOns.IsAddOnLoaded("BetterBags") then
             onItemUpdate(_, item)
         end
     end
-    events:RegisterMessage('bags/OpenClose', onBagsOpenClose)
+    events:RegisterMessage('bag/Rendered', onBagRendered)
 end
