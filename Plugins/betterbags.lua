@@ -1,7 +1,6 @@
 -- Adds overlays to items in the addon BetterBags: https://www.curseforge.com/wow/addons/better-bags
 
 if C_AddOns.IsAddOnLoaded("BetterBags") then
-
     local betterBags = LibStub("AceAddon-3.0"):GetAddon("BetterBags")
     local events = betterBags:GetModule("Events")
 
@@ -48,5 +47,5 @@ if C_AddOns.IsAddOnLoaded("BetterBags") then
     end
     events:RegisterMessage('bag/Rendered', onBagRendered)
 
-    CanIMogIt:RegisterMessage("OptionUpdate", onBagRendered)
+    CanIMogIt:RegisterMessage("ResetCache", onBagRendered)
 end
