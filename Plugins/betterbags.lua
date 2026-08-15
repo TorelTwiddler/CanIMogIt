@@ -21,9 +21,19 @@ if C_AddOns.IsAddOnLoaded("BetterBags") then
             return
         end
 
-        if not item.currentData then return end
-        
-        local slot, bag = item.currentData.slotid, item.currentData.bagid
+        if not item.currentData then
+            if item.slotkey then
+                local bagAndSlot = {}
+                for value in string.gmatch(item.slotkey, "%d+") do
+                    table.insert(bagAndSlot, value)
+                end
+                CIMI_SetIcon(cimiFrame, function() end, CanIMogIt:GetTooltipText(nil, bagAndSlot[1], bagAndSlot[2]))
+            end
+
+            return
+        end
+
+        local bag, slot = item.currentData.bagid, item.currentData.slotid
         CIMI_SetIcon(cimiFrame, function () end, CanIMogIt:GetTooltipText(nil, bag, slot))
     end
     events:RegisterMessage('item/Updated', onItemUpdate)
@@ -37,4 +47,6 @@ if C_AddOns.IsAddOnLoaded("BetterBags") then
         end
     end
     events:RegisterMessage('bag/Rendered', onBagRendered)
+
+    CanIMogIt:RegisterMessage("OptionUpdate", onBagRendered)
 end
