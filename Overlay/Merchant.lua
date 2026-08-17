@@ -33,7 +33,13 @@ function MerchantFrame_CIMIUpdateBuybackIcon(self)
         return
     end
 
-    CIMI_SetIcon(self, MerchantFrame_CIMIUpdateBuybackIcon, nil)
+    local name = self:GetParent():GetParent().Name:GetText()
+    if name == nil then
+        CIMI_SetIcon(self, MerchantFrame_CIMIUpdateBuybackIcon, nil)
+    else
+        local itemLink = CanIMogIt:GetItemLinkFromName(name)
+        CIMI_SetIcon(self, MerchantFrame_CIMIUpdateBuybackIcon, CanIMogIt:GetTooltipText(itemLink))
+    end
 end
 
 

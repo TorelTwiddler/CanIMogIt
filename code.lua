@@ -748,6 +748,10 @@ function CanIMogIt:GetItemID(itemLink)
     return tonumber(itemLink:match("item:(%d+)"))
 end
 
+function CanIMogIt:GetItemLinkFromName(itemName)
+    return select(2, C_Item.GetItemInfo(itemName))
+end
+
 
 function CanIMogIt:GetItemLinkFromSourceID(sourceID)
     local appearanceInfo = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
