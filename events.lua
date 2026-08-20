@@ -159,7 +159,7 @@ CanIMogIt.eventFrame:SetScript("OnEvent", SmartEventHook);
 
 function CanIMogIt.frame.AddonLoaded(event, addonName)
     if event == "ADDON_LOADED" and addonName == "CanIMogIt" then
-        CanIMogIt.frame.Loaded()
+        CanIMogIt.frame.Init()
     end
 end
 CanIMogIt.eventFrame:AddSmartEvent(CanIMogIt.frame.AddonLoaded, {"ADDON_LOADED"})

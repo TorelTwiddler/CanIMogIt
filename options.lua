@@ -542,13 +542,25 @@ local function createOptionsMenu()
     changesSavedText()
 end
 
+-- Fail-safe to ensure Init() gets called even if event handling is disrupted
+-- This helps when multiple addons are competing for the same events
+local initializedFlag = false
 
-function CanIMogIt.frame.Loaded()
+-- Add a function to track whether the addon has been initialized
+function CanIMogIt.MarkAsInitialized()
+    initializedFlag = true
+end
+
+function CanIMogIt.frame.Init()
+    -- Check if addon is already initialized
+    if initializedFlag then return end
+
     -- Set the Options from defaults.
     if (not CanIMogItOptions) then
         CanIMogItOptions = CanIMogItOptions_Defaults.options
         print(L["CanIMogItOptions not found, loading defaults!"])
     end
+
     -- Set missing options from the defaults if the version is out of date.
     if (CanIMogItOptions["version"] < CanIMogIt_OptionsVersion) then
         local CanIMogItOptions_temp = CanIMogItOptions_Defaults.options;
@@ -561,25 +573,11 @@ function CanIMogIt.frame.Loaded()
         CanIMogItOptions = CanIMogItOptions_temp;
     end
     createOptionsMenu()
-    CanIMogIt.MarkAsLoaded()
+    CanIMogIt.MarkAsInitialized()
 end
 
--- Fail-safe to ensure Loaded() gets called even if event handling is disrupted
--- This helps when multiple addons are competing for the same events
-local loadedFlag = false
-
--- Add a function to track whether the addon has been loaded
-function CanIMogIt.MarkAsLoaded()
-    loadedFlag = true
-end
-
--- Create a fail-safe timer to check if Loaded() has been called
-C_Timer.After(2, function()
-    if not loadedFlag then
-        CanIMogIt.frame.Loaded()
-        CanIMogIt.MarkAsLoaded()
-    end
-end)
+-- Create a fail-safe timer that calls Init() in case event handling gets disrupted
+C_Timer.After(2, function() CanIMogIt.frame.Init() end)
 
 CanIMogIt:RegisterChatCommand("cimi", "SlashCommands")
 CanIMogIt:RegisterChatCommand("canimogit", "SlashCommands")
