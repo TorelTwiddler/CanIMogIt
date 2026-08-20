@@ -28,13 +28,8 @@ local function printDebug(tooltip, itemLink, tooltipData)
     addDoubleLine(tooltip, "Addon Version:", C_AddOns.GetAddOnMetadata("CanIMogIt", "Version"))
     local playerClass = select(2, UnitClass("player"))
     local playerLevel = UnitLevel("player")
-    local playerSpecName
-    if CanIMogIt.isRetail then
-        local playerSpec = GetSpecialization()
-        playerSpecName = playerSpec and select(2, GetSpecializationInfo(playerSpec)) or "None"
-    else
-        playerSpecName = "Classic, unknown"
-    end
+    local playerSpec = GetSpecialization()
+    local playerSpecName = playerSpec and select(2, GetSpecializationInfo(playerSpec)) or "None"
 
     addDoubleLine(tooltip, "Player Class:", playerClass)
     addDoubleLine(tooltip, "Player Spec:", playerSpecName)
@@ -278,10 +273,7 @@ ItemRefShoppingTooltip1:HookScript("OnTooltipCleared", TooltipCleared)
 ItemRefShoppingTooltip2:HookScript("OnTooltipCleared", TooltipCleared)
 ShoppingTooltip1:HookScript("OnTooltipCleared", TooltipCleared)
 ShoppingTooltip2:HookScript("OnTooltipCleared", TooltipCleared)
-
-if CanIMogIt.isRetail then
-    GameTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", TooltipCleared)
-end
+GameTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", TooltipCleared)
 
 
 local function CanIMogIt_AttachItemTooltip(tooltip, tooltipData)

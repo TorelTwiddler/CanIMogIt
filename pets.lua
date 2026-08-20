@@ -12,7 +12,6 @@ function CanIMogIt:IsItemPet(itemLink)
     end
     return false
 end
-CanIMogIt.IsItemPet = CanIMogIt.RetailWrapper(CanIMogIt.IsItemPet, false)
 
 function CanIMogIt:PlayerKnowsPet(itemLink)
     local itemID = CanIMogIt:GetItemID(itemLink)

@@ -57,21 +57,3 @@ function CanIMogIt:SendMessage(message)
         func(message)
     end
 end
-
-local function IsRetail()
-    return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-end
-
-CanIMogIt.isRetail = IsRetail()
-
-function CanIMogIt.RetailWrapper(funcRetail, funcClassic)
-    -- If funcClassic isn't a function, then it's the value we should return instead.
-    if CanIMogIt.isRetail then
-        return funcRetail
-    else
-        if type(funcClassic) ~= "function" then
-            return function() return funcClassic end
-        end
-        return funcClassic
-    end
-end

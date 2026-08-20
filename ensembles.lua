@@ -8,8 +8,6 @@ function CanIMogIt:IsItemEnsemble(itemLink)
     end
     return false
 end
-CanIMogIt.IsItemEnsemble = CanIMogIt.RetailWrapper(CanIMogIt.IsItemEnsemble, false)
-
 
 function CanIMogIt:EnsembleItemsKnown(itemLink)
     -- Returns the number of appearances known, and the number of appearances total in the ensemble.
