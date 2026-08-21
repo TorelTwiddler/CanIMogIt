@@ -19,6 +19,17 @@ end
 -----------------------------
 
 
+-- Enable this to get a very verbose debug message for every tooltip
+-- change that occurs.
+local VVDebug = false
+
+function VVDebugPrint(tooltip, event)
+    if VVDebug then
+        CanIMogIt:Print(tooltip:GetName(), event)
+    end
+end
+
+
 local function printDebug(tooltip, itemLink, tooltipData)
     -- Add debug statements to the tooltip, to make it easier to understand
     -- what may be going wrong.
@@ -196,11 +207,21 @@ end
 -- Tooltip hooks           --
 -----------------------------
 
-local itemLinks = {}
+
+-- Define table with tooltips to hook on to with CIMI
+CanIMogIt.HookableTooltips = {
+    GameTooltip = 1,
+    ItemRefTooltip = 1,
+    ItemRefShoppingTooltip1 = 1,
+    ItemRefShoppingTooltip2 = 1,
+    ShoppingTooltip1 = 1,
+    ShoppingTooltip2 = 1,
+}
 
 local function addToTooltip(tooltip, itemLink, tooltipData)
     -- Does the calculations for determining what text to
     -- display on the tooltip.
+    if not CanIMogIt.HookableTooltips[tooltip:GetName()] then return end
     if tooltip.CIMI_tooltipWritten then return end
     if not itemLink then return end
     if not CanIMogIt:IsReadyForCalculations(itemLink) then
@@ -248,32 +269,19 @@ local function addToTooltip(tooltip, itemLink, tooltipData)
     end
 end
 
-
--- Enable this to get a very verbose debug message for every tooltip
--- change that occurs.
-local VVDebug = false
-
-function VVDebugPrint(tooltip, event)
-    if VVDebug then
-        CanIMogIt:Print(tooltip:GetName(), event)
-    end
-end
-
-
-local function TooltipCleared(tooltip)
+function CanIMogIt:TooltipCleared(tooltip)
     -- Clears the tooltipWritten flag once the tooltip is done rendering.
     tooltip.CIMI_tooltipWritten = false
     VVDebugPrint(tooltip, "OnTooltipCleared")
 end
 
-
-GameTooltip:HookScript("OnTooltipCleared", TooltipCleared)
-ItemRefTooltip:HookScript("OnTooltipCleared", TooltipCleared)
-ItemRefShoppingTooltip1:HookScript("OnTooltipCleared", TooltipCleared)
-ItemRefShoppingTooltip2:HookScript("OnTooltipCleared", TooltipCleared)
-ShoppingTooltip1:HookScript("OnTooltipCleared", TooltipCleared)
-ShoppingTooltip2:HookScript("OnTooltipCleared", TooltipCleared)
-GameTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", TooltipCleared)
+GameTooltip:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
+ItemRefTooltip:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
+ItemRefShoppingTooltip1:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
+ItemRefShoppingTooltip2:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
+ShoppingTooltip1:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
+ShoppingTooltip2:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
+GameTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
 
 
 local function CanIMogIt_AttachItemTooltip(tooltip, tooltipData)
