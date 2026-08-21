@@ -77,7 +77,7 @@ local function printDebug(tooltip, itemLink, tooltipData)
     addDoubleLine(tooltip, "Item setID:", tostring(setID))
 
     local baseSetID = setID ~= nil and setID ~= "nil" and C_TransmogSets.GetBaseSetID(setID) or "nil"
-    addDoubleLine(tooltip, "Item baseSetID:", tostring(setID))
+    addDoubleLine(tooltip, "Item baseSetID:", tostring(baseSetID))
 
     addLine(tooltip, '--------')
 
