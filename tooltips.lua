@@ -4,13 +4,11 @@
 
 local function addDoubleLine(tooltip, left_text, right_text)
     tooltip:AddDoubleLine(left_text, right_text)
-    tooltip:Show()
 end
 
 
 local function addLine(tooltip, text)
     tooltip:AddLine(text, nil, nil, nil, true)
-    tooltip:Show()
 end
 
 
@@ -199,7 +197,6 @@ local function printDebug(tooltip, itemLink, tooltipData)
     end
 
     addLine(tooltip, '--------')
-
 end
 
 
@@ -267,6 +264,8 @@ local function addToTooltip(tooltip, itemLink, tooltipData)
             tooltip.CIMI_tooltipWritten = true
         end
     end
+
+    tooltip:Show()
 end
 
 function CanIMogIt:TooltipCleared(tooltip)
