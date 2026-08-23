@@ -2,9 +2,8 @@
 
 local addon = "WorldQuestTab"
 
-local function AddWorldQuestTabHooks()
+local function AddWorldQuestTabHook()
     CanIMogIt.HookableTooltips["WQT_GameTooltipTooltip"] = 1
-    WQT_GameTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
 end
 
 local function CheckAndLoadWorldQuestTab()
@@ -13,7 +12,7 @@ local function CheckAndLoadWorldQuestTab()
 
     local _, loaded = C_AddOns.IsAddOnLoaded(addon)
     if loaded then
-        AddWorldQuestTabHooks()
+        AddWorldQuestTabHook()
         return
     end
 
@@ -22,7 +21,7 @@ local function CheckAndLoadWorldQuestTab()
 
         CanIMogIt:UnregisterEvent("ADDON_LOADED", WorldQuestTabLoader)
 
-        AddWorldQuestTabHooks()
+        AddWorldQuestTabHook()
     end
 
     CanIMogIt:RegisterEvent("ADDON_LOADED", WorldQuestTabLoader)

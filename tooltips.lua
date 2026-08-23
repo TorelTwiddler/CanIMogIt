@@ -215,6 +215,12 @@ CanIMogIt.HookableTooltips = {
     ShoppingTooltip2 = 1,
 }
 
+local function tooltipCleared(tooltip)
+    -- Clears the tooltipWritten flag once the tooltip is done rendering.
+    tooltip.CIMI_tooltipWritten = false
+    VVDebugPrint(tooltip, "OnTooltipCleared")
+end
+
 local function addToTooltip(tooltip, itemLink, tooltipData)
     -- Does the calculations for determining what text to
     -- display on the tooltip.
@@ -223,6 +229,12 @@ local function addToTooltip(tooltip, itemLink, tooltipData)
     if not itemLink then return end
     if not CanIMogIt:IsReadyForCalculations(itemLink) then
         return
+    end
+
+    -- Add OnTooltipCleared handler for tooltip
+    if not tooltip.CIMI_tooltipOnCleared then
+        tooltip:HookScript("OnTooltipCleared", tooltipCleared)
+        tooltip.CIMI_tooltipOnCleared = true;
     end
 
     if CanIMogItOptions["debug"] then
@@ -267,20 +279,6 @@ local function addToTooltip(tooltip, itemLink, tooltipData)
 
     tooltip:Show()
 end
-
-function CanIMogIt:TooltipCleared(tooltip)
-    -- Clears the tooltipWritten flag once the tooltip is done rendering.
-    tooltip.CIMI_tooltipWritten = false
-    VVDebugPrint(tooltip, "OnTooltipCleared")
-end
-
-GameTooltip:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
-ItemRefTooltip:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
-ItemRefShoppingTooltip1:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
-ItemRefShoppingTooltip2:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
-ShoppingTooltip1:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
-ShoppingTooltip2:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
-GameTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
 
 
 local function CanIMogIt_AttachItemTooltip(tooltip, tooltipData)

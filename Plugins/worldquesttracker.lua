@@ -2,9 +2,8 @@
 
 local addon = "WorldQuestTracker"
 
-local function AddWorldQuestTrackerHooks()
+local function AddWorldQuestTrackerHook()
     CanIMogIt.HookableTooltips["WorldQuestTrackerGameTooltipItemTooltipTooltip"] = 1
-    WorldQuestTrackerGameTooltipItemTooltipTooltip:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
 end
 
 local function CheckAndLoadWorldQuestTracker()
@@ -13,7 +12,7 @@ local function CheckAndLoadWorldQuestTracker()
 
     local _, loaded = C_AddOns.IsAddOnLoaded(addon)
     if loaded then
-        AddWorldQuestTrackerHooks()
+        AddWorldQuestTrackerHook()
         return
     end
 
@@ -22,7 +21,7 @@ local function CheckAndLoadWorldQuestTracker()
 
         CanIMogIt:UnregisterEvent("ADDON_LOADED", WorldQuestTrackerLoader)
 
-        AddWorldQuestTrackerHooks()
+        AddWorldQuestTrackerHook()
     end
 
     CanIMogIt:RegisterEvent("ADDON_LOADED", WorldQuestTrackerLoader)
