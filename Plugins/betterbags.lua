@@ -1,6 +1,7 @@
 -- Adds overlays to items in the addon BetterBags: https://www.curseforge.com/wow/addons/better-bags
 
 if C_AddOns.IsAddOnLoaded("BetterBags") then
+
     local betterBags = LibStub("AceAddon-3.0"):GetAddon("BetterBags")
     local events = betterBags:GetModule("Events")
 
@@ -19,25 +20,12 @@ if C_AddOns.IsAddOnLoaded("BetterBags") then
             cimiFrame:SetScript("OnUpdate", nil)
             return
         end
-
-        if not item.currentData then
-            if item.slotkey then
-                local bagAndSlot = {}
-                for value in string.gmatch(item.slotkey, "%d+") do
-                    table.insert(bagAndSlot, value)
-                end
-                CIMI_SetIcon(cimiFrame, function() end, CanIMogIt:GetTooltipText(nil, bagAndSlot[1], bagAndSlot[2]))
-            end
-
-            return
-        end
-
-        local bag, slot = item.currentData.bagid, item.currentData.slotid
+        local slot, bag = item.data.slotid, item.data.bagid
         CIMI_SetIcon(cimiFrame, function () end, CanIMogIt:GetTooltipText(nil, bag, slot))
     end
     events:RegisterMessage('item/Updated', onItemUpdate)
 
-    local function onBagRendered()
+    local function onBagsOpenClose()
         local bags = betterBags.Bags.Backpack
         if not bags.currentView then return end
         local itemList = bags.currentView.itemsByBagAndSlot
@@ -45,7 +33,5 @@ if C_AddOns.IsAddOnLoaded("BetterBags") then
             onItemUpdate(_, item)
         end
     end
-    events:RegisterMessage('bag/Rendered', onBagRendered)
-
-    CanIMogIt:RegisterMessage("ResetCache", onBagRendered)
+    events:RegisterMessage('bags/OpenClose', onBagsOpenClose)
 end
