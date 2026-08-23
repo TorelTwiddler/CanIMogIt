@@ -8,5 +8,6 @@
     <Script file="cargbagsnivaya.lua"/>
     <Script file="elvui.lua"/>
     <Script file="litebag.lua"/>
+    <Script file="worldquesttab.lua"/>
     <Script file="worldquesttracker.lua"/>
 </Ui>

@@ -1,29 +1,31 @@
--- Adds tooltip to World Quest Tracker https://www.curseforge.com/wow/addons/world-quest-tracker
+-- Adds tooltip support for World Quest Tracker https://www.curseforge.com/wow/addons/world-quest-tracker
 
-local function AddWQTHooks()
+local addon = "WorldQuestTracker"
+
+local function AddWorldQuestTrackerHooks()
     CanIMogIt.HookableTooltips["WorldQuestTrackerGameTooltipItemTooltipTooltip"] = 1
     WorldQuestTrackerGameTooltipItemTooltipTooltip:HookScript("OnTooltipCleared", function(self) CanIMogIt:TooltipCleared(self) end)
 end
 
-local function CheckAndLoadWQT()
-    local _, _, _, loadable, _ = C_AddOns.GetAddOnInfo("WorldQuestTracker")
+local function CheckAndLoadWorldQuestTracker()
+    local _, _, _, loadable, _ = C_AddOns.GetAddOnInfo(addon)
     if not loadable then return end
 
-    local _, loaded = C_AddOns.IsAddOnLoaded("WorldQuestTracker")
+    local _, loaded = C_AddOns.IsAddOnLoaded(addon)
     if loaded then
-        AddWQTHooks()
+        AddWorldQuestTrackerHooks()
         return
     end
 
-    local function WQTLoader(event, addonName)
-        if event ~= "ADDON_LOADED" or addonName ~= "WorldQuestTracker" then return end
+    local function WorldQuestTrackerLoader(event, addonName)
+        if event ~= "ADDON_LOADED" or addonName ~= addon then return end
 
-        CanIMogIt:UnregisterEvent("ADDON_LOADED", WQTLoader)
+        CanIMogIt:UnregisterEvent("ADDON_LOADED", WorldQuestTrackerLoader)
 
-        AddWQTHooks()
+        AddWorldQuestTrackerHooks()
     end
 
-    CanIMogIt:RegisterEvent("ADDON_LOADED", WQTLoader)
+    CanIMogIt:RegisterEvent("ADDON_LOADED", WorldQuestTrackerLoader)
 end
 
-CheckAndLoadWQT()
+CheckAndLoadWorldQuestTracker()
