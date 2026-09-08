@@ -21,9 +21,18 @@ end
 -- change that occurs.
 local VVDebug = false
 
+
+-- Safe tooltip name call to avoid potential errors (ty ATT)
+local function SafeGetName(tooltip)
+    local ok, name = pcall(tooltip.GetName, tooltip)
+    if ok then return name end
+
+    return ""
+end
+
 function VVDebugPrint(tooltip, event)
     if VVDebug then
-        CanIMogIt:Print(tooltip:GetName(), event)
+        CanIMogIt:Print(SafeGetName(tooltip), event)
     end
 end
 
@@ -224,7 +233,7 @@ end
 local function addToTooltip(tooltip, itemLink, tooltipData)
     -- Does the calculations for determining what text to
     -- display on the tooltip.
-    if not CanIMogIt.HookableTooltips[tooltip:GetName()] then return end
+    if not CanIMogIt.HookableTooltips[SafeGetName(tooltip)] then return end
     if tooltip.CIMI_tooltipWritten then return end
     if not itemLink then return end
     if not CanIMogIt:IsReadyForCalculations(itemLink) then
