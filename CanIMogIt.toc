@@ -42,7 +42,6 @@ classes\itemData.lua
 options.lua
 events.lua
 cache.lua
-requirements.lua
 code.lua
 tooltips.lua
 database.lua

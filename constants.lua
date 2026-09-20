@@ -4,32 +4,6 @@ local L = CanIMogIt.L
 
 
 --------------------------------------------
--- Database scan speed values             --
---------------------------------------------
-
-
--- Instant - Only the best of connections, or you WILL crash with Error #134
--- CanIMogIt.throttleTime = 0.25
--- CanIMogIt.bufferMax = 10000
-
--- Near Instant - May cause your game to crash with Error #134
--- CanIMogIt.throttleTime = 0.25
--- CanIMogIt.bufferMax = 200
-
--- Fast - Less likely to cause lag or crash
--- CanIMogIt.throttleTime = 0.1
--- CanIMogIt.bufferMax = 50
-
--- Medium - Most likely safe
-CanIMogIt.throttleTime = 0.1
-CanIMogIt.bufferMax = 25
-
--- Slow - Will take a long time, but be 100% safe. Use if you have a poor connection.
--- CanIMogIt.throttleTime = 0.5
--- CanIMogIt.bufferMax = 5
-
-
---------------------------------------------
 -- Tooltip icon, color and text constants --
 --------------------------------------------
 
@@ -115,7 +89,6 @@ CanIMogIt.KNOWN_BY_ANOTHER_CHARACTER_WARBOUND =             CanIMogIt.KNOWN_WARB
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =           CanIMogIt.KNOWN_BUT_SOULBOUND_ICON .. CanIMogIt.BLUE_GREEN .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE =       CanIMogIt.KNOWN_BUT_BOE_ICON .. CanIMogIt.YELLOW .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
 CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND =  CanIMogIt.KNOWN_BUT_WARBOUND_ICON .. CanIMogIt.PINK .. KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER
--- CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER =        CanIMogIt.QUESTIONABLE_ICON .. CanIMogIt.YELLOW .. CANNOT_DETERMINE
 CanIMogIt.UNKNOWABLE_SOULBOUND =                            CanIMogIt.UNKNOWABLE_SOULBOUND_ICON .. CanIMogIt.BLUE_GREEN .. UNKNOWABLE_SOULBOUND
 CanIMogIt.UNKNOWABLE_BY_CHARACTER =                         CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON .. CanIMogIt.YELLOW .. UNKNOWABLE_BY_CHARACTER
 CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND =                CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND_ICON .. CanIMogIt.PINK .. UNKNOWABLE_BY_CHARACTER_WARBOUND
@@ -140,11 +113,9 @@ CanIMogIt.tooltipIcons = {
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.KNOWN_BUT_SOULBOUND_ICON,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE] = CanIMogIt.KNOWN_BUT_BOE_ICON,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND] = CanIMogIt.KNOWN_BUT_WARBOUND_ICON,
-    -- [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.QUESTIONABLE_ICON,
     [CanIMogIt.UNKNOWABLE_SOULBOUND] = CanIMogIt.UNKNOWABLE_SOULBOUND_ICON,
     [CanIMogIt.UNKNOWABLE_BY_CHARACTER] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON,
     [CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND_ICON,
-    -- [CanIMogIt.CAN_BE_LEARNED_BY] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON,
     [CanIMogIt.UNKNOWN] = CanIMogIt.UNKNOWN_ICON,
     [CanIMogIt.PARTIAL] = CanIMogIt.PARTIAL_ICON,
     [CanIMogIt.NOT_TRANSMOGABLE] = CanIMogIt.NOT_TRANSMOGABLE_ICON,
@@ -168,11 +139,9 @@ CanIMogIt.tooltipOverlayIcons = {
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.KNOWN_BUT_SOULBOUND_ICON_OVERLAY,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_BOE] = CanIMogIt.KNOWN_BUT_BOE_ICON_OVERLAY,
     [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER_WARBOUND] = CanIMogIt.KNOWN_BUT_WARBOUND_ICON_OVERLAY,
-    -- [CanIMogIt.KNOWN_FROM_ANOTHER_ITEM_AND_CHARACTER] = CanIMogIt.QUESTIONABLE_ICON_OVERLAY,
     [CanIMogIt.UNKNOWABLE_SOULBOUND] = CanIMogIt.UNKNOWABLE_SOULBOUND_ICON_OVERLAY,
     [CanIMogIt.UNKNOWABLE_BY_CHARACTER] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON_OVERLAY,
     [CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_WARBOUND_ICON_OVERLAY,
-    -- [CanIMogIt.CAN_BE_LEARNED_BY] = CanIMogIt.UNKNOWABLE_BY_CHARACTER_ICON_OVERLAY,
     [CanIMogIt.UNKNOWN] = CanIMogIt.UNKNOWN_ICON_OVERLAY,
     [CanIMogIt.PARTIAL] = CanIMogIt.PARTIAL_ICON_OVERLAY,
     [CanIMogIt.NOT_TRANSMOGABLE] = CanIMogIt.NOT_TRANSMOGABLE_ICON_OVERLAY,
@@ -220,17 +189,6 @@ CanIMogIt.MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS or 40
 -- Bank = NUM_BANKGENERIC_SLOTS
 
 CanIMogIt.NUM_BANK_ITEMS = 112
-
----- Expansions ----
-CanIMogIt.Expansions = {}
-CanIMogIt.Expansions.BC = 1
-CanIMogIt.Expansions.WRATH = 2
-CanIMogIt.Expansions.CATA = 3
-CanIMogIt.Expansions.MISTS = 4
-CanIMogIt.Expansions.WOD = 5
-CanIMogIt.Expansions.LEGION = 6
-CanIMogIt.Expansions.BFA = 7
-CanIMogIt.Expansions.SHADOWLANDS = 8
 
 ---- Others ----
 CanIMogIt.NUM_ENCOUNTER_JOURNAL_ENCOUNTER_LOOT_FRAMES = 10 -- Blizzard functions are locals
