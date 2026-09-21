@@ -1,4 +1,4 @@
-## Interface: 16010
+## Interface: 16001
 ## Title: Can I Mog It?
 ## IconTexture: Interface\Addons\CanIMogIt\Icons\KNOWN
 ## Author: RoseTwiddler/TorelTwiddler, Ami Yuy, gewoonnico
