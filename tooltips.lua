@@ -156,21 +156,6 @@ local function printDebug(tooltip, itemLink, tooltipData)
             addDoubleLine(tooltip, "PlayerKnowsToy:", tostring(CanIMogIt:PlayerKnowsToy(itemLink)))
         end
     end
-    local isEnsembleItem = CanIMogIt:IsItemEnsemble(itemLink)
-    if isEnsembleItem ~= nil then
-        addDoubleLine(tooltip, "IsEnsembleItem:", tostring(isEnsembleItem))
-        if isEnsembleItem then
-            local known, total = CanIMogIt:EnsembleItemsKnown(itemLink)
-            addDoubleLine(tooltip, "EnsembleItemsKnown:", known .. "/" .. total)
-        end
-    end
-    local isDecorItem = CanIMogIt:IsItemDecor(itemLink)
-    if isDecorItem ~= nil then
-        addDoubleLine(tooltip, "IsDecorItem:", tostring(isDecorItem))
-        if isDecorItem then
-            addDoubleLine(tooltip, "PlayersOwnsDecor:", tostring(CanIMogIt:PlayerOwnsDecor(itemLink)))
-        end
-    end
 
     addDoubleLine(tooltip, "IsItemSoulbound:", tostring(CanIMogIt:IsItemSoulbound(itemLink)))
     addDoubleLine(tooltip, "IsItemWarbound:", tostring(CanIMogIt:IsItemWarbound(itemLink)))

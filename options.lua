@@ -55,9 +55,6 @@ CanIMogItOptions_Defaults = {
         ["showToyItems"] = true,
         ["showPetItems"] = true,
         ["showMountItems"] = true,
-        ["showCatalizableItems"] = true,
-        ["showEnsembleItems"] = true,
-        ["showDecorItems"] = true,
     },
 }
 
@@ -146,24 +143,6 @@ local toggle_options = {
         label = L["Show Mount Items"],
         var = "showMountItems",
         description = L["Show tooltips and overlays on mounts (otherwise, shows as not transmoggable)."],
-    },
-    {
-        type = "checkbox",
-        label = L["Show Catalizable Items"],
-        var = "showCatalizableItems",
-        description = L["Show extra tooltip for items that can be catalyzed."],
-    },
-    {
-        type = "checkbox",
-        label = L["Show Ensemble Items"],
-        var = "showEnsembleItems",
-        description = L["Show tooltips and overlays on Ensemble Items (otherwise, shows as not transmoggable)."],
-    },
-    {
-        type = "checkbox",
-        label = L["Show Decor Items"],
-        var = "showDecorItems",
-        description = L["Show tooltips and overlays on Decor Items (otherwise, shows as not transmoggable)."],
     },
 }
 
@@ -599,9 +578,6 @@ Can I Mog It? help:
     toyitems            Toggles showing overlay on toy items.
     petitems            Toggles showing overlay on pet items.
     mountitems          Toggles showing overlay on mount items.
-    catalizableitems    Toggles showing overlay for catalizable items.
-    ensembleitems       Toggles showing overlay for ensemble items.
-    decoritems          Toggles showing overlay for decor items.
     ]])
 end
 
@@ -627,12 +603,6 @@ function CanIMogIt:SlashCommands(input)
         CanIMogIt.frame.showPetItems:Click()
     elseif input == 'mountitems' then
         CanIMogIt.frame.showMountItems:Click()
-    elseif input == 'catalizableitems' then
-        CanIMogIt.frame.showCatalizableItems:Click()
-    elseif input == 'ensembleitems' then
-        CanIMogIt.frame.showEnsembleItems:Click()
-    elseif input == 'decoritems' then
-        CanIMogIt.frame.showDecorItems:Click()
     elseif input == 'refresh' then
         self:ResetCache()
     elseif input == 'help' then

@@ -49,9 +49,6 @@ tooltipScanner.lua
 mounts.lua
 toys.lua
 pets.lua
-ensembles.lua
-catalyze.lua
-decor.lua
 Overlay\_overlays.xml
 Plugins\_plugins.xml
 tests.lua

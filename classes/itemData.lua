@@ -8,20 +8,16 @@ CanIMogIt.ItemTypes = {
     Mount = "Mount",
     Toy = "Toy",
     Pet = "Pet",
-    Ensemble = "Ensemble",
-    Decor = "Decor",
     Other = "Other"
 }
 
 
-function CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy, isItemPet, isItemEnsemble, isItemDecor, isItemEquippable)
+function CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy, isItemPet, isItemEquippable)
     if itemLink == nil
         or isTransmogable == nil
         or isItemMount == nil
         or isItemToy == nil
         or isItemPet == nil
-        or isItemEnsemble == nil
-        or isItemDecor == nil
         or isItemEquippable == nil then
         return nil
     end
@@ -32,8 +28,6 @@ function CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy
     this.isItemMount = isItemMount
     this.isItemToy = isItemToy
     this.isItemPet = isItemPet
-    this.isItemEnsemble = isItemEnsemble
-    this.isItemDecor = isItemDecor
     this.isItemEquippable = isItemEquippable
     this.type = this:CalculateType()
     return this
@@ -50,14 +44,10 @@ function CanIMogIt.ItemData.FromItemLink(itemLink)
     if isItemToy == nil then return end
     local isItemPet = CanIMogIt:IsItemPet(itemLink)
     if isItemPet == nil then return end
-    local isItemEnsemble = CanIMogIt:IsItemEnsemble(itemLink)
-    if isItemEnsemble == nil then return end
-    local isItemDecor = CanIMogIt:IsItemDecor(itemLink)
-    if isItemDecor == nil then return end
     -- Pets are never equippable
     local isItemEquippable = not isItemPet and CanIMogIt:IsEquippable(itemLink) or false
     if isItemEquippable == nil then return end
-    return CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy, isItemPet, isItemEnsemble, isItemDecor, isItemEquippable)
+    return CanIMogIt.ItemData:new(itemLink, isTransmogable, isItemMount, isItemToy, isItemPet, isItemEquippable)
 end
 
 
@@ -70,10 +60,6 @@ function CanIMogIt.ItemData:CalculateType()
         return CanIMogIt.ItemTypes.Toy
     elseif self.isItemPet then
         return CanIMogIt.ItemTypes.Pet
-    elseif self.isItemEnsemble then
-        return CanIMogIt.ItemTypes.Ensemble
-    elseif self.isItemDecor then
-        return CanIMogIt.ItemTypes.Decor
     else
         return CanIMogIt.ItemTypes.Other
     end
