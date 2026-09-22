@@ -5,6 +5,7 @@ local containerFrameContainer = nil
 local combinedBagsContainerFrame = nil
 local bankFramePanel = nil
 
+local maximumTotalSlotsPerPage = nil
 local useCombinedBags = false
 
 
@@ -65,9 +66,9 @@ function BankFrame_CIMIUpdateIcon(self)
         return
     end
 
-    local bag, slot = self:GetParent().bankTabID, self:GetParent().containerSlotID
-    local itemLink = C_Container.GetContainerItemLink(bag, slot)
-    CIMI_SetIcon(self, BankFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
+    local itemInfo = self:GetParent().itemInfo
+    local itemLink = itemInfo and itemInfo.hyperlink
+    CIMI_SetIcon(self, BankFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink))
 end
 
 
@@ -137,8 +138,9 @@ end
 
 local function UpdateBank()
     local cimiFrame
-    for i=1, CanIMogIt.NUM_BANK_ITEMS do
-        local frame = bankFramePanel:FindItemButtonByContainerSlotID(i)
+    local currentBankTab = bankFramePanel:GetSelectedTabID()
+    for i=1, maximumTotalSlotsPerPage do
+        local frame = bankFramePanel:FindItemButtonByBankTabAndContainerSlotID(currentBankTab, i)
         if frame then
             cimiFrame = frame.CanIMogItOverlay
             if not cimiFrame then
@@ -160,9 +162,14 @@ local function UpdateContainerFrames(event, elapsed)
         if containerFrameContainer:IsVisible() then UpdateBags() end
     end
 
-    -- Bank and Warbank frames (they are the same frames)
+    -- Bank frames
     if bankFramePanel == nil then bankFramePanel = _G["BankFrame"].BankPanel end
-    if bankFramePanel:IsVisible() then UpdateBank() end
+    if bankFramePanel:IsVisible() then
+        if not maximumTotalSlotsPerPage then 
+            maximumTotalSlotsPerPage = bankFramePanel:GetMaximumTotalSlotsPerPage()
+        end
+        UpdateBank()
+    end
 end
 
 hooksecurefunc("ToggleBag", UpdateContainerFrames)
