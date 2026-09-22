@@ -61,7 +61,6 @@ end
 
 
 function BankFrame_CIMIUpdateIcon(self)
-    -- Works for both Bank and Warbank frames.
     if not self then return end
     if not CIMI_CheckOverlayIconEnabled() then
         self.CIMIIconTexture:SetShown(false)
@@ -141,15 +140,17 @@ end
 
 local function UpdateBank()
     local cimiFrame
-    local currentBankTab = bankFramePanel:GetSelectedTabID()
-    for i=1, maximumTotalSlotsPerPage do
-        local frame = bankFramePanel:FindItemButtonByBankTabAndContainerSlotID(currentBankTab, i)
-        if frame then
-            cimiFrame = frame.CanIMogItOverlay
-            if not cimiFrame then
-                cimiFrame = AddToContainerFrame(frame)
+    -- Default bank tab # is 6, every bag is treated as a different tab (max. 8 bags)
+    for currentBankTab = 6, 14 do
+        for i = 1, maximumTotalSlotsPerPage do
+            local frame = bankFramePanel:FindItemButtonByBankTabAndContainerSlotID(currentBankTab, i)
+            if frame then
+                cimiFrame = frame.CanIMogItOverlay
+                if not cimiFrame then
+                    cimiFrame = AddToContainerFrame(frame)
+                end
+                BankFrame_CIMIUpdateIcon(cimiFrame)
             end
-            BankFrame_CIMIUpdateIcon(cimiFrame)
         end
     end
 end
@@ -180,7 +181,7 @@ hooksecurefunc("ToggleBag", UpdateContainerFrames)
 hooksecurefunc("OpenAllBags", UpdateContainerFrames)
 hooksecurefunc("CloseAllBags", UpdateContainerFrames)
 hooksecurefunc("ToggleAllBags", UpdateContainerFrames)
--- Works for both Bank and Warbank tabs.
+
 hooksecurefunc(_G["BankFrame"].BankPanel, "SelectTab", UpdateContainerFrames)
 
 
