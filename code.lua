@@ -1263,7 +1263,7 @@ function CanIMogIt:GetTooltipText(itemLink, bag, slot, tooltipData)
             the text to display.
             the unmodifiedText that can be used for lookup values.
     ]]
-    if bag and slot then
+    if bag and slot and bag ~= -1 then -- Ignore key ring
         itemLink = C_Container.GetContainerItemLink(bag, slot)
         if not itemLink then
             if foundAnItemFromBags then

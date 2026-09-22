@@ -51,7 +51,10 @@ function ContainerFrame_CIMIUpdateIcon(cimiFrame)
 
     C_Timer.After(0, function()
         local bag, slot = GetBagAndSlot(cimiFrame)
-        local itemLink = C_Container.GetContainerItemLink(bag, slot)
+        local itemLink = nil
+        if bag ~= -1 then -- Ignore key ring
+            local itemLink = C_Container.GetContainerItemLink(bag, slot)
+        end
         CIMI_SetIcon(cimiFrame, ContainerFrame_CIMIUpdateIcon, CanIMogIt:GetTooltipText(itemLink, bag, slot))
     end)
 end
@@ -172,6 +175,7 @@ local function UpdateContainerFrames(event, elapsed)
     end
 end
 
+hooksecurefunc("OpenBag", UpdateContainerFrames)
 hooksecurefunc("ToggleBag", UpdateContainerFrames)
 hooksecurefunc("OpenAllBags", UpdateContainerFrames)
 hooksecurefunc("CloseAllBags", UpdateContainerFrames)
@@ -202,6 +206,7 @@ CanIMogIt:RegisterMessage("OptionUpdate", UpdateContainerFrames)
 -- Register change of combined bags setting
 local function UseCombinedBagsChanged(event, value)
     useCombinedBags = value
+    UpdateContainerFrames()
 end
 EventRegistry:RegisterFrameEventAndCallback("USE_COMBINED_BAGS_CHANGED", UseCombinedBagsChanged)
 
