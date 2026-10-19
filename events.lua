@@ -26,6 +26,7 @@ local EVENTS = {
     "ITEM_LOCK_CHANGED",
     "LOADING_SCREEN_DISABLED",
     "LOADING_SCREEN_ENABLED",
+    "LOOT_OPENED",  -- Opening the loot frame
     "MERCHANT_SHOW",
     "NEW_MOUNT_ADDED",
     "NEW_TOY_ADDED",
