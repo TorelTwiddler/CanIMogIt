@@ -36,7 +36,7 @@ function UpdateLootButtons()
         end
     end
 end
-LootFrame:HookScript("OnShow", UpdateLootButtons)
+CanIMogIt.eventFrame:AddSmartEvent(UpdateLootButtons, {"LOOT_OPENED"})
 
 
 ------------------------
