@@ -19,7 +19,7 @@ local EVENTS = {
     "BLACK_MARKET_ITEM_UPDATE",
     "BLACK_MARKET_OPEN",
     "CHAT_MSG_LOOT",
-    "GARRISON_HIDE_LANDING_PAGE",
+    "GARRISON_HIDE_LANDING_PAGE",   -- Used for decors, they have (had?) a weird update quirk when this event fires while swapping zones
     "GET_ITEM_INFO_RECEIVED",
     "GUILDBANKBAGSLOTS_CHANGED",
     "HOUSE_DECOR_ADDED_TO_CHEST",
