@@ -11,9 +11,7 @@ local function string_starts(String,Start)
     return string.sub(String,1,string.len(Start))==Start
 end
 
-
-function CIMI_UpdateTradeSkillIcons(_, elapsed)
-    if not CanIMogIt.FrameShouldUpdate("TradeskillOverlay", elapsed or 1) then return end
+local function UpdateTradeSkillIcons()
     if not CIMI_CheckOverlayIconEnabled() then
         return
     end
@@ -37,14 +35,11 @@ function CIMI_UpdateTradeSkillIcons(_, elapsed)
 end
 
 
-------------------------
--- Function hooks     --
-------------------------
-
-
-----------------------------
--- Begin adding to frames --
-----------------------------
+function CIMI_UpdateTradeSkillIcons(_, elapsed)
+    if not CanIMogIt.FrameShouldUpdate("TradeskillOverlay", elapsed or 0.5) then return end
+    
+    UpdateTradeSkillIcons()
+end
 
 
 ------------------------
@@ -66,5 +61,6 @@ local function TradeSkillEvents(event, addonName)
 end
 
 CanIMogIt.eventFrame:AddSmartEvent(TradeSkillEvents, {"ADDON_LOADED"})
+CanIMogIt.eventFrame:AddSmartEvent(updateTradeSkillIcons, {"TRADE_SKILL_LIST_UPDATE"})
 
 CanIMogIt:RegisterMessage("OptionUpdate", TradeSkillEvents)
