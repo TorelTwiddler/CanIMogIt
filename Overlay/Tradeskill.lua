@@ -11,7 +11,10 @@ local function string_starts(String,Start)
     return string.sub(String,1,string.len(Start))==Start
 end
 
-local function UpdateTradeSkillIcons()
+function CIMI_UpdateTradeSkillIcons(_, elapsed)
+    -- NOTE: this does not seem necessary atm, can't register fps drops even in a low frame environment
+    --if not CanIMogIt.FrameShouldUpdate("TradeskillOverlay", elapsed or 1) then return end
+
     if not CIMI_CheckOverlayIconEnabled() then
         return
     end
@@ -35,13 +38,6 @@ local function UpdateTradeSkillIcons()
 end
 
 
-function CIMI_UpdateTradeSkillIcons(_, elapsed)
-    if not CanIMogIt.FrameShouldUpdate("TradeskillOverlay", elapsed or 0.5) then return end
-    
-    UpdateTradeSkillIcons()
-end
-
-
 ------------------------
 -- Event functions    --
 ------------------------
@@ -61,6 +57,5 @@ local function TradeSkillEvents(event, addonName)
 end
 
 CanIMogIt.eventFrame:AddSmartEvent(TradeSkillEvents, {"ADDON_LOADED"})
-CanIMogIt.eventFrame:AddSmartEvent(updateTradeSkillIcons, {"TRADE_SKILL_LIST_UPDATE"})
 
 CanIMogIt:RegisterMessage("OptionUpdate", TradeSkillEvents)
